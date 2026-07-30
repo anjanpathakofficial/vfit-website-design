@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vantage Fit Homepage Redesign — Strategy &amp; Copy Deck · Kimi K3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --ink: #172126; --muted: #5d6a6f; --paper: #fff; --canvas: #f4f6f3;
+  --soft: #e8eeea; --dark: #18262b; --coral: #ef5d67; --line: rgba(23,33,38,.12);
+  --font: Inter, system-ui, -apple-system, sans-serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--canvas); color: var(--ink);
+  font-family: var(--font); font-size: 15.5px; line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: #0b6e56; }
+a:hover { color: var(--coral); }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--dark); color: #fff;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.topbar-inner {
+  width: min(820px, calc(100% - 32px)); margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 12px 0; font-size: .84rem;
+}
+.topbar a { color: rgba(255,255,255,.8); text-decoration: none; font-weight: 600; }
+.topbar a:hover { color: #fff; }
+.topbar .meta { color: rgba(255,255,255,.5); font-size: .78rem; }
+article {
+  width: min(820px, calc(100% - 32px)); margin: 0 auto;
+  padding: 36px 0 72px;
+}
+article > *:first-child { margin-top: 0; }
+h1 { font-size: 1.85rem; letter-spacing: -.03em; line-height: 1.2; margin: 0 0 1rem; }
+h2 { font-size: 1.3rem; letter-spacing: -.02em; margin: 2.2rem 0 .75rem; padding-top: .4rem; border-top: 1px solid var(--line); }
+h3 { font-size: 1.05rem; margin: 1.5rem 0 .5rem; }
+h4 { font-size: .95rem; margin: 1.2rem 0 .4rem; color: #2a383d; }
+p { margin: 0 0 .9rem; color: #2c383d; }
+ul, ol { margin: 0 0 1rem; padding-left: 1.35rem; color: #2c383d; }
+li { margin: .35rem 0; }
+li > ul, li > ol { margin-bottom: .35rem; }
+blockquote {
+  margin: 1rem 0; padding: .75rem 1rem;
+  border-left: 3px solid var(--coral); background: var(--paper);
+  color: #2c383d; border-radius: 0 10px 10px 0;
+}
+blockquote p:last-child { margin-bottom: 0; }
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .86em; background: var(--soft); padding: .1em .4em; border-radius: 4px;
+}
+pre {
+  background: #0f171a; color: #d5dee2; padding: 14px 16px; border-radius: 12px;
+  overflow: auto; font-size: .82rem; line-height: 1.5; margin: 0 0 1rem;
+}
+pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+table {
+  width: 100%; border-collapse: collapse; margin: 0 0 1.1rem;
+  font-size: .9rem; background: var(--paper); border-radius: 10px; overflow: hidden;
+  border: 1px solid var(--line);
+}
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+th { background: var(--soft); font-weight: 700; font-size: .82rem; }
+tr:last-child td { border-bottom: none; }
+hr { border: none; border-top: 1px solid var(--line); margin: 1.75rem 0; }
+strong { color: var(--ink); }
+img { max-width: 100%; height: auto; }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a href="../index.html">← All versions</a>
+      <span class="meta">Kimi K3 · strategy brief</span>
+      <a href="vantage-fit-homepage-v2.html">Open homepage →</a>
+    </div>
+  </div>
+  <article>
+<h1>Vantage Fit Homepage Redesign — Strategy &amp; Copy Deck</h1>
+<p><strong>Prepared for:</strong> Vantage Fit (vantagefit.io) homepage redesign <strong>Audience:</strong> Senior HR leaders, CHROs, Benefits &amp; Wellbeing leaders — US enterprise market <strong>North star metric:</strong> Employee participation <strong>Companion artifact:</strong> <code>vantage-fit-homepage-v2.html</code> (working hi-fi implementation of this strategy)</p>
+<hr>
+<h2>1. Homepage Audit &amp; Recommendations</h2>
+<p>Audit of the current homepage (<code>vantagefit-astro</code>: <code>src/components/marketing/HomePage.astro</code> + <code>content/en/pages/home.yaml</code>).</p>
+<h3>1.1 Current structure (10 stacked sections)</h3>
+<ol>
+<li>Hero — &quot;The wellness platform employees actually use — launched in days, not months.&quot;</li>
+<li>Logo strip + &quot;How Corporate Wellness programs help?&quot; + 3 stat cards (59% / 88% / $250)</li>
+<li>&quot;A platform based on Cue &gt; Action &gt; Reward&quot; (3 images)</li>
+<li>Feature tabs — &quot;Everything your workforce needs to stay healthy and active&quot; (5 tabs)</li>
+<li>Testimonials — &quot;Real people, real results&quot; (3 videos, far down the page)</li>
+<li>&quot;Why Vantage Fit?&quot; — 3 benefit cards + product video + security pill strip</li>
+<li>Blog — &quot;Our Wellness Blogs&quot;</li>
+<li>Final CTA — &quot;See why 100+ organizations trust Vantage Fit…&quot;</li>
+</ol>
+<h3>1.2 Messaging weaknesses</h3>
+<ul>
+<li><strong>Split-brain hero.</strong> &quot;Employees actually use&quot; (participation) + &quot;launched in days, not months&quot; (vendor convenience) compete in one H1. Implementation speed is a proof point, not the promise — it belongs in micro-copy, not the headline.</li>
+<li><strong>No single metric owns the page.</strong> Participation stats appear mid-page as decorative cards. For an HR buyer whose #1 failure mode is &quot;nobody uses the benefit,&quot; the page never names the enemy (post-launch drop-off) or the north star (sustained participation).</li>
+<li><strong>Jargon-first frameworks.</strong> &quot;Cue &gt; Action &gt; Reward&quot; asks the buyer to learn our behavioral-science model before understanding the value. Buyers buy outcomes, not frameworks.</li>
+<li><strong>Generic, SEO-flavored headings.</strong> &quot;How Corporate Wellness programs help?&quot; (also grammatically broken) and &quot;Everything your workforce needs to stay healthy and active&quot; could appear on any competitor&#x27;s site.</li>
+<li><strong>Feature-led, not outcome-led.</strong> Five capability tabs describe what the product <em>has</em>, not what the buyer <em>gets</em> (a defensible participation number, a program that runs itself).</li>
+<li><strong>Credibility gaps an enterprise buyer will catch:</strong></li>
+<ul>
+<li>Tata Motors engagement cited as <strong>59%</strong> (homepage) vs <strong>70%</strong> (team-challenges page) — inconsistent.</li>
+<li>G2 rating cited as <strong>4.6</strong> (about) vs <strong>4.5</strong> (EWS page); Capterra <strong>4.3</strong> vs <strong>4.5</strong> — inconsistent.</li>
+<li>&quot;$250 healthcare savings per employee per year&quot; — unsourced. Enterprise buyers (and their legal teams) will discount or challenge it.</li>
+<li>Testimonial video <code>4h9eRm4hNe0</code> is credited to <strong>&quot;Shyam Surendran&quot;</strong> (homepage YAML, partnership pages) and <strong>&quot;Tarun Rangwani&quot;</strong> (client-testimonials page) — must be resolved before relaunch.</li>
+</ul>
+<li><strong>Trust is underweighted for the actual buying situation.</strong> An India-headquartered vendor selling health-adjacent software to US enterprises faces a trust deficit. Today security is one pill-shaped strip (&quot;Your data is safe with us&quot;) buried in section 6 of 8. SOC 2 / ISO 27001 / ISO 27701 / GDPR / HIPAA credentials deserve a first-class section.</li>
+<li><strong>AI story is absent from the homepage.</strong> The product now has AI-powered insights (health data upload analysis, &quot;what to launch next&quot; recommendations, leadership insights). The schema/SEO copy even calls Vantage Fit an &quot;AI-powered corporate wellness platform&quot; — but the homepage never says it. For an &quot;AI-first&quot; refresh this is the single biggest messaging gap.</li>
+</ul>
+<h3>1.3 UX / UI issues</h3>
+<ul>
+<li><strong>Length:</strong> 8+ major sections with redundant beats (stats appear twice; CTAs 6+ times). Narrative momentum dies before the testimonials.</li>
+<li><strong>Buried proof:</strong> the strongest conversion assets (customer videos, named customer stats) sit below the fold in sections 5–6 of 8.</li>
+<li><strong>Logo strip is a CSS sprite animation</strong> — inaccessible (no alt text per logo), un-clickable, and it mixes small Indian brands with US enterprise names with no hierarchy.</li>
+<li><strong>Mixed audiences without a primary:</strong> employee-app imagery and HR-buyer copy interleave without signaling &quot;this page is for the HR buyer; the employee experience is the <em>evidence</em>.&quot;</li>
+<li><strong>Blog section on the homepage</strong> is low-intent content that dilutes the conversion path; it belongs in Resources.</li>
+<li><strong>No persistent conversion element</strong> — the demo CTA disappears on scroll.</li>
+</ul>
+<h3>1.4 Conversion opportunities</h3>
+<ol>
+<li>Make <strong>participation</strong> the hero promise <em>and</em> show it being measured (product UI as proof) — already the strength of the v1 sample; retain it.</li>
+<li>Move <strong>proof</strong> (named-customer stats + video testimonials) into the middle of the page, immediately after the product story.</li>
+<li>Add an <strong>Enterprise Security &amp; Compliance</strong> section to neutralize the offshore-vendor objection before the final CTA.</li>
+<li>One primary CTA (&quot;Book a demo&quot;) repeated at each story beat + a sticky nav CTA; secondary CTA = pricing (pre-qualifies enterprise buyers).</li>
+<li>Preempt the ROI question with honest, sourced, time-bounded stats (&quot;who, what program, what period&quot;) instead of unsourced savings claims.</li>
+</ol>
+<h3>1.5 Retain / Remove / Consolidate</h3>
+<table>
+<thead><tr><th>Verdict</th><th>Content</th></tr></thead>
+<tbody>
+<tr><td><strong>Retain</strong></td><td>3 customer video testimonials (YouTube); named stats 59% Tata Motors / 88% IBS / 86% Brazosport ISD; &quot;100+ organizations&quot;; security certifications (SOC 2, ISO 27001, ISO 27701, GDPR, HIPAA); &quot;launched in days&quot; (as micro-copy); feature depth (challenges, rewards, analytics); final CTA.</td></tr>
+<tr><td><strong>Remove</strong></td><td>Homepage blog section; &quot;How Corporate Wellness programs help?&quot; heading; unsourced &quot;$250 savings&quot; claim; decorative Cue&gt;Action&gt;Reward image row; brand watermark flourishes.</td></tr>
+<tr><td><strong>Consolidate</strong></td><td>5 feature tabs → one &quot;two experiences&quot; story (employee app + HR admin); stats cards + testimonials → one Proof section; security pill + Why-Vantage-Fit → one Trust section; 10 sections → 5.</td></tr>
+</tbody>
+</table>
+<hr>
+<h2>2. Information Architecture — New Homepage</h2>
+<p>Five full-screen sections + footer. One story: <strong>Promise → Engine → Proof → Trust → Action.</strong></p>
+<pre><code>NAV (sticky)  Solutions ▾ · Features ▾ · Resources ▾ · Pricing · [Book a demo]
+
+S1  HERO (100vh)
+    Promise: participation as the outcome + product UI proving it (HR dashboard + employee app)
+    Micro-trust bar (SOC 2 · launch speed · 100+ orgs) + customer logo strip
+
+S2  THE PARTICIPATION ENGINE (product story, ~1.3 screens)
+    Problem framing (post-launch drop-off) → 4-step loop: Invite → Participate → Reward → Improve
+    Two-experience tabs: For employees / For HR teams (measurement story lives in HR panel)
+
+S3  PROOF (100vh)
+    3 named-customer result stats + 3 customer testimonial videos + case-study CTA
+
+S4  ENTERPRISE TRUST (100vh)
+    &quot;Your data is safe with us&quot; — 5 compliance credentials + 4 trust pillars + security CTA
+
+S5  CLOSE (compact)
+    Final CTA band: demo promise + pricing link + plan micro-copy + compliance chips
+
+FOOTER  Product · Solutions · Resources · Company + certifications</code></pre>
+<p><strong>Design principles applied</strong></p>
+<ul>
+<li><strong>One idea per screen.</strong> Each section answers exactly one buyer question, in the order enterprise buyers ask them: <em>What is it? → How does it work? → Does it work for companies like mine? → Can I trust you with my data? → What do I do next?</em></li>
+<li><strong>Employee experience is evidence, not audience.</strong> The page speaks to the HR buyer throughout; the employee app appears only as proof that participation will happen.</li>
+<li><strong>Show the metric, then show the proof.</strong> The hero <em>displays</em> participation being measured; S3 <em>proves</em> it with customers; S4 <em>de-risks</em> it.</li>
+<li><strong>Progressive disclosure.</strong> Deep feature detail moves to nav dropdowns and sub-pages; the homepage carries the narrative, not the catalog.</li>
+</ul>
+<hr>
+<h2>3. Navigation &amp; Submenu Structure</h2>
+<p>Top level (unchanged per brief): <strong>Solutions ▾ · Features ▾ · Resources ▾ · Pricing</strong> + persistent <strong>Book a demo</strong> CTA. Links below map to existing site pages — no new page builds required.</p>
+<h3>Solutions ▾ (organized by <em>how buyers buy</em>: challenge types + strategic needs)</h3>
+<table>
+<thead><tr><th>Group</th><th>Item</th><th>Target URL</th></tr></thead>
+<tbody>
+<tr><td><strong>Challenges</strong></td><td>Step Challenges — &quot;Launch a company-wide step challenge in minutes&quot;</td><td><code>/steps-challenge/</code></td></tr>
+<tr><td></td><td>Team Challenges — &quot;Build camaraderie with team-based competition&quot;</td><td><code>/team-challenges/</code></td></tr>
+<tr><td></td><td>Multi-Activity Challenges — &quot;65+ activities, one inclusive challenge&quot;</td><td><code>/multi-activity-challenges/</code></td></tr>
+<tr><td></td><td>Virtual Marathon — &quot;Unite a global workforce in a one-day event&quot;</td><td><code>/virtual-marathon/</code></td></tr>
+<tr><td><strong>By need</strong></td><td>Remote &amp; Hybrid Team Wellness</td><td><code>/remote-team-wellness/</code></td></tr>
+<tr><td></td><td>Global Employee Engagement</td><td><code>/global-employee-engagement/</code></td></tr>
+<tr><td></td><td>Mental Health &amp; Wellbeing</td><td><code>/mental-health-and-wellbeing-challenges/</code></td></tr>
+<tr><td></td><td>Holistic Wellness Program</td><td><code>/holistic-wellness-program/</code></td></tr>
+<tr><td></td><td>Wellness Rewards Program</td><td><code>/wellness-rewards-program/</code></td></tr>
+<tr><td></td><td>Workforce Health Analytics</td><td><code>/health-fitness-analytics/</code></td></tr>
+<tr><td><em>Featured</em></td><td>Wellness Challenges Library → &quot;23+ ready-to-run programs&quot;</td><td><code>/wellness-challenges/</code></td></tr>
+<tr><td><em>Footer link</em></td><td>All-in-one Employee Wellness Software →</td><td><code>/employee-wellness-software/</code></td></tr>
+</tbody>
+</table>
+<h3>Features ▾ (organized by <em>user</em>: employee experience vs HR command center)</h3>
+<table>
+<thead><tr><th>Group</th><th>Item</th><th>Target URL</th></tr></thead>
+<tbody>
+<tr><td><strong>Employee experience</strong></td><td>Activity Tracking</td><td><code>/features/activity-tracking/</code></td></tr>
+<tr><td></td><td>Personalized Programs</td><td><code>/features/personalized-programs/</code></td></tr>
+<tr><td></td><td>Mental Wellbeing</td><td><code>/features/mental-health-and-mindfulness/</code></td></tr>
+<tr><td></td><td>Incentives &amp; Rewards</td><td><code>/features/incentivization-and-rewards/</code></td></tr>
+<tr><td></td><td>Wellness Leagues</td><td><code>/features/wellness-leagues/</code></td></tr>
+<tr><td><strong>HR &amp; admin</strong></td><td>Admin Dashboard</td><td><code>/features/admin-dashboard/</code></td></tr>
+<tr><td></td><td>Workforce Health Analytics</td><td><code>/health-fitness-analytics/</code></td></tr>
+<tr><td></td><td>Health Data Upload (AI insights)</td><td><code>/features/health-data-upload/</code></td></tr>
+<tr><td></td><td>Engagement Tools</td><td><code>/features/engagement-tools/</code></td></tr>
+<tr><td></td><td>Integrations</td><td><code>/features/integrations/</code></td></tr>
+<tr><td></td><td>Security &amp; Compliance</td><td><code>/features/security-and-compliance/</code></td></tr>
+</tbody>
+</table>
+<h3>Resources ▾</h3>
+<p>Blog · Client Success Stories (<code>/casestudy/</code>) · Guides · Tools &amp; Templates · 2026 Industry Report · Podcasts · Help Center <em>Featured:</em> ROI Calculator (<code>/tools-and-templates/</code>) · Competitor Comparisons (<code>/compare/</code>)</p>
+<h3>Pricing — direct link (<code>/pricing/</code>), no dropdown.</h3>
+<p><strong>IA rationale:</strong> Solutions = buyer problems (why they&#x27;re here), Features = product capabilities (what we ship), Resources = self-education (how they justify internally). This mirrors how enterprise HR buyers navigate and scales cleanly as new challenges/features ship — new items slot into existing groups without restructuring.</p>
+<hr>
+<h2>4. Wireframe — Five Full-Screen Sections</h2>
+<h3>S1 — HERO (100vh, dark)</h3>
+<pre><code>┌────────────────────────────────────────────────────────────────┐
+│ TOPLINE: Employee wellness built around the metric that        │
+│ matters first: participation.                                  │
+├────────────────────────────────────────────────────────────────┤
+│ NAV (sticky): ◆ Vantage Fit   Solutions▾ Features▾ Resources▾  │
+│               Pricing                        [Book a demo]     │
+├──────────────────────────────┬─────────────────────────────────┤
+│ ● Built for sustained        │  ┌─ HR DASHBOARD (tilted) ────┐ │
+│   participation              │  │ Participation rate  68% ↑7 │ │
+│                              │  │ 1,455 of 2,140 · target 75%│ │
+│ H1: More employees           │  │ [participation trend chart]│ │
+│ participating. Better        │  └────────────────────────────┘ │
+│ workforce wellbeing.         │   ┌─ PHONE: employee app ───┐  │
+│                              │   │ Move Together challenge │  │
+│ Lead paragraph (2 lines)     │   │ 72% to goal · 850 pts   │  │
+│                              │   └──────────────────────────┘  │
+│ [Book a demo] [See how       │   caption: Illustrative data    │
+│  participation grows ↓]      │                                 │
+│                              │                                 │
+│ ● SOC 2 &amp; ISO 27001 · Launch │                                 │
+│   in days · 100+ orgs        │                                 │
+├──────────────────────────────┴─────────────────────────────────┤
+│ LOGO STRIP: Trusted by 100+ organizations across 50+ countries │
+│ TATA MOTORS · WIPRO · HERSHEY · IBS SOFTWARE · BRAZOSPORT ISD  │
+└────────────────────────────────────────────────────────────────┘</code></pre>
+<h3>S2 — THE PARTICIPATION ENGINE (~1.3 screens, light)</h3>
+<pre><code>┌────────────────────────────────────────────────────────────────┐
+│ EYEBROW: The participation engine                              │
+│ H2: Most wellness programs flatline after launch week.         │
+│     This one is built for day 90.                              │
+│ Lead: problem framing (post-launch silence)                    │
+│ ┌──────────┬──────────┬──────────┬──────────┐                  │
+│ │ 01 Invite│02 Particip│03 Reward│04 Improve│  4-step loop    │
+│ └──────────┴──────────┴──────────┴──────────┘                  │
+│ TABS: [ For employees ] [ For HR teams ]                       │
+│ ┌─ benefits (3, stacked) ────┬─ product screen ─────────────┐  │
+│ │ employee: inclusion,       │ phone app  OR  admin console │  │
+│ │ progress, rewards          │ (admin shows 68% gauge, dept │  │
+│ │ HR: launch, measure, prove │ bars, Wellness Score 72)     │  │
+│ └────────────────────────────┴──────────────────────────────┘  │
+└────────────────────────────────────────────────────────────────┘</code></pre>
+<h3>S3 — PROOF (100vh, gray)</h3>
+<pre><code>┌────────────────────────────────────────────────────────────────┐
+│ EYEBROW: Proof, not promises                                   │
+│ H2: Real programs. Real participation. On camera.              │
+│ ┌─────────────┬─────────────┬─────────────┐                    │
+│ │ TATA MOTORS │ IBS SOFTWARE│ BRAZOSPORT  │  big-number stats │
+│ │    59%      │    88%      │    86%      │  + program names │
+│ └─────────────┴─────────────┴─────────────┘  + variance note │
+│ ┌─────────────┬─────────────┬─────────────┐                    │
+│ │ ▶ VIDEO     │ ▶ VIDEO     │ ▶ VIDEO     │  click-to-play   │
+│ │ Rachel A.   │ Shyam S.    │ Matt W.     │  YouTube thumbs  │
+│ │ BISD        │ Landmark    │ BWC         │  + 1-line quote  │
+│ └─────────────┴─────────────┴─────────────┘                    │
+│ [ Explore all customer stories → ]                             │
+└────────────────────────────────────────────────────────────────┘</code></pre>
+<h3>S4 — ENTERPRISE TRUST (100vh, dark)</h3>
+<pre><code>┌────────────────────────────────────────────────────────────────┐
+│ EYEBROW: Enterprise security &amp; compliance                      │
+│ H2: Your data is safe with us.                                 │
+│ Lead: certified, audited, privacy-first from day one           │
+│ ┌──────┬───────────┬───────────┬──────┬───────┐                │
+│ │SOC 2 │ ISO 27001 │ ISO 27701 │ GDPR │ HIPAA │  cert badges  │
+│ └──────┴───────────┴───────────┴──────┴───────┘                │
+│ ┌─────────────┬─────────────┬─────────────┬─────────────┐      │
+│ │ Certified &amp; │ Regional    │ No external │ Enterprise  │      │
+│ │ audited     │ data hosting│ PII sharing │ controls    │      │
+│ └─────────────┴─────────────┴─────────────┴─────────────┘      │
+│ [ Explore security &amp; compliance → ]  Top-rated on G2 &amp; Capterra│
+└────────────────────────────────────────────────────────────────┘</code></pre>
+<h3>S5 — CLOSE (compact, coral)</h3>
+<pre><code>┌────────────────────────────────────────────────────────────────┐
+│ H2: Make participation the beginning of your wellness story —  │
+│     not the missing chapter.                                   │
+│ Demo promise (one line: tour, build a challenge, see the metric)│
+│ [Book your Vantage Fit demo]  [Explore pricing]                │
+│ No obligation · 50–50,000 employees · Single challenge or      │
+│ year-round                              SOC 2 · ISO · GDPR · HIPAA │
+└────────────────────────────────────────────────────────────────┘
+FOOTER: brand + 4 link columns + certifications + © line</code></pre>
+<hr>
+<h2>5. Complete Homepage Copy</h2>
+<blockquote><p>Status notes: product-UI numbers (68%, 1,455/2,140, etc.) are labeled &quot;illustrative&quot; on-page. Customer stats are verbatim from current case-study claims. Items flagged <strong>[VERIFY]</strong> need a fact-check before launch (see §1.2).</p></blockquote>
+<p><strong>Meta title:</strong> Vantage Fit — Employee Wellness Platform Built for Participation <strong>Meta description:</strong> Vantage Fit helps enterprises grow and sustain employee wellness participation — inclusive challenges, rewards people want, and AI-powered analytics that prove ROI. SOC 2, ISO 27001, GDPR &amp; HIPAA ready.</p>
+<h3>S1 — Hero</h3>
+<ul>
+<li><strong>Kicker:</strong> ● Built for sustained participation</li>
+<li><strong>H1:</strong> More employees participating. Better workforce wellbeing.</li>
+<li><strong>Lead:</strong> Vantage Fit turns one-time wellness launches into year-round habits — inclusive challenges every employee can join, rewards worth earning, and AI-powered analytics that prove it&#x27;s working.</li>
+<li><strong>Primary CTA:</strong> Book a demo → <code>/request-demo/</code></li>
+<li><strong>Secondary CTA:</strong> See how participation grows ↓ (anchor to S2)</li>
+<li><strong>Micro-trust (3 bullets):</strong> SOC 2 &amp; ISO 27001 certified · Launch in days, not months · 100+ organizations worldwide</li>
+<li><strong>Dashboard visual (illustrative):</strong> Participation rate 68% (↑ 7 pts this quarter) · 1,455 participating / 2,140 enrolled · target 75% · 6-month participation trend · caption &quot;Illustrative product data&quot;</li>
+<li><strong>Phone visual:</strong> &quot;Move Together&quot; challenge, 72% to goal, 6 active days, team rank #12, 850 points</li>
+<li><strong>Logo strip label:</strong> Trusted by 100+ organizations across 50+ countries</li>
+<li><strong>Logos:</strong> TATA MOTORS · WIPRO · HERSHEY · IBS SOFTWARE · BRAZOSPORT ISD · LANDMARK GROUP</li>
+</ul>
+<h3>S2 — The Participation Engine</h3>
+<ul>
+<li><strong>Eyebrow:</strong> The participation engine</li>
+<li><strong>H2:</strong> Most wellness programs flatline after launch week. This one is built for day 90.</li>
+<li><strong>Lead:</strong> Wellness benefits rarely fail loudly — a launch email, a spike of sign-ups, then silence. Vantage Fit closes the loop that keeps employees joining, coming back, and progressing.</li>
+</ul>
+<p><strong>The loop (4 steps):</strong></p>
+<ol>
+<li><strong>Invite</strong> — Launch a company-wide challenge in under 10 minutes, targeted by team, location, or the whole workforce. No IT project required.</li>
+<li><strong>Participate</strong> — 65+ activities and seven challenge formats — steps, mindfulness, sleep, nutrition, virtual marathons — so wellness is bigger than a fitness contest.</li>
+<li><strong>Reward</strong> — Points, badges, leagues, and gift cards from 100+ brands employees actually want — Amazon, Starbucks, Nike.</li>
+<li><strong>Improve</strong> — See participation by department and location in real time, and let AI recommend the program to run next.</li>
+</ol>
+<p><strong>Tabs — For employees</strong> <em>(subhead: A wellness app people open on purpose.)</em></p>
+<ul>
+<li><strong>A way in for everyone</strong> — Physical, mental, and everyday wellbeing — in 14+ languages, on any device, with or without a wearable.</li>
+<li><strong>Progress you can feel</strong> — Personal goals, streaks, and team challenges turn a distant health outcome into today&#x27;s next step.</li>
+<li><strong>Rewards worth earning</strong> — Real effort converts to points employees redeem in a global catalog of 100+ brands.</li>
+</ul>
+<p><strong>Tabs — For HR teams</strong> <em>(subhead: A command center, not another dashboard.)</em></p>
+<ul>
+<li><strong>Launch without a project</strong> — Start from proven templates — step challenges, virtual marathons, habit streaks — and adapt goals, audience, and rewards.</li>
+<li><strong>One number to lead with</strong> — A rolling 30-day participation rate with trends and department breakdowns — plus a Wellness Score for supporting context.</li>
+<li><strong>Proof for the CFO</strong> — Exportable participation, rewards, and outcomes reports. No black-box promises.</li>
+<li><strong>Admin visual (illustrative):</strong> 68% gauge · participation by department bars vs 75% target · Wellness Score 72/100 (supporting) · footnote: &quot;Participation rate = unique enrolled employees completing a qualifying wellness action in the previous 30 days ÷ enrolled employees.&quot;</li>
+</ul>
+<h3>S3 — Proof</h3>
+<ul>
+<li><strong>Eyebrow:</strong> Proof, not promises</li>
+<li><strong>H2:</strong> Real programs. Real participation. On camera.</li>
+<li><strong>Lead:</strong> The strongest proof is specific: who participated, in what program, over what period — and what HR leaders say when you ask them directly.</li>
+</ul>
+<p><strong>Stats row:</strong></p>
+<ul>
+<li><strong>Tata Motors — 59%</strong> workforce engagement in the &quot;Step Up &amp; Elevate&quot; program across 43 teams. <strong>[VERIFY: cited as 70% elsewhere on site]</strong></li>
+<li><strong>IBS Software — 88%</strong> participation in a 28-day &quot;March to Fitness&quot; challenge — 17 points above the industry benchmark.</li>
+<li><strong>Brazosport ISD — 86%</strong> engagement in a two-week &quot;Fit Wars&quot; challenge across district staff.</li>
+<li><strong>Disclaimer:</strong> Customer program results; outcomes vary by workforce, program design, and measurement window.</li>
+</ul>
+<p><strong>Video testimonials (click-to-play, YouTube):</strong></p>
+<ol>
+<li><strong>Rachel Arthur</strong> — Director of Benefits &amp; Wellness, BISD (<code>LSX4pxSB6Qw</code>)</li>
+</ol>
+<p>&quot;Vantage Fit has helped our employees stay active, track their progress, and get rewarded — turning wellness into a daily habit that drives both health and happiness across BISD.&quot;</p>
+<ol>
+<li><strong>Shyam Surendran</strong> — Sr. Manager Training, Landmark Leisure (<code>4h9eRm4hNe0</code>) <strong>[VERIFY: also credited as &quot;Tarun Rangwani&quot; on client-testimonials page]</strong></li>
+</ol>
+<p>&quot;Vantage Fit gave our team the first momentum toward healthier habits, turning &#x27;something is better than nothing&#x27; into a culture of wellness and daily progress.&quot;</p>
+<ol>
+<li><strong>Matt Whitmore</strong> — Managing Partner, BWC Real Estate (<code>L_39IykL-O4</code>)</li>
+</ol>
+<p>&quot;In just four months, Vantage Fit has seamlessly integrated into our growing business, boosted workplace wellbeing, and delivered incredible results for our employees.&quot;</p>
+<ul>
+<li><strong>CTA:</strong> Explore all customer stories → <code>/casestudy/</code></li>
+</ul>
+<h3>S4 — Enterprise Trust</h3>
+<ul>
+<li><strong>Eyebrow:</strong> Enterprise security &amp; compliance</li>
+<li><strong>H2:</strong> Your data is safe with us.</li>
+<li><strong>Lead:</strong> Wellness data is personal. Vantage Fit is certified, audited, and privacy-first from day one — so US enterprises can launch with confidence, wherever their teams are.</li>
+<li><strong>Certification badges:</strong> SOC 2 · ISO 27001 · ISO 27701 · GDPR · HIPAA</li>
+</ul>
+<p><strong>Trust pillars:</strong></p>
+<ol>
+<li><strong>Certified &amp; independently audited</strong> — SOC 2 attestation and ISO 27001/27701 certification, with GDPR compliance and HIPAA-aligned safeguards for employee health information.</li>
+<li><strong>Regional data hosting</strong> — Dedicated data centers within your region keep employee data where your policies require it.</li>
+<li><strong>No external sharing of PII</strong> — Employee personal data is never sold or shared with third parties. Reports are aggregated so no individual can be identified. <strong>[VERIFY: minimum-cohort threshold claim with product]</strong></li>
+<li><strong>Enterprise-grade controls</strong> — SSO, role-based access, consent management, and a dedicated health-data admin role come standard.</li>
+</ol>
+<ul>
+<li><strong>CTA:</strong> Explore security &amp; compliance → <code>/features/security-and-compliance/</code></li>
+<li><strong>Micro-line:</strong> Top-rated by HR teams on G2 and Capterra</li>
+</ul>
+<h3>S5 — Close</h3>
+<ul>
+<li><strong>H2:</strong> Make participation the beginning of your wellness story — not the missing chapter.</li>
+<li><strong>Body:</strong> In one 30-minute demo: tour the employee experience, build a sample challenge for your workforce, and see exactly how participation is measured.</li>
+<li><strong>Primary CTA:</strong> Book your Vantage Fit demo → <code>/request-demo/</code></li>
+<li><strong>Secondary CTA:</strong> Explore pricing → <code>/pricing/</code></li>
+<li><strong>Micro-copy:</strong> No obligation · Plans for teams of 50 to 50,000 · Single challenge or year-round</li>
+<li><strong>Compliance chips (repeat):</strong> SOC 2 · ISO 27001 · GDPR · HIPAA</li>
+</ul>
+<h3>Footer</h3>
+<ul>
+<li><strong>Brand line:</strong> The employee wellness platform built to grow participation through inclusive programs, meaningful rewards, and measurable outcomes.</li>
+<li><strong>Product:</strong> Employee Wellness Software · Pricing · Security &amp; Compliance · Integrations</li>
+<li><strong>Solutions:</strong> Step Challenges · Team Challenges · Virtual Marathon · Wellness Rewards</li>
+<li><strong>Resources:</strong> Blog · Client Success Stories · Guides · Help Center</li>
+<li><strong>Company:</strong> About Us · Partnerships · Contact · Download the App</li>
+<li><strong>Legal line:</strong> © 2026 Vantage Circle. Homepage redesign prototype. · <em>Participation is the proof. Wellbeing is the promise.</em></li>
+</ul>
+<hr>
+<h2>6. UX / UI Rationale — Why Each Section Exists</h2>
+<table>
+<thead><tr><th>Section</th><th>Buyer question it answers</th><th>Why it converts (enterprise HR lens)</th></tr></thead>
+<tbody>
+<tr><td><strong>S1 Hero</strong></td><td>&quot;What is it, and is it for me?&quot;</td><td>Leads with the buyer&#x27;s #1 anxiety — participation, not features. The product UI <em>in the hero</em> does two jobs: proves the north star is measurable, and shows the two interfaces HR must believe in (admin console + employee app). Micro-trust bar + logos neutralize the &quot;unknown vendor&quot; reflex within 5 seconds. Dark, data-forward aesthetic signals enterprise gravity, not consumer wellness fluff.</td></tr>
+<tr><td><strong>S2 Engine</strong></td><td>&quot;How does it actually work?&quot;</td><td>Names the enemy (post-launch drop-off) before presenting the mechanism — problem-agitate-solve. The 4-step loop translates the old internal &quot;Cue&gt;Action&gt;Reward&quot; framework into buyer language. Employee/HR tabs let two stakeholders self-select without doubling page length; the HR panel carries the <em>measurement</em> story (rolling participation rate, department breakdowns, Wellness Score positioned as supporting context, not a black-box promise) — which is exactly how the admin product is designed (dashboard: participation north star, target lines, league/tier analytics). &quot;AI recommends what to launch next&quot; plants the AI-first flag using a real capability.</td></tr>
+<tr><td><strong>S3 Proof</strong></td><td>&quot;Does it work for companies like mine?&quot;</td><td>Moves the strongest conversion assets to mid-page. Stats are specific and time-bounded (who, what program, what window) because enterprise buyers distrust round numbers; the variance disclaimer <em>builds</em> credibility. Video testimonials are the highest-trust asset on the site — a US benefits director (BISD) speaking to camera is worth more than any copy we write — and click-to-play keeps the section at one screen (no autoplay, no modals, privacy-enhanced youtube-nocookie embeds).</td></tr>
+<tr><td><strong>S4 Trust</strong></td><td>&quot;Can I put employee health data in your hands?&quot;</td><td>Directly attacks the India→US trust deficit at the moment evaluation turns into procurement. Five credentials are shown as a badge row (scannable in 3 seconds), then four pillars answer the exact due-diligence questions infosec/legal will ask (audits, data residency, PII handling, access controls). Dark background gives the section institutional weight; linking to the full security page supports procurement self-service.</td></tr>
+<tr><td><strong>S5 Close</strong></td><td>&quot;What happens if I say yes?&quot;</td><td>A single, low-friction ask with the demo <em>scoped</em> (&quot;tour, build a challenge, see the metric&quot;) so the buyer knows the 30 minutes won&#x27;t be a generic pitch. Pricing link pre-qualifies enterprise budget expectations. Repeating compliance chips next to the CTA is deliberate: the last thing seen before converting is a trust signal.</td></tr>
+</tbody>
+</table>
+<p><strong>Cross-cutting UI decisions</strong></p>
+<ul>
+<li><strong>Full-screen rhythm, no scroll-jacking.</strong> Sections use <code>min-height: 100svh</code> with content vertically centered, giving the &quot;five screens&quot; feel without scroll-snapping (which breaks accessibility and fights long content on short viewports; mobile relaxes to natural height).</li>
+<li><strong>Sticky nav with dropdowns</strong> keeps &quot;Book a demo&quot; reachable at every scroll depth and carries the full IA without lengthening the page.</li>
+<li><strong>One CTA hierarchy everywhere:</strong> coral primary (demo) + quiet secondary (pricing/anchor). No competing third action.</li>
+<li><strong>Honest data labeling.</strong> Illustrative dashboard numbers are captioned as such; customer numbers carry program names and windows. This is a deliberate enterprise-credibility choice, not legal boilerplate.</li>
+<li><strong>Accessibility:</strong> semantic landmarks, <code>aria</code>-correct tabs and dropdowns, keyboard-focusable menus, <code>prefers-reduced-motion</code> support, alt text on testimonial thumbnails.</li>
+<li><strong>Performance:</strong> single self-contained HTML file, system font stack, zero JS libraries; videos load zero YouTube JS until clicked (facade pattern).</li>
+</ul>
+<p><strong>What changed vs the v1 sample:</strong> 11 sections → 5; added testimonial videos (S3) and full security section (S4); replaced v1&#x27;s text-only nav with the production IA dropdowns; folded v1&#x27;s standalone &quot;measurement&quot; section into the HR tab of S2 and its &quot;responsible participation&quot; ideas into S2/S4; dropped the FAQ and blog sections to Resources/pricing pages (documented in §1.5).</p>
+<hr>
+<h2>Appendix — Pre-launch verification checklist</h2>
+<ol>
+<li>Resolve &quot;Shyam Surendran&quot; vs &quot;Tarun Rangwani&quot; credit on video <code>4h9eRm4hNe0</code>.</li>
+<li>Reconcile Tata Motors engagement: 59% vs 70% across pages.</li>
+<li>Reconcile review ratings (G2 4.5 vs 4.6; Capterra 4.3 vs 4.5) — homepage deliberately uses &quot;top-rated on G2 and Capterra&quot; until fixed.</li>
+<li>Confirm &quot;aggregated so no individual can be identified&quot; (minimum-cohort reporting) with product before publishing S4 pillar 3.</li>
+<li>Replace text wordmark logos with approved customer logo assets and confirm logo permissions (Hershey, Landmark Group).</li>
+<li>Confirm SOC 2 report availability for procurement (link or &quot;available under NDA&quot; note on security page).</li>
+</ol>
+  </article>
+</body>
+</html>

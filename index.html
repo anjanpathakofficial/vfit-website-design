@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Vantage Fit homepage redesign — four AI versions of the same brief.">
+  <meta name="theme-color" content="#18262b">
+  <title>Vantage Fit Redesign — AI Comparison</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #172126;
+      --muted: #5d6a6f;
+      --paper: #fff;
+      --canvas: #f4f6f3;
+      --soft: #e8eeea;
+      --dark: #18262b;
+      --coral: #ef5d67;
+      --mint: #37c9a4;
+      --line: rgba(23, 33, 38, .12);
+      --font: Inter, system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: var(--font);
+      font-size: 15px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    h1, h2, p { margin: 0; }
+
+    .shell { width: min(720px, calc(100% - 32px)); margin: 0 auto; }
+
+    header {
+      background: var(--dark);
+      color: #fff;
+      padding: 36px 0 32px;
+    }
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -.03em;
+      margin-bottom: 6px;
+    }
+    header p { color: rgba(255,255,255,.65); font-size: .92rem; }
+
+    main { padding: 28px 0 48px; }
+
+    /* ── Versions ── */
+    .list {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      align-items: center;
+      gap: 12px 16px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    .row:last-child { border-bottom: none; }
+    .row:hover { background: #fafbfa; }
+    .name { font-weight: 700; font-size: .95rem; }
+    .dir { font-size: .78rem; color: var(--muted); font-weight: 500; margin-top: 1px; }
+    .time {
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .links { display: flex; gap: 8px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: .8rem;
+      font-weight: 650;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      transition: background .12s, border-color .12s;
+    }
+    .btn:hover { background: var(--soft); border-color: #c5cec8; }
+    .btn-main {
+      background: var(--dark);
+      color: #fff;
+      border-color: var(--dark);
+    }
+    .btn-main:hover { background: #24353b; border-color: #24353b; }
+
+    /* ── Prompt ── */
+    .prompt-block {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .prompt-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .prompt-head h2 {
+      font-size: .88rem;
+      font-weight: 750;
+      letter-spacing: -.01em;
+    }
+    .prompt-actions { display: flex; gap: 8px; align-items: center; }
+    .btn-copy {
+      background: var(--coral);
+      color: #fff;
+      border-color: var(--coral);
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .btn-copy:hover { background: #d94e58; border-color: #d94e58; }
+    .btn-copy.copied { background: var(--mint); border-color: var(--mint); color: var(--dark); }
+    .btn-toggle {
+      cursor: pointer;
+      font-family: inherit;
+      color: var(--muted);
+    }
+    .btn-toggle:hover { color: var(--ink); }
+
+    .prompt-preview {
+      padding: 14px 16px 16px;
+      font-size: .84rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .prompt-preview strong { color: var(--ink); font-weight: 650; }
+
+    .prompt-full {
+      display: none;
+      margin: 0;
+      padding: 16px;
+      max-height: 420px;
+      overflow: auto;
+      background: #0f171a;
+      color: #c8d4d8;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .78rem;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-break: break-word;
+      border: none;
+    }
+    .prompt-block.open .prompt-full { display: block; }
+    .prompt-block.open .prompt-preview { display: none; }
+    .prompt-block.open .btn-toggle { color: var(--ink); }
+
+    .note {
+      margin-top: 16px;
+      font-size: .8rem;
+      color: var(--muted);
+    }
+    .note code {
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: .85em;
+      background: var(--soft);
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 560px) {
+      .row {
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+      }
+      .time { grid-column: 2; grid-row: 1; }
+      .links { grid-column: 1 / -1; }
+      .links .btn { flex: 1; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="shell">
+      <h1>Vantage Fit homepage redesign</h1>
+      <p>Same prompt · 4 models · compare the outputs</p>
+    </div>
+  </header>
+
+  <main class="shell">
+
+    <div class="list">
+      <div class="row">
+        <div>
+          <div class="name">Claude</div>
+          <div class="dir">claude-fable</div>
+        </div>
+        <div class="time">40 min</div>
+        <div class="links">
+          <a class="btn btn-main" href="claude-fable/vantage-fit-homepage-v2.html">Homepage</a>
+          <a class="btn" href="claude-fable/REDESIGN-BRIEF.html">Brief</a>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="name">Kimi K3</div>
+          <div class="dir">kimi-k3</div>
+        </div>
+        <div class="time">40 min</div>
+        <div class="links">
+          <a class="btn btn-main" href="kimi-k3/vantage-fit-homepage-v2.html">Homepage</a>
+          <a class="btn" href="kimi-k3/homepage-redesign-strategy.html">Brief</a>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="name">GPT Sol</div>
+          <div class="dir">gpt-sol</div>
+        </div>
+        <div class="time">20 min</div>
+        <div class="links">
+          <a class="btn btn-main" href="gpt-sol/vantage-fit-homepage-v2.html">Homepage</a>
+          <a class="btn" href="gpt-sol/vantage-fit-homepage-strategy.html">Brief</a>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="name">Grok</div>
+          <div class="dir">grok</div>
+        </div>
+        <div class="time">5 min</div>
+        <div class="links">
+          <a class="btn btn-main" href="grok/vantage-fit-homepage-v2.html">Homepage</a>
+          <a class="btn" href="grok/vantage-fit-homepage-redesign-brief.html">Brief</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="prompt-block" id="promptBlock">
+      <div class="prompt-head">
+        <h2>Shared prompt</h2>
+        <div class="prompt-actions">
+          <button type="button" class="btn btn-copy" id="copyBtn">Copy</button>
+          <button type="button" class="btn btn-toggle" id="toggleBtn">Show full</button>
+        </div>
+      </div>
+      <div class="prompt-preview" id="promptPreview">
+        <strong>Role:</strong> Expert VP Product Marketing (enterprise B2B HR tech) + UI/UX / IA.<br>
+        Redesign <strong>vantagefit.io</strong> homepage for US enterprise HR buyers.
+        North star: <strong>employee participation</strong>. ~5 full-screen sections.
+        Add testimonial videos + enterprise security. Audit first, then ship brief + homepage.
+      </div>
+      <pre class="prompt-full" id="promptFull"></pre>
+    </div>
+
+    <p class="note">
+      Each folder’s <code>v1</code> is the shared sample (ignore). Compare the <code>v2</code> homepages.
+    </p>
+  </main>
+
+  <script>
+    const PROMPT = `Work like an expert VP of Product Marketing with 20 years of experience in enterprise B2B SaaS, specializing in conversion-focused websites for HR technology. You also have deep expertise in UI/UX design, information architecture, messaging, and modern AI-first website experiences.
+
+I want your help redesigning the website of http://www.vantagefit.io. The current website was built in the pre-AI era, and we believe it's time to completely rethink the homepage using AI-assisted design and modern product marketing principles.
+
+Our primary target audience is Senior HR leaders, CHROs, Benefits leaders, and Wellbeing leaders in the US enterprise market.
+
+We have already shortlisted a design direction. The sample homepage in the provided directory is a good starting point. Our north star metric is employee participation, and we like how prominently the sample showcases it in the hero section.
+
+However, a few important things are missing:
+
+Customer Testimonial Video – Add a section showcasing customer testimonial videos. You can reuse the content and assets from the current website.
+Enterprise Security & Compliance – Since we're an India-based company selling to US enterprises, trust is critical. Add a section similar to the current website's "Your data is safe with us" section to communicate our security, privacy, and compliance credentials.
+The sample homepage is too long. We want the homepage to be condensed into approximately five full-screen scroll sections while preserving a clear storytelling flow.
+
+Existing codebases
+1. Current marketing website Location: /Users/vc/anjan/work/vantagefit-astro
+
+Use this primarily to understand:
+
+Product positioning and messaging
+Features
+Customer stories
+Security and trust content
+Resources
+Help section (important because it explains the product in detail)
+The new marketing website does not need to include everything from the current site. Simplify where appropriate and focus on what best supports enterprise buyers.
+
+2. Dashboard design Location: /Users/vc/anjan/work/vc-dashboard-design
+
+This represents the HR admin experience. Use it to understand how HR leaders consume analytics so the homepage clearly connects product capabilities with measurable business outcomes.
+
+Navigation
+Create a modern navigation structure. The top-level menu can remain similar to the current website:
+
+Solutions (or Use Cases)
+Features
+Resources
+Pricing
+The linked pages do not need to be designed. However, propose what the submenu items under Solutions and Features should be so the information architecture is logical and scalable.
+
+Before designing
+First, audit the current homepage and identify:
+
+Messaging weaknesses
+UX/UI issues
+Conversion opportunities
+Content that should be retained
+Content that should be removed or consolidated
+Use these findings to justify your redesign decisions.
+
+Deliverables
+Produce:
+
+Homepage audit and recommendations.
+Information architecture for the new homepage.
+Proposed navigation and submenu structure.
+Wireframe for a homepage with approximately five full-screen sections.
+Complete homepage copy, including headlines, supporting copy, CTAs, and section content.
+UX/UI rationale explaining why each section exists and how it supports enterprise HR buyers.
+If information is missing, make reasonable assumptions based on best practices for enterprise HR SaaS websites. Only ask questions if a missing detail would materially affect the homepage strategy or messaging.
+
+Ask me question if you need clearifications`;
+
+    const block = document.getElementById('promptBlock');
+    const full = document.getElementById('promptFull');
+    const toggleBtn = document.getElementById('toggleBtn');
+    const copyBtn = document.getElementById('copyBtn');
+
+    full.textContent = PROMPT;
+
+    toggleBtn.addEventListener('click', () => {
+      const open = block.classList.toggle('open');
+      toggleBtn.textContent = open ? 'Hide' : 'Show full';
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(PROMPT);
+      } catch {
+        const ta = document.createElement('textarea');
+        ta.value = PROMPT;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+      }
+      copyBtn.textContent = 'Copied';
+      copyBtn.classList.add('copied');
+      setTimeout(() => {
+        copyBtn.textContent = 'Copy';
+        copyBtn.classList.remove('copied');
+      }, 1600);
+    });
+  </script>
+</body>
+</html>
