@@ -1,0 +1,1766 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="description" content="Run one multi-activity challenge across steps, sleep, nutrition, mindfulness and habits, with a new theme every week. Book a Vantage Fit demo.">
+  <meta name="theme-color" content="#18262b">
+  <title>Custom Multi-Activity Wellness Challenges | Vantage Fit</title>
+  <link rel="stylesheet" href="../styles/enterprise.css">
+  <style>
+    /* ============================================================
+       Multi-activity Challenge solutions page. Tokens, buttons,
+       hero frame, phone, dash, tour tabs, trust and final all come
+       from ../styles/enterprise.css. New here: the week table and
+       task rows in the hero, the weekly theme rail, the score
+       breakdown board, the task configuration modal, the per-task
+       report mock, the proof lead panel, and the FAQ list.
+       ============================================================ */
+
+    /* --- Nav: Solutions is the current section, Multi-activity the current page --- */
+    .nav-trigger.is-current { background: var(--soft); color: var(--ink); box-shadow: inset 0 -2px 0 var(--coral); border-radius: 9px 9px 0 0; }
+    .mega a.mega-link.is-page { background: var(--soft); box-shadow: inset 3px 0 0 var(--coral); }
+    /* Escape closes a mega menu even while focus stays on its trigger, which
+       :focus-within alone would keep open. */
+    .nav-item.esc-closed .mega { display: none; }
+
+    /* --- Shared section shells (hub vocabulary) --- */
+    .hub-section { padding: 96px 0; }
+    .hub-head { max-width: 720px; }
+    .hub-head .lead { margin-top: 14px; }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s cubic-bezier(.22,.9,.24,1); }
+    .reveal.on { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+    /* --- Skip link: the nav carries three mega menus, so a keyboard user needs
+       a way past roughly 37 stops before the h1. --- */
+    .skip-link { position: absolute; left: -9999px; }
+    .skip-link:focus {
+      left: 16px; top: 12px; z-index: 60;
+      padding: 10px 16px;
+      border-radius: 10px;
+      background: var(--ink);
+      color: #fff;
+      font-weight: 700;
+      outline: 3px solid var(--coral-dark);
+      outline-offset: 2px;
+    }
+
+    /* --- Contrast lifts on inherited small-text rules, carried from the
+       built Team page. Scoped here because the stylesheet is shared. --- */
+    .logos-label { color: rgba(41,41,76,.72); }
+    .logo-word { color: rgba(41,41,76,.78); }
+    .solutions-trust .trust-plaque .trust-support { color: rgba(255,255,255,.62); }
+    /* .eyebrow is --coral-dark, which clears 4.5:1 on white but not on the
+       tinted surfaces below. --coral-deep restores the margin. */
+    .enroll-screen .eyebrow,
+    .weeks-screen .eyebrow,
+    .hr-screen .eyebrow,
+    .proof-hub .eyebrow,
+    .related-screen .eyebrow { color: var(--coral-deep); }
+
+    /* --- Focus visibility. The inherited ring is a 16%-alpha ink outline,
+       which reads as no ring at all on white. --- */
+    .hr-screen .seg-btn:focus-visible { outline: 3px solid var(--coral-dark); outline-offset: 2px; border-radius: 8px; }
+
+    /* --- The primary CTA gradient starts on flat coral, which is 3.45:1 under
+       a white label. Start it a step darker so the label always clears 4.5:1. --- */
+    .btn-primary { background: linear-gradient(125deg, var(--coral-dark) 0%, var(--coral-deep) 100%); }
+
+    /* --- Gradient-clipped text disappears in forced-colors mode. --- */
+    @media (forced-colors: active) {
+      .stat,
+      .hero-copy h1 em { background: none; -webkit-text-fill-color: currentColor; color: CanvasText; }
+    }
+
+    /* --- Illustrative-data label, used on every drawn mock --- */
+    .mock-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(41,41,76,.04);
+      /* A required disclosure, so it sits a step darker than --muted. */
+      color: rgba(41,41,76,.75);
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* --- S1 Hero: admin week table + employee week view --- */
+    .multi-hero .hero-grid { grid-template-columns: 1.02fr .98fr; }
+    .multi-hero .hero-copy .lead { max-width: 560px; }
+    .multi-hero .hero-visual { min-height: 470px; }
+    /* The phone layers over the dash on the right, so the Tasks column is inset.
+       The dash is wide enough to keep a real overlap with the phone rather than
+       abutting it, and the metric row under the title fills the column. */
+    .multi-hero .dash { width: min(100%, 432px); box-shadow: 0 30px 74px rgba(41,41,76,.18); }
+    .multi-hero .dash-body { padding-right: 32px; }
+    .multi-hero .metric-inline { margin-right: 0; }
+
+    .wk-head, .wk-row { display: grid; grid-template-columns: 56px 1fr 60px; gap: 8px; align-items: center; }
+    .wk-head { margin-top: 13px; padding: 8px 2px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: .56rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+    .wk-row { padding: 10px 2px; border-bottom: 1px solid var(--line); font-size: .76rem; }
+    .wk-head span:last-child, .wk-row span:last-child { text-align: right; }
+    .wk-no { color: var(--muted); font-size: .68rem; font-weight: 800; }
+    .wk-theme { display: inline-flex; align-items: center; gap: 9px; font-weight: 700; letter-spacing: -.012em; }
+    .wk-sw { flex: none; width: 10px; height: 10px; border-radius: 3px; }
+    .wk-tasks { color: var(--muted); font-size: .68rem; font-weight: 700; }
+    .wk-add { display: flex; align-items: center; gap: 9px; padding: 11px 2px 2px; color: var(--muted); font-size: .7rem; font-weight: 750; }
+    .wk-add i { display: grid; flex: none; width: 17px; height: 17px; place-items: center; border: 1px dashed rgba(41,41,76,.3); border-radius: 6px; font-style: normal; font-size: .68rem; font-weight: 800; }
+
+    .ph-theme { margin: 11px 11px 0; padding: 11px 12px; border-left: 3px solid var(--amber); border-radius: 6px 14px 14px 6px; background: var(--dark); color: #fff; }
+    .ph-theme small { display: block; color: var(--amber); font-size: .5rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .ph-theme b { display: block; margin-top: 3px; font-size: .8rem; letter-spacing: -.015em; }
+    .ph-weeks { display: flex; gap: 5px; margin-top: 9px; }
+    .ph-weeks span { display: grid; width: 19px; height: 19px; place-items: center; border-radius: 6px; background: rgba(255,255,255,.1); color: rgba(255,255,255,.66); font-size: .5rem; font-weight: 800; }
+    .ph-weeks span.on { background: var(--amber); color: var(--dark); }
+    .ph-sec { margin: 12px 12px 0; color: var(--muted); font-size: .5rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .ptasks { display: grid; gap: 6px; padding: 8px 11px 0; }
+    .ptask { display: grid; grid-template-columns: 24px 1fr auto; gap: 8px; align-items: center; padding: 7px 8px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+    .ptask-ico { display: grid; width: 24px; height: 24px; place-items: center; border-radius: 8px; background: rgba(65,216,180,.13); color: #128f72; }
+    .ptask:nth-child(2) .ptask-ico { background: rgba(241,81,98,.1); color: var(--coral-deep); }
+    .ptask:nth-child(3) .ptask-ico { background: rgba(41,41,76,.07); color: var(--ink); }
+    .ptask-ico svg { width: 13px; height: 13px; }
+    .ptask b { display: block; font-size: .55rem; letter-spacing: -.01em; line-height: 1.3; }
+    .ptask small { display: block; margin-top: 2px; color: var(--muted); font-size: .48rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .ptask-auto { padding: 3px 7px; border-radius: 999px; background: rgba(65,216,180,.16); color: #0f7a61; font-size: .46rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+    .ptask-btn { padding: 4px 9px; border-radius: 7px; background: var(--coral-dark); color: #fff; font-size: .48rem; font-weight: 800; }
+    .ptask-ring { display: block; width: 22px; height: 22px; }
+    .phone .mock-tag { margin: 10px 11px 11px; padding: 2px 6px; font-size: .5rem; letter-spacing: .04em; }
+
+    /* --- S2 Enrollment --- */
+    .enroll-screen { background: var(--canvas); }
+    .employee-cols { display: grid; grid-template-columns: 1.04fr .96fr; gap: 56px; align-items: center; margin-top: 40px; }
+    .join-points { display: grid; gap: 6px; }
+    .join-point {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 16px;
+      align-items: start;
+      padding: 14px 16px;
+      border-radius: 14px;
+      transition: background .2s ease;
+    }
+    .join-point:hover { background: var(--soft); }
+    .join-icon {
+      display: grid;
+      width: 40px;
+      height: 40px;
+      place-items: center;
+      border-radius: 11px;
+      background: rgba(65,216,180,.13);
+      color: #128f72;
+    }
+    .join-point:nth-child(even) .join-icon { background: rgba(241,81,98,.1); color: var(--coral-deep); }
+    .join-icon svg { width: 19px; height: 19px; }
+    .join-point b { display: block; font-size: .98rem; letter-spacing: -.015em; }
+    .join-point p { margin-top: 3px; color: var(--muted); font-size: .85rem; line-height: 1.5; }
+    .join-fine { margin: 14px 16px 0; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: .76rem; }
+    .join-cta { margin: 16px 16px 0; }
+    .employee-media img { width: 100%; height: auto; border-radius: 10px; }
+
+    /* --- S3 Task families --- */
+    .format-screen { background: #fff; }
+    .format-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; margin-top: 36px; }
+    .format-card {
+      grid-column: span 2;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .format-card:hover { transform: translateY(-3px); border-color: rgba(41,41,76,.22); box-shadow: var(--shadow-soft); }
+    .format-glyph { display: grid; align-items: end; height: 46px; margin-bottom: 18px; }
+    .format-glyph svg { width: 74px; height: 44px; display: block; }
+    .format-card h3 { font-size: 1.08rem; letter-spacing: -.02em; }
+    .format-card > p { margin-top: 8px; color: var(--muted); font-size: .87rem; line-height: 1.55; }
+    .best-for {
+      display: block;
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .78rem;
+      line-height: 1.5;
+    }
+    .best-for b {
+      display: block;
+      margin-bottom: 2px;
+      /* A darker step off --mint-dark. The token is unchanged; this label is
+         9.6px bold on white and needs the extra contrast. */
+      color: #0f6f58;
+      font-size: .6rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .card-fine { display: block; margin-top: 10px; color: var(--muted); font-size: .74rem; line-height: 1.45; }
+    .format-note { margin-top: 22px; color: var(--muted); font-size: .8rem; line-height: 1.6; max-width: 860px; }
+
+    /* --- S4 Weekly themes --- */
+    .weeks-screen { background: var(--canvas); }
+    .week-rail { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 34px; }
+    .wr-tile { display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: var(--paper); }
+    .wr-band { height: 6px; }
+    .wr-body { display: flex; flex-direction: column; flex: 1; padding: 20px 20px 22px; }
+    .wr-no { color: var(--muted); font-size: .6rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .wr-name { display: block; margin-top: 6px; font-size: 1.08rem; font-weight: 750; letter-spacing: -.02em; }
+    .wr-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+    .wr-chips span { padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--canvas); font-size: .72rem; font-weight: 650; }
+    .wr-add { display: inline-flex; align-items: center; gap: 7px; width: max-content; margin-top: 12px; padding: 4px 10px; border: 1px dashed rgba(41,41,76,.28); border-radius: 999px; color: var(--muted); font-size: .7rem; font-weight: 750; }
+    .week-tagrow { display: flex; justify-content: flex-end; margin-top: 12px; }
+    .week-foot { display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; margin-top: 26px; }
+    .week-lines { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+    .week-lines li { position: relative; padding-left: 20px; color: var(--muted); font-size: .88rem; line-height: 1.55; }
+    .week-lines li::before { position: absolute; left: 0; top: .55em; width: 7px; height: 7px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 0 3px rgba(65,216,180,.14); content: ""; }
+    .week-closer { align-self: center; padding-left: 26px; border-left: 3px solid rgba(241,81,98,.35); font-size: .95rem; font-weight: 600; line-height: 1.6; }
+
+    /* --- S5 Scoring integrity: dark band + score breakdown panel --- */
+    .scoring-screen { background: #fff; }
+    .fairband {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 48px;
+      align-items: center;
+      padding: 44px 48px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: linear-gradient(135deg, var(--dark), #2c4249);
+      color: #fff;
+    }
+    .fairband .eyebrow { color: var(--lime); margin-bottom: 12px; }
+    .fairband h2 { font-size: clamp(1.6rem, 2.8vw, 2.3rem); letter-spacing: -.03em; max-width: 460px; }
+    .fairband .lead { margin-top: 14px; color: rgba(255,255,255,.68); font-size: .95rem; max-width: 480px; }
+    .fair-list { display: grid; gap: 14px; margin-top: 26px; }
+    .fair-item { display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: start; }
+    .fair-item i {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      border: 1px solid var(--line-dark);
+      border-radius: 10px;
+      background: rgba(255,255,255,.06);
+      color: var(--mint);
+      font-style: normal;
+    }
+    .fair-item i svg { width: 17px; height: 17px; }
+    .fair-item b { display: block; font-size: .95rem; letter-spacing: -.015em; }
+    .fair-item p { margin-top: 3px; color: rgba(255,255,255,.6); font-size: .82rem; line-height: 1.5; }
+    .fair-fine { margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--line-dark); color: rgba(255,255,255,.5); font-size: .74rem; line-height: 1.5; }
+
+    .audit-board {
+      justify-self: end;
+      width: min(100%, 380px);
+      padding: 20px 22px;
+      border: 1px solid rgba(41,41,76,.1);
+      border-radius: 18px;
+      background: #f9faf8;
+      color: var(--ink);
+      box-shadow: 0 26px 60px rgba(0,0,0,.32);
+    }
+    .audit-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+    .audit-head b { font-size: .8rem; letter-spacing: -.015em; }
+    .audit-live { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: .56rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; white-space: nowrap; }
+    .audit-live i { width: 7px; height: 7px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 0 3px rgba(65,216,180,.16); }
+    .audit-cols, .audit-row { display: grid; grid-template-columns: 1fr 86px 46px 38px; gap: 8px; align-items: center; }
+    .audit-cols { padding: 9px 4px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: .54rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .audit-row { padding: 11px 4px; border-bottom: 1px solid var(--line); font-size: .78rem; }
+    .audit-cols span:nth-child(n+3), .audit-row span:nth-child(n+3) { text-align: right; }
+    .audit-task { font-weight: 700; letter-spacing: -.012em; }
+    .audit-target { color: var(--muted); font-size: .62rem; font-weight: 650; line-height: 1.35; }
+    .audit-log, .audit-pts { font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+    .audit-auto { display: inline-block; padding: 2px 7px; border-radius: 999px; background: rgba(65,216,180,.16); color: #0f7a61; font-size: .54rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+    /* The capped row is a rule working correctly, so it reads amber, the system's
+       third accent, rather than error red or a tint too faint to see. */
+    .audit-row.capped { margin: 5px -8px; padding: 11px 12px; border: 1px solid rgba(246,185,59,.45); border-radius: 12px; background: rgba(246,185,59,.10); }
+    .audit-cap { display: inline-block; margin-top: 3px; padding: 2px 7px; border-radius: 999px; background: rgba(246,185,59,.22); color: #8a5d05; font-size: .54rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+    .audit-caption { margin-top: 12px; color: var(--muted); font-size: .68rem; line-height: 1.5; }
+    .audit-board .mock-tag { margin-top: 12px; }
+
+    /* --- S7 Control for HR --- */
+    .hr-screen { background: var(--canvas); }
+    .hr-screen .tour-tabs { max-width: 1100px; margin-top: 36px; }
+    /* The mocks are taller than the checklists, so the pane tops both columns out
+       level instead of centring them, and keeps clearance for the card shadow. */
+    .hr-screen .tabpane { align-items: start; padding-bottom: 40px; }
+    .hr-screen .measure-note {
+      max-width: 430px;
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .74rem;
+      line-height: 1.5;
+    }
+    .tour-close { max-width: 430px; margin-top: 16px; font-size: .88rem; font-weight: 600; line-height: 1.55; }
+
+    .launch-mock {
+      width: min(100%, 440px);
+      padding: 20px 22px;
+      border: 1px solid rgba(41,41,76,.1);
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 22px 54px rgba(41,41,76,.12);
+    }
+    .launch-mock .lm-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+    .launch-mock .lm-head b { font-size: .88rem; }
+    .launch-mock .lm-head span { color: var(--muted); font-size: .6rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; text-align: right; }
+    .lm-task { display: grid; grid-template-columns: 32px 1fr; gap: 12px; align-items: center; padding: 14px 2px; border-bottom: 1px solid var(--line); }
+    .lm-task i { display: grid; width: 32px; height: 32px; place-items: center; border-radius: 10px; background: rgba(65,216,180,.13); color: #128f72; font-style: normal; }
+    .lm-task i svg { width: 16px; height: 16px; }
+    .lm-task b { display: block; font-size: .86rem; letter-spacing: -.015em; }
+    .lm-task small { display: block; margin-top: 2px; color: var(--muted); font-size: .66rem; font-weight: 650; }
+    .lm-label { display: block; margin: 15px 2px 9px; color: var(--muted); font-size: .72rem; font-weight: 750; }
+    .lm-pills { display: flex; gap: 8px; }
+    .lm-pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 13px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: .74rem; font-weight: 750; }
+    .lm-pill i { flex: none; width: 13px; height: 13px; border: 2px solid rgba(41,41,76,.24); border-radius: 50%; font-style: normal; }
+    .lm-pill.is-on { border-color: rgba(65,216,180,.55); background: rgba(65,216,180,.07); color: var(--ink); }
+    .lm-pill.is-on i { border-color: var(--mint-dark); background: radial-gradient(circle, var(--mint-dark) 0 3px, #fff 3px); }
+    .lm-field { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 2px; border-bottom: 1px solid var(--line); font-size: .76rem; }
+    .lm-field:first-of-type { margin-top: 4px; }
+    .lm-field > span:first-child { color: var(--muted); font-weight: 750; font-size: .72rem; }
+    .lm-input { min-width: 78px; padding: 6px 11px; border: 1px solid var(--line); border-radius: 9px; background: var(--canvas); font-weight: 800; text-align: right; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+    .lm-select { display: inline-flex; align-items: center; justify-content: space-between; gap: 12px; text-align: left; }
+    .lm-select svg { width: 10px; color: var(--muted); }
+    .lm-rebuild { margin-top: 16px; padding: 13px 15px; border: 1px solid rgba(65,216,180,.32); border-radius: 12px; background: rgba(65,216,180,.09); }
+    .lm-rebuild small { display: block; color: #0f6f58; font-size: .55rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .lm-rebuild b { display: block; margin-top: 6px; font-size: .8rem; font-weight: 750; line-height: 1.5; letter-spacing: -.01em; }
+    .lm-actions { display: flex; gap: 10px; margin-top: 16px; }
+    .lm-ghost { flex: 1; padding: 11px; border: 1px solid var(--line); border-radius: 10px; color: var(--muted); text-align: center; font-size: .78rem; font-weight: 800; }
+    .lm-cta { flex: 1; display: block; padding: 11px; border-radius: 10px; background: linear-gradient(125deg, var(--coral) 5%, var(--coral-deep) 125%); color: #fff; text-align: center; font-size: .78rem; font-weight: 800; }
+    .launch-mock .mock-tag { margin-top: 14px; }
+
+    .report-mock {
+      width: min(100%, 520px);
+      padding: 18px 20px;
+      border: 1px solid rgba(41,41,76,.1);
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 22px 54px rgba(41,41,76,.12);
+    }
+    .rm-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+    .rm-head b { font-size: .86rem; letter-spacing: -.015em; }
+    .rm-tabs { display: flex; gap: 3px; margin-top: 12px; border-bottom: 1px solid var(--line); }
+    .rm-tabs span { padding: 7px 10px; color: var(--muted); font-size: .62rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .rm-tabs span.on { color: var(--ink); box-shadow: inset 0 -2px 0 var(--coral); }
+    .rm-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 13px; }
+    .rm-field { flex: 1 1 140px; padding: 7px 11px; border: 1px solid var(--line); border-radius: 9px; color: var(--muted); font-size: .68rem; font-weight: 650; }
+    .rm-cols, .rm-row { display: grid; grid-template-columns: 28px 1fr 52px 74px; gap: 8px; align-items: center; }
+    .rm-cols { margin-top: 14px; padding: 8px 4px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: .55rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+    .rm-row { padding: 10px 4px; border-bottom: 1px solid var(--line); font-size: .78rem; }
+    .rm-cols span:nth-child(n+3), .rm-row span:nth-child(n+3) { text-align: right; }
+    .rm-rank { color: var(--muted); font-size: .68rem; font-weight: 800; }
+    .rm-name { font-weight: 700; letter-spacing: -.012em; }
+    .rm-name small { display: block; margin-top: 1px; color: var(--muted); font-size: .62rem; font-weight: 650; }
+    .rm-score, .rm-steps { font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+    .rm-row.expanded { margin: 4px -4px 0; padding: 10px 8px; border-bottom: 0; border-radius: 10px 10px 0 0; background: rgba(41,41,76,.07); box-shadow: inset 3px 0 0 var(--ink); }
+    .rm-open { margin: 0 -4px; padding: 2px 12px 12px; border-radius: 0 0 10px 10px; background: rgba(41,41,76,.07); box-shadow: inset 3px 0 0 var(--ink); }
+    .rm-weeks { display: flex; gap: 6px; padding: 4px 0 10px; }
+    .rm-weeks span { padding: 3px 9px; border-radius: 999px; background: #fff; border: 1px solid var(--line); color: var(--muted); font-size: .58rem; font-weight: 800; }
+    .rm-weeks span.on { border-color: rgba(41,41,76,.3); background: var(--ink); color: #fff; }
+    .rm-task { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 7px 0; border-top: 1px dashed var(--line); font-size: .72rem; }
+    .rm-task > span:first-child { flex: 1 1 130px; font-weight: 700; }
+    .rm-pts { color: var(--muted); font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+    .rm-stat { padding: 3px 9px; border-radius: 999px; font-size: .56rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; white-space: nowrap; }
+    .rm-stat.done { background: rgba(65,216,180,.16); color: #0f7a61; }
+    .rm-stat.part { background: rgba(41,41,76,.12); color: rgba(41,41,76,.86); }
+    .rm-stat.miss { background: rgba(241,81,98,.12); color: var(--coral-deep); }
+    .rm-foot { display: flex; justify-content: flex-end; margin-top: 14px; }
+    .rm-export { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border-radius: 9px; background: linear-gradient(125deg, var(--coral) 5%, var(--coral-deep) 125%); color: #fff; font-size: .7rem; font-weight: 800; }
+    .rm-export svg { width: 13px; }
+    .report-mock .mock-tag { margin-top: 13px; }
+
+    /* --- S8 Customer results --- */
+    .proof-hub { background: #f6f7f4; }
+    .result-lead {
+      display: grid;
+      grid-template-columns: 1.02fr .98fr;
+      gap: 44px;
+      align-items: center;
+      margin-top: 40px;
+      padding: 32px 34px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--paper);
+      box-shadow: 0 8px 24px rgba(30,38,38,.05);
+    }
+    .stat {
+      display: block;
+      font-size: 2.9rem;
+      font-weight: 800;
+      letter-spacing: -.055em;
+      line-height: 1;
+      background: linear-gradient(125deg, var(--coral) 15%, var(--coral-deep) 95%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+    }
+    .result-lead .stat { font-size: 3.4rem; }
+    .result-lead > div > p { margin-top: 12px; color: var(--ink); font-size: .95rem; font-weight: 600; line-height: 1.55; max-width: 460px; }
+    /* Client names render as registered, so no text-transform here. Weight and
+       color carry the label role instead. */
+    .segment {
+      display: block; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line);
+      color: var(--muted); font-size: .72rem; font-weight: 700; letter-spacing: .01em; line-height: 1.6;
+    }
+    .count-strip-label { display: block; color: var(--muted); font-size: .78rem; font-weight: 800; letter-spacing: -.005em; }
+    .count-row { display: grid; grid-template-columns: 68px 1fr; gap: 16px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid var(--line); }
+    .count-row:first-of-type { margin-top: 6px; }
+    .count-row:last-of-type { border-bottom: 0; padding-bottom: 0; }
+    .count-row b { font-size: 1.32rem; font-weight: 800; letter-spacing: -.035em; font-variant-numeric: tabular-nums; }
+    .count-row span { color: var(--muted); font-size: .82rem; line-height: 1.45; }
+    .results-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 14px; }
+    .result-card { padding: 24px; border: 1px solid var(--line); border-radius: 18px; background: var(--paper); box-shadow: 0 8px 24px rgba(30,38,38,.05); }
+    .result-card > p { margin-top: 10px; color: var(--ink); font-size: .87rem; font-weight: 600; line-height: 1.5; }
+    .quote-duo { display: grid; grid-template-columns: 1.15fr .85fr; gap: 14px; margin-top: 28px; }
+    .quote-band {
+      display: grid;
+      grid-template-columns: 1fr;
+      align-content: center;
+      padding: 22px 26px;
+      border-left: 4px solid var(--coral);
+      border-radius: 0 18px 18px 0;
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+    }
+    .quote-band blockquote { margin: 0; font-size: .95rem; font-weight: 700; letter-spacing: -.015em; line-height: 1.5; }
+    .quote-band .quote-who { display: block; margin-top: 8px; color: var(--muted); font-size: .74rem; font-weight: 500; }
+    .proof-fine { margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; }
+    .proof-fine small { color: var(--muted); font-size: .68rem; max-width: 720px; }
+    .proof-fine .text-link { margin-top: 0; font-size: .82rem; }
+
+    /* --- S6 Trust (hub layout) --- */
+    .solutions-trust .trust-grid { grid-template-columns: 1fr 1fr; margin-top: 0; }
+    .solutions-trust .trust-card { min-height: 0; }
+    .solutions-trust .trust-cols { align-items: start; gap: 48px; }
+    .solutions-trust .trust-plaque { margin-top: 28px; padding: 32px 34px 22px; }
+    /* The baseline plaque raster carries certification marks that no source in
+       the knowledge base supports, so it is replaced with a typeset strip that
+       carries only the three approved compliance strings. */
+    .mark-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+    .mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 14px;
+      background: rgba(255,255,255,.06);
+      color: #fff;
+      font-size: .82rem;
+      font-weight: 700;
+      letter-spacing: -.015em;
+      text-align: left;
+    }
+    .mark svg { flex: none; width: 20px; height: 20px; color: var(--mint); }
+
+    /* --- S9 FAQ --- */
+    .faq-screen { background: #fff; }
+    .faq-list { max-width: 840px; margin-top: 34px; border-top: 1px solid var(--line); }
+    .faq-item { border-bottom: 1px solid var(--line); }
+    .faq-item summary { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 2px; cursor: pointer; list-style: none; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after {
+      flex: none; width: 10px; height: 10px; margin-right: 4px;
+      border-right: 2px solid var(--coral-dark); border-bottom: 2px solid var(--coral-dark);
+      transform: rotate(45deg) translate(-2px, -2px);
+      transition: transform .25s ease; content: "";
+    }
+    .faq-item[open] summary::after { transform: rotate(225deg) translate(-2px, -2px); }
+    .faq-item summary:focus-visible { outline: 3px solid var(--coral-dark); outline-offset: 2px; border-radius: 8px; }
+    .faq-item summary h3 { font-size: 1.02rem; font-weight: 700; letter-spacing: -.02em; }
+    .faq-item summary:hover h3 { color: var(--coral-deep); }
+    .faq-item p { max-width: 740px; margin: 0 2px; padding-bottom: 22px; color: var(--muted); font-size: .89rem; line-height: 1.62; }
+    @media (prefers-reduced-motion: reduce) { .faq-item summary::after { transition: none; } }
+
+    /* --- S10 Related programs --- */
+    .related-screen { padding: 72px 0; background: var(--canvas); }
+    .related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; }
+    .related-row {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      align-items: start;
+      gap: 14px;
+      padding: 20px 22px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+      transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+    }
+    .related-row:hover { transform: translateY(-2px); border-color: rgba(241,81,98,.35); box-shadow: var(--shadow-soft); }
+    .related-icon { display: grid; width: 38px; height: 38px; place-items: center; border-radius: 11px; background: rgba(41,41,76,.06); color: var(--ink); }
+    .related-icon svg { width: 18px; height: 18px; }
+    .related-row h3 { display: flex; align-items: center; gap: 8px; font-size: .98rem; letter-spacing: -.015em; }
+    .related-row h3 svg { width: 14px; color: var(--coral-dark); }
+    .related-row p { margin-top: 4px; color: var(--muted); font-size: .82rem; line-height: 1.45; }
+
+    /* --- Responsive --- */
+    /* Narrow two-column desktops: the hero cards shrink a step so the phone keeps
+       a real overlap with the dash instead of colliding with it or floating away. */
+    @media (min-width: 1101px) and (max-width: 1227px) {
+      /* The shell is still growing here, so the dash tracks its column as a
+         percentage. A fixed width would swing the overlap from 0 to 50px. */
+      .multi-hero .dash { width: 74%; }
+      .multi-hero .dash-body { padding-right: 34px; }
+      .multi-hero .phone { right: -4px; width: 186px; }
+    }
+    @media (max-width: 1100px) {
+      .multi-hero .hero-grid { grid-template-columns: 1fr; }
+      .multi-hero .dash-body { padding-right: 16px; }
+      .employee-cols { grid-template-columns: 1fr; gap: 36px; }
+      .employee-media { order: -1; }
+      .employee-media img { max-width: 560px; margin-inline: auto; }
+      .format-grid { grid-template-columns: 1fr 1fr; }
+      .format-card { grid-column: auto; }
+      .week-rail { grid-template-columns: 1fr 1fr; }
+      .week-foot { grid-template-columns: 1fr; gap: 26px; }
+      .week-closer { padding-left: 20px; }
+      .fairband { grid-template-columns: 1fr; gap: 32px; padding: 34px; }
+      .audit-board { justify-self: start; }
+      .result-lead { grid-template-columns: 1fr; gap: 30px; padding: 28px 26px; }
+      .quote-duo { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 860px) {
+      .hub-section { padding: 64px 0; }
+      /* Below the nav breakpoint the two hero mocks stack. Overlapping them at
+         this width would hide the week table, which is the argument. */
+      .multi-hero .hero-visual { display: flex; flex-direction: column; align-items: center; gap: 24px; min-height: 0; }
+      .multi-hero .dash { position: static; width: min(100%, 430px); transform: none; }
+      .multi-hero .phone { position: static; width: 194px; transform: rotate(-2deg); }
+    }
+    @media (max-width: 640px) {
+      .format-grid { grid-template-columns: 1fr; }
+      .format-card { grid-column: auto; }
+      .week-rail { grid-template-columns: 1fr; }
+      .results-grid { grid-template-columns: 1fr; }
+      .related-grid { grid-template-columns: 1fr; }
+      .fairband { padding: 26px 22px; }
+      .solutions-trust .trust-grid { grid-template-columns: 1fr; }
+      .launch-mock, .report-mock { padding: 16px 15px; }
+      .result-lead .stat { font-size: 2.9rem; }
+      .count-row { grid-template-columns: 58px 1fr; gap: 12px; }
+    }
+    @media (max-width: 560px) {
+      .wk-head, .wk-row { grid-template-columns: 48px 1fr 54px; gap: 6px; }
+      .wk-row { font-size: .72rem; }
+      .audit-cols, .audit-row { grid-template-columns: 1fr 68px 40px 34px; gap: 6px; }
+      .audit-row { font-size: .74rem; }
+      .rm-cols, .rm-row { grid-template-columns: 24px 1fr 44px 62px; gap: 6px; }
+      .rm-row { font-size: .74rem; }
+      /* Tighter tracking so "Total step count" still holds its track. */
+      .audit-cols, .rm-cols { font-size: .52rem; letter-spacing: .04em; }
+      .lm-input { min-width: 66px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#top">Skip to main content</a>
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="https://www.vantagefit.io/" aria-label="Vantage Fit home">
+        <img src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37" style="height:32px;width:auto;display:block">
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="nav-links" id="nav-links">
+        <div class="nav-item">
+          <button class="nav-trigger is-current" type="button" aria-expanded="false">
+            Solutions
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Solutions menu">
+            <div class="mega-body">
+              <div class="mega-grid cols-2">
+                <div>
+                  <div class="mega-col-title">Run a challenge</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/steps-challenge/">Steps Challenge<span>Company-wide step goals in five formats</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/team-challenges/">Team Challenge<span>Departments and squads, competing together</span></a>
+                  <a class="mega-link is-page" href="#top" aria-current="page">Multi-activity Challenge<span>Custom challenges across any mix of activities</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/mental-health-and-wellbeing-challenges/">Mental Health &amp; Wellbeing<span>Mindfulness, mood and stress support at work</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/virtual-marathon/">Virtual Marathon<span>One-day events that unite a global workforce</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Programs &amp; needs</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/holistic-wellness-program/">Year-round Wellness Program<span>An always-on calendar of challenges and events</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/wellness-rewards-program/">Wellness Rewards<span>Points and gift cards tied to real effort</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/remote-team-wellness/">Remote &amp; Hybrid Teams<span>Wellness that works away from the office</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/global-employee-engagement/">Global Workforces<span>One program across countries and time zones</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/health-fitness-analytics/">Measure Program Impact<span>Participation analytics your board can read</span></a>
+                </div>
+              </div>
+            </div>
+            <a class="mega-banner" href="../solutions-page/vantage-fit-solutions-v1.html">
+              See every program on one page: the Solutions overview
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Features
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">For employees</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/activity-tracking/">Activity &amp; health tracking<span>Steps, workouts, sleep and more, auto-synced</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/nutrition-and-hydration/">Nutrition &amp; hydration<span>Everyday habits, gently tracked</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/mental-health-and-mindfulness/">Mental wellbeing &amp; mindfulness<span>Sessions, streaks and mood check-ins</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/engagement-tools/">Teams, leaderboards &amp; community<span>Squads, rankings and social buzz that keep people going</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">For HR teams</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/admin-dashboard/">Admin dashboard &amp; analytics<span>Participation, trends and insights in one console</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/program-builder/">Program builder &amp; templates<span>Launch challenges and calendars in minutes</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/reports/">Reports &amp; exports<span>Board-ready participation and outcomes reports</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Enterprise platform</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/integrations/">Integrations &amp; SSO<span>Wearables, HRIS, SSO and more</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/security-and-compliance/">Security, privacy &amp; residency<span>Aggregate-only reporting, regional hosting</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/accessibility/">Global access &amp; localization<span>Inclusive across devices, locations and languages</span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Resources
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Resources menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">Learn</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/">Blog<span>Ideas and research for healthier workplaces</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/guides/">Guides &amp; eBooks<span>Playbooks for launching and scaling wellness</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/2026-global-workplace-well-being-industry-report/">2026 Industry Report<span>The state of global workplace wellbeing</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Evaluate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/casestudy/">Customer stories<span>Results from real customer programs</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/compare/">Compare platforms<span>Vantage Fit vs the alternatives</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/">Help Center<span>Product docs and setup guides</span></a>
+                </div>
+                <a class="mega-feature" href="https://www.vantagefit.io/wellness-challenges/">
+                  <span>
+                    <small>Featured</small>
+                    <b>Wellness Challenges Library</b>
+                    <p>Browse ready-to-run challenges your teams can start this month.</p>
+                  </span>
+                  <span class="go">Explore the library
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top" tabindex="-1">
+    <!-- ========== S1 HERO ========== -->
+    <section class="hero multi-hero" id="hero" aria-labelledby="hero-heading">
+      <div class="shell hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Solutions · Multi-activity Challenge</span>
+          <h1 id="hero-heading">Multi-activity challenges give everyone a <em>way to win</em>, not just the walkers.</h1>
+          <p class="lead">A step challenge has one way to score, so the people your program exists for drop out in week one. This one runs 27 task types, with a new theme every week.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+            <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">See pricing</a>
+          </div>
+          <div class="hero-note" role="group" aria-label="Program facts">
+            <span>27 task types, availability depends on your configuration</span>
+            <span>Auto-enrolled by an audience rule, including people who arrive mid-challenge</span>
+            <span>Weeks come from your start and end dates, each with its own task set</span>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="dash" role="img" aria-label="Vantage Fit admin dashboard showing a four-week custom challenge with a theme and task count per week. Figures shown are illustrative.">
+            <div class="dash-top">
+              <span class="dash-dot"></span><span class="dash-dot"></span><span class="dash-dot"></span>
+              <span class="dash-url"></span>
+            </div>
+            <div class="dash-body">
+              <div class="dash-title">
+                <div>
+                  <small>Admin · Challenges</small>
+                  <strong>March Reset</strong>
+                </div>
+                <span class="mock-tag">Illustrative data</span>
+              </div>
+              <div class="metric-inline" aria-hidden="true">
+                <span><i>DAYS</i><b>28</b></span>
+                <span><i>WEEKS</i><b>4</b></span>
+                <span><i>TASKS</i><b>13</b></span>
+              </div>
+              <div class="wk-head" aria-hidden="true">
+                <span>Week</span><span>Theme</span><span>Tasks</span>
+              </div>
+              <div class="wk-row" aria-hidden="true">
+                <span class="wk-no">Week 1</span>
+                <span class="wk-theme"><i class="wk-sw" style="background:#41d8b4"></i>Move</span>
+                <span class="wk-tasks">3 tasks</span>
+              </div>
+              <div class="wk-row" aria-hidden="true">
+                <span class="wk-no">Week 2</span>
+                <span class="wk-theme"><i class="wk-sw" style="background:#F6B93B"></i>Nourish</span>
+                <span class="wk-tasks">3 tasks</span>
+              </div>
+              <div class="wk-row" aria-hidden="true">
+                <span class="wk-no">Week 3</span>
+                <span class="wk-theme"><i class="wk-sw" style="background:rgba(41,41,76,.45)"></i>Rest</span>
+                <span class="wk-tasks">3 tasks</span>
+              </div>
+              <div class="wk-row" aria-hidden="true">
+                <span class="wk-no">Week 4</span>
+                <span class="wk-theme"><i class="wk-sw" style="background:#F15162"></i>Thrive</span>
+                <span class="wk-tasks">4 tasks</span>
+              </div>
+              <div class="wk-add" aria-hidden="true"><i>+</i> Add week</div>
+            </div>
+          </div>
+
+          <div class="phone" role="img" aria-label="Vantage Fit employee app showing week 2 of a multi-activity challenge, with an auto-tracked step task, a water log with a Log button, and an article task in progress. Figures shown are illustrative.">
+            <div class="phone-screen">
+              <div class="phone-head">
+                Vantage Fit
+                <span class="avatar" aria-hidden="true"></span>
+              </div>
+              <div class="ph-theme" aria-hidden="true">
+                <small>Week 2</small>
+                <b>Nourish</b>
+                <div class="ph-weeks">
+                  <span>1</span><span class="on">2</span><span>3</span><span>4</span>
+                </div>
+                <div class="progress-label"><span>Challenge progress</span><span>61%</span></div>
+                <div class="progress"><i style="width:61%"></i></div>
+              </div>
+              <div class="ph-sec" aria-hidden="true">Today's progress</div>
+              <div class="ptasks" aria-hidden="true">
+                <div class="ptask">
+                  <span class="ptask-ico">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h16M8 20v-6M13 20v-9M18 20v-13"/></svg>
+                  </span>
+                  <span><b>Step count</b><small>6,500 / 10,000</small></span>
+                  <span class="ptask-auto">Auto</span>
+                </div>
+                <div class="ptask">
+                  <span class="ptask-ico">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3.5c3.6 4 6 6.9 6 9.7a6 6 0 0 1-12 0c0-2.8 2.4-5.7 6-9.7Z"/></svg>
+                  </span>
+                  <span><b>Water log</b><small>4 / 8 glasses</small></span>
+                  <span class="ptask-btn">Log</span>
+                </div>
+                <div class="ptask">
+                  <span class="ptask-ico">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h6a2.5 2.5 0 0 1 2 2v11a2.5 2.5 0 0 0-2-1.6H4Z"/><path d="M20 5.5h-6a2.5 2.5 0 0 0-2 2v11a2.5 2.5 0 0 1 2-1.6h6Z"/></svg>
+                  </span>
+                  <span><b>Read: build a better lunch</b><small>In progress</small></span>
+                  <span class="ptask-ring">
+                    <svg viewBox="0 0 24 24" width="22" height="22">
+                      <circle cx="12" cy="12" r="9.5" fill="none" stroke="rgba(41,41,76,.16)" stroke-width="3"/>
+                      <circle cx="12" cy="12" r="9.5" fill="none" stroke="#169d7e" stroke-width="3" stroke-linecap="round" stroke-dasharray="34 60" transform="rotate(-90 12 12)"/>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+              <span class="mock-tag">Illustrative data</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="logo-band">
+        <div class="shell logos" role="group" aria-label="Selected customers">
+          <span class="logos-label">Trusted by 100+ organizations worldwide</span>
+          <span class="logo-word">TATA MOTORS</span>
+          <span class="logo-word">WIPRO</span>
+          <span class="logo-word">IBS SOFTWARE</span>
+          <span class="logo-word">TEVA</span>
+          <span class="logo-word">GODREJ</span>
+          <span class="logo-word">TEXAS INSTRUMENTS</span>
+          <span class="logo-word">BRAZOSPORT ISD</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S2 NOBODY SIGNS UP ========== -->
+    <section class="hub-section enroll-screen" id="enrollment" aria-labelledby="enrollment-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Enrollment</span>
+          <h2 id="enrollment-heading">Nobody signs up. That is the participation mechanic.</h2>
+          <p class="lead">Enrollment is a rule you write, not a campaign you run.</p>
+        </div>
+
+        <div class="employee-cols">
+          <div>
+            <div class="join-points">
+              <div class="join-point reveal">
+                <span class="join-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 5h17l-6.5 7.5V20l-4-2.4v-5.1L3.5 5Z"/></svg>
+                </span>
+                <div>
+                  <b>An audience rule enrolls them.</b>
+                  <p>All employees, or filtered by country, city, department, gender, age range or language. Everyone who matches is in.</p>
+                </div>
+              </div>
+              <div class="join-point reveal">
+                <span class="join-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 3.5H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9l-5.5-5.5Z"/><path d="M13.5 3.5V9H19"/><path d="M8.5 13h7M8.5 16.5h4.5"/></svg>
+                </span>
+                <div>
+                  <b>Or you add them by search or bulk CSV.</b>
+                  <p>There is no browse-and-join catalog, so participation never depends on a sign-up drive.</p>
+                </div>
+              </div>
+              <div class="join-point reveal">
+                <span class="join-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4.5l3 2M9.5 2.5h5"/></svg>
+                </span>
+                <div>
+                  <b>People who arrive late still get pulled in.</b>
+                  <p>Choose enroll when active and a matching employee is enrolled the moment they become active in the app.</p>
+                </div>
+              </div>
+              <div class="join-point reveal">
+                <span class="join-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="7" y="2.5" width="10" height="19" rx="2.6"/><path d="M11 18.5h2"/><path d="M3.2 9.2a5.5 5.5 0 0 1 0 5.6M20.8 9.2a5.5 5.5 0 0 0 0 5.6"/></svg>
+                </span>
+                <div>
+                  <b>Some tasks fill themselves.</b>
+                  <p>Step count, distance and calorie count need nothing but a phone in a pocket.</p>
+                </div>
+              </div>
+              <div class="join-point reveal">
+                <span class="join-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="12.5" rx="2.4"/><path d="M8 21h8"/><path d="m10.4 8.6 4.6 2.6-4.6 2.6V8.6Z"/></svg>
+                </span>
+                <div>
+                  <b>Content tasks complete at a desk.</b>
+                  <p>Reaching the end is what counts, and skipping through a video will not register as done.</p>
+                </div>
+              </div>
+              <div class="join-point reveal">
+                <span class="join-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10a6 6 0 0 1 12 0c0 4 1.4 5.4 1.9 6H4.1C4.6 15.4 6 14 6 10Z"/><path d="M10 19.5a2.2 2.2 0 0 0 4 0"/></svg>
+                </span>
+                <div>
+                  <b>Manual logs take seconds, and employees set their own reminders.</b>
+                  <p>Water, mood and meals, each with its own time and repeat days.</p>
+                </div>
+              </div>
+            </div>
+            <p class="join-fine">Most challenges reset daily tasks at midnight, so a missed check-in stays missed.</p>
+            <div class="join-cta">
+              <a class="text-link" href="#tasks">See the 27 task types
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="15" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="employee-media reveal">
+            <img src="https://cdn.vantagecircle.com/image/upload/f_auto,q_auto,w_820/v1771579791/product-images-hub/v-fit/vfit-challenge-mobile.png" alt="Vantage Fit employee app showing a challenge journey with weekly tasks and a leaderboard" width="820" height="541" loading="lazy" decoding="async">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S3 TASK FAMILIES ========== -->
+    <section class="hub-section format-screen" id="tasks" aria-labelledby="tasks-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Task families</span>
+          <h2 id="tasks-heading">27 task types, in any combination, in the same week.</h2>
+        </div>
+
+        <div class="format-grid">
+          <article class="format-card reveal">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44">
+                <rect x="6" y="28" width="9" height="14" rx="2" fill="rgba(41,41,76,.16)"/>
+                <rect x="21" y="21" width="9" height="21" rx="2" fill="rgba(41,41,76,.24)"/>
+                <rect x="36" y="13" width="9" height="29" rx="2" fill="rgba(41,41,76,.34)"/>
+                <rect x="51" y="4" width="9" height="38" rx="2" fill="#41d8b4"/>
+              </svg>
+            </div>
+            <h3>Movement and fitness</h3>
+            <p>Step count, distance and calorie count.</p>
+            <span class="best-for"><b>How it scores</b>Auto-tracked, no action needed</span>
+          </article>
+
+          <article class="format-card reveal">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44">
+                <rect x="6" y="14" width="8" height="16" rx="2" fill="rgba(41,41,76,.22)"/>
+                <rect x="16" y="9" width="8" height="26" rx="2.5" fill="#41d8b4"/>
+                <rect x="24" y="19" width="26" height="6" rx="3" fill="rgba(41,41,76,.16)"/>
+                <rect x="50" y="9" width="8" height="26" rx="2.5" fill="rgba(41,41,76,.28)"/>
+                <rect x="60" y="14" width="8" height="16" rx="2" fill="rgba(41,41,76,.22)"/>
+              </svg>
+            </div>
+            <h3>Workouts and strength</h3>
+            <p>Squat Tracker with camera pose detection, video workouts and logged sessions.</p>
+            <span class="best-for"><b>How it scores</b>Complete it, or log it</span>
+          </article>
+
+          <article class="format-card reveal">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44">
+                <circle cx="22" cy="22" r="19" fill="none" stroke="rgba(41,41,76,.14)" stroke-width="2"/>
+                <circle cx="22" cy="22" r="12.5" fill="none" stroke="rgba(41,41,76,.22)" stroke-width="2"/>
+                <circle cx="22" cy="22" r="6" fill="none" stroke="rgba(41,41,76,.28)" stroke-width="2"/>
+                <circle cx="22" cy="22" r="2.6" fill="#41d8b4"/>
+                <path d="M45 22h12" stroke="rgba(41,41,76,.16)" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="65" cy="22" r="5" fill="none" stroke="rgba(41,41,76,.28)" stroke-width="2"/>
+              </svg>
+            </div>
+            <h3>Mind and body</h3>
+            <p>Meditation, mindfulness, yoga, sleep and a daily mood check-in.</p>
+            <small class="card-fine">Mood is never shown to admins.</small>
+            <span class="best-for"><b>How it scores</b>Manual log, a tap or a short form</span>
+          </article>
+
+          <article class="format-card reveal">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44">
+                <rect x="5" y="12" width="9" height="28" rx="4.5" fill="rgba(41,41,76,.16)"/>
+                <rect x="19" y="12" width="9" height="28" rx="4.5" fill="rgba(41,41,76,.22)"/>
+                <rect x="33" y="12" width="9" height="28" rx="4.5" fill="rgba(41,41,76,.28)"/>
+                <rect x="47" y="12" width="9" height="28" rx="4.5" fill="rgba(41,41,76,.34)"/>
+                <rect x="61" y="4" width="9" height="36" rx="4.5" fill="#41d8b4"/>
+              </svg>
+            </div>
+            <h3>Nutrition and hydration</h3>
+            <p>Water log and meal logging, the two habits people can start on a Tuesday.</p>
+            <span class="best-for"><b>How it scores</b>Manual log, water is one tap</span>
+          </article>
+
+          <article class="format-card reveal">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44">
+                <rect x="4" y="3" width="34" height="38" rx="4" fill="none" stroke="rgba(41,41,76,.24)" stroke-width="2"/>
+                <rect x="11" y="11" width="20" height="3" rx="1.5" fill="rgba(41,41,76,.22)"/>
+                <rect x="11" y="18" width="13" height="3" rx="1.5" fill="rgba(41,41,76,.16)"/>
+                <path d="M10 31h7l3.5-7 5 13 3.5-6h39" fill="none" stroke="#F15162" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3>Health tracking and vitals</h3>
+            <p>Lab report upload and health vitals, for a screening campaign.</p>
+            <span class="best-for"><b>How it scores</b>Event-based, cannot be self-logged</span>
+          </article>
+
+          <article class="format-card reveal">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44">
+                <rect x="4" y="6" width="40" height="4" rx="2" fill="rgba(41,41,76,.24)"/>
+                <rect x="4" y="16" width="30" height="4" rx="2" fill="rgba(41,41,76,.18)"/>
+                <rect x="4" y="26" width="36" height="4" rx="2" fill="rgba(41,41,76,.18)"/>
+                <rect x="4" y="36" width="22" height="4" rx="2" fill="rgba(41,41,76,.14)"/>
+                <circle cx="59" cy="22" r="11" fill="#41d8b4"/>
+                <path d="m54.5 22 3.2 3.4 6-6.6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3>Content, learning and habits</h3>
+            <p>Articles, bite-size content and book reading, a doctor-visit log, plus habits and activities you name yourself.</p>
+            <span class="best-for"><b>How it scores</b>Complete it, or log it</span>
+          </article>
+        </div>
+
+        <p class="format-note">27 task types in total. Availability depends on your company's configuration: Lite Mode runs Step Count only, Full Mode runs all 27. In the admin dashboard this format is called a Custom Challenge.</p>
+      </div>
+    </section>
+
+    <!-- ========== S4 WEEKLY THEMES ========== -->
+    <section class="hub-section weeks-screen" id="weeks" aria-labelledby="weeks-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Weekly themes</span>
+          <h2 id="weeks-heading">A different way to win every week.</h2>
+        </div>
+
+        <div class="week-rail" role="img" aria-label="Four weekly themes in a Vantage Fit multi-activity challenge, each with its own color and task set. Week 1 Move with step count, distance and desk stretches. Week 2 Nourish with step count, water log and an article. Week 3 Rest with sleep tracker, meditation and mood check-in. Week 4 Thrive with step count, squat tracker, yoga and bite-size content. Figures shown are illustrative.">
+          <div class="wr-tile reveal">
+            <div class="wr-band" style="background:#41d8b4"></div>
+            <div class="wr-body">
+              <span class="wr-no">Week 1</span>
+              <b class="wr-name">Move</b>
+              <div class="wr-chips"><span>Step count</span><span>Distance</span><span>Desk stretches</span></div>
+            </div>
+          </div>
+          <div class="wr-tile reveal">
+            <div class="wr-band" style="background:#F6B93B"></div>
+            <div class="wr-body">
+              <span class="wr-no">Week 2</span>
+              <b class="wr-name">Nourish</b>
+              <div class="wr-chips"><span>Step count</span><span>Water log</span><span>Read: build a better lunch</span></div>
+            </div>
+          </div>
+          <div class="wr-tile reveal">
+            <div class="wr-band" style="background:rgba(41,41,76,.45)"></div>
+            <div class="wr-body">
+              <span class="wr-no">Week 3</span>
+              <b class="wr-name">Rest</b>
+              <div class="wr-chips"><span>Sleep tracker</span><span>Meditation</span><span>Mood check-in</span></div>
+            </div>
+          </div>
+          <div class="wr-tile reveal">
+            <div class="wr-band" style="background:#F15162"></div>
+            <div class="wr-body">
+              <span class="wr-no">Week 4</span>
+              <b class="wr-name">Thrive</b>
+              <div class="wr-chips"><span>Step count</span><span>Squat tracker</span><span>Yoga</span><span>Bite-size content</span></div>
+              <span class="wr-add">+ Add theme</span>
+            </div>
+          </div>
+        </div>
+        <div class="week-tagrow"><span class="mock-tag">Illustrative data</span></div>
+
+        <div class="week-foot">
+          <ul class="week-lines">
+            <li>The number of weeks comes from your start and end dates.</li>
+            <li>Each week carries its own name, theme logo, theme color and task set.</li>
+            <li>You can add a theme mid-challenge, or update or delete one for a week that has not started.</li>
+          </ul>
+          <p class="week-closer">The leaderboard carries a weekly view alongside the overall standings, so a slow first week is not the whole season. That is what makes it read as a program rather than a points race.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S5 SCORING INTEGRITY ========== -->
+    <section class="hub-section scoring-screen" id="scoring" aria-labelledby="scoring-heading">
+      <div class="shell">
+        <div class="fairband reveal">
+          <div>
+            <span class="eyebrow">Scoring integrity</span>
+            <h2 id="scoring-heading">The scoring rules, published.</h2>
+            <p class="lead">Your fittest ten people cannot win this on steps alone, and an inflated log earns nothing. Here is exactly why.</p>
+            <div class="fair-list">
+              <div class="fair-item">
+                <i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6.5h16"/><rect x="6.5" y="10.5" width="4.5" height="9.5" rx="1.4"/><rect x="14" y="10.5" width="4.5" height="9.5" rx="1.4"/></svg></i>
+                <div>
+                  <b>Non-step tasks cap at 100% of target.</b>
+                  <p>Someone who logs five yoga sessions against a target of three earns points for three. Going over earns nothing extra.</p>
+                </div>
+              </div>
+              <div class="fair-item">
+                <i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 4v16M12 4v16M19 4v16"/><circle cx="5" cy="9" r="2.2"/><circle cx="12" cy="15" r="2.2"/><circle cx="19" cy="7.5" r="2.2"/></svg></i>
+                <div>
+                  <b>Step count is one task among many, and you set what it is worth.</b>
+                  <p>Points per task are yours to author, so a step-only performer earns one task's points while somebody logging across the week's set earns across all of them.</p>
+                </div>
+              </div>
+              <div class="fair-item">
+                <i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.4"/><path d="M3.5 10h17M8.5 3v4M15.5 3v4"/><path d="m10 15 1.9 1.9 3.6-3.8"/></svg></i>
+                <div>
+                  <b>Late joiners score from their join date.</b>
+                  <p>Add people mid-challenge without gifting anyone a head start.</p>
+                </div>
+              </div>
+              <div class="fair-item">
+                <i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 6v5c0 4.6 3.1 8.3 7.5 10 4.4-1.7 7.5-5.4 7.5-10V6L12 3Z"/><path d="m9 12 2.2 2.2L15.5 9.7"/></svg></i>
+                <div>
+                  <b>Steps come only from recognized apps and devices.</b>
+                  <p>Unrecognized sources are rejected, implausible counts are filtered, and one primary device counts at a time.</p>
+                </div>
+              </div>
+            </div>
+            <p class="fair-fine">Wellbeing logs like water, yoga and meditation are self-reported. The design answer is that over-logging earns nothing, not that we check it.</p>
+          </div>
+
+          <div class="audit-board" role="img" aria-label="Vantage Fit score breakdown showing yoga logged five times against a target of three, scoring points for three. Figures shown are illustrative.">
+            <div class="audit-head">
+              <b>Score breakdown · Week 4 Thrive</b>
+              <span class="audit-live"><i></i> Live</span>
+            </div>
+            <div class="audit-cols" aria-hidden="true">
+              <span>Task</span><span>Target</span><span>Logged</span><span>Points</span>
+            </div>
+            <div class="audit-row" aria-hidden="true">
+              <span class="audit-task">Step count</span>
+              <span class="audit-target">5,000 on 4 days</span>
+              <span><span class="audit-auto">Auto</span></span>
+              <span class="audit-pts">40</span>
+            </div>
+            <div class="audit-row" aria-hidden="true">
+              <span class="audit-task">Squat tracker</span>
+              <span class="audit-target">30 a day</span>
+              <span class="audit-log">30</span>
+              <span class="audit-pts">30</span>
+            </div>
+            <div class="audit-row capped" aria-hidden="true">
+              <span class="audit-task">Yoga<span class="audit-cap">Capped at 3</span></span>
+              <span class="audit-target">3 sessions</span>
+              <span class="audit-log">5</span>
+              <span class="audit-pts">30</span>
+            </div>
+            <div class="audit-row" aria-hidden="true">
+              <span class="audit-task">Bite-size content</span>
+              <span class="audit-target">finish the lesson</span>
+              <span class="audit-log">Done</span>
+              <span class="audit-pts">20</span>
+            </div>
+            <p class="audit-caption">Logged 5 of 3 yoga sessions. Points for 3, which is 100% of target.</p>
+            <span class="mock-tag">Illustrative data</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S6 SECURITY AND PRIVACY ========== -->
+    <section class="screen trust-screen solutions-trust" id="security" aria-labelledby="security-heading">
+      <div class="shell">
+        <div class="trust-cols">
+          <div class="trust-copy">
+            <span class="eyebrow">Enterprise security &amp; compliance</span>
+            <h2 id="security-heading">Employees see their own data. HR sees aggregate trends.</h2>
+            <p class="lead">This challenge asks people to log sleep, mood and vitals, so the boundary is published rather than promised. An employee can also hide from the leaderboard and still take part, and still earn points.</p>
+            <div class="trust-actions">
+              <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+              <a class="text-link text-link-light" href="https://www.vantagefit.io/features/security-and-compliance/">Explore security &amp; compliance &rarr;</a>
+            </div>
+          </div>
+          <div class="trust-grid">
+            <div class="trust-card">
+              <span class="trust-icon" aria-hidden="true">&#9673;</span>
+              <h3>What an admin can see</h3>
+              <p>Aggregate metrics, challenge participation status, leaderboard rankings, team scores, registration status, last active date and device type.</p>
+            </div>
+            <div class="trust-card">
+              <span class="trust-icon" aria-hidden="true">&#9737;</span>
+              <h3>What an admin cannot see</h3>
+              <p>Weight, BMI and body measurements, health risk answers and risk categories, lab biomarker values, mood logs, the food diary and sleep patterns.</p>
+            </div>
+            <div class="trust-card">
+              <span class="trust-icon" aria-hidden="true">&#8644;</span>
+              <h3>A mood check-in scores without being seen</h3>
+              <p>The score shows the check-in happened. The mood itself is never shown to admins or on leaderboards.</p>
+            </div>
+            <div class="trust-card">
+              <span class="trust-icon" aria-hidden="true">&#10003;</span>
+              <h3>Where the data sits</h3>
+              <p>Vantage Fit follows HIPAA guidelines, is SOC 2 Type II, and offers secured regional data hosting in India, the US, the EU and the UAE.</p>
+            </div>
+          </div>
+        </div>
+        <div class="trust-plaque">
+          <div class="mark-strip" role="list">
+            <span class="mark" role="listitem">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4.5 6v5c0 4.6 3.1 8.3 7.5 10 4.4-1.7 7.5-5.4 7.5-10V6L12 3Z"/><path d="m9 12 2.2 2.2L15.5 9.7"/></svg>
+              Follows HIPAA guidelines
+            </span>
+            <span class="mark" role="listitem">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 3.5H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9l-5.5-5.5Z"/><path d="M13.5 3.5V9H19"/><path d="m8.8 15 1.9 1.9 3.9-4.1"/></svg>
+              SOC 2 Type II
+            </span>
+            <span class="mark" role="listitem">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.2 2.4 3.3 5.2 3.3 8.5S14.2 18.1 12 20.5c-2.2-2.4-3.3-5.2-3.3-8.5S9.8 5.9 12 3.5Z"/></svg>
+              Secured regional data hosting
+            </span>
+          </div>
+          <p class="trust-support">Security documentation is available during evaluation.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S7 CONTROL FOR HR ========== -->
+    <section class="hub-section hr-screen" id="hr" aria-labelledby="hr-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Control for HR</span>
+          <h2 id="hr-heading">Build the custom challenge. Leave with per-task evidence.</h2>
+        </div>
+
+        <div class="tour-tabs">
+          <div class="seg" role="tablist" aria-label="Choose a view">
+            <span class="seg-thumb" aria-hidden="true"></span>
+            <button class="seg-btn" id="tab-build" role="tab" aria-selected="true" aria-controls="pane-build" tabindex="0" type="button">Build it</button>
+            <button class="seg-btn" id="tab-prove" role="tab" aria-selected="false" aria-controls="pane-prove" tabindex="-1" type="button">Prove it</button>
+          </div>
+
+          <div class="tabpane is-in" id="pane-build" role="tabpanel" aria-labelledby="tab-build" tabindex="0">
+            <div class="tour-copy">
+              <ul class="tour-checks">
+                <li><b>Start from a pre-built template.</b><p>Format, tasks, targets, scoring and weekly themes come preset with best-practice defaults, and shortening the duration trims the last week's configuration.</p></li>
+                <li><b>Add weeks and themes.</b><p>The week count comes from your dates. Each week takes a name, a theme logo and a theme color.</p></li>
+                <li><b>Add tasks per week.</b><p>Task type, target value, daily or weekly mode, and points. Drag to reorder.</p></li>
+                <li><b>Set the audience and publish.</b><p>All employees or a filtered group, and any filter makes the challenge private. It sits in Upcoming and moves to Ongoing on the start date.</p></li>
+              </ul>
+              <p class="measure-note">Creating a challenge takes 5 to 10 minutes from the admin dashboard. Challenges are created on the dashboard, not on mobile.</p>
+            </div>
+            <div class="tour-media">
+              <div class="launch-mock" role="img" aria-label="Vantage Fit task configuration screen setting a daily water log target of 8 glasses on 5 days for 10 points. Figures shown are illustrative.">
+                <div class="lm-head">
+                  <b>Add task</b>
+                  <span>Week 2 · Nourish</span>
+                </div>
+                <div class="lm-task" aria-hidden="true">
+                  <i>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3.5c3.6 4 6 6.9 6 9.7a6 6 0 0 1-12 0c0-2.8 2.4-5.7 6-9.7Z"/></svg>
+                  </i>
+                  <span><b>Water log</b><small>Nutrition and hydration</small></span>
+                </div>
+                <span class="lm-label">Select target type</span>
+                <div class="lm-pills" aria-hidden="true">
+                  <span class="lm-pill is-on"><i></i>Daily</span>
+                  <span class="lm-pill"><i></i>Weekly</span>
+                </div>
+                <div class="lm-field" aria-hidden="true"><span>Target value</span><span class="lm-input">8</span></div>
+                <div class="lm-field" aria-hidden="true">
+                  <span>No of days this week</span>
+                  <span class="lm-input lm-select">5
+                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+                  </span>
+                </div>
+                <div class="lm-field" aria-hidden="true"><span>Points</span><span class="lm-input">10</span></div>
+                <div class="lm-rebuild" aria-hidden="true">
+                  <small>Task summary</small>
+                  <b>Log 8 glasses of water on at least 5 days this week for 10 points.</b>
+                </div>
+                <div class="lm-actions" aria-hidden="true">
+                  <span class="lm-ghost">Remove task</span>
+                  <span class="lm-cta">Add task</span>
+                </div>
+                <span class="mock-tag">Illustrative data</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tabpane" id="pane-prove" role="tabpanel" aria-labelledby="tab-prove" tabindex="0" hidden>
+            <div class="tour-copy">
+              <ul class="tour-checks">
+                <li><b>Score and Steps in every challenge, plus Team when you enable teams.</b><p>Score ranks by total points across every task and week, Steps ranks by step count alone, and the Team view ranks teams by average score.</p></li>
+                <li><b>Open any participant for the breakdown.</b><p>Points per task, performance per week, and whether each task was completed, partially completed or missed.</p></li>
+                <li><b>Filter by department, search by name, then export.</b><p>Filters apply before the export.</p></li>
+                <li><b>The Custom leaderboard CSV carries per-task score columns.</b><p>It also carries name and email, department and country, total score and rank, and total step count.</p></li>
+              </ul>
+              <p class="tour-close">You can see which tasks people are completing and which they are skipping, which is what makes the next challenge's mix evidence-based.</p>
+              <p class="measure-note">Exports are manual CSV downloads from the dashboard. There is no scheduled report delivery.</p>
+            </div>
+            <div class="tour-media">
+              <div class="report-mock" role="img" aria-label="Vantage Fit admin leaderboard with a participant expanded to show per-task points and completed, partially completed and missed status. Figures shown are illustrative.">
+                <div class="rm-head">
+                  <b>March Reset · Leaderboard</b>
+                  <span class="mock-tag">Illustrative data</span>
+                </div>
+                <div class="rm-tabs" aria-hidden="true">
+                  <span class="on">Score</span><span>Steps</span><span>Team · if enabled</span>
+                </div>
+                <div class="rm-controls" aria-hidden="true">
+                  <span class="rm-field">Filter by department</span>
+                  <span class="rm-field">Search by name</span>
+                </div>
+                <div class="rm-cols" aria-hidden="true">
+                  <span>Rank</span><span>Participant</span><span>Score</span><span>Total step count</span>
+                </div>
+                <div class="rm-row" aria-hidden="true">
+                  <span class="rm-rank">1</span>
+                  <span class="rm-name">A. Rivera <small>Operations</small></span>
+                  <span class="rm-score">340</span>
+                  <span class="rm-steps">214,480</span>
+                </div>
+                <div class="rm-row expanded" aria-hidden="true">
+                  <span class="rm-rank">2</span>
+                  <span class="rm-name">P. Sharma <small>Engineering</small></span>
+                  <span class="rm-score">295</span>
+                  <span class="rm-steps">186,120</span>
+                </div>
+                <div class="rm-open" aria-hidden="true">
+                  <div class="rm-weeks">
+                    <span>W1</span><span class="on">W2</span><span>W3</span><span>W4</span>
+                  </div>
+                  <div class="rm-task">
+                    <span>Step count 10,000 a day</span>
+                    <span class="rm-pts">50 / 50 pts</span>
+                    <span class="rm-stat done">Completed</span>
+                  </div>
+                  <div class="rm-task">
+                    <span>Water log 8 glasses</span>
+                    <span class="rm-pts">40 / 50 pts</span>
+                    <span class="rm-stat part">Partially completed</span>
+                  </div>
+                  <div class="rm-task">
+                    <span>Read: build a better lunch</span>
+                    <span class="rm-pts">0 / 20 pts</span>
+                    <span class="rm-stat miss">Missed</span>
+                  </div>
+                </div>
+                <div class="rm-foot" aria-hidden="true">
+                  <span class="rm-export">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4.5-4.5M12 15l4.5-4.5M4 20h16"/></svg>
+                    Export CSV
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S8 CUSTOMER RESULTS ========== -->
+    <section class="hub-section proof-hub" id="proof" aria-labelledby="proof-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Customer results</span>
+          <h2 id="proof-heading">Inside one program, people did far more than walk.</h2>
+        </div>
+
+        <div class="result-lead reveal">
+          <div>
+            <b class="stat">88%</b>
+            <p>IBS Software's 28-day March to Fitness challenge reached 88% engagement, with 500+ active participants averaging 5,000+ steps a day.</p>
+            <span class="segment">IBS Software · March to Fitness · March 1–28, 2024</span>
+          </div>
+          <div class="count-strip">
+            <span class="count-strip-label">Inside that one challenge</span>
+            <div class="count-row"><b>236</b><span>of 660 participants hit 30,000+ steps a week by week 3</span></div>
+            <div class="count-row"><b>130</b><span>monitored their daily mood</span></div>
+            <div class="count-row"><b>118</b><span>tracked heart health</span></div>
+            <div class="count-row"><b>98</b><span>did squats</span></div>
+            <div class="count-row"><b>95</b><span>engaged in mental wellness activities</span></div>
+          </div>
+        </div>
+
+        <div class="results-grid">
+          <article class="result-card reveal">
+            <b class="stat">59%</b>
+            <p>engagement across Tata Motors' six-month Step &amp; Stride Challenge, with 1,248 active participants, 7,275 activities logged and 7,200+ meals logged.</p>
+            <span class="segment">Tata Motors · Step &amp; Stride Challenge · Automotive</span>
+          </article>
+          <article class="result-card reveal">
+            <b class="stat">1,980</b>
+            <p>mindfulness minutes logged in the two-week Wipro Wellbeing Fest, alongside 1,409 litres of water and 8,870 squats, with 163 active users.</p>
+            <span class="segment">Wipro · Wipro Wellbeing Fest · April 7–20, 2025</span>
+          </article>
+        </div>
+
+        <div class="quote-duo">
+          <div class="quote-band reveal">
+            <div>
+              <blockquote>&ldquo;The activities were engaging, catering to different fitness levels and interests.&rdquo;</blockquote>
+              <span class="quote-who">— Shraddha Mishra, HR Generalist &amp; Operations, Checkmarx</span>
+            </div>
+          </div>
+          <div class="quote-band reveal">
+            <div>
+              <blockquote>&ldquo;We love the Vantage Fit app! The wide variety of wellness options kept our team interested week by week.&rdquo;</blockquote>
+              <span class="quote-who">— International School of Kuala Lumpur (ISKL)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="proof-fine">
+          <small>Results from named customer programs, labeled the way each customer measured them. Outcomes vary by workforce and program design.</small>
+          <a class="text-link" href="https://www.vantagefit.io/casestudy/">Read customer stories
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="15" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S9 FAQ ========== -->
+    <section class="hub-section faq-screen" id="faq" aria-labelledby="faq-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Common questions</span>
+          <h2 id="faq-heading">What HR asks before the first custom challenge.</h2>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item" open>
+            <summary><h3>Do we have to stop our step challenge to run this?</h3></summary>
+            <p>No. There is no limit on how many challenges run at once, and a single walk counts toward every challenge whose tasks it matches. The common pattern is one always-on challenge plus short bursts. Stagger the end dates so each set of results lands on its own day.</p>
+          </details>
+          <details class="faq-item">
+            <summary><h3>Is every task type available to us?</h3></summary>
+            <p>Availability depends on your company's configuration. Lite Mode runs Step Count only, so a multi-activity challenge needs Full Mode, where all 27 task types are available. A few task types are switched on by your account manager rather than self-serve.</p>
+          </details>
+          <details class="faq-item">
+            <summary><h3>Do employees need a wearable?</h3></summary>
+            <p>No. Steps come from Apple Health on iOS and Google Fit on Android. Fitbit, Garmin and Samsung Watch take over when connected, and only one primary device counts at a time so nothing is double counted. A wearable is optional.</p>
+          </details>
+          <details class="faq-item">
+            <summary><h3>Who designs the weekly task mix?</h3></summary>
+            <p>Start from a pre-built template with best-practice defaults, then adjust. The guidance the product ships with is to keep targets achievable, at a level 60 to 70 percent of participants can hit, and the mix it recommends for maximum participation is step count plus a water log plus a content task, because auto-tracked tasks complete without friction.</p>
+          </details>
+          <details class="faq-item">
+            <summary><h3>What can we export at the end?</h3></summary>
+            <p>The leaderboard exports to CSV with per-task score columns for a custom challenge, plus name and email, department and country, total score and rank, and total step count. Employee, transaction and redemption reports export the same way. Exports are manual downloads, not scheduled deliveries.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S10 RELATED ========== -->
+    <section class="related-screen" id="related" aria-labelledby="related-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Keep exploring</span>
+          <h2 id="related-heading">Where teams go next.</h2>
+        </div>
+        <div class="related-grid">
+          <a class="related-row reveal" href="https://www.vantagefit.io/steps-challenge/">
+            <span class="related-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20h16M7.5 20v-5M12 20v-9M16.5 20v-13"/></svg>
+            </span>
+            <span>
+              <h3>Steps Challenge
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </h3>
+              <p>One metric, five formats, when a single number is the whole point.</p>
+            </span>
+          </a>
+          <a class="related-row reveal" href="https://www.vantagefit.io/team-challenges/">
+            <span class="related-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="7" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M2.8 20c.5-3.4 2.6-5.4 5.2-5.4s4.7 2 5.2 5.4M13.9 20c.4-2.5 1.6-4 3.1-4 1.6 0 2.8 1.5 3.2 4"/></svg>
+            </span>
+            <span>
+              <h3>Team Challenge
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </h3>
+              <p>Score teams on the average of their members, not the total.</p>
+            </span>
+          </a>
+          <a class="related-row reveal" href="../solutions-page/vantage-fit-solutions-v1.html">
+            <span class="related-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3.5 20.5 8 12 12.5 3.5 8 12 3.5Z"/><path d="M3.5 12.5 12 17l8.5-4.5M3.5 17 12 21.5l8.5-4.5"/></svg>
+            </span>
+            <span>
+              <h3>All Vantage Fit solutions
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </h3>
+              <p>Every program on one page, from one-day events to year-round calendars.</p>
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S11 CLOSER ========== -->
+    <section class="final" id="demo" aria-labelledby="demo-heading">
+      <div class="shell">
+        <h2 id="demo-heading">See the task builder and the score breakdown.</h2>
+        <p>A 30-minute demo. We will build a four-week challenge in the dashboard and open one participant's per-task breakdown.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+          <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">See pricing</a>
+        </div>
+        <div class="final-checks">
+          <span>Live product walkthrough</span>
+          <span>Built in the live dashboard</span>
+          <span>No obligation</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="#top">
+            <img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37" style="height:28px;width:auto;display:block">
+          </a>
+          <p class="footer-about">Inclusive wellness that turns participation into measurable progress.</p>
+        </div>
+        <div>
+          <div class="footer-title">Product</div>
+          <div class="footer-links">
+            <a href="#tasks">Challenge tasks</a>
+            <a href="https://www.vantagefit.io/features/admin-dashboard/">HR analytics</a>
+            <a href="https://www.vantagefit.io/features/security-and-compliance/">Security</a>
+            <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Solutions</div>
+          <div class="footer-links">
+            <a href="#top" aria-current="page" style="color:#fff;font-weight:700">Multi-activity challenges</a>
+            <a href="https://www.vantagefit.io/steps-challenge/">Step challenges</a>
+            <a href="https://www.vantagefit.io/team-challenges/">Team challenges</a>
+            <a href="https://www.vantagefit.io/holistic-wellness-program/">Wellness program</a>
+            <a href="https://www.vantagefit.io/remote-team-wellness/">Remote teams</a>
+            <a href="https://www.vantagefit.io/health-fitness-analytics/">Analytics</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Company</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/about-us/">About</a>
+            <a href="#proof">Customer results</a>
+            <a href="https://www.vantagefit.io/casestudy/">Case studies</a>
+            <a href="https://www.vantagefit.io/request-demo/">Contact sales</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Vantage Circle. All rights reserved.</span>
+        <span>HIPAA guidelines · SOC 2 Type II</span>
+        <span>Wellness built for participation.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Do we have to stop our step challenge to run this?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. There is no limit on how many challenges run at once, and a single walk counts toward every challenge whose tasks it matches. The common pattern is one always-on challenge plus short bursts. Stagger the end dates so each set of results lands on its own day."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is every task type available to us?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Availability depends on your company's configuration. Lite Mode runs Step Count only, so a multi-activity challenge needs Full Mode, where all 27 task types are available. A few task types are switched on by your account manager rather than self-serve."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do employees need a wearable?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Steps come from Apple Health on iOS and Google Fit on Android. Fitbit, Garmin and Samsung Watch take over when connected, and only one primary device counts at a time so nothing is double counted. A wearable is optional."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Who designs the weekly task mix?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Start from a pre-built template with best-practice defaults, then adjust. The guidance the product ships with is to keep targets achievable, at a level 60 to 70 percent of participants can hit, and the mix it recommends for maximum participation is step count plus a water log plus a content task, because auto-tracked tasks complete without friction."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What can we export at the end?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The leaderboard exports to CSV with per-task score columns for a custom challenge, plus name and email, department and country, total score and rank, and total step count. Employee, transaction and redemption reports export the same way. Exports are manual downloads, not scheduled deliveries."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <script>
+    // Mobile nav
+    const menuButton = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation');
+      navLinks.classList.toggle('open', !open);
+    });
+
+    // Mega-menu behavior (desktop hover, mobile accordion)
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const navTriggers = [...document.querySelectorAll('.nav-trigger')];
+    const desktopNav = window.matchMedia('(min-width: 861px)');
+    let desktopCloseTimer;
+
+    // The mega menu opens on hover and on focus-within, so aria-expanded has to
+    // follow both paths, not only the mobile accordion.
+    const setExpanded = (item, open) => {
+      item.querySelector('.nav-trigger')?.setAttribute('aria-expanded', String(open));
+    };
+
+    const closeDesktopMenus = (except = null) => {
+      navItems.forEach((item) => {
+        if (item !== except) {
+          item.classList.remove('desktop-open');
+          if (!item.contains(document.activeElement)) setExpanded(item, false);
+        }
+      });
+    };
+
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => {
+        if (!desktopNav.matches) return;
+        window.clearTimeout(desktopCloseTimer);
+        closeDesktopMenus(item);
+        item.classList.add('desktop-open');
+        setExpanded(item, true);
+        const focusedTrigger = document.activeElement?.closest?.('.nav-trigger');
+        if (focusedTrigger && !item.contains(focusedTrigger)) focusedTrigger.blur();
+      });
+
+      item.addEventListener('pointerleave', () => {
+        if (!desktopNav.matches) return;
+        desktopCloseTimer = window.setTimeout(() => {
+          if (!item.matches(':hover') && !item.contains(document.activeElement)) {
+            item.classList.remove('desktop-open');
+            setExpanded(item, false);
+          }
+        }, 120);
+      });
+
+      item.addEventListener('focusin', () => {
+        if (desktopNav.matches) setExpanded(item, true);
+      });
+
+      item.addEventListener('focusout', () => {
+        if (!desktopNav.matches) return;
+        window.setTimeout(() => {
+          if (!item.contains(document.activeElement) && !item.matches(':hover')) setExpanded(item, false);
+        }, 0);
+      });
+    });
+
+    // Escape dismisses an open mega menu and returns focus to its trigger,
+    // which is the Dismissible requirement in WCAG 1.4.13.
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      const active = document.activeElement?.closest?.('.nav-item')
+        || document.querySelector('.nav-item.desktop-open');
+      if (!active) return;
+      active.classList.remove('desktop-open');
+      active.classList.remove('open');
+      active.classList.add('esc-closed');
+      setExpanded(active, false);
+      active.querySelector('.nav-trigger')?.focus();
+    });
+
+    // The panel becomes available again as soon as the user leaves or reopens it.
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => item.classList.remove('esc-closed'));
+      item.addEventListener('focusout', () => {
+        window.setTimeout(() => {
+          if (!item.contains(document.activeElement)) item.classList.remove('esc-closed');
+        }, 0);
+      });
+      item.querySelector('.nav-trigger')?.addEventListener('click', () => item.classList.remove('esc-closed'));
+    });
+
+    document.querySelectorAll('.nav-links > a').forEach((link) => {
+      link.addEventListener('pointerenter', () => {
+        if (desktopNav.matches) closeDesktopMenus();
+      });
+    });
+
+    navTriggers.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        if (window.matchMedia('(max-width: 860px)').matches) {
+          e.preventDefault();
+          const item = btn.closest('.nav-item');
+          const isOpen = item.classList.contains('open');
+          document.querySelectorAll('.nav-item').forEach((n) => {
+            n.classList.remove('open');
+            n.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        }
+      });
+    });
+
+    // HR tabs (segmented control)
+    (function () {
+      const seg = document.querySelector('.seg');
+      if (!seg) return;
+      const buttons = [...seg.querySelectorAll('.seg-btn')];
+      buttons.forEach((btn, i) => {
+        btn.addEventListener('click', () => {
+          buttons.forEach((b) => {
+            const pane = document.getElementById(b.getAttribute('aria-controls'));
+            const active = b === btn;
+            b.setAttribute('aria-selected', String(active));
+            b.tabIndex = active ? 0 : -1;
+            if (pane) {
+              pane.hidden = !active;
+              pane.classList.toggle('is-in', active);
+            }
+          });
+          seg.classList.toggle('hr', i === 1);
+        });
+      });
+
+      // Arrow, Home and End move between tabs, per the ARIA tabs pattern.
+      seg.addEventListener('keydown', (e) => {
+        const from = buttons.indexOf(document.activeElement);
+        if (from === -1) return;
+        let to = null;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') to = (from + 1) % buttons.length;
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') to = (from - 1 + buttons.length) % buttons.length;
+        if (e.key === 'Home') to = 0;
+        if (e.key === 'End') to = buttons.length - 1;
+        if (to === null) return;
+        e.preventDefault();
+        buttons[to].focus();
+        buttons[to].click();
+      });
+    })();
+
+    // Nav CTA: ghost over the hero, filled after
+    (function () {
+      const nav = document.querySelector('nav.nav');
+      const hero = document.querySelector('.hero');
+      if (!nav || !hero) return;
+      const state = () => nav.classList.toggle('lit', window.scrollY > hero.offsetHeight - 90);
+      window.addEventListener('scroll', state, { passive: true });
+      state();
+    })();
+
+    // Subtle scroll reveal
+    (function () {
+      const nodes = document.querySelectorAll('.reveal');
+      if (!nodes.length) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+        nodes.forEach((n) => n.classList.add('on'));
+        return;
+      }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('on');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+      nodes.forEach((n) => io.observe(n));
+    })();
+
+    // Grayscale preview mode for accessibility review: append ?gray to the URL
+    if (new URLSearchParams(location.search).has('gray')) {
+      document.documentElement.style.filter = 'grayscale(1)';
+    }
+  </script>
+</body>
+</html>

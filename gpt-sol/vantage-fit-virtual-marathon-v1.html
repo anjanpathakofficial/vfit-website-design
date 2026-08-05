@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Run an employee virtual marathon with step-to-distance or a one-day GPS event. Manage audiences, progress, leaderboards, notifications, and reports.">
+  <meta name="theme-color" content="#1D2228">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/enterprise.css">
+  <title>Virtual Marathon for Employees | Vantage Fit</title>
+  <style>
+    :root {
+      --course-dark: #1D2228;
+      --course-panel: #252c34;
+      --course-coral: #F15162;
+      --course-mint: #41D8B4;
+      --course-paper: #FFFFFF;
+      --course-mist: #F1F1F6;
+      --course-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    body { overflow-x: hidden; }
+    main { background: var(--paper); }
+    section { scroll-margin-top: 76px; }
+
+    .skip-link {
+      position: fixed;
+      z-index: 100;
+      top: 10px;
+      left: 10px;
+      padding: 10px 14px;
+      border-radius: 9px;
+      background: var(--ink);
+      color: #fff;
+      font-size: .82rem;
+      font-weight: 800;
+      transform: translateY(-160%);
+      transition: transform .2s ease;
+    }
+    .skip-link:focus { transform: none; }
+
+    :where(a, button, summary):focus-visible {
+      outline: 3px solid rgba(241, 81, 98, .42);
+      outline-offset: 3px;
+    }
+
+    .nav-logo { width: auto; height: 32px; }
+    .footer-logo { width: auto; height: 28px; }
+    .nav-links > a[aria-current="page"] { background: var(--soft); color: var(--ink); }
+
+    .section-pad { padding: 94px 0; }
+    .section-head { max-width: 760px; }
+    .section-head .lead { max-width: 650px; }
+    .section-head.center { margin-inline: auto; }
+    .section-head.center .lead { margin-inline: auto; }
+    .mono { font-family: var(--course-mono); }
+    .mock-note {
+      color: var(--muted);
+      font-family: var(--course-mono);
+      font-size: .63rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .check-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px 22px;
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 750;
+    }
+    .check-list span { display: inline-flex; align-items: center; gap: 8px; }
+    .check-list span::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--course-mint);
+      box-shadow: 0 0 0 4px rgba(65,216,180,.12);
+      content: "";
+    }
+
+    /* Hero: two product paths become one shared finish. */
+    .vm-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 58px 0 72px;
+      background:
+        radial-gradient(660px 480px at 91% 18%, rgba(241,81,98,.10), transparent 68%),
+        radial-gradient(620px 430px at 7% 92%, rgba(65,216,180,.10), transparent 70%),
+        linear-gradient(180deg, #fff 0%, #fdfbfb 100%);
+    }
+    .vm-hero::after {
+      position: absolute;
+      right: -190px;
+      bottom: -300px;
+      width: 580px;
+      height: 580px;
+      border: 1px solid rgba(41,41,76,.08);
+      border-radius: 50%;
+      content: "";
+    }
+    .vm-hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      min-height: 610px;
+      align-items: center;
+      grid-template-columns: .88fr 1.12fr;
+      gap: 66px;
+    }
+    .vm-hero h1 { max-width: 660px; margin-top: 12px; }
+    .vm-hero h1 em { color: var(--coral-dark); font-style: normal; }
+    .vm-hero .lead { max-width: 620px; font-size: 1.08rem; }
+
+    .course-stage {
+      position: relative;
+      min-height: 570px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 30px;
+      background:
+        linear-gradient(rgba(255,255,255,.033) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.033) 1px, transparent 1px),
+        linear-gradient(155deg, #2d353e 0%, var(--course-dark) 62%);
+      background-size: 38px 38px, 38px 38px, auto;
+      box-shadow: 0 34px 80px rgba(29,34,40,.24);
+      color: #fff;
+      isolation: isolate;
+    }
+    .course-stage::before {
+      position: absolute;
+      z-index: -1;
+      inset: auto -100px -180px auto;
+      width: 430px;
+      height: 430px;
+      border: 1px solid rgba(255,255,255,.11);
+      border-radius: 50%;
+      content: "";
+    }
+    .stage-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 20px 22px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    .stage-title { display: flex; align-items: center; gap: 10px; font-size: .8rem; font-weight: 800; }
+    .stage-title i {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--course-mint);
+      box-shadow: 0 0 0 5px rgba(65,216,180,.12);
+    }
+    .stage-bar .mock-note { color: rgba(255,255,255,.52); }
+    .course-map { position: relative; min-height: 315px; }
+    .course-map svg { position: absolute; inset: 20px 20px 0; width: calc(100% - 40px); height: 270px; }
+    .route-path {
+      fill: none;
+      stroke-linecap: round;
+      stroke-width: 4;
+      stroke-dasharray: 9 12;
+      animation: routeFlow 12s linear infinite;
+    }
+    .route-coral { stroke: var(--course-coral); }
+    .route-mint { stroke: var(--course-mint); animation-direction: reverse; }
+    .course-label {
+      position: absolute;
+      max-width: 165px;
+      padding: 8px 10px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 10px;
+      background: rgba(29,34,40,.82);
+      box-shadow: 0 10px 28px rgba(0,0,0,.18);
+      backdrop-filter: blur(10px);
+      font-size: .65rem;
+      line-height: 1.35;
+    }
+    .course-label b { display: block; margin-bottom: 2px; font-size: .72rem; }
+    .course-label small { color: rgba(255,255,255,.62); font-size: .59rem; }
+    .label-steps { top: 45px; left: 32px; }
+    .label-gps { right: 42px; bottom: 58px; }
+    .format-pin {
+      position: absolute;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #fff;
+      color: var(--ink);
+      font-size: .63rem;
+      font-weight: 800;
+      box-shadow: 0 10px 28px rgba(0,0,0,.18);
+    }
+    .format-pin::before { width: 7px; height: 7px; border-radius: 50%; content: ""; }
+    .pin-steps { top: 174px; left: 18%; }
+    .pin-steps::before { background: var(--course-coral); }
+    .pin-gps { right: 18%; bottom: 30px; }
+    .pin-gps::before { background: var(--course-mint); }
+    .finish-marker {
+      position: absolute;
+      top: 38px;
+      right: 54px;
+      display: grid;
+      width: 72px;
+      height: 72px;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 50%;
+      background: rgba(255,255,255,.07);
+      font-family: var(--course-mono);
+      font-size: .5rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .finish-marker::before {
+      position: absolute;
+      width: 30px;
+      height: 22px;
+      top: 13px;
+      background:
+        linear-gradient(45deg, #fff 25%, transparent 25%) 0 0/10px 10px,
+        linear-gradient(45deg, transparent 75%, #fff 75%) 0 0/10px 10px,
+        linear-gradient(45deg, transparent 75%, #fff 75%) 5px 5px/10px 10px,
+        linear-gradient(45deg, #fff 25%, transparent 25%) 5px 5px/10px 10px;
+      content: "";
+      opacity: .9;
+    }
+    .finish-marker span { margin-top: 31px; }
+
+    .stage-ui {
+      position: absolute;
+      right: 22px;
+      bottom: 22px;
+      left: 22px;
+      display: grid;
+      align-items: end;
+      grid-template-columns: .86fr 1.14fr;
+      gap: 14px;
+    }
+    .employee-progress,
+    .hr-result {
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 18px;
+      background: rgba(255,255,255,.96);
+      box-shadow: 0 18px 48px rgba(0,0,0,.22);
+      color: var(--ink);
+    }
+    .employee-progress { padding: 15px; }
+    .product-cap { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .product-cap small { color: var(--muted); font-size: .58rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+    .sync-status { display: inline-flex; align-items: center; gap: 5px; color: var(--mint-dark); font-size: .55rem; font-weight: 800; }
+    .sync-status::before { width: 6px; height: 6px; border-radius: 50%; background: var(--course-mint); content: ""; }
+    .progress-distance { margin-top: 12px; font-size: 2rem; font-weight: 800; letter-spacing: -.06em; line-height: 1; }
+    .progress-distance span { color: var(--muted); font-size: .64rem; letter-spacing: 0; }
+    .course-progress { height: 7px; margin-top: 12px; overflow: hidden; border-radius: 999px; background: #ececf2; }
+    .course-progress i { display: block; width: 75%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--course-coral), var(--coral-deep)); }
+    .progress-meta { display: flex; justify-content: space-between; gap: 10px; margin-top: 7px; color: var(--muted); font-size: .56rem; font-weight: 700; }
+    .hr-result { padding: 15px; }
+    .hr-result-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .hr-result-head b { display: block; font-size: .76rem; }
+    .hr-result-head span { display: inline-flex; padding: 4px 7px; border-radius: 999px; background: rgba(65,216,180,.12); color: var(--mint-dark); font-size: .54rem; font-weight: 800; }
+    .result-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-top: 12px; }
+    .result-grid div { padding: 9px; border: 1px solid var(--line); border-radius: 10px; background: #fafafd; }
+    .result-grid small { display: block; color: var(--muted); font-size: .48rem; line-height: 1.3; }
+    .result-grid strong { display: block; margin-top: 4px; font-size: .67rem; }
+
+    @keyframes routeFlow { to { stroke-dashoffset: -126px; } }
+
+    /* Format decision */
+    .format-section {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(160deg, #2d343d 0%, var(--course-dark) 62%);
+      color: #fff;
+    }
+    .format-section::before {
+      position: absolute;
+      top: -220px;
+      left: -160px;
+      width: 460px;
+      height: 460px;
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 50%;
+      content: "";
+    }
+    .format-section .section-head { position: relative; }
+    .format-section h2 { color: #fff; }
+    .format-section .lead { color: rgba(255,255,255,.7); }
+    .format-tabs {
+      position: relative;
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 34px;
+      padding: 6px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+    }
+    .format-tab {
+      min-height: 44px;
+      padding: 0 17px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: rgba(255,255,255,.72);
+      font: inherit;
+      font-size: .8rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .format-tab[aria-selected="true"] { background: #fff; color: var(--ink); box-shadow: 0 9px 24px rgba(0,0,0,.2); }
+    .format-panel {
+      position: relative;
+      display: grid;
+      margin-top: 22px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 24px;
+      background: rgba(255,255,255,.055);
+      grid-template-columns: .92fr 1.08fr;
+    }
+    .format-panel[hidden] { display: none; }
+    .format-copy { padding: 38px; }
+    .setup-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 999px;
+      color: #fff;
+      font-size: .65rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .setup-badge::before { width: 7px; height: 7px; border-radius: 50%; background: var(--course-mint); content: ""; }
+    .format-copy h3 { max-width: 520px; margin-top: 17px; color: #fff; font-size: clamp(1.75rem, 3vw, 2.55rem); }
+    .format-copy > p { max-width: 610px; margin-top: 14px; color: rgba(255,255,255,.7); }
+    .format-facts { display: grid; margin-top: 27px; gap: 0; }
+    .format-fact { display: grid; grid-template-columns: 120px 1fr; gap: 18px; padding: 13px 0; border-top: 1px solid rgba(255,255,255,.11); }
+    .format-fact small { color: rgba(255,255,255,.47); font-size: .64rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+    .format-fact span { color: rgba(255,255,255,.86); font-size: .84rem; font-weight: 650; }
+    .format-visual { display: grid; min-height: 440px; place-items: center; padding: 32px; background: rgba(0,0,0,.14); }
+    .config-card { width: min(100%, 460px); overflow: hidden; border-radius: 18px; background: #fff; box-shadow: 0 24px 65px rgba(0,0,0,.3); color: var(--ink); }
+    .config-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 17px; border-bottom: 1px solid var(--line); }
+    .config-head b { font-size: .76rem; }
+    .config-head span { padding: 4px 7px; border-radius: 6px; background: var(--soft); color: var(--muted); font-family: var(--course-mono); font-size: .51rem; font-weight: 800; text-transform: uppercase; }
+    .config-body { padding: 18px; }
+    .wizard-row { display: flex; align-items: center; gap: 6px; margin-bottom: 17px; }
+    .wizard-row i { display: grid; width: 24px; height: 24px; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: var(--muted); font-size: .54rem; font-style: normal; font-weight: 800; }
+    .wizard-row i.done { border-color: rgba(65,216,180,.4); background: rgba(65,216,180,.12); color: var(--mint-dark); }
+    .wizard-row i.active { border-color: var(--course-coral); background: var(--course-coral); color: #fff; }
+    .wizard-row span { height: 1px; flex: 1; background: var(--line); }
+    .field-label { display: block; margin-bottom: 6px; color: var(--muted); font-size: .61rem; font-weight: 800; }
+    .field-grid { display: grid; grid-template-columns: 1.3fr .7fr; gap: 9px; }
+    .field-box { min-height: 43px; padding: 11px 12px; border: 1px solid var(--line); border-radius: 9px; background: #fff; font-size: .77rem; font-weight: 700; }
+    .convert-note { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 10px; padding: 10px 12px; border-radius: 9px; background: rgba(65,216,180,.10); color: var(--mint-dark); font-size: .65rem; font-weight: 750; }
+    .review-btn { display: flex; min-height: 42px; align-items: center; justify-content: center; margin-top: 16px; border-radius: 999px; background: var(--course-coral); color: #fff; font-size: .72rem; font-weight: 800; }
+    .tier-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .tier-title small { color: var(--muted); font-size: .58rem; font-weight: 800; text-transform: uppercase; }
+    .tier-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-top: 12px; }
+    .tier {
+      padding: 13px 7px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fafafd;
+      text-align: center;
+    }
+    .tier.active { border-color: rgba(241,81,98,.45); background: rgba(241,81,98,.08); }
+    .tier b { display: block; font-family: var(--course-mono); font-size: .83rem; }
+    .tier small { display: block; margin-top: 3px; color: var(--muted); font-size: .5rem; }
+    .activity-modes { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+    .activity-modes span { padding: 7px 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: .59rem; font-weight: 800; }
+    .format-cta { margin-top: 22px; }
+
+    /* Participant experience */
+    .experience-section { background: linear-gradient(165deg, #fff 0%, #fbfbfd 100%); }
+    .experience-grid { display: grid; align-items: center; grid-template-columns: .83fr 1.17fr; gap: 74px; }
+    .phone-stage { position: relative; min-height: 560px; display: grid; place-items: center; }
+    .phone-stage::before {
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      border: 1px solid rgba(241,81,98,.14);
+      border-radius: 50%;
+      content: "";
+    }
+    .phone-stage::after {
+      position: absolute;
+      width: 310px;
+      height: 310px;
+      border-radius: 50%;
+      background: rgba(65,216,180,.10);
+      content: "";
+    }
+    .marathon-phone {
+      position: relative;
+      z-index: 2;
+      width: 264px;
+      padding: 9px;
+      border-radius: 38px;
+      background: #12171c;
+      box-shadow: 0 35px 75px rgba(29,34,40,.28);
+      transform: rotate(-2deg);
+    }
+    .marathon-screen { min-height: 510px; overflow: hidden; border-radius: 30px; background: #f7f7fa; }
+    .phone-status { display: flex; align-items: center; justify-content: space-between; padding: 16px 17px 11px; font-family: var(--course-mono); font-size: .58rem; font-weight: 800; }
+    .phone-course {
+      position: relative;
+      min-height: 200px;
+      margin: 0 11px;
+      overflow: hidden;
+      border-radius: 20px;
+      background: linear-gradient(145deg, #2d343d, var(--course-dark));
+      color: #fff;
+    }
+    .phone-course::before,
+    .phone-course::after { position: absolute; border: 1px solid rgba(255,255,255,.12); border-radius: 50%; content: ""; }
+    .phone-course::before { width: 150px; height: 150px; top: -90px; right: -40px; }
+    .phone-course::after { width: 100px; height: 100px; bottom: -56px; left: -32px; }
+    .phone-course-label { padding: 16px 16px 0; color: rgba(255,255,255,.55); font-size: .55rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .phone-course h3 { padding: 6px 16px 0; color: #fff; font-size: 1rem; }
+    .phone-distance { padding: 24px 16px 0; font-family: var(--course-mono); font-size: 2.15rem; font-weight: 800; letter-spacing: -.08em; }
+    .phone-distance small { margin-left: 4px; color: rgba(255,255,255,.52); font-size: .55rem; letter-spacing: 0; }
+    .phone-bar { height: 6px; margin: 13px 16px 0; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.13); }
+    .phone-bar i { display: block; width: 75%; height: 100%; border-radius: inherit; background: var(--course-mint); }
+    .phone-finish { display: flex; justify-content: space-between; gap: 10px; padding: 7px 16px 0; color: rgba(255,255,255,.62); font-size: .52rem; font-weight: 700; }
+    .phone-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin: 11px; }
+    .phone-stats div { padding: 11px 7px; border: 1px solid var(--line); border-radius: 11px; background: #fff; text-align: center; }
+    .phone-stats b { display: block; font-size: .73rem; }
+    .phone-stats small { display: block; margin-top: 3px; color: var(--muted); font-size: .48rem; }
+    .phone-leader { margin: 0 11px 11px; padding: 13px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+    .leader-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .leader-head b { font-size: .68rem; }
+    .leader-head span { color: var(--coral-dark); font-size: .52rem; font-weight: 800; }
+    .leader-row { display: grid; grid-template-columns: 20px 1fr auto; gap: 7px; align-items: center; margin-top: 10px; font-size: .55rem; }
+    .leader-row i { display: grid; width: 20px; height: 20px; place-items: center; border-radius: 50%; background: var(--soft); color: var(--muted); font-style: normal; font-weight: 800; }
+    .leader-row strong { font-family: var(--course-mono); font-size: .55rem; }
+    .sync-pill {
+      position: absolute;
+      z-index: 3;
+      right: 1%;
+      top: 105px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      width: 190px;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+      font-size: .69rem;
+      font-weight: 800;
+    }
+    .sync-pill i { width: 10px; height: 10px; border-radius: 50%; background: var(--course-mint); box-shadow: 0 0 0 5px rgba(65,216,180,.14); }
+    .privacy-pill {
+      position: absolute;
+      z-index: 3;
+      left: 1%;
+      bottom: 82px;
+      width: 186px;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+    }
+    .privacy-pill b { display: block; font-size: .68rem; }
+    .privacy-pill span { display: block; margin-top: 3px; color: var(--muted); font-size: .56rem; }
+    .benefit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 34px; }
+    .benefit-card { padding: 21px; border: 1px solid var(--line); border-radius: 17px; background: #fff; }
+    .benefit-icon { display: grid; width: 36px; height: 36px; place-items: center; border-radius: 11px; background: rgba(241,81,98,.09); color: var(--coral-dark); }
+    .benefit-icon svg { width: 18px; }
+    .benefit-card h3 { margin-top: 16px; font-size: .98rem; line-height: 1.25; letter-spacing: -.02em; }
+    .benefit-card p { margin-top: 8px; color: var(--muted); font-size: .78rem; line-height: 1.55; }
+
+    /* HR control */
+    .control-section { background: var(--canvas); }
+    .control-grid { display: grid; margin-top: 42px; align-items: center; grid-template-columns: .74fr 1.26fr; gap: 64px; }
+    .workflow { display: grid; gap: 0; }
+    .workflow-step { position: relative; display: grid; grid-template-columns: 42px 1fr; gap: 14px; padding: 0 0 24px; }
+    .workflow-step:not(:last-child)::after { position: absolute; top: 38px; bottom: 0; left: 20px; width: 1px; background: var(--line); content: ""; }
+    .workflow-step > span { position: relative; z-index: 1; display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid rgba(241,81,98,.3); border-radius: 50%; background: #fff; color: var(--coral-dark); font-family: var(--course-mono); font-size: .68rem; font-weight: 800; }
+    .workflow-step h3 { margin-top: 2px; font-size: 1rem; letter-spacing: -.02em; }
+    .workflow-step p { margin-top: 6px; color: var(--muted); font-size: .8rem; line-height: 1.5; }
+    .admin-window { overflow: hidden; border: 1px solid var(--line); border-radius: 22px; background: #fff; box-shadow: var(--shadow); }
+    .admin-browser { display: flex; align-items: center; gap: 7px; height: 34px; padding: 0 13px; border-bottom: 1px solid var(--line); background: #f5f6f8; }
+    .admin-browser i { width: 7px; height: 7px; border-radius: 50%; background: #c8cbd2; }
+    .admin-browser span { width: 44%; height: 7px; margin-left: 7px; border-radius: 999px; background: #e3e5e9; }
+    .admin-layout { display: grid; min-height: 440px; grid-template-columns: 94px 1fr; }
+    .admin-side { padding: 17px 11px; background: var(--course-dark); color: rgba(255,255,255,.58); }
+    .admin-side b { display: block; margin-bottom: 23px; color: #fff; font-size: .61rem; }
+    .side-link { margin-top: 9px; padding: 8px; border-radius: 7px; font-size: .5rem; font-weight: 750; }
+    .side-link.on { background: rgba(255,255,255,.10); color: #fff; }
+    .admin-main { padding: 20px; min-width: 0; }
+    .admin-title { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+    .admin-title small { display: block; color: var(--muted); font-size: .55rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+    .admin-title b { display: block; margin-top: 3px; font-size: .8rem; }
+    .admin-actions { display: flex; gap: 6px; }
+    .admin-actions span { padding: 7px 9px; border: 1px solid var(--line); border-radius: 999px; font-size: .5rem; font-weight: 800; white-space: nowrap; }
+    .admin-actions span:last-child { border-color: transparent; background: var(--course-coral); color: #fff; }
+    .admin-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
+    .admin-metric { padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: #fbfbfd; }
+    .admin-metric small { display: block; color: var(--muted); font-size: .49rem; }
+    .admin-metric strong { display: block; margin-top: 4px; font-size: .72rem; }
+    .admin-table { margin-top: 13px; overflow: hidden; border: 1px solid var(--line); border-radius: 13px; }
+    .table-tools { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px; border-bottom: 1px solid var(--line); }
+    .search-mock { width: 50%; padding: 7px 9px; border: 1px solid var(--line); border-radius: 7px; color: #9292a3; font-size: .48rem; }
+    .filter-mock { padding: 7px 9px; border: 1px solid var(--line); border-radius: 7px; color: var(--muted); font-size: .48rem; font-weight: 750; }
+    .table-row { display: grid; grid-template-columns: 28px 1.2fr .9fr .7fr; gap: 8px; align-items: center; padding: 9px 11px; border-bottom: 1px solid var(--line); font-size: .5rem; }
+    .table-row:last-child { border-bottom: 0; }
+    .table-row.head { background: #fafafd; color: var(--muted); font-weight: 800; }
+    .table-row:not(.head) span:last-child { font-family: var(--course-mono); font-weight: 800; }
+    .admin-foot { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; color: var(--muted); font-size: .48rem; font-weight: 700; }
+
+    /* Integrity */
+    .integrity-section { padding: 74px 0; background: #fff; }
+    .integrity-band { padding: 34px; border: 1px solid var(--line); border-radius: 24px; background: linear-gradient(140deg, #fff 0%, #f8faf9 100%); }
+    .integrity-head { display: flex; align-items: end; justify-content: space-between; gap: 30px; }
+    .integrity-head h2 { max-width: 640px; font-size: clamp(1.8rem, 3vw, 2.8rem); }
+    .integrity-head p { max-width: 390px; color: var(--muted); font-size: .9rem; }
+    .integrity-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 11px; margin-top: 28px; }
+    .integrity-item { padding: 18px; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
+    .integrity-item span { display: grid; width: 30px; height: 30px; place-items: center; border-radius: 9px; background: rgba(65,216,180,.11); color: var(--mint-dark); }
+    .integrity-item span svg { width: 16px; }
+    .integrity-item h3 { margin-top: 14px; font-size: .88rem; letter-spacing: -.02em; }
+    .integrity-item p { margin-top: 7px; color: var(--muted); font-size: .72rem; line-height: 1.5; }
+
+    /* Proof */
+    .proof-section { background: var(--course-dark); color: #fff; }
+    .proof-grid { display: grid; align-items: center; grid-template-columns: 1.15fr .85fr; gap: 66px; }
+    .proof-section h2 { max-width: 800px; color: #fff; }
+    .proof-section .lead { color: rgba(255,255,255,.68); }
+    .proof-section .text-link { color: var(--course-mint); }
+    .proof-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .proof-stat { min-height: 144px; display: flex; flex-direction: column; justify-content: flex-end; padding: 22px; border: 1px solid rgba(255,255,255,.12); border-radius: 18px; background: rgba(255,255,255,.055); }
+    .proof-stat:first-child { grid-row: span 2; min-height: 298px; background: linear-gradient(150deg, rgba(241,81,98,.24), rgba(255,255,255,.05)); }
+    .proof-stat strong { display: block; font-family: var(--course-mono); font-size: clamp(1.8rem, 4vw, 3.4rem); letter-spacing: -.07em; line-height: 1; }
+    .proof-stat span { display: block; margin-top: 9px; color: rgba(255,255,255,.62); font-size: .68rem; font-weight: 750; }
+    .proof-note { margin-top: 13px; color: rgba(255,255,255,.42); font-size: .62rem; }
+
+    /* FAQ and closer */
+    .faq-section { background: #fff; }
+    .faq-grid { display: grid; grid-template-columns: .72fr 1.28fr; gap: 72px; }
+    .faq-list { border-top: 1px solid var(--line); }
+    .faq-list details { border-bottom: 1px solid var(--line); }
+    .faq-list summary {
+      position: relative;
+      padding: 23px 44px 23px 0;
+      list-style: none;
+      font-size: .95rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .faq-list summary::-webkit-details-marker { display: none; }
+    .faq-list summary::after {
+      position: absolute;
+      top: 20px;
+      right: 4px;
+      display: grid;
+      width: 28px;
+      height: 28px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--coral-dark);
+      content: "+";
+      font-size: 1rem;
+    }
+    .faq-list details[open] summary::after { content: "−"; }
+    .faq-answer { max-width: 760px; padding: 0 44px 23px 0; color: var(--muted); font-size: .85rem; line-height: 1.6; }
+
+    .vm-final {
+      position: relative;
+      overflow: hidden;
+      padding: 94px 0;
+      background: linear-gradient(155deg, #2c333c 0%, var(--course-dark) 72%);
+      color: #fff;
+      text-align: center;
+    }
+    .vm-final::before,
+    .vm-final::after { position: absolute; border: 1px solid rgba(255,255,255,.14); border-radius: 50%; content: ""; }
+    .vm-final::before { width: 440px; height: 440px; top: -280px; left: -120px; }
+    .vm-final::after { width: 540px; height: 540px; right: -220px; bottom: -380px; }
+    .vm-final .shell { position: relative; }
+    .vm-final h2 { max-width: 860px; margin-inline: auto; color: #fff; }
+    .vm-final .lead { max-width: 660px; margin: 18px auto 0; color: rgba(255,255,255,.7); }
+    .vm-final .btn-row { justify-content: center; }
+    .vm-final .btn-outline { border-color: rgba(255,255,255,.28); background: transparent; color: #fff; }
+    .vm-final .check-list { justify-content: center; color: rgba(255,255,255,.7); }
+
+    footer { padding: 52px 0 30px; background: #161b20; color: rgba(255,255,255,.6); }
+
+    @media (max-width: 1080px) {
+      .vm-hero-grid,
+      .experience-grid,
+      .control-grid,
+      .proof-grid { grid-template-columns: 1fr; }
+      .vm-hero-grid { gap: 44px; }
+      .vm-hero-copy { max-width: 760px; }
+      .course-stage { width: min(100%, 720px); margin-inline: auto; }
+      .experience-grid { gap: 44px; }
+      .experience-copy { grid-row: 1; }
+      .phone-stage { grid-row: 2; }
+      .control-grid { gap: 34px; }
+      .workflow { grid-template-columns: 1fr 1fr; column-gap: 30px; }
+      .workflow-step:not(:last-child)::after { display: none; }
+      .proof-grid { gap: 36px; }
+    }
+
+    @media (max-width: 860px) {
+      .section-pad { padding: 72px 0; }
+      .vm-hero { padding: 40px 0 58px; }
+      .vm-hero-grid { min-height: auto; }
+      .format-panel,
+      .faq-grid { grid-template-columns: 1fr; }
+      .format-copy { padding: 28px; }
+      .format-visual { min-height: 390px; }
+      .benefit-grid { grid-template-columns: 1fr 1fr; }
+      .integrity-head { display: grid; align-items: start; }
+      .integrity-grid { grid-template-columns: 1fr 1fr; }
+      .proof-stats { max-width: 620px; }
+      .faq-grid { gap: 34px; }
+    }
+
+    @media (max-width: 620px) {
+      .nav-logo { height: 28px; }
+      .vm-hero h1 { font-size: clamp(2.35rem, 12vw, 3.3rem); }
+      .course-stage { min-height: 590px; border-radius: 22px; }
+      .stage-bar { padding: 16px; }
+      .stage-bar .mock-note { display: none; }
+      .course-map { min-height: 310px; }
+      .course-map svg { inset: 14px 4px 0; width: calc(100% - 8px); }
+      .label-steps { top: 30px; left: 14px; }
+      .label-gps { right: 12px; bottom: 58px; }
+      .finish-marker { right: 18px; }
+      .pin-steps { top: 172px; left: 9%; }
+      .pin-gps { right: 8%; }
+      .stage-ui { grid-template-columns: 1fr; right: 14px; bottom: 14px; left: 14px; }
+      .employee-progress { display: none; }
+      .format-tabs { display: grid; width: 100%; border-radius: 17px; }
+      .format-tab { width: 100%; border-radius: 12px; }
+      .format-copy { padding: 24px 20px; }
+      .format-fact { grid-template-columns: 1fr; gap: 5px; }
+      .format-visual { min-height: 0; padding: 22px 15px; }
+      .tier-list { grid-template-columns: 1fr 1fr; }
+      .phone-stage { min-height: 540px; }
+      .phone-stage::before { width: 340px; height: 340px; }
+      .phone-stage::after { width: 250px; height: 250px; }
+      .marathon-phone { width: 242px; }
+      .marathon-screen { min-height: 488px; }
+      .sync-pill { right: 0; top: 72px; width: 150px; padding: 10px; }
+      .privacy-pill { left: 0; bottom: 46px; width: 152px; padding: 10px; }
+      .benefit-grid,
+      .workflow,
+      .integrity-grid,
+      .proof-stats { grid-template-columns: 1fr; }
+      .workflow-step { padding-bottom: 20px; }
+      .integrity-band { padding: 24px 18px; }
+      .proof-stat:first-child { grid-row: auto; min-height: 160px; }
+      .admin-layout { grid-template-columns: 68px 1fr; min-height: 390px; }
+      .admin-side { padding: 14px 7px; }
+      .admin-main { padding: 14px 10px; }
+      .admin-actions span:first-child { display: none; }
+      .admin-metrics { grid-template-columns: 1fr 1fr; }
+      .admin-metric:last-child { display: none; }
+      .table-row { grid-template-columns: 22px 1fr .72fr; }
+      .table-row span:nth-child(3) { display: none; }
+      .footer-bottom { display: grid; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <nav class="nav lit" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="https://www.vantagefit.io/" aria-label="Vantage Fit home">
+        <img class="nav-logo" src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37">
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="nav-links" id="nav-links">
+        <a href="https://www.vantagefit.io/employee-wellness-software/">Product</a>
+        <a href="https://www.vantagefit.io/virtual-marathon/" aria-current="page">Solutions</a>
+        <a href="https://www.vantagefit.io/en/help/">Resources</a>
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main-content">
+    <header class="vm-hero">
+      <div class="shell vm-hero-grid">
+        <div class="vm-hero-copy">
+          <div class="eyebrow">Virtual marathon challenges</div>
+          <h1>Give every employee a <em>finish line.</em></h1>
+          <p class="lead">Run a step-powered distance challenge over days, or create a one-day GPS event with target tiers. Vantage Fit brings every route into one visible program HR can manage and report.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+            <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">See pricing</a>
+          </div>
+          <div class="check-list" role="group" aria-label="Program highlights">
+            <span>Step or GPS formats</span>
+            <span>Phone-first participation</span>
+            <span>Exportable results</span>
+          </div>
+        </div>
+
+        <div class="course-stage" role="img" aria-label="Illustrative product view showing a step-powered E-Marathon and a one-day GPS Marathon Event converging at one finish line, with employee progress and HR program controls.">
+          <div class="stage-bar">
+            <div class="stage-title"><i></i>Company virtual marathon</div>
+            <div class="mock-note">Illustrative product view</div>
+          </div>
+          <div class="course-map" aria-hidden="true">
+            <svg viewBox="0 0 650 290" preserveAspectRatio="none">
+              <path class="route-path route-coral" d="M42 87 C128 185 190 76 285 151 S430 216 575 72"/>
+              <path class="route-path route-mint" d="M38 242 C140 215 155 240 250 211 S403 99 575 72"/>
+              <circle cx="42" cy="87" r="7" fill="#F15162"/>
+              <circle cx="38" cy="242" r="7" fill="#41D8B4"/>
+              <circle cx="575" cy="72" r="9" fill="#ffffff"/>
+            </svg>
+            <div class="course-label label-steps"><b>Extended E-Marathon</b><small>Everyday steps, converted to distance</small></div>
+            <div class="course-label label-gps"><b>One-day Marathon Event</b><small>GPS distance with target tiers</small></div>
+            <span class="format-pin pin-steps">Synced steps</span>
+            <span class="format-pin pin-gps">Validated GPS</span>
+            <div class="finish-marker"><span>One finish</span></div>
+          </div>
+          <div class="stage-ui">
+            <div class="employee-progress">
+              <div class="product-cap"><small>Employee progress</small><span class="sync-status">Synced</span></div>
+              <div class="progress-distance mono">31.8 <span>km of 42.2 km</span></div>
+              <div class="course-progress"><i></i></div>
+              <div class="progress-meta"><span>75% complete</span><span>10.4 km to finish</span></div>
+            </div>
+            <div class="hr-result">
+              <div class="hr-result-head"><div><div class="mock-note">HR program view</div><b>Company E-Marathon</b></div><span>Ongoing</span></div>
+              <div class="result-grid">
+                <div><small>Audience</small><strong>Selected</strong></div>
+                <div><small>Notification</small><strong>Ready</strong></div>
+                <div><small>Leaderboard</small><strong>CSV export</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="format-section section-pad" id="formats" aria-labelledby="formats-title">
+      <div class="shell">
+        <div class="section-head">
+          <div class="eyebrow" style="color:var(--course-mint)">Choose the right course</div>
+          <h2 id="formats-title">One finish line. Two ways to run it.</h2>
+          <p class="lead">Start with the behavior you want, then choose the format that measures it accurately.</p>
+        </div>
+
+        <div class="format-tabs" role="tablist" aria-label="Virtual marathon formats">
+          <button class="format-tab" id="tab-emarathon" type="button" role="tab" aria-selected="true" aria-controls="panel-emarathon" tabindex="0">E-Marathon · Admin self-serve</button>
+          <button class="format-tab" id="tab-event" type="button" role="tab" aria-selected="false" aria-controls="panel-event" tabindex="-1">Marathon Event · Account-team setup</button>
+        </div>
+
+        <div class="format-panel" id="panel-emarathon" role="tabpanel" aria-labelledby="tab-emarathon">
+          <div class="format-copy">
+            <span class="setup-badge">Admin self-serve</span>
+            <h3>Make everyday steps feel like distance.</h3>
+            <p>Set a finish-line target, choose km or miles, and let synced steps accumulate across the challenge window. Employees do not need to record a GPS route.</p>
+            <div class="format-facts">
+              <div class="format-fact"><small>Best for</small><span>A flexible campaign across days or weeks</span></div>
+              <div class="format-fact"><small>Activity input</small><span>Synced daily steps</span></div>
+              <div class="format-fact"><small>HR configures</small><span>Dates, audience, target distance, unit, and reward</span></div>
+              <div class="format-fact"><small>Employees see</small><span>Cumulative distance and leaderboard rank</span></div>
+            </div>
+            <a class="text-link text-link-light format-cta" href="https://www.vantagefit.io/request-demo/">Help me choose a format
+              <svg width="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+          <div class="format-visual">
+            <div class="config-card" role="group" aria-label="Illustrative E-Marathon configuration">
+              <div class="config-head"><b>E-Marathon configuration</b><span>Illustrative</span></div>
+              <div class="config-body">
+                <div class="wizard-row" aria-hidden="true"><i class="done">✓</i><span></span><i class="done">✓</i><span></span><i class="done">✓</i><span></span><i class="active">4</i><span></span><i>5</i></div>
+                <label class="field-label">Target distance and unit</label>
+                <div class="field-grid"><div class="field-box mono">42.2</div><div class="field-box">km</div></div>
+                <div class="convert-note"><span>Steps-to-distance conversion</span><strong class="mono">1,000 = 1 km</strong></div>
+                <label class="field-label" style="margin-top:13px">Audience</label>
+                <div class="field-box">Selected employees</div>
+                <div class="review-btn">Review challenge</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="format-panel" id="panel-event" role="tabpanel" aria-labelledby="tab-event" hidden>
+          <div class="format-copy">
+            <span class="setup-badge">Account-team setup</span>
+            <h3>Turn one day into a company-wide event.</h3>
+            <p>Create one shared calendar moment with GPS-tracked distance, multiple target tiers, and run, cycle, or wheelchair modes.</p>
+            <div class="format-facts">
+              <div class="format-fact"><small>Best for</small><span>A wellness day, launch, anniversary, or finale</span></div>
+              <div class="format-fact"><small>Activity input</small><span>Validated GPS distance</span></div>
+              <div class="format-fact"><small>Account team configures</small><span>One event date, activity modes, distance tiers, and scaled points</span></div>
+              <div class="format-fact"><small>Employees see</small><span>Their chosen distance, time, completion, and rank</span></div>
+            </div>
+            <a class="text-link text-link-light format-cta" href="https://www.vantagefit.io/request-demo/">Help me choose a format
+              <svg width="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+          <div class="format-visual">
+            <div class="config-card" role="group" aria-label="Illustrative one-day Marathon Event configuration">
+              <div class="config-head"><b>Marathon Event</b><span>Account team</span></div>
+              <div class="config-body">
+                <div class="tier-title"><b>Choose a distance</b><small>One event day</small></div>
+                <div class="tier-list">
+                  <div class="tier"><b>5K</b><small>Target tier</small></div>
+                  <div class="tier active"><b>10K</b><small>Selected</small></div>
+                  <div class="tier"><b>21.1K</b><small>Target tier</small></div>
+                  <div class="tier"><b>42.2K</b><small>Target tier</small></div>
+                </div>
+                <label class="field-label" style="margin-top:16px">Activity modes</label>
+                <div class="activity-modes"><span>Run</span><span>Cycle</span><span>Wheelchair</span></div>
+                <div class="convert-note" style="margin-top:16px"><span>Distance source</span><strong>Validated GPS</strong></div>
+                <div class="review-btn">Plan with account team</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <noscript><p style="margin-top:16px;color:rgba(255,255,255,.72)">E-Marathon uses synced steps over a date range. Marathon Event is an account-team configured, one-day GPS format with distance tiers.</p></noscript>
+      </div>
+    </section>
+
+    <section class="experience-section section-pad" id="employee-experience" aria-labelledby="experience-title">
+      <div class="shell experience-grid">
+        <div class="phone-stage" role="group" aria-label="Illustrative employee E-Marathon progress screen">
+          <div class="marathon-phone">
+            <div class="marathon-screen">
+              <div class="phone-status"><span>9:41</span><span>● ● ●</span></div>
+              <div class="phone-course">
+                <div class="phone-course-label">Company E-Marathon</div>
+                <h3>Your progress</h3>
+                <div class="phone-distance">31.8<small>km</small></div>
+                <div class="phone-bar"><i></i></div>
+                <div class="phone-finish"><span>75% of target</span><span>10.4 km to finish</span></div>
+              </div>
+              <div class="phone-stats">
+                <div><b>#14</b><small>Company rank</small></div>
+                <div><b>6</b><small>Days left</small></div>
+                <div><b>Today</b><small>Last sync</small></div>
+              </div>
+              <div class="phone-leader">
+                <div class="leader-head"><b>Leaderboard</b><span>View all</span></div>
+                <div class="leader-row"><i>1</i><span>Alex R.</span><strong>40.7 km</strong></div>
+                <div class="leader-row"><i>2</i><span>Priya S.</span><strong>39.2 km</strong></div>
+                <div class="leader-row"><i>3</i><span>Jordan M.</span><strong>37.8 km</strong></div>
+              </div>
+              <div class="mock-note" style="padding:4px 16px 14px;text-align:center">Illustrative product view</div>
+            </div>
+          </div>
+          <div class="sync-pill"><i></i><span>Steps converted to distance</span></div>
+          <div class="privacy-pill"><b>Leaderboard choice</b><span>Participate without appearing in individual ranks</span></div>
+        </div>
+
+        <div class="experience-copy">
+          <div class="section-head">
+            <div class="eyebrow">Built for participation</div>
+            <h2 id="experience-title">Make distance feel close enough to chase.</h2>
+            <p class="lead">Progress stays concrete, whether it comes from ordinary steps or a GPS event route.</p>
+          </div>
+          <div class="benefit-grid">
+            <article class="benefit-card">
+              <div class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M10 7h4M11 18h2"/></svg></div>
+              <h3>Count the movement people already make.</h3>
+              <p>E-Marathon turns synced phone or wearable steps into distance without asking employees to record a route.</p>
+            </article>
+            <article class="benefit-card">
+              <div class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 19V8m7 11V4m7 15v-7"/><path d="M3 19h18"/></svg></div>
+              <h3>Show the next marker.</h3>
+              <p>Employees can see total distance, rank, and time remaining from the challenge view.</p>
+            </article>
+            <article class="benefit-card">
+              <div class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"/><path d="M4 4l16 16"/></svg></div>
+              <h3>Keep competition optional.</h3>
+              <p>An employee can hide from individual rankings and continue participating.</p>
+            </article>
+            <article class="benefit-card">
+              <div class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 3h8v4a4 4 0 0 1-8 0z"/><path d="M6 5H3v1a5 5 0 0 0 5 5m10-6h3v1a5 5 0 0 1-5 5M12 11v5m-4 5h8m-6-5h4"/></svg></div>
+              <h3>Recognize the finish.</h3>
+              <p>Completion certificates can carry your logo, signer, seal, and message.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="control-section section-pad" id="hr-control" aria-labelledby="control-title">
+      <div class="shell">
+        <div class="section-head">
+          <div class="eyebrow">Control for HR</div>
+          <h2 id="control-title">Run the program, not the spreadsheet.</h2>
+          <p class="lead">E-Marathon follows one admin flow. Marathon Event setup happens with your account team, then HR manages participation and results from Vantage Fit.</p>
+        </div>
+        <div class="control-grid">
+          <div class="workflow">
+            <div class="workflow-step"><span>01</span><div><h3>Set the challenge.</h3><p>Name the event, choose dates, add the story, and select your program image.</p></div></div>
+            <div class="workflow-step"><span>02</span><div><h3>Choose the audience.</h3><p>Select employees with filters, add people directly, or upload a CSV.</p></div></div>
+            <div class="workflow-step"><span>03</span><div><h3>Keep the field moving.</h3><p>Manage participants and send challenge-specific notifications from the dashboard.</p></div></div>
+            <div class="workflow-step"><span>04</span><div><h3>Close with a record.</h3><p>View rankings, search and filter results, then export the leaderboard to CSV.</p></div></div>
+          </div>
+
+          <div class="admin-window" role="group" aria-label="Illustrative Vantage Fit admin challenge management view">
+            <div class="admin-browser" aria-hidden="true"><i></i><i></i><i></i><span></span></div>
+            <div class="admin-layout">
+              <div class="admin-side">
+                <b>Vantage Fit</b>
+                <div class="side-link">Overview</div>
+                <div class="side-link on">Challenges</div>
+                <div class="side-link">Reports</div>
+                <div class="side-link">Community</div>
+              </div>
+              <div class="admin-main">
+                <div class="admin-title">
+                  <div><small>Manage challenge</small><b>Company E-Marathon</b></div>
+                  <div class="admin-actions"><span>Notify participants</span><span>Export CSV</span></div>
+                </div>
+                <div class="admin-metrics">
+                  <div class="admin-metric"><small>Status</small><strong>Ongoing</strong></div>
+                  <div class="admin-metric"><small>Participants</small><strong>Selected</strong></div>
+                  <div class="admin-metric"><small>View</small><strong>Leaderboard</strong></div>
+                </div>
+                <div class="admin-table">
+                  <div class="table-tools"><div class="search-mock">Search employees</div><div class="filter-mock">Department filter</div></div>
+                  <div class="table-row head"><span>Rank</span><span>Employee</span><span>Department</span><span>Distance</span></div>
+                  <div class="table-row"><span>1</span><span>Alex Rivera</span><span>Sales</span><span>40.7 km</span></div>
+                  <div class="table-row"><span>2</span><span>Priya Shah</span><span>Product</span><span>39.2 km</span></div>
+                  <div class="table-row"><span>3</span><span>Jordan Miller</span><span>Operations</span><span>37.8 km</span></div>
+                  <div class="table-row"><span>4</span><span>Sam Chen</span><span>Finance</span><span>36.1 km</span></div>
+                  <div class="table-row"><span>5</span><span>Taylor Jones</span><span>People</span><span>34.6 km</span></div>
+                </div>
+                <div class="admin-foot"><span>Illustrative product view</span><span>Filtered results can be exported</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="integrity-section" aria-labelledby="integrity-title">
+      <div class="shell">
+        <div class="integrity-band">
+          <div class="integrity-head">
+            <div><div class="eyebrow">Results people can trust</div><h2 id="integrity-title">Keep the finish fair and the reporting clear.</h2></div>
+            <p>Use the right data source for each format, give employees a privacy choice, and leave the program with a reviewable result.</p>
+          </div>
+          <div class="integrity-grid">
+            <article class="integrity-item"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 5h8v14H8z"/><path d="M12 8v8"/></svg></span><h3>One step source</h3><p>Vantage Fit uses one primary device at a time to avoid double-counting.</p></article>
+            <article class="integrity-item"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s6-5.2 6-11a6 6 0 1 0-12 0c0 5.8 6 11 6 11z"/><circle cx="12" cy="10" r="2"/></svg></span><h3>Validated GPS</h3><p>Implausible pace and vehicle-like movement can be flagged and excluded.</p></article>
+            <article class="integrity-item"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"/><path d="M4 4l16 16"/></svg></span><h3>Leaderboard choice</h3><p>Employees can opt out of individual rankings without leaving the challenge.</p></article>
+            <article class="integrity-item"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span><h3>Exportable record</h3><p>HR can filter leaderboard results and download a CSV for review and recognition.</p></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="proof-section section-pad" id="proof" aria-labelledby="proof-title">
+      <div class="shell proof-grid">
+        <div>
+          <div class="eyebrow" style="color:var(--course-mint)">A global finish line, already proven</div>
+          <h2 id="proof-title">Rajagiri brought more than 5,000 participants into a 15-day e-Marathon.</h2>
+          <p class="lead">The program paired a 21.1 km Fit Run with a 42.2 km Challenge Run and reported more than a 15% increase in wellness participation between phases.</p>
+          <a class="text-link text-link-light" href="https://www.vantagefit.io/casestudy/rajagiri-e-marathon/">Read the Rajagiri story
+            <svg width="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </a>
+          <p class="proof-note">Customer-reported results from the Rajagiri e-Marathon case study.</p>
+        </div>
+        <div class="proof-stats" role="group" aria-label="Rajagiri e-Marathon results">
+          <div class="proof-stat"><strong>5,000+</strong><span>Global participants</span></div>
+          <div class="proof-stat"><strong>15</strong><span>Program days</span></div>
+          <div class="proof-stat"><strong>15%+</strong><span>Participation increase</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-section section-pad" id="faq" aria-labelledby="faq-title">
+      <div class="shell faq-grid">
+        <div class="section-head">
+          <div class="eyebrow">Questions before rollout</div>
+          <h2 id="faq-title">Choose the course with confidence.</h2>
+          <p class="lead">Bring your timing, audience, and reporting needs to a demo. We will map them to the right format.</p>
+          <a class="text-link" href="https://www.vantagefit.io/request-demo/">Talk to a program specialist
+            <svg width="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </a>
+        </div>
+        <div class="faq-list">
+          <details open>
+            <summary>What is the difference between E-Marathon and Marathon Event?</summary>
+            <div class="faq-answer">E-Marathon is a self-serve challenge that converts synced steps into cumulative distance over a date range. Marathon Event is a separate, account-team configured format for one day, with GPS distance, multiple target tiers, and run, cycle, or wheelchair modes.</div>
+          </details>
+          <details>
+            <summary>Do employees need a fitness tracker?</summary>
+            <div class="faq-answer">No tracker is required for E-Marathon. A supported phone step source can provide the steps, and employees may also use connected devices. Marathon Event uses the Vantage Fit phone app to record a GPS workout.</div>
+          </details>
+          <details>
+            <summary>Can employees participate without appearing on the leaderboard?</summary>
+            <div class="faq-answer">Yes. Employees can hide themselves from individual rankings while their activities and challenge progress continue to count.</div>
+          </details>
+          <details>
+            <summary>What can HR report after the challenge?</summary>
+            <div class="faq-answer">HR can view challenge rankings, search and filter participants, and export leaderboard data to CSV. Available columns include participant, department, score or steps, rank, and team where applicable.</div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="vm-final" aria-labelledby="final-title">
+      <div class="shell">
+        <div class="eyebrow" style="justify-content:center;color:var(--course-mint)">Pick the date. Set the distance.</div>
+        <h2 id="final-title">Build a virtual marathon your workforce can finish together.</h2>
+        <p class="lead">Bring your audience, timing, and participation goal. We will help you choose the right format and show the employee and HR experience end to end.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">See pricing</a>
+        </div>
+        <div class="check-list" role="group" aria-label="Demo topics">
+          <span>Format recommendation</span>
+          <span>Employee app walkthrough</span>
+          <span>Admin reporting</span>
+          <span>Rollout planning</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="https://www.vantagefit.io/" aria-label="Vantage Fit home">
+            <img class="footer-logo" src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37">
+          </a>
+          <p class="footer-about">Inclusive wellness that turns participation into measurable progress.</p>
+        </div>
+        <div>
+          <div class="footer-title">Product</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/features/activity-tracking/">Activity tracking</a>
+            <a href="https://www.vantagefit.io/features/admin-dashboard/">Admin dashboard</a>
+            <a href="https://www.vantagefit.io/features/security-and-compliance/">Security and privacy</a>
+            <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Solutions</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/virtual-marathon/">Virtual marathon</a>
+            <a href="https://www.vantagefit.io/steps-challenge/">Step challenges</a>
+            <a href="https://www.vantagefit.io/team-challenges/">Team challenges</a>
+            <a href="https://www.vantagefit.io/multi-activity-challenges/">Multi-activity challenges</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Resources</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/casestudy/">Customer stories</a>
+            <a href="https://www.vantagefit.io/guides/">Guides</a>
+            <a href="https://www.vantagefit.io/en/help/">Help center</a>
+            <a href="https://www.vantagefit.io/request-demo/">Contact sales</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Vantage Circle. All rights reserved.</span>
+        <span>Employee privacy controls · Enterprise program management</span>
+        <span>Wellness built for participation.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const menuButton = document.querySelector('.menu-btn');
+      const navLinks = document.getElementById('nav-links');
+      if (menuButton && navLinks) {
+        menuButton.addEventListener('click', () => {
+          const isOpen = menuButton.getAttribute('aria-expanded') === 'true';
+          menuButton.setAttribute('aria-expanded', String(!isOpen));
+          menuButton.setAttribute('aria-label', isOpen ? 'Open navigation' : 'Close navigation');
+          navLinks.classList.toggle('open', !isOpen);
+        });
+      }
+
+      const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+      const selectTab = (selected) => {
+        tabs.forEach((tab) => {
+          const isSelected = tab === selected;
+          tab.setAttribute('aria-selected', String(isSelected));
+          tab.tabIndex = isSelected ? 0 : -1;
+          const panel = document.getElementById(tab.getAttribute('aria-controls'));
+          if (panel) panel.hidden = !isSelected;
+        });
+      };
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => selectTab(tab));
+        tab.addEventListener('keydown', (event) => {
+          if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+          event.preventDefault();
+          let nextIndex = index;
+          if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
+          if (event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length;
+          if (event.key === 'Home') nextIndex = 0;
+          if (event.key === 'End') nextIndex = tabs.length - 1;
+          selectTab(tabs[nextIndex]);
+          tabs[nextIndex].focus();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

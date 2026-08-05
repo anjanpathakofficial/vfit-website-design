@@ -1,0 +1,1263 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="description" content="One challenge that scores steps, sleep, hydration, meditation, and 23 more activities. Weekly themes, automatic tracking, real rewards, and reporting HR can defend.">
+  <meta name="theme-color" content="#18262b">
+  <title>Multi-Activity Wellness Challenges | Vantage Fit</title>
+  <link rel="stylesheet" href="../styles/enterprise.css">
+  <style>
+    /* —— Multi-Activity Challenge page components (built on enterprise.css tokens) —— */
+
+    /* Current-page marker inside the Solutions mega menu */
+    .mega-link[aria-current="page"] { position: relative; background: var(--soft); }
+    .mega-link[aria-current="page"]::after {
+      content: "You’re here";
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(241, 81, 98, .1);
+      color: var(--coral-dark);
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    /* Hero: per-task completion bars inside the dash mock */
+    .tb { margin-top: 12px; padding: 13px 15px; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
+    .tb-head { display: flex; align-items: center; justify-content: space-between; font-size: .7rem; font-weight: 800; }
+    .tb-head span { color: var(--muted); font-size: .6rem; font-weight: 650; }
+    .tb-row { display: flex; align-items: center; gap: 9px; margin-top: 9px; font-size: .7rem; font-weight: 650; }
+    .tb-ic {
+      display: grid;
+      place-items: center;
+      width: 20px;
+      height: 20px;
+      flex: none;
+      border-radius: 7px;
+      background: var(--soft);
+      color: var(--muted);
+      font-size: .58rem;
+      font-weight: 800;
+    }
+    .tb-row:first-of-type .tb-ic { background: rgba(65, 216, 180, .16); color: var(--mint-dark); }
+    .tb-name { flex: 1; }
+    .tb-bar { width: 34%; height: 6px; overflow: hidden; border-radius: 999px; background: #edf0ee; }
+    .tb-bar i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--mint), var(--mint-dark)); }
+    .tb-pct { color: var(--muted); font-size: .64rem; font-weight: 700; }
+    .hero-visual .dash { transform: none; }
+    .hero-visual .phone { bottom: -8px; }
+    .mock-note { margin-top: 10px; color: rgba(41, 41, 76, .4); font-size: .6rem; font-weight: 650; }
+
+    /* Hero phone: themed week + mixed task list */
+    .week-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 10px 11px 0;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: #fdf3e2;
+      font-size: .58rem;
+      font-weight: 800;
+    }
+    .week-strip span { color: var(--muted); font-weight: 700; }
+    .task-list { margin: 8px 11px 11px; display: grid; gap: 6px; }
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 9px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      font-size: .58rem;
+      font-weight: 700;
+    }
+    .task-item small { display: block; color: var(--muted); font-size: .5rem; font-weight: 650; }
+    .task-item .grow { flex: 1; }
+    .task-dot { width: 16px; height: 16px; flex: none; border-radius: 50%; display: grid; place-items: center; font-size: .52rem; }
+    .task-dot.done { background: rgba(65, 216, 180, .2); color: var(--mint-dark); }
+    .task-dot.todo { border: 1.5px dashed rgba(41, 41, 76, .3); color: transparent; }
+
+    /* S2 problem */
+    .pain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 40px; }
+    .pain-card {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+    }
+    .pain-card h3 { display: flex; align-items: baseline; gap: 10px; font-size: 1rem; letter-spacing: -.015em; }
+    .pain-card h3::before {
+      content: "✕";
+      display: grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      flex: none;
+      border-radius: 8px;
+      background: rgba(241, 81, 98, .1);
+      color: var(--coral-dark);
+      font-size: .62rem;
+      font-weight: 800;
+      transform: translateY(3px);
+    }
+    .pain-card p { margin-top: 8px; color: var(--muted); font-size: .86rem; line-height: 1.5; }
+    .pain-pivot {
+      margin-top: 28px;
+      padding: 18px 22px;
+      border-left: 4px solid var(--mint);
+      border-radius: 0 14px 14px 0;
+      background: #e9f7f2;
+      font-size: .95rem;
+      font-weight: 650;
+    }
+
+    /* S3 friction groups */
+    .friction-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 40px; }
+    .friction-card {
+      padding: 20px 22px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+    }
+    .friction-tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(65, 216, 180, .14);
+      color: var(--mint-dark);
+      font-size: .62rem;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+    .friction-card:nth-child(2) .friction-tag { background: rgba(246, 185, 59, .16); color: #9a6d10; }
+    .friction-card:nth-child(3) .friction-tag { background: rgba(241, 81, 98, .1); color: var(--coral-dark); }
+    .friction-card h3 { margin-top: 12px; font-size: 1.05rem; letter-spacing: -.02em; }
+    .friction-card p { margin-top: 6px; color: var(--muted); font-size: .84rem; line-height: 1.5; }
+
+    /* S3 weekly theme explorer (dark dual panel + tabs from enterprise.css) */
+    .explorer { margin-top: 36px; }
+    .explorer .dual-head h3 { max-width: 460px; }
+    .week-panel { display: none; grid-template-columns: .8fr 1.2fr; gap: 36px; align-items: center; margin-top: 26px; }
+    .week-panel.active { display: grid; }
+    .week-copy h4 { margin: 0; font-size: 1.3rem; letter-spacing: -.02em; color: #fff; }
+    .week-copy p { margin-top: 8px; color: rgba(255, 255, 255, .62); font-size: .88rem; line-height: 1.55; }
+    .week-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      padding: 6px 12px;
+      border: 1px solid var(--line-dark);
+      border-radius: 999px;
+      color: rgba(255, 255, 255, .75);
+      font-size: .68rem;
+      font-weight: 700;
+    }
+    .week-meta i { width: 8px; height: 8px; border-radius: 50%; }
+    .week-screen { padding: 14px; }
+    .week-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-radius: 12px;
+      color: var(--ink);
+      font-size: .78rem;
+      font-weight: 800;
+    }
+    .week-banner span { font-size: .6rem; font-weight: 700; opacity: .72; }
+    .week-banner.move { background: #d9f4ec; }
+    .week-banner.nourish { background: #fdf3e2; }
+    .week-banner.rest { background: #e6e9fb; }
+    .week-banner.thrive { background: #fde7e9; }
+    .week-tasks { display: grid; gap: 8px; margin-top: 10px; }
+    .week-task {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+    }
+    .week-task-ic {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      flex: none;
+      border-radius: 10px;
+      background: var(--soft);
+      color: var(--ink);
+      font-size: .85rem;
+    }
+    .week-task b { display: block; font-size: .8rem; letter-spacing: -.01em; }
+    .week-task small { color: var(--muted); font-size: .62rem; font-weight: 650; }
+    .week-pts {
+      margin-left: auto;
+      flex: none;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(65, 216, 180, .14);
+      color: var(--mint-dark);
+      font-size: .64rem;
+      font-weight: 800;
+    }
+    .explorer-note { margin-top: 16px; color: rgba(255, 255, 255, .55); font-size: .76rem; }
+
+    /* S4 follow-through — reuse .steps/.step cards; add list flavor */
+    #engine .steps { margin: 44px 0 0; }
+    .step .step-list { margin: 10px 0 0; padding: 0; list-style: none; }
+    .step .step-list li { position: relative; margin-top: 7px; padding-left: 16px; color: var(--muted); font-size: .8rem; line-height: 1.45; }
+    .step .step-list li::before { content: ""; position: absolute; left: 0; top: .48em; width: 6px; height: 6px; border-radius: 50%; background: var(--mint); }
+    .engine-note {
+      margin-top: 24px;
+      padding: 14px 20px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+      color: var(--muted);
+      font-size: .86rem;
+      text-align: center;
+    }
+    .engine-note b { color: var(--ink); }
+
+    /* S5 HR section */
+    .hr-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 52px; align-items: center; }
+    .hr-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; margin-top: 26px; }
+    .report-mock {
+      overflow: hidden;
+      border: 1px solid rgba(41, 41, 76, .1);
+      border-radius: 22px;
+      background: #f9faf8;
+      box-shadow: var(--shadow-soft);
+    }
+    .report-mock-body { padding: 16px; }
+    .admin-cards.three { grid-template-columns: repeat(3, 1fr); }
+    .nudge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+      padding: 12px 14px;
+      border: 1px solid rgba(246, 185, 59, .5);
+      border-radius: 12px;
+      background: #fdf6e7;
+    }
+    .nudge-icon {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      flex: none;
+      border-radius: 9px;
+      background: rgba(246, 185, 59, .25);
+      color: #9a6d10;
+    }
+    .nudge b { display: block; font-size: .74rem; }
+    .nudge small { color: var(--muted); font-size: .6rem; font-weight: 650; }
+    .nudge-act {
+      margin-left: auto;
+      flex: none;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: var(--ink);
+      color: #fff;
+      font-size: .6rem;
+      font-weight: 800;
+    }
+    .tpl-row { display: flex; gap: 8px; margin-top: 10px; }
+    .tpl {
+      flex: 1;
+      padding: 10px 12px;
+      border: 1px dashed rgba(41, 41, 76, .25);
+      border-radius: 11px;
+      background: #fff;
+      font-size: .62rem;
+      font-weight: 700;
+    }
+    .tpl small { display: block; margin-top: 2px; color: var(--muted); font-size: .54rem; font-weight: 650; }
+    .report-foot { margin-top: 14px; color: var(--muted); font-size: .68rem; font-weight: 650; text-align: center; }
+
+    /* S6 proof */
+    .results-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 44px; }
+    .stat-card {
+      padding: 22px;
+      border: 1px solid rgba(41, 41, 76, .08);
+      border-radius: 18px;
+      background: var(--paper);
+      box-shadow: 0 8px 24px rgba(30, 38, 38, .05);
+    }
+    .stat-num {
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -.05em;
+      line-height: 1;
+      background: linear-gradient(125deg, var(--coral) 20%, var(--coral-deep) 90%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+    .stat-org { margin-top: 12px; font-size: .95rem; font-weight: 800; letter-spacing: -.01em; }
+    .stat-org span { display: block; margin-top: 3px; color: var(--muted); font-size: .66rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .stat-card p { margin-top: 8px; color: var(--muted); font-size: .8rem; line-height: 1.5; }
+    .results-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 28px; margin-top: 26px; }
+    .results-actions .text-link { margin-top: 0; }
+    .results-note { margin-top: 18px; text-align: center; color: var(--muted); font-size: .62rem; }
+
+    /* S8 FAQ */
+    .faq { max-width: 780px; margin: 40px auto 0; }
+    .faq details { border-bottom: 1px solid var(--line); }
+    .faq details:first-child { border-top: 1px solid var(--line); }
+    .faq summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 4px;
+      cursor: pointer;
+      font-size: 1.02rem;
+      font-weight: 750;
+      letter-spacing: -.015em;
+      list-style: none;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: "+";
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      flex: none;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--coral-dark);
+      font-size: 1rem;
+      font-weight: 600;
+      transition: transform .2s ease;
+    }
+    .faq details[open] summary::after { transform: rotate(45deg); }
+    .faq summary:focus-visible { outline: 3px solid rgba(241, 81, 98, .35); outline-offset: 3px; border-radius: 8px; }
+    .faq details p { padding: 0 44px 22px 4px; color: var(--muted); font-size: .92rem; line-height: 1.6; }
+
+    /* Explorer tabs: light-focus affordance */
+    .tab:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
+
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .friction-grid, .results-grid { grid-template-columns: 1fr 1fr; }
+      .hr-grid { grid-template-columns: 1fr; gap: 36px; }
+    }
+    @media (max-width: 860px) {
+      .hero-visual .phone { right: 0; }
+      .week-panel.active { grid-template-columns: 1fr; gap: 20px; }
+      .explorer .tabs { display: flex; flex-wrap: wrap; }
+    }
+    @media (max-width: 650px) {
+      .pain-grid, .hr-checks { grid-template-columns: 1fr; }
+      .admin-cards.three { grid-template-columns: 1fr 1fr; }
+      .admin-cards.three .admin-card:last-child { display: none; }
+    }
+    @media (max-width: 560px) {
+      .friction-grid, .results-grid { grid-template-columns: 1fr; }
+      .stat-num { font-size: 2.2rem; }
+      /* keep floating proof chips inside the clipped hero, above the phone mock */
+      .hero-chip { z-index: 3; }
+      .hero-visual { min-height: 600px; }
+      .hc1 { left: 6px; }
+      .hc2 { right: 6px; }
+      .tpl-row { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .friction-card { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="#top" aria-label="Vantage Fit home">
+        <img src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37" style="height:32px;width:auto;display:block">
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="nav-links" id="nav-links">
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false" aria-current="page">
+            Solutions
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Solutions menu">
+            <div class="mega-body">
+              <div class="mega-grid cols-2">
+                <div>
+                  <div class="mega-col-title">By program</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/steps-challenge/">Step challenges<span>Company-wide step goals that get everyone moving</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/multi-activity-challenges/" aria-current="page">Custom &amp; multi-activity challenges<span>Challenges across any mix of health goals</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/team-challenges/">Team challenges<span>Departments and squads, competing together</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/virtual-marathon/">Virtual marathon<span>One-day events that unite a global workforce</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/mental-health-and-wellbeing-challenges/">Mental health &amp; wellbeing<span>Mindfulness, mood and stress support at work</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/holistic-wellness-program/">Year-round wellness program<span>An always-on calendar of challenges and events</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">By need</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/remote-team-wellness/">Support remote &amp; hybrid teams<span>Wellness that works away from the office</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/global-employee-engagement/">Engage a global workforce<span>One program across countries, languages, time zones</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/wellness-rewards-program/">Reward healthy habits<span>Points and gift cards tied to real effort</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/health-fitness-analytics/">Measure program impact<span>Participation analytics your board can read</span></a>
+                </div>
+              </div>
+            </div>
+            <a class="mega-banner" href="vantage-fit-solutions-v1.html">
+              Explore all programs and use cases
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Features
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">For employees</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/activity-tracking/">Activity &amp; health tracking<span>Steps, workouts, sleep and more, auto-synced</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/nutrition-and-hydration/">Nutrition &amp; hydration<span>Everyday habits, gently tracked</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/mental-health-and-mindfulness/">Mental wellbeing &amp; mindfulness<span>Sessions, streaks and mood check-ins</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/personalized-programs/">Personalized programs<span>Plans tuned to each employee's goals</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/engagement-tools/">Teams, leaderboards &amp; community<span>Squads, rankings and social buzz that keep people going</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">For HR teams</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/admin-dashboard/">Admin dashboard &amp; analytics<span>Participation, trends and insights in one console</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/program-builder/">Program builder &amp; templates<span>Launch challenges and calendars in minutes</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/audience-targeting/">Audience targeting<span>Segment by team, location, or activity level</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/reports/">Reports &amp; exports<span>Board-ready participation and outcomes reports</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/health-data-upload/">Health data upload, AI insights<span>Turn existing health data into program recommendations</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Enterprise platform</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/integrations/">Integrations &amp; SSO<span>Wearables, HRIS, SSO and more</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/security-and-compliance/">Security, privacy &amp; residency<span>HIPAA, SOC 2, GDPR, ISO 27001/27701</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/accessibility/">Global access &amp; localization<span>Inclusive across devices, locations and languages</span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Resources
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Resources menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">Learn</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/">Blog<span>Ideas and research for healthier workplaces</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/guides/">Guides &amp; eBooks<span>Playbooks for launching and scaling wellness</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/podcasts/">Podcasts<span>Conversations with HR and wellbeing leaders</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/2026-global-workplace-well-being-industry-report/">2026 Industry Report<span>The state of global workplace wellbeing</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Evaluate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/casestudy/">Customer stories<span>Results from real customer programs</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/compare/">Compare platforms<span>Vantage Fit vs the alternatives</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/">Help Center<span>Product docs and setup guides</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/tools-and-templates/step-challenge-diy-template/">Step Challenge Template<span>DIY template to plan and launch a step challenge</span></a>
+                </div>
+                <a class="mega-feature" href="https://www.vantagefit.io/wellness-challenges/">
+                  <span>
+                    <small>Featured</small>
+                    <b>Wellness Challenges Library</b>
+                    <p>Browse ready-to-run challenges your teams can start this month.</p>
+                  </span>
+                  <span class="go">Explore the library
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <!-- ========== S1 HERO ========== -->
+    <header class="hero" id="hero">
+      <div class="shell hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Solutions · Multi-activity challenge</span>
+          <h1>One challenge for <em>every kind of healthy.</em></h1>
+          <p class="lead">Vantage Fit's multi-activity challenges score 27 activity types in a single program: steps and distance, sleep and meditation, hydration, nutrition, even lab reports. Weekly themes keep it fresh, and everyone competes on effort they can actually put in.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+            <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">See pricing</a>
+          </div>
+          <div class="hero-note">
+            <span>No wearable required</span>
+            <span>27 task types</span>
+            <span>Weekly themed programs</span>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-label="Illustration: Vantage Fit admin dashboard showing per-task completion across a themed wellness week, alongside the employee app view of the same challenge">
+          <div class="dash" aria-hidden="true">
+            <div class="dash-top">
+              <span class="dash-dot"></span><span class="dash-dot"></span><span class="dash-dot"></span>
+              <span class="dash-url"></span>
+            </div>
+            <div class="dash-body">
+              <div class="dash-title">
+                <div>
+                  <small>Admin dashboard · Challenges</small>
+                  <strong>Spring Wellness Challenge</strong>
+                </div>
+              </div>
+              <div class="metric-inline">
+                <span><i>Enrolled</i><b>2,140</b></span>
+                <span><i>Active</i><b>1,802</b></span>
+                <span><i>Week</i><b>2 of 4</b></span>
+              </div>
+              <div class="metric-card metric-main">
+                <span class="metric-lab">Participation · Week 2: Nourish</span>
+                <div class="metric-value">84%</div>
+                <span class="metric-delta">Live · updates as activities sync</span>
+              </div>
+              <div class="tb">
+                <div class="tb-head">Task completion this week <span>% of participants</span></div>
+                <div class="tb-row">
+                  <span class="tb-ic">S</span>
+                  <span class="tb-name">Steps, auto-synced</span>
+                  <span class="tb-bar"><i style="width:81%"></i></span>
+                  <span class="tb-pct">81%</span>
+                </div>
+                <div class="tb-row">
+                  <span class="tb-ic">W</span>
+                  <span class="tb-name">Water, 8 glasses</span>
+                  <span class="tb-bar"><i style="width:68%"></i></span>
+                  <span class="tb-pct">68%</span>
+                </div>
+                <div class="tb-row">
+                  <span class="tb-ic">M</span>
+                  <span class="tb-name">Meal log, 3 meals</span>
+                  <span class="tb-bar"><i style="width:54%"></i></span>
+                  <span class="tb-pct">54%</span>
+                </div>
+                <div class="tb-row">
+                  <span class="tb-ic">A</span>
+                  <span class="tb-name">Article, read to end</span>
+                  <span class="tb-bar"><i style="width:47%"></i></span>
+                  <span class="tb-pct">47%</span>
+                </div>
+              </div>
+              <p class="mock-note">Illustrative figures</p>
+            </div>
+          </div>
+
+          <div class="phone" aria-hidden="true">
+            <div class="phone-screen">
+              <div class="phone-head"><span>9:41</span><span class="avatar"></span></div>
+              <div class="challenge">
+                <div class="challenge-art"><span class="challenge-person">🧘</span></div>
+                <div class="challenge-copy">
+                  <small>MULTI-ACTIVITY · LIVE</small>
+                  <b>Spring Wellness Challenge</b>
+                  <p>4 weeks · 12 tasks · teams on</p>
+                  <div class="progress-label"><span>Your points</span><span>1,240</span></div>
+                  <div class="progress"><i style="width:62%"></i></div>
+                </div>
+              </div>
+              <div class="week-strip">Week 2: Nourish <span>3 of 4 done</span></div>
+              <div class="task-list">
+                <div class="task-item">
+                  <span class="task-dot done">✓</span>
+                  <span class="grow">Steps <small>8,240 / 7,500 · synced</small></span>
+                </div>
+                <div class="task-item">
+                  <span class="task-dot done">✓</span>
+                  <span class="grow">Article: Eating for energy <small>Read to end</small></span>
+                </div>
+                <div class="task-item">
+                  <span class="task-dot todo">✓</span>
+                  <span class="grow">Water <small>6 / 8 glasses</small></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-chip hc2">
+            <span class="hc-dot" aria-hidden="true"></span>
+            <div><b>3X</b> participation growth · Wipro</div>
+          </div>
+          <div class="hero-chip hc1">
+            <span class="hc-dot" aria-hidden="true"></span>
+            <div><b>1,100+</b> participants · Intrado Healthy Me</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="logo-band">
+        <div class="shell logos" aria-label="Selected customers">
+          <span class="logos-label">Trusted by 100+ organizations in 50+ countries</span>
+          <span class="logo-word">TATA MOTORS</span>
+          <span class="logo-word">WIPRO</span>
+          <span class="logo-word">ACCENTURE</span>
+          <span class="logo-word">TEVA</span>
+          <span class="logo-word">TEXAS INSTRUMENTS</span>
+          <span class="logo-word">HERSHEY</span>
+          <span class="logo-word">BRAZOSPORT ISD</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ========== S2 PROBLEM ========== -->
+    <section class="screen" id="why" aria-labelledby="why-heading" style="background: var(--canvas);">
+      <div class="shell">
+        <div class="center">
+          <span class="eyebrow">The familiar story</span>
+          <h2 id="why-heading">Step-only challenges leave most of the company out.</h2>
+          <p class="lead" style="margin-inline: auto;">Walking is a great start. It is not a wellness program. When one metric is all there is, most employees watch from the sidelines and the rest tune out by week two.</p>
+        </div>
+        <div class="pain-grid">
+          <div class="pain-card">
+            <h3>Not everyone is a walker</h3>
+            <p>Cyclists, swimmers, lifters, and yogis get zero credit for the healthy things they already do.</p>
+          </div>
+          <div class="pain-card">
+            <h3>One metric gets old fast</h3>
+            <p>The same daily step target for four straight weeks is why launch-week energy fades into silence.</p>
+          </div>
+          <div class="pain-card">
+            <h3>Wellness lives in silos</h3>
+            <p>Steps in one app, mindfulness in another, screenings in a spreadsheet. Nothing adds up to one program.</p>
+          </div>
+          <div class="pain-card">
+            <h3>HR runs it all by hand</h3>
+            <p>Five separate initiatives means five launches, five reminder campaigns, and five reports to stitch together.</p>
+          </div>
+        </div>
+        <p class="pain-pivot">A multi-activity challenge folds all of it into one scored program. One launch, one leaderboard, one report, and a task list with something for every employee.</p>
+      </div>
+    </section>
+
+    <!-- ========== S3 TASK EXPLORER ========== -->
+    <section class="screen" id="tasks" aria-labelledby="tasks-heading">
+      <div class="shell">
+        <div class="center">
+          <span class="eyebrow">One program, 27 task types</span>
+          <h2 id="tasks-heading">If it is healthy, it can earn points.</h2>
+          <p class="lead" style="margin-inline: auto;">Every task has a target and a point value you set. Movement syncs itself, daily habits take one tap, and content completes when it is watched or read. Mix low-friction and engaged tasks so the whole company can play.</p>
+        </div>
+
+        <div class="friction-grid">
+          <div class="friction-card">
+            <span class="friction-tag">No employee effort</span>
+            <h3>Auto-tracked</h3>
+            <p>Steps, distance, calories, and active minutes sync from the phone or wearable employees already carry.</p>
+          </div>
+          <div class="friction-card">
+            <span class="friction-tag">Seconds per day</span>
+            <h3>One-tap habits</h3>
+            <p>Water, meals, sleep, meditation, mood, and custom check-ins log in seconds, with reminders if they forget.</p>
+          </div>
+          <div class="friction-card">
+            <span class="friction-tag">Proof built in</span>
+            <h3>Event-based</h3>
+            <p>Video workouts, health articles, HRAs, and lab report uploads complete when done. Biomarkers extract automatically.</p>
+          </div>
+        </div>
+
+        <div class="dual explorer">
+          <div class="dual-head">
+            <h3>See what a 4-week program looks like.</h3>
+            <p>Weekly themes, each with its own name, colors, and logo, so month-long programs feel curated, not repetitive.</p>
+          </div>
+          <div class="tabs" role="tablist" aria-label="Sample weekly themes">
+            <button class="tab" role="tab" id="tab-move" aria-controls="panel-move" aria-selected="true">Move</button>
+            <button class="tab" role="tab" id="tab-nourish" aria-controls="panel-nourish" aria-selected="false" tabindex="-1">Nourish</button>
+            <button class="tab" role="tab" id="tab-rest" aria-controls="panel-rest" aria-selected="false" tabindex="-1">Rest</button>
+            <button class="tab" role="tab" id="tab-thrive" aria-controls="panel-thrive" aria-selected="false" tabindex="-1">Thrive</button>
+          </div>
+
+          <div class="week-panel active" id="panel-move" role="tabpanel" aria-labelledby="tab-move">
+            <div class="week-copy">
+              <h4>Week 1 · Move</h4>
+              <p>Open with momentum. Auto-tracked movement gets everyone on the board without asking for any effort, and the camera squat counter adds a social moment.</p>
+              <span class="week-meta"><i style="background: var(--mint);"></i>4 tasks · auto-sync heavy</span>
+            </div>
+            <div class="product-window">
+              <div class="product-screen week-screen">
+                <div class="week-banner move">Move <span>Week 1 of 4</span></div>
+                <div class="week-tasks">
+                  <div class="week-task">
+                    <span class="week-task-ic">👟</span>
+                    <div><b>Steps</b><small>7,500 a day · auto-synced from phone or wearable</small></div>
+                    <span class="week-pts">20 pts</span>
+                  </div>
+                  <div class="week-task">
+                    <span class="week-task-ic">🚴</span>
+                    <div><b>Distance, your way</b><small>5K run, walk, or cycle this week · GPS or wearable</small></div>
+                    <span class="week-pts">25 pts</span>
+                  </div>
+                  <div class="week-task">
+                    <span class="week-task-ic">⚡</span>
+                    <div><b>Active minutes</b><small>150 moderate-to-vigorous minutes this week</small></div>
+                    <span class="week-pts">30 pts</span>
+                  </div>
+                  <div class="week-task">
+                    <span class="week-task-ic">🏋️</span>
+                    <div><b>Squats</b><small>20 reps with the in-app camera counter</small></div>
+                    <span class="week-pts">15 pts</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="week-panel" id="panel-nourish" role="tabpanel" aria-labelledby="tab-nourish" hidden>
+            <div class="week-copy">
+              <h4>Week 2 · Nourish</h4>
+              <p>Shift to nutrition with one-tap logs. Hydration and meal awareness are the habits employees say they want but never track.</p>
+              <span class="week-meta"><i style="background: var(--amber);"></i>4 tasks · one-tap heavy</span>
+            </div>
+            <div class="product-window">
+              <div class="product-screen week-screen">
+                <div class="week-banner nourish">Nourish <span>Week 2 of 4</span></div>
+                <div class="week-tasks">
+                  <div class="week-task">
+                    <span class="week-task-ic">💧</span>
+                    <div><b>Water</b><small>8 glasses a day · one tap per glass</small></div>
+                    <span class="week-pts">15 pts</span>
+                  </div>
+                  <div class="week-task">
+                    <span class="week-task-ic">🥗</span>
+                    <div><b>Meal log</b><small>3 meals logged a day · search or quick-add</small></div>
+                    <span class="week-pts">20 pts</span>
+                  </div>
+                  <div class="week-task">
+                    <span class="week-task-ic">📖</span>
+                    <div><b>Article: Eating for energy</b><small>Completes when read to the end</small></div>
+                    <span class="week-pts">10 pts</span>
+                  </div>
+                  <div class="week-task">
+                    <span class="week-task-ic">✅</span>
+                    <div><b>Check-in: No added sugar</b><small>Daily adherence habit, your branding</small></div>
+                    <span class="week-pts">10 pts</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="week-panel" id="panel-rest" role="tabpanel" aria-labelledby="tab-rest" hidden>
+            <div class="week-copy">
+              <h4>Week 3 · Rest</h4>
+              <p>Recovery counts too. Sleep, meditation, and mood check-ins bring your mental wellbeing goals into the same program, with privacy intact.</p>
+              <span class="week-meta"><i style="background: #8b9cf0;"></i>4 tasks · mood stays private</span>
+            </div>
+            <div class="product-window">
+              <div class="product-screen week-screen">
+                <div class="week-banner rest">Rest <span>Week 3 of 4</span></div>
+                <div class="week-tasks">
+                  <div class="week-task">
+                    <span class="week-task-ic">😴</span>
+                    <div><b>Sleep</b><small>7+ hours · manual log or wearable sync</small></div>
+                    <span class="week-pts">20 pts</span>
+                  </div>
+                  <div class="week-task">
+                    <span class="week-task-ic">🧘</span>
+                    <div><b>Meditation</b><small>10 minutes a day · log a session</small></div>
+                    <span class="week-pts">15 pts</span>
+                  </div>
+                  <div class="week-task">
+                    <span class="week-task-ic">🙂</span>
+                    <div><b>Mood check-in</b><small>Daily · private to the employee, never on leaderboards</small></div>
+                    <span class="week-pts">10 pts</span>
+                  </div>
+                  <div class="week-task">
+                    <span class="week-task-ic">🌙</span>
+                    <div><b>Habit: Screen-free evening</b><small>Custom adherence check-in</small></div>
+                    <span class="week-pts">10 pts</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="week-panel" id="panel-thrive" role="tabpanel" aria-labelledby="tab-thrive" hidden>
+            <div class="week-copy">
+              <h4>Week 4 · Thrive</h4>
+              <p>Close with growth and prevention. Learning content and health checks turn a fitness push into a whole-person program.</p>
+              <span class="week-meta"><i style="background: var(--coral);"></i>4 tasks · event-based proof</span>
+            </div>
+            <div class="product-window">
+              <div class="product-screen week-screen">
+                <div class="week-banner thrive">Thrive <span>Week 4 of 4</span></div>
+                <div class="week-tasks">
+                  <div class="week-task">
+                    <span class="week-task-ic">👟</span>
+                    <div><b>Steps</b><small>8,000 a day · the habit, one level up</small></div>
+                    <span class="week-pts">20 pts</span>
+                  </div>
+                  <div class="week-task">
+                    <span class="week-task-ic">🎬</span>
+                    <div><b>Video workout</b><small>Watch one VFit library session to the end</small></div>
+                    <span class="week-pts">20 pts</span>
+                  </div>
+                  <div class="week-task">
+                    <span class="week-task-ic">📚</span>
+                    <div><b>Book reading</b><small>20 minutes logged a day</small></div>
+                    <span class="week-pts">15 pts</span>
+                  </div>
+                  <div class="week-task">
+                    <span class="week-task-ic">🩺</span>
+                    <div><b>Health check</b><small>Complete an HRA or upload a lab report · biomarkers extract automatically</small></div>
+                    <span class="week-pts">40 pts</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p class="explorer-note">A representative mix of the 27 task types. Your exact catalog depends on your plan and configuration, and every point value shown here is one you control.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S4 FOLLOW-THROUGH ========== -->
+    <section class="screen" id="engine" aria-labelledby="engine-heading" style="background: var(--canvas);">
+      <div class="shell">
+        <div class="center">
+          <span class="eyebrow">Designed for follow-through</span>
+          <h2 id="engine-heading">Built so week three feels like week one.</h2>
+          <p class="lead" style="margin-inline: auto;">Four mechanics, working together, that keep a long program alive after the launch-day buzz wears off.</p>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <span class="step-no">01</span>
+            <span class="step-tag" aria-hidden="true">01</span>
+            <h3>Balanced by design</h3>
+            <p>You set the points per task, and the scoring keeps any single task, or athlete, from running away with it.</p>
+            <ul class="step-list">
+              <li>Non-step tasks cap at 100% of target, so over-logging earns nothing extra</li>
+              <li>Steps cap at 25,000 a day by default, adjustable for your program</li>
+              <li>Team scores average member effort, so every person's contribution counts</li>
+            </ul>
+          </article>
+          <article class="step">
+            <span class="step-no">02</span>
+            <span class="step-tag" aria-hidden="true">02</span>
+            <h3>Habits or totals, your call</h3>
+            <p>Each task runs in the mode that fits the behavior you want to build.</p>
+            <ul class="step-list">
+              <li>Daily mode: "hit the target on at least 4 days this week" builds consistency</li>
+              <li>Weekly mode: "accumulate 35,000 steps" rewards sustained effort</li>
+              <li>Different tasks, different weeks, so the program never repeats itself</li>
+            </ul>
+          </article>
+          <article class="step">
+            <span class="step-no">03</span>
+            <span class="step-tag" aria-hidden="true">03</span>
+            <h3>Recognition beyond the podium</h3>
+            <p>Only three people win the leaderboard. Everyone else still needs a reason to finish.</p>
+            <ul class="step-list">
+              <li>Automatic badges mark personal milestones from the first week onward</li>
+              <li>Branded completion certificates carry your logo, seal, and signature</li>
+              <li>Score breakdowns per task and week keep progress visible</li>
+            </ul>
+          </article>
+          <article class="step">
+            <span class="step-no">04</span>
+            <span class="step-tag" aria-hidden="true">04</span>
+            <h3>Rewards worth earning</h3>
+            <p>Effort converts to points, and points convert to things people actually want.</p>
+            <ul class="step-list">
+              <li>Points credit the moment a task completes, with a confirmation in-app</li>
+              <li>Redeemable for gift cards from country-relevant catalogs</li>
+              <li>Set values in USD; employees see them in local currency</li>
+            </ul>
+          </article>
+        </div>
+        <p class="engine-note"><b>Competition optional.</b> Employees can opt out of the leaderboard and still earn every point, badge, and certificate.</p>
+      </div>
+    </section>
+
+    <!-- ========== S5 FOR HR ========== -->
+    <section class="screen" id="for-hr" aria-labelledby="for-hr-heading">
+      <div class="shell hr-grid">
+        <div>
+          <span class="eyebrow">For HR &amp; program managers</span>
+          <h2 id="for-hr-heading" style="font-size: clamp(1.7rem, 2.6vw, 2.5rem);">A month-long program, launched before lunch.</h2>
+          <p class="lead" style="margin-top: 14px;">Start from a template, make it yours, and point it at exactly the right audience. The dashboard carries the proof.</p>
+          <ul class="tour-checks hr-checks">
+            <li>
+              <b>Templates, not blank pages</b>
+              <p>Pre-built programs like "4-Week Holistic Wellness" ship with themes, tasks, targets, and scoring set. Pick dates and go.</p>
+            </li>
+            <li>
+              <b>Make it yours</b>
+              <p>Weekly theme names, logos, and colors, plus company-branded activities like "Walking meeting" or "Took vitamins" check-ins.</p>
+            </li>
+            <li>
+              <b>Aim it anywhere</b>
+              <p>Target by department, country, language, or age. Run as many challenges in parallel as you like; days localize to every time zone.</p>
+            </li>
+            <li>
+              <b>Report like you meant it</b>
+              <p>Live participation per task, leaderboard exports, and a full points ledger, all downloadable as CSV.</p>
+            </li>
+          </ul>
+        </div>
+        <div class="report-mock" role="img" aria-label="Illustration: Vantage Fit admin dashboard for a multi-activity challenge, showing per-task participation, a template library, and a next-action reminder">
+          <div class="dash-top" aria-hidden="true">
+            <span class="dash-dot"></span><span class="dash-dot"></span><span class="dash-dot"></span>
+            <span class="dash-url"></span>
+          </div>
+          <div class="report-mock-body" aria-hidden="true">
+            <div class="admin-layout" style="min-height: 0;">
+              <div class="admin-side">
+                <b>Vantage Fit</b>
+                <div class="admin-link">Overview</div>
+                <div class="admin-link active">Challenges</div>
+                <div class="admin-link">Reports</div>
+                <div class="admin-link">Rewards</div>
+              </div>
+              <div class="admin-main">
+                <h3>Spring Wellness Challenge</h3>
+                <p>Custom multi-week · Week 2 of 4 · 2,140 enrolled</p>
+                <div class="admin-cards three">
+                  <div class="admin-card"><span>Participation</span><b>84%</b></div>
+                  <div class="admin-card"><span>Points awarded</span><b>128k</b></div>
+                  <div class="admin-card"><span>Certificates queued</span><b>1,540</b></div>
+                </div>
+                <div class="admin-chart">
+                  <div class="admin-chart-head"><span>Participation by week</span><span class="legend"><i></i>Live</span></div>
+                  <div class="bars">
+                    <span class="bar" style="height:55%"></span>
+                    <span class="bar" style="height:84%"></span>
+                    <span class="bar" style="height:18%"></span>
+                    <span class="bar" style="height:8%"></span>
+                    <span class="bar" style="height:0%"></span>
+                    <span class="bar" style="height:0%"></span>
+                    <span class="bar" style="height:0%"></span>
+                  </div>
+                </div>
+                <div class="nudge">
+                  <span class="nudge-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/></svg></span>
+                  <div><b>Next action</b><small>Week 3 "Rest" starts Monday · remind 312 inactive participants</small></div>
+                  <span class="nudge-act">Send</span>
+                </div>
+              </div>
+            </div>
+            <div class="tpl-row">
+              <div class="tpl">4-Week Holistic Wellness <small>Template · 12 tasks</small></div>
+              <div class="tpl">Mindful March <small>Template · 8 tasks</small></div>
+              <div class="tpl">Build from scratch <small>All 27 task types</small></div>
+            </div>
+            <div class="report-foot">Illustrative figures · your dashboard shows live program data</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S6 PROOF ========== -->
+    <section class="screen" id="proof" aria-labelledby="proof-heading" style="background: #f6f7f4;">
+      <div class="shell">
+        <div class="center">
+          <span class="eyebrow">Results</span>
+          <h2 id="proof-heading">Holistic programs, measurable momentum.</h2>
+          <p class="lead" style="margin-inline: auto;">Named outcomes from multi-activity campaigns run on Vantage Fit.</p>
+        </div>
+        <div class="results-grid">
+          <div class="stat-card">
+            <div class="stat-num">1,100+</div>
+            <div class="stat-org">Intrado <span>Technology · Nebraska</span></div>
+            <p>employees joined the 5-week "Healthy Me" campaign spanning steps, meal logging, yoga, and meditation.</p>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">63M+</div>
+            <div class="stat-org">Intrado <span>5-week campaign</span></div>
+            <p>steps logged collectively, with a 1.7% rise in average steps in the final two weeks. Momentum, not drop-off.</p>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">3X</div>
+            <div class="stat-org">Wipro <span>IT services · 30+ countries</span></div>
+            <p>participation growth across three connected 2025 challenges, from 163 to 550 active users.</p>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">46.5M</div>
+            <div class="stat-org">Wipro <span>4-month program</span></div>
+            <p>cumulative steps across a program that mixed steps, hydration, mindfulness, and yoga.</p>
+          </div>
+        </div>
+        <div class="results-actions">
+          <a class="text-link" href="https://www.vantagefit.io/casestudy/">Read the customer stories &rarr;</a>
+          <a class="text-link" href="https://www.vantagefit.io/request-demo/">Get results like these &rarr;</a>
+        </div>
+        <p class="results-note">Results from published Vantage Fit customer case studies, as reported by each customer's program.</p>
+      </div>
+    </section>
+
+    <!-- ========== S7 TRUST ========== -->
+    <section class="trust-screen" id="security" aria-labelledby="security-heading">
+      <div class="shell">
+        <span class="eyebrow">Enterprise trust</span>
+        <h2 id="security-heading" style="color:#fff;">Wellness data this personal comes with rules.</h2>
+        <p class="lead">A multi-activity program touches sleep, mood, weight, and lab results. So the line between what HR sees and what stays private is drawn by the product, not by policy promises.</p>
+        <div class="trust-grid" style="margin-top: 44px;">
+          <div class="trust-card">
+            <span class="trust-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.5"/></svg></span>
+            <h3>What HR sees</h3>
+            <p>Participation, task completion, leaderboard positions, and aggregate trends at company or department level.</p>
+          </div>
+          <div class="trust-card">
+            <span class="trust-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><path d="M4 4l16 16"/></svg></span>
+            <h3>What HR never sees</h3>
+            <p>Individual weight, mood logs, food diaries, sleep patterns, HRA answers, or lab reports. Ever.</p>
+          </div>
+          <div class="trust-card">
+            <span class="trust-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
+            <h3>Private by choice</h3>
+            <p>Leaderboard opt-out is built in, and mood data is never shown to admins or rankings, only to the employee.</p>
+          </div>
+          <div class="trust-card">
+            <span class="trust-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l7 3v5c0 4.4-3 8.4-7 10-4-1.6-7-5.6-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
+            <h3>Compliance &amp; residency</h3>
+            <p>HIPAA-aligned and GDPR compliant, with employee data isolated in its assigned region.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S8 FAQ ========== -->
+    <section class="screen" id="faq" aria-labelledby="faq-heading">
+      <div class="shell">
+        <div class="center">
+          <span class="eyebrow">FAQ</span>
+          <h2 id="faq-heading">Questions before rollout.</h2>
+        </div>
+        <div class="faq">
+          <details>
+            <summary>Do employees have to log everything by hand?</summary>
+            <p>No. Steps, distance, calories, and active minutes sync automatically from phones and wearables. Daily habits like water or meditation are one tap, and content tasks complete themselves when watched or read. Manual step entry exists only as a fallback, if your company enables it.</p>
+          </details>
+          <details>
+            <summary>Can different activities really share one leaderboard?</summary>
+            <p>Yes. Each task is worth points you set, non-step tasks cap at 100% of target, and steps cap daily. Team scores average member effort, so a few power walkers cannot carry a squad, and the yogi can outscore the runner.</p>
+          </details>
+          <details>
+            <summary>Can we brand the program and add our own activities?</summary>
+            <p>Yes. Name and theme every week with your own logos and colors, create custom activities like "Office stretch break," add daily adherence check-ins like "Took vitamins," and issue completion certificates with your logo and signature.</p>
+          </details>
+          <details>
+            <summary>What about privacy when sleep and mood are involved?</summary>
+            <p>Admins see participation and aggregate trends only. Individual mood logs, sleep patterns, weight, HRA answers, and lab reports are never visible to HR, and employees can opt out of leaderboards entirely while still earning points.</p>
+          </details>
+          <details>
+            <summary>How long does it take to launch?</summary>
+            <p>Template programs carry themes, tasks, targets, and scoring, so most teams launch in days. Set dates, pick your audience, publish. Your account manager can also help design your first multi-week program.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S9 FINAL CTA ========== -->
+    <section class="final" id="demo" aria-labelledby="demo-heading">
+      <div class="shell">
+        <h2 id="demo-heading">See the program your whole workforce can actually join.</h2>
+        <p>Book a 30-minute walkthrough. We will sketch a themed multi-activity challenge for your workforce and show you the reporting behind it.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+          <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">See pricing</a>
+        </div>
+        <div class="final-checks">
+          <span>27 task types</span>
+          <span>Launch in days</span>
+          <span>No wearable required</span>
+          <span>Privacy built in</span>
+        </div>
+        <div class="final-note">One program. Every kind of healthy.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="#top">
+            <img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37" style="height:28px;width:auto;display:block">
+          </a>
+          <p class="footer-about">Inclusive wellness that turns participation into measurable progress.</p>
+        </div>
+        <div>
+          <div class="footer-title">Programs</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/steps-challenge/">Steps challenge</a>
+            <a href="https://www.vantagefit.io/team-challenges/">Team challenges</a>
+            <a href="https://www.vantagefit.io/virtual-marathon/">Virtual marathon</a>
+            <a href="https://www.vantagefit.io/multi-activity-challenges/">Custom challenges</a>
+            <a href="https://www.vantagefit.io/holistic-wellness-program/">Year-round program</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Solutions</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/remote-team-wellness/">Remote teams</a>
+            <a href="https://www.vantagefit.io/global-employee-engagement/">Global engagement</a>
+            <a href="https://www.vantagefit.io/wellness-rewards-program/">Wellness rewards</a>
+            <a href="https://www.vantagefit.io/health-fitness-analytics/">Analytics</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Company</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/about-us/">About</a>
+            <a href="https://www.vantagefit.io/casestudy/">Case studies</a>
+            <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+            <a href="https://www.vantagefit.io/request-demo/">Contact sales</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Vantage Circle. All rights reserved.</span>
+        <span>HIPAA · GDPR · Regional data residency</span>
+        <span>Wellness built for participation.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav
+    const menuButton = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation');
+      navLinks.classList.toggle('open', !open);
+    });
+
+    // Mega menus: hover on desktop, tap on mobile
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const navTriggers = [...document.querySelectorAll('.nav-trigger')];
+    const desktopNav = window.matchMedia('(min-width: 861px)');
+    let desktopCloseTimer;
+
+    const closeDesktopMenus = (except = null) => {
+      navItems.forEach((item) => {
+        if (item !== except) item.classList.remove('desktop-open');
+      });
+    };
+
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => {
+        if (!desktopNav.matches) return;
+        window.clearTimeout(desktopCloseTimer);
+        closeDesktopMenus(item);
+        item.classList.add('desktop-open');
+
+        const focusedTrigger = document.activeElement?.closest?.('.nav-trigger');
+        if (focusedTrigger && !item.contains(focusedTrigger)) focusedTrigger.blur();
+      });
+
+      item.addEventListener('pointerleave', () => {
+        if (!desktopNav.matches) return;
+        desktopCloseTimer = window.setTimeout(() => {
+          if (!item.matches(':hover') && !item.contains(document.activeElement)) {
+            item.classList.remove('desktop-open');
+          }
+        }, 120);
+      });
+    });
+
+    document.querySelectorAll('.nav-links > a').forEach((link) => {
+      link.addEventListener('pointerenter', () => {
+        if (desktopNav.matches) closeDesktopMenus();
+      });
+    });
+
+    navTriggers.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        if (window.matchMedia('(max-width: 860px)').matches) {
+          e.preventDefault();
+          const item = btn.closest('.nav-item');
+          const isOpen = item.classList.contains('open');
+          document.querySelectorAll('.nav-item').forEach((n) => {
+            n.classList.remove('open');
+            n.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        }
+      });
+    });
+
+    // Weekly theme explorer tabs
+    const explorerTabs = [...document.querySelectorAll('.tabs [role="tab"]')];
+    const selectTab = (tab) => {
+      explorerTabs.forEach((t) => {
+        const selected = t === tab;
+        t.setAttribute('aria-selected', String(selected));
+        t.tabIndex = selected ? 0 : -1;
+        const panel = document.getElementById(t.getAttribute('aria-controls'));
+        panel.classList.toggle('active', selected);
+        panel.hidden = !selected;
+      });
+    };
+    explorerTabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => selectTab(tab));
+      tab.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        const next = explorerTabs[(i + (e.key === 'ArrowRight' ? 1 : explorerTabs.length - 1)) % explorerTabs.length];
+        next.focus();
+        selectTab(next);
+      });
+    });
+
+    // Nav CTA: ghost over the hero, filled after
+    (function () {
+      const nav = document.querySelector('nav.nav');
+      const hero = document.querySelector('.hero');
+      if (!nav || !hero) return;
+      const state = () => nav.classList.toggle('lit', window.scrollY > hero.offsetHeight - 90);
+      window.addEventListener('scroll', state, { passive: true });
+      state();
+    })();
+
+    // Grayscale preview mode for accessibility review: append ?gray to the URL
+    if (new URLSearchParams(location.search).has('gray')) {
+      document.documentElement.style.filter = 'grayscale(1)';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1091 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="description" content="Run workplace mental health and wellbeing challenges employees actually join. Guided mindfulness, private mood check-ins, sleep and yoga tasks, and aggregate-only reporting for HR.">
+  <meta name="theme-color" content="#18262b">
+  <title>Mental Health &amp; Wellbeing Challenges for Work | Vantage Fit</title>
+  <link rel="stylesheet" href="../styles/enterprise.css">
+  <style>
+    /* —— Mental Health & Wellbeing page components (built on enterprise.css tokens) —— */
+
+    /* Current-page marker inside the Solutions mega menu */
+    .mega-link[aria-current="page"] { position: relative; background: var(--soft); }
+    .mega-link[aria-current="page"]::after {
+      content: "You’re here";
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(241, 81, 98, .1);
+      color: var(--coral-dark);
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    /* Hero: task rows inside the admin dash mock */
+    .tk { margin-top: 12px; padding: 13px 15px; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
+    .tk-head { display: flex; align-items: center; justify-content: space-between; font-size: .7rem; font-weight: 800; }
+    .tk-head span { color: var(--muted); font-size: .6rem; font-weight: 650; }
+    .tk-row { display: flex; align-items: center; gap: 9px; margin-top: 9px; font-size: .72rem; font-weight: 650; }
+    .tk-ic {
+      display: grid;
+      place-items: center;
+      width: 20px;
+      height: 20px;
+      flex: none;
+      border-radius: 7px;
+      background: rgba(65, 216, 180, .14);
+      color: var(--mint-dark);
+      font-size: .58rem;
+      font-weight: 800;
+    }
+    .tk-row:nth-child(3) .tk-ic { background: rgba(241, 81, 98, .1); color: var(--coral-dark); }
+    .tk-row:nth-child(4) .tk-ic { background: rgba(246, 185, 59, .18); color: #a97a12; }
+    .tk-name { flex: 1; }
+    .tk-bar { width: 32%; height: 6px; overflow: hidden; border-radius: 999px; background: #edf0ee; }
+    .tk-bar i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--mint), var(--mint-dark)); }
+    .tk-pct { color: var(--muted); font-size: .64rem; font-weight: 700; }
+    .hero-visual .dash { transform: none; width: 400px; }
+    .hero-visual .phone { bottom: -8px; }
+    @media (min-width: 1101px) { .hero-visual .phone { right: -44px; } }
+    /* keep the top proof chip clear of the phone frame */
+    .hero-visual .hc2 { right: auto; left: 24px; top: -16px; }
+
+    /* Hero phone: mood check-in widget */
+    .mood {
+      margin: 0 11px 11px;
+      padding: 10px 11px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: #fff;
+    }
+    .mood-q { display: flex; align-items: center; justify-content: space-between; font-size: .6rem; font-weight: 800; }
+    .mood-lock { display: inline-flex; align-items: center; gap: 4px; color: var(--mint-dark); font-size: .5rem; font-weight: 800; }
+    .mood-lock svg { width: 9px; height: 9px; }
+    .mood-dots { display: flex; justify-content: space-between; margin-top: 8px; }
+    .mood-dots span {
+      width: 22px;
+      height: 22px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: var(--soft);
+    }
+    .mood-dots span.on { border-color: transparent; background: linear-gradient(135deg, var(--mint), var(--mint-dark)); box-shadow: 0 3px 8px rgba(22, 157, 126, .3); }
+    .mood-note { margin-top: 8px; color: var(--muted); font-size: .5rem; font-weight: 650; text-align: center; }
+
+    .samplenote { font-size: .62rem; color: var(--muted); font-style: italic; }
+
+    /* S2 problem */
+    .pain-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 40px; }
+    .pain-card { padding: 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--paper); }
+    .pain-card h3 { display: flex; align-items: baseline; gap: 10px; font-size: 1rem; letter-spacing: -.015em; }
+    .pain-card h3::before {
+      content: "✕";
+      display: grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      flex: none;
+      border-radius: 8px;
+      background: rgba(241, 81, 98, .1);
+      color: var(--coral-dark);
+      font-size: .62rem;
+      font-weight: 800;
+      transform: translateY(3px);
+    }
+    .pain-card p { margin-top: 8px; color: var(--muted); font-size: .86rem; line-height: 1.5; }
+    .pain-pivot {
+      margin-top: 28px;
+      padding: 18px 22px;
+      border-left: 4px solid var(--mint);
+      border-radius: 0 14px 14px 0;
+      background: #e9f7f2;
+      font-size: .95rem;
+      font-weight: 650;
+    }
+
+    /* S3 task explorer */
+    .dim-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 44px; }
+    .dim-card {
+      display: flex;
+      flex-direction: column;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .dim-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-soft); }
+    .dim-ic {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 11px;
+      background: rgba(65, 216, 180, .14);
+      color: var(--mint-dark);
+    }
+    .dim-ic svg { width: 19px; height: 19px; }
+    .dim-card:nth-child(2) .dim-ic { background: rgba(241, 81, 98, .1); color: var(--coral-dark); }
+    .dim-card:nth-child(3) .dim-ic { background: rgba(246, 185, 59, .18); color: #a97a12; }
+    .dim-card:nth-child(4) .dim-ic { background: rgba(41, 41, 76, .08); color: var(--ink); }
+    .dim-card h3 { margin-top: 14px; font-size: 1.05rem; letter-spacing: -.02em; }
+    .dim-card > p { margin-top: 7px; color: var(--muted); font-size: .83rem; line-height: 1.5; }
+    .dim-tasks { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .dim-tasks span {
+      padding: 4px 9px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--canvas);
+      color: var(--ink);
+      font-size: .66rem;
+      font-weight: 700;
+    }
+    .cadence {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px 26px;
+      margin-top: 30px;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+    .cadence .text-link { margin-top: 0; font-size: .88rem; }
+
+    /* S4 guided sessions */
+    .sess-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 52px; align-items: center; }
+    .sess-mock {
+      overflow: hidden;
+      border: 1px solid rgba(41, 41, 76, .1);
+      border-radius: 22px;
+      background: #f9faf8;
+      box-shadow: var(--shadow-soft);
+    }
+    .sess-body { padding: 16px; }
+    .sess-head { display: flex; align-items: center; justify-content: space-between; padding: 2px 4px 12px; }
+    .sess-head b { font-size: .86rem; letter-spacing: -.01em; }
+    .sess-head span {
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(65, 216, 180, .14);
+      color: var(--mint-dark);
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .sess-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 8px;
+      padding: 11px 13px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: #fff;
+    }
+    .sess-play {
+      display: grid;
+      width: 32px;
+      height: 32px;
+      flex: none;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(65, 216, 180, .14);
+      color: var(--mint-dark);
+    }
+    .sess-play svg { width: 12px; height: 12px; }
+    .sess-row b { display: block; font-size: .8rem; }
+    .sess-row small { color: var(--muted); font-size: .64rem; font-weight: 650; }
+    .sess-min { margin-left: auto; color: var(--muted); font-size: .68rem; font-weight: 700; flex: none; }
+    .sess-row.done { border-color: rgba(22, 157, 126, .3); background: #eef8f4; }
+    .sess-row.done .sess-play { background: var(--mint-dark); color: #fff; }
+    .sess-pts {
+      margin-left: auto;
+      flex: none;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(241, 81, 98, .1);
+      color: var(--coral-dark);
+      font-size: .6rem;
+      font-weight: 800;
+    }
+    .sess-foot { margin-top: 12px; color: var(--muted); font-size: .66rem; font-weight: 650; text-align: center; }
+
+    /* S5 privacy (dark) */
+    .priv-screen { background: var(--dark); color: #fff; }
+    .priv-screen .eyebrow { color: var(--lime); }
+    .priv-screen .lead { color: rgba(255, 255, 255, .68); }
+    .priv-grid { display: grid; grid-template-columns: 1.02fr .98fr; gap: 56px; align-items: center; }
+    .priv-checks { display: grid; gap: 4px; margin-top: 30px; }
+    .priv-checks li {
+      position: relative;
+      padding: 11px 0 11px 34px;
+      list-style: none;
+      font-size: .9rem;
+      color: rgba(255, 255, 255, .88);
+    }
+    .priv-checks li b { font-weight: 750; }
+    .priv-checks li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 13px;
+      width: 20px;
+      height: 20px;
+      border-radius: 7px;
+      background: rgba(65, 216, 180, .16) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%2341d8b4" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>') center / 11px no-repeat;
+    }
+    .priv-stack { display: grid; gap: 14px; }
+    .priv-card {
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 18px;
+      background: var(--dark-2);
+    }
+    .priv-card .pc-lab {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: rgba(255, 255, 255, .5);
+      font-size: .62rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .priv-card .pc-lab .lock { display: inline-flex; align-items: center; gap: 5px; color: var(--lime); text-transform: none; letter-spacing: 0; }
+    .priv-card .pc-lab .lock svg { width: 11px; height: 11px; }
+    .pc-mood { display: flex; align-items: center; gap: 10px; margin-top: 13px; }
+    .pc-mood .md { width: 26px; height: 26px; border: 1px solid rgba(255, 255, 255, .2); border-radius: 50%; }
+    .pc-mood .md.on { border-color: transparent; background: linear-gradient(135deg, var(--mint), var(--mint-dark)); }
+    .pc-mood small { margin-left: auto; color: rgba(255, 255, 255, .55); font-size: .64rem; font-weight: 650; }
+    .pc-note { margin-top: 12px; color: rgba(255, 255, 255, .5); font-size: .68rem; line-height: 1.45; }
+    .pc-row { display: flex; align-items: center; gap: 10px; margin-top: 11px; font-size: .74rem; font-weight: 650; color: rgba(255, 255, 255, .85); }
+    .pc-row .nm { width: 118px; flex: none; }
+    .pc-row .tr { flex: 1; height: 7px; overflow: hidden; border-radius: 999px; background: rgba(255, 255, 255, .1); }
+    .pc-row .tr i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--mint), var(--lime)); }
+    .pc-row .vl { width: 44px; text-align: right; color: rgba(255, 255, 255, .55); font-size: .66rem; font-weight: 700; }
+
+    /* S6 HR admin mock */
+    .hr-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 52px; align-items: center; }
+    .hr-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; margin-top: 26px; }
+    .admin-mock {
+      overflow: hidden;
+      border: 1px solid rgba(41, 41, 76, .1);
+      border-radius: 22px;
+      background: #f9faf8;
+      box-shadow: var(--shadow-soft);
+      color: var(--ink);
+    }
+    .am-body { padding: 18px; }
+    .am-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 13px; }
+    .am-head b { font-size: .92rem; letter-spacing: -.01em; }
+    .am-head span {
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: #f1f0f5;
+      color: var(--muted);
+      font-size: .56rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+    }
+    .amet { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .amc { padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+    .amc small { color: var(--muted); font-size: .58rem; font-weight: 750; letter-spacing: .04em; text-transform: uppercase; }
+    .amc b { display: block; margin-top: 3px; font-size: 1.3rem; font-weight: 800; letter-spacing: -.04em; line-height: 1; }
+    .amc .up { margin-top: 5px; color: var(--mint-dark); font-size: .56rem; font-weight: 800; }
+    .dept { margin-top: 10px; padding: 13px 15px; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
+    .dept .dl { display: flex; justify-content: space-between; font-size: .68rem; font-weight: 800; }
+    .dept .dl span:last-child { color: var(--muted); font-weight: 650; }
+    .dr { display: flex; align-items: center; gap: 10px; margin-top: 9px; font-size: .7rem; font-weight: 650; }
+    .dr .nm { width: 64px; flex: none; }
+    .dr .tr { flex: 1; height: 6px; overflow: hidden; border-radius: 999px; background: #edf0ee; }
+    .dr .tr i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--mint), var(--mint-dark)); }
+    .dr .pc { width: 30px; text-align: right; color: var(--muted); font-size: .62rem; font-weight: 700; }
+    .nextaction { margin-top: 10px; padding: 12px 14px; border: 1px solid rgba(241, 81, 98, .25); border-radius: 12px; background: rgba(241, 81, 98, .05); }
+    .nextaction .nl { color: var(--muted); font-size: .56rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+    .nextaction b { display: block; margin: 3px 0; font-size: .8rem; }
+    .nextaction p { color: var(--muted); font-size: .68rem; line-height: 1.4; }
+
+    /* S7 proof */
+    .results-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 44px; }
+    .stat-card {
+      padding: 22px;
+      border: 1px solid rgba(41, 41, 76, .08);
+      border-radius: 18px;
+      background: var(--paper);
+      box-shadow: 0 8px 24px rgba(30, 38, 38, .05);
+    }
+    .stat-num {
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -.05em;
+      line-height: 1;
+      background: linear-gradient(125deg, var(--coral) 20%, var(--coral-deep) 90%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+    .stat-org { margin-top: 12px; font-size: .95rem; font-weight: 800; letter-spacing: -.01em; }
+    .stat-org span { display: block; margin-top: 3px; color: var(--muted); font-size: .66rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .stat-card p { margin-top: 8px; color: var(--muted); font-size: .8rem; line-height: 1.5; }
+    .results-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 28px; margin-top: 26px; }
+    .results-actions .text-link { margin-top: 0; }
+    .results-note { margin-top: 18px; text-align: center; color: var(--muted); font-size: .62rem; }
+
+    /* S8 FAQ */
+    .faq { max-width: 780px; margin: 40px auto 0; }
+    .faq details { border-bottom: 1px solid var(--line); }
+    .faq details:first-child { border-top: 1px solid var(--line); }
+    .faq summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 4px;
+      cursor: pointer;
+      font-size: 1.02rem;
+      font-weight: 750;
+      letter-spacing: -.015em;
+      list-style: none;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: "+";
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      flex: none;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--coral-dark);
+      font-size: 1rem;
+      font-weight: 600;
+      transition: transform .2s ease;
+    }
+    .faq details[open] summary::after { transform: rotate(45deg); }
+    .faq summary:focus-visible { outline: 3px solid rgba(241, 81, 98, .35); outline-offset: 3px; border-radius: 8px; }
+    .faq details p { padding: 0 44px 22px 4px; color: var(--muted); font-size: .92rem; line-height: 1.6; }
+
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .dim-grid, .results-grid { grid-template-columns: 1fr 1fr; }
+      .sess-grid, .hr-grid, .priv-grid { grid-template-columns: 1fr; gap: 36px; }
+    }
+    @media (max-width: 860px) {
+      .hero-visual .phone { right: 0; }
+    }
+    @media (max-width: 650px) {
+      .pain-grid, .hr-checks { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .dim-grid, .results-grid { grid-template-columns: 1fr; }
+      .stat-num { font-size: 2.2rem; }
+      /* keep floating proof chips inside the clipped hero */
+      .hc1 { left: 6px; }
+      .hero-visual .hc2 { left: 6px; top: -8px; }
+      .pc-row .nm { width: 92px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .dim-card { transition: none; }
+      .dim-card:hover { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="#top" aria-label="Vantage Fit home">
+        <img src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37" style="height:32px;width:auto;display:block">
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="nav-links" id="nav-links">
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false" aria-current="page">
+            Solutions
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Solutions menu">
+            <div class="mega-body">
+              <div class="mega-grid cols-2">
+                <div>
+                  <div class="mega-col-title">By program</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/steps-challenge/">Step challenges<span>Company-wide step goals that get everyone moving</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/multi-activity-challenges/">Custom &amp; multi-activity challenges<span>Challenges across any mix of health goals</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/team-challenges/">Team challenges<span>Departments and squads, competing together</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/virtual-marathon/">Virtual marathon<span>One-day events that unite a global workforce</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/mental-health-and-wellbeing-challenges/" aria-current="page">Mental health &amp; wellbeing<span>Mindfulness, mood and stress support at work</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/holistic-wellness-program/">Year-round wellness program<span>An always-on calendar of challenges and events</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">By need</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/remote-team-wellness/">Support remote &amp; hybrid teams<span>Wellness that works away from the office</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/global-employee-engagement/">Engage a global workforce<span>One program across countries, languages, time zones</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/wellness-rewards-program/">Reward healthy habits<span>Points and gift cards tied to real effort</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/health-fitness-analytics/">Measure program impact<span>Participation analytics your board can read</span></a>
+                </div>
+              </div>
+            </div>
+            <a class="mega-banner" href="https://www.vantagefit.io/mental-health-and-wellbeing-challenges/">
+              Explore all programs and use cases
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Features
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">For employees</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/activity-tracking/">Activity &amp; health tracking<span>Steps, workouts, sleep and more, auto-synced</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/nutrition-and-hydration/">Nutrition &amp; hydration<span>Everyday habits, gently tracked</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/mental-health-and-mindfulness/">Mental wellbeing &amp; mindfulness<span>Sessions, streaks and mood check-ins</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/personalized-programs/">Personalized programs<span>Plans tuned to each employee's goals</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/engagement-tools/">Teams, leaderboards &amp; community<span>Squads, rankings and social buzz that keep people going</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">For HR teams</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/admin-dashboard/">Admin dashboard &amp; analytics<span>Participation, trends and insights in one console</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/program-builder/">Program builder &amp; templates<span>Launch challenges and calendars in minutes</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/audience-targeting/">Audience targeting<span>Segment by team, location, or activity level</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/reports/">Reports &amp; exports<span>Board-ready participation and outcomes reports</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/health-data-upload/">Health data upload, AI insights<span>Turn existing health data into program recommendations</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Enterprise platform</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/integrations/">Integrations &amp; SSO<span>Wearables, HRIS, SSO and more</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/security-and-compliance/">Security, privacy &amp; residency<span>Compliance and regional data hosting</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/accessibility/">Global access &amp; localization<span>Inclusive across devices, locations and languages</span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Resources
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Resources menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">Learn</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/">Blog<span>Ideas and research for healthier workplaces</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/guides/">Guides &amp; eBooks<span>Playbooks for launching and scaling wellness</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/podcasts/">Podcasts<span>Conversations with HR and wellbeing leaders</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/2026-global-workplace-well-being-industry-report/">2026 Industry Report<span>The state of global workplace wellbeing</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Evaluate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/casestudy/">Customer stories<span>Results from real customer programs</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/compare/">Compare platforms<span>Vantage Fit vs the alternatives</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/">Help Center<span>Product docs and setup guides</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/tools-and-templates/step-challenge-diy-template/">Step Challenge Template<span>DIY template to plan and launch a step challenge</span></a>
+                </div>
+                <a class="mega-feature" href="https://www.vantagefit.io/wellness-challenges/">
+                  <span>
+                    <small>Featured</small>
+                    <b>Wellness Challenges Library</b>
+                    <p>Browse ready-to-run challenges your teams can start this month.</p>
+                  </span>
+                  <span class="go">Explore the library
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <!-- ========== S1 HERO ========== -->
+    <header class="hero" id="hero">
+      <div class="shell hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Solutions · Mental health &amp; wellbeing</span>
+          <h1>Mental wellbeing your whole workforce can <em>take part in.</em></h1>
+          <p class="lead">Vantage Fit turns mindfulness, mood check-ins, sleep, and yoga into team challenges people join and finish. Employees get guided sessions and private tracking. HR gets participation numbers, never personal data.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+            <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">See pricing</a>
+          </div>
+          <div class="hero-note">
+            <span>No wearable required</span>
+            <span>Mood data stays private</span>
+            <span>Live in days, not months</span>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-label="Illustration: Vantage Fit admin dashboard showing a Mindful May wellbeing challenge at 74% participation, alongside the employee app view with a private mood check-in">
+          <div class="dash" aria-hidden="true">
+            <div class="dash-top">
+              <span class="dash-dot"></span><span class="dash-dot"></span><span class="dash-dot"></span>
+              <span class="dash-url"></span>
+            </div>
+            <div class="dash-body">
+              <div class="dash-title">
+                <div>
+                  <small>Admin dashboard · Challenges</small>
+                  <strong>Mindful May</strong>
+                </div>
+              </div>
+              <div class="metric-inline">
+                <span><i>Enrolled</i><b>1,180</b></span>
+                <span><i>Active</i><b>874</b></span>
+                <span><i>Teams</i><b>32</b></span>
+              </div>
+              <div class="metric-card metric-main">
+                <span class="metric-lab">Participation · Day 9 of 28</span>
+                <div class="metric-value">74%</div>
+                <span class="metric-delta">Aggregate view · no personal data</span>
+              </div>
+              <div class="tk">
+                <div class="tk-head">Task completion this week <span>org-wide</span></div>
+                <div class="tk-row">
+                  <span class="tk-ic">M</span>
+                  <span class="tk-name">Meditation · 10 min × 5</span>
+                  <span class="tk-bar"><i style="width:82%"></i></span>
+                  <span class="tk-pct">82%</span>
+                </div>
+                <div class="tk-row">
+                  <span class="tk-ic">S</span>
+                  <span class="tk-name">Sleep · 7h+ × 4</span>
+                  <span class="tk-bar"><i style="width:68%"></i></span>
+                  <span class="tk-pct">68%</span>
+                </div>
+                <div class="tk-row">
+                  <span class="tk-ic">Y</span>
+                  <span class="tk-name">Yoga · 2 sessions</span>
+                  <span class="tk-bar"><i style="width:54%"></i></span>
+                  <span class="tk-pct">54%</span>
+                </div>
+              </div>
+              <p class="samplenote" style="margin-top:10px;">Illustrative data</p>
+            </div>
+          </div>
+
+          <div class="phone" aria-hidden="true">
+            <div class="phone-screen">
+              <div class="phone-head"><span>9:41</span><span class="avatar"></span></div>
+              <div class="challenge">
+                <div class="challenge-art"><span class="challenge-person">🧘</span></div>
+                <div class="challenge-copy">
+                  <small>WELLBEING CHALLENGE · LIVE</small>
+                  <b>Mindful May</b>
+                  <p>32 teams · Week 2: Reset</p>
+                  <div class="progress-label"><span>Weekly goal</span><span>3 of 4 tasks</span></div>
+                  <div class="progress"><i style="width:75%"></i></div>
+                </div>
+              </div>
+              <div class="phone-stats">
+                <div class="phone-stat"><b>42</b><span>Mindful min</span></div>
+                <div class="phone-stat"><b>6</b><span>Day streak</span></div>
+                <div class="phone-stat"><b>+180</b><span>Points</span></div>
+              </div>
+              <div class="mood">
+                <div class="mood-q">
+                  <span>How are you today?</span>
+                  <span class="mood-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Private</span>
+                </div>
+                <div class="mood-dots"><span></span><span></span><span></span><span class="on"></span><span></span></div>
+                <div class="mood-note">Visible only to you. Never on leaderboards.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-chip hc2">
+            <span class="hc-dot" aria-hidden="true"></span>
+            <div><b>86%</b> participation · Brazosport ISD</div>
+          </div>
+          <div class="hero-chip hc1">
+            <span class="hc-dot" aria-hidden="true"></span>
+            <div><b>8,800+</b> mindful minutes · JF Petroleum</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="logo-band">
+        <div class="shell logos" aria-label="Selected customers">
+          <span class="logos-label">Trusted by 100+ organizations in 50+ countries</span>
+          <span class="logo-word">TATA MOTORS</span>
+          <span class="logo-word">WIPRO</span>
+          <span class="logo-word">ACCENTURE</span>
+          <span class="logo-word">TEVA</span>
+          <span class="logo-word">TEXAS INSTRUMENTS</span>
+          <span class="logo-word">HERSHEY</span>
+          <span class="logo-word">BRAZOSPORT ISD</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ========== S2 PROBLEM ========== -->
+    <section class="screen" id="why" aria-labelledby="why-heading" style="background: var(--canvas);">
+      <div class="shell">
+        <div class="center">
+          <span class="eyebrow">The familiar story</span>
+          <h2 id="why-heading">Most mental health programs are easy to launch and hard to use.</h2>
+          <p class="lead" style="margin-inline: auto;">Depression and anxiety cost 12 billion working days a year (WHO). The usual response is a webinar series and an EAP phone number, and the usual outcome is low use, no habits, and nothing to report.</p>
+        </div>
+        <div class="pain-grid">
+          <div class="pain-card">
+            <h3>Support arrives once a year</h3>
+            <p>An awareness-month webinar and a helpline poster reach the same small group, then go quiet for eleven months.</p>
+          </div>
+          <div class="pain-card">
+            <h3>Apps get downloaded, then dropped</h3>
+            <p>A meditation app with no social pull or reward behind it loses most people in the first week.</p>
+          </div>
+          <div class="pain-card">
+            <h3>Impact stays unprovable</h3>
+            <p>HR can't report on mental health without touching personal data, so programs get funded on faith and cut on doubt.</p>
+          </div>
+        </div>
+        <p class="pain-pivot">These are design problems, not motivation problems. A wellbeing challenge fixes the mechanics: daily guided practice, friendly team momentum, real rewards, and reporting that never exposes a single person.</p>
+      </div>
+    </section>
+
+    <!-- ========== S3 TASK EXPLORER ========== -->
+    <section class="screen" id="program" aria-labelledby="program-heading">
+      <div class="shell">
+        <div class="center">
+          <span class="eyebrow">One challenge, every dimension of wellbeing</span>
+          <h2 id="program-heading">Build your program from 27 real activities.</h2>
+          <p class="lead" style="margin-inline: auto;">A Custom Challenge runs weekly themes with any mix of tasks, each with its own target and points. Start from a template like Mindful March or Stress-Free Month, or build your own.</p>
+        </div>
+        <div class="dim-grid">
+          <div class="dim-card">
+            <span class="dim-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
+            <h3>Mind</h3>
+            <p>Guided practice and a daily emotional pulse, with privacy built in.</p>
+            <div class="dim-tasks"><span>Meditation</span><span>Mindfulness</span><span>Mood check-in</span><span>Breathing</span></div>
+          </div>
+          <div class="dim-card">
+            <span class="dim-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 4l-7 9h5l-2 7 7-9h-5z"/></svg></span>
+            <h3>Move</h3>
+            <p>For the people who process stress physically, from yoga to step goals.</p>
+            <div class="dim-tasks"><span>Yoga</span><span>Steps</span><span>Active minutes</span><span>Strength</span></div>
+          </div>
+          <div class="dim-card">
+            <span class="dim-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span>
+            <h3>Rest &amp; fuel</h3>
+            <p>Recovery is half of wellbeing, so sleep and hydration count too.</p>
+            <div class="dim-tasks"><span>Sleep</span><span>Water intake</span><span>Meal log</span></div>
+          </div>
+          <div class="dim-card">
+            <span class="dim-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg></span>
+            <h3>Learn</h3>
+            <p>Short lessons on stress, sleep, and work-life balance that count as tasks.</p>
+            <div class="dim-tasks"><span>Articles</span><span>Videos</span><span>Bite-size lessons</span><span>Book reading</span></div>
+          </div>
+        </div>
+        <div class="cadence">
+          <span>Keep an always-on habit challenge running, then add short themed bursts in parallel.</span>
+          <a class="text-link" href="https://www.vantagefit.io/multi-activity-challenges/">Custom &amp; multi-activity challenges &rarr;</a>
+          <a class="text-link" href="https://www.vantagefit.io/holistic-wellness-program/">Year-round wellness program &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S4 GUIDED SESSIONS ========== -->
+    <section class="screen" id="sessions" aria-labelledby="sessions-heading" style="background: var(--canvas);">
+      <div class="shell sess-grid">
+        <div>
+          <span class="eyebrow">More than tracking</span>
+          <h2 id="sessions-heading" style="font-size: clamp(1.7rem, 2.6vw, 2.5rem);">A guided session library employees actually open.</h2>
+          <p class="lead" style="margin-top: 14px;">Over 30 guided audio sessions across meditation, sleep, relaxation, breathing, and yoga, from one-minute resets to 30-minute deep rests. They play offline, and every completed session counts toward the challenge.</p>
+          <ul class="tour-checks" style="margin-top: 18px;">
+            <li>
+              <b>Seven categories, zero subscriptions</b>
+              <p>Top picks, meditation, sleep, relaxation, self-awareness, yoga, and white noise, all inside the app your challenge already lives in.</p>
+            </li>
+            <li>
+              <b>Built for the workday</b>
+              <p>Sessions run 1 to 34 minutes, so a reset fits between meetings and a wind-down fits before bed.</p>
+            </li>
+            <li>
+              <b>Practice converts to progress</b>
+              <p>Finished sessions log as mindful minutes automatically, feeding challenge tasks, streaks, and points.</p>
+            </li>
+          </ul>
+        </div>
+        <div class="sess-mock" role="img" aria-label="Illustration: Vantage Fit guided session list with meditation, breathing, sleep and yoga sessions, one completed and worth 20 challenge points">
+          <div class="dash-top" aria-hidden="true">
+            <span class="dash-dot"></span><span class="dash-dot"></span><span class="dash-dot"></span>
+            <span class="dash-url"></span>
+          </div>
+          <div class="sess-body" aria-hidden="true">
+            <div class="sess-head"><b>Guided sessions</b><span>Top picks</span></div>
+            <div class="sess-row">
+              <span class="sess-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+              <div><b>Focus breath</b><small>Breathing · Self-awareness</small></div>
+              <span class="sess-min">5 min</span>
+            </div>
+            <div class="sess-row">
+              <span class="sess-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+              <div><b>Body scan</b><small>Meditation</small></div>
+              <span class="sess-min">12 min</span>
+            </div>
+            <div class="sess-row done">
+              <span class="sess-play"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <div><b>Rain sounds</b><small>White noise · Completed</small></div>
+              <span class="sess-pts">+20 pts</span>
+            </div>
+            <div class="sess-row">
+              <span class="sess-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+              <div><b>Deep sleep</b><small>Sleep</small></div>
+              <span class="sess-min">20 min</span>
+            </div>
+            <div class="sess-row">
+              <span class="sess-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+              <div><b>Yoga Nidra</b><small>Yoga</small></div>
+              <span class="sess-min">25 min</span>
+            </div>
+            <div class="sess-foot">30+ sessions · 7 categories · plays offline</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S5 PRIVACY ========== -->
+    <section class="screen priv-screen" id="privacy" aria-labelledby="privacy-heading">
+      <div class="shell priv-grid">
+        <div>
+          <span class="eyebrow">Privacy by design</span>
+          <h2 id="privacy-heading" style="color:#fff; font-size: clamp(1.7rem, 2.6vw, 2.5rem);">Personal stays personal. Participation stays visible.</h2>
+          <p class="lead">A mental health program only works if people trust it. That trust is built into the product, not bolted on with a policy page.</p>
+          <ul class="priv-checks">
+            <li><b>Mood check-ins are private to the employee.</b> They never appear on leaderboards, admin screens, or reports.</li>
+            <li><b>Rankings are optional.</b> Anyone can hide from leaderboards and still participate and earn points.</li>
+            <li><b>HR reporting is aggregate-only.</b> Participation, completion, and org trends, never individual health data.</li>
+            <li><b>Targeting shows counts, not names.</b> Health-risk audiences return a number, with minimum group sizes enforced.</li>
+            <li><b>No one can win at meditating.</b> Non-step tasks cap at 100% per day, so the leaderboard rewards consistency, not grinding.</li>
+            <li><b>Enterprise-grade handling.</b> SOC 2 Type II compliant, HIPAA-aligned practices, and data residency in the US, EU, India, and UAE.</li>
+          </ul>
+        </div>
+        <div class="priv-stack" role="img" aria-label="Illustration: an employee mood check-in marked visible only to you, contrasted with the aggregate-only metrics HR can see">
+          <div class="priv-card" aria-hidden="true">
+            <div class="pc-lab">
+              <span>Employee view · Mood check-in</span>
+              <span class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Visible only to you</span>
+            </div>
+            <div class="pc-mood">
+              <span class="md"></span><span class="md"></span><span class="md"></span><span class="md on"></span><span class="md"></span>
+              <small>Today: pretty good</small>
+            </div>
+            <p class="pc-note">Mood entries help employees spot their own patterns over time. They are never shared with managers, HR, or teammates.</p>
+          </div>
+          <div class="priv-card" aria-hidden="true">
+            <div class="pc-lab"><span>What HR sees · Aggregate only</span></div>
+            <div class="pc-row"><span class="nm">Participation</span><span class="tr"><i style="width:74%"></i></span><span class="vl">74%</span></div>
+            <div class="pc-row"><span class="nm">Sessions completed</span><span class="tr"><i style="width:62%"></i></span><span class="vl">1,842</span></div>
+            <div class="pc-row"><span class="nm">Avg mindful min</span><span class="tr"><i style="width:47%"></i></span><span class="vl">9.4</span></div>
+            <p class="pc-note">Program health without personal health. No individual moods, sleep records, or assessment answers. Illustrative data.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S6 FOR HR ========== -->
+    <section class="screen" id="for-hr" aria-labelledby="for-hr-heading">
+      <div class="shell hr-grid">
+        <div>
+          <span class="eyebrow">For HR &amp; program managers</span>
+          <h2 id="for-hr-heading" style="font-size: clamp(1.7rem, 2.6vw, 2.5rem);">Launch in minutes. Measure what matters.</h2>
+          <p class="lead" style="margin-top: 14px;">Templates carry the configuration, automation carries the momentum, and the dashboard carries the proof.</p>
+          <ul class="tour-checks hr-checks">
+            <li>
+              <b>Start from a template</b>
+              <p>Mindful March and Stress-Free Month ship with weekly themes, tasks, targets, and scoring pre-set. Pick dates and an audience, then go live.</p>
+            </li>
+            <li>
+              <b>Reach the right people</b>
+              <p>Target by department, location, age group, or health risk code, such as higher-stress groups, and auto-enroll everyone, including new hires.</p>
+            </li>
+            <li>
+              <b>Momentum without busywork</b>
+              <p>Automated invites, reminders, and weekly summaries go out on their own. One challenge localizes to every time zone.</p>
+            </li>
+            <li>
+              <b>Report with confidence</b>
+              <p>Participation, completion, and task engagement by department, plus aggregate wellbeing trends over time. Exports are aggregate and audit-logged.</p>
+            </li>
+          </ul>
+        </div>
+        <div class="admin-mock" role="img" aria-label="Illustration: Vantage Fit admin dashboard for a Mindful May challenge showing aggregate participation, department breakdown, and a nudge action for inactive members">
+          <div class="dash-top" aria-hidden="true">
+            <span class="dash-dot"></span><span class="dash-dot"></span><span class="dash-dot"></span>
+            <span class="dash-url"></span>
+          </div>
+          <div class="am-body" aria-hidden="true">
+            <div class="am-head"><b>Mindful May · Day 9 of 28</b><span>ILLUSTRATIVE</span></div>
+            <div class="amet">
+              <div class="amc"><small>Participation</small><b>74%</b><div class="up">+6 pts this week</div></div>
+              <div class="amc"><small>Sessions done</small><b>1,842</b><div class="up">Org total</div></div>
+              <div class="amc"><small>Mindful min</small><b>10,204</b><div class="up">Avg 9.4 / person</div></div>
+            </div>
+            <div class="dept">
+              <div class="dl"><span>Department view</span><span>Active this week</span></div>
+              <div class="dr"><span class="nm">Support</span><span class="tr"><i style="width:81%"></i></span><span class="pc">81%</span></div>
+              <div class="dr"><span class="nm">Sales</span><span class="tr"><i style="width:76%"></i></span><span class="pc">76%</span></div>
+              <div class="dr"><span class="nm">Product</span><span class="tr"><i style="width:72%"></i></span><span class="pc">72%</span></div>
+              <div class="dr"><span class="nm">Finance</span><span class="tr"><i style="width:64%"></i></span><span class="pc">64%</span></div>
+            </div>
+            <div class="nextaction">
+              <div class="nl">Next action</div>
+              <b>Nudge 96 inactive members</b>
+              <p>One tap sends a prefilled push to people enrolled but quiet this week.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S7 PROOF ========== -->
+    <section class="screen" id="proof" aria-labelledby="proof-heading" style="background: #f6f7f4;">
+      <div class="shell">
+        <div class="center">
+          <span class="eyebrow">Results</span>
+          <h2 id="proof-heading">Wellbeing programs with receipts.</h2>
+          <p class="lead" style="margin-inline: auto;">Named outcomes from mental health and wellbeing challenges run on Vantage Fit.</p>
+        </div>
+        <div class="results-grid">
+          <div class="stat-card">
+            <div class="stat-num">86%</div>
+            <div class="stat-org">Brazosport ISD <span>School district · Texas</span></div>
+            <p>participation in a two-week Fit Wars challenge built around mindfulness sessions. The district's average mood score reached 4 out of 5.</p>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">8,800+</div>
+            <div class="stat-org">JF Petroleum <span>Energy services · US</span></div>
+            <p>mindfulness minutes logged across a 52-week program, with the organization-wide mood reading at "Awesome," the highest category.</p>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">130</div>
+            <div class="stat-org">IBS Software <span>Technology · Global</span></div>
+            <p>employees logging their mood daily through a 28-day challenge, with 88% overall engagement.</p>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">1,279</div>
+            <div class="stat-org">Wipro <span>Technology · 30+ countries</span></div>
+            <p>mindfulness minutes in the two-week "Inbox to Inner Peace" challenge, alongside 163 yoga sessions.</p>
+          </div>
+        </div>
+        <div class="results-actions">
+          <a class="text-link" href="https://www.vantagefit.io/casestudy/">Read the customer stories &rarr;</a>
+          <a class="text-link" href="https://www.vantagefit.io/request-demo/">Get results like these &rarr;</a>
+        </div>
+        <p class="results-note">Figures as reported in each customer's published Vantage Fit case study.</p>
+      </div>
+    </section>
+
+    <!-- ========== S8 FAQ ========== -->
+    <section class="screen" id="faq" aria-labelledby="faq-heading">
+      <div class="shell">
+        <div class="center">
+          <span class="eyebrow">FAQ</span>
+          <h2 id="faq-heading">Questions HR teams ask.</h2>
+        </div>
+        <div class="faq">
+          <details>
+            <summary>Who can see an employee's mood check-ins?</summary>
+            <p>Only the employee. Mood entries never appear on leaderboards, in admin dashboards, or in reports. HR sees participation counts and aggregate trends, nothing personal.</p>
+          </details>
+          <details>
+            <summary>Do employees need a wearable or a meditation app subscription?</summary>
+            <p>No. Guided meditation and mindfulness sessions play inside Vantage Fit, sleep syncs from phones and common wearables, and everything else is a quick manual log. A phone is enough.</p>
+          </details>
+          <details>
+            <summary>Does this replace our EAP?</summary>
+            <p>No. Vantage Fit builds daily wellbeing habits and sits alongside your EAP, not instead of it. The in-app Marketplace can point employees to your existing counseling and assistance providers.</p>
+          </details>
+          <details>
+            <summary>Can we focus the program on teams that need it most?</summary>
+            <p>Yes. Target by department, location, age group, or health risk code, for example higher-stress groups. Risk-based targeting returns a count, never a list of names, and targeted groups require a minimum of 20 people.</p>
+          </details>
+          <details>
+            <summary>What can we report to leadership?</summary>
+            <p>Participation and completion by challenge and department, task-level engagement such as mindful minutes and sessions completed, and aggregate wellbeing trends over time. Exports are aggregate and audit-logged.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S9 FINAL CTA ========== -->
+    <section class="final" id="demo" aria-labelledby="demo-heading">
+      <div class="shell">
+        <h2 id="demo-heading">See the wellbeing challenge your workforce would actually join.</h2>
+        <p>Book a 30-minute walkthrough. We'll configure a sample Mindful Month for your organization and show you the employee experience, the privacy model, and the reporting behind it.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+          <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">See pricing</a>
+        </div>
+        <div class="final-checks">
+          <span>Template walkthrough</span>
+          <span>Privacy &amp; security review</span>
+          <span>Admin reporting</span>
+          <span>Launch plan in days</span>
+        </div>
+        <div class="final-note">Daily habits for calmer, healthier teams.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="#top">
+            <img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37" style="height:28px;width:auto;display:block">
+          </a>
+          <p class="footer-about">Inclusive wellness that turns participation into measurable progress.</p>
+        </div>
+        <div>
+          <div class="footer-title">Programs</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/steps-challenge/">Steps challenge</a>
+            <a href="https://www.vantagefit.io/team-challenges/">Team challenges</a>
+            <a href="https://www.vantagefit.io/virtual-marathon/">Virtual marathon</a>
+            <a href="https://www.vantagefit.io/multi-activity-challenges/">Custom challenges</a>
+            <a href="https://www.vantagefit.io/holistic-wellness-program/">Year-round program</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Solutions</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/remote-team-wellness/">Remote teams</a>
+            <a href="https://www.vantagefit.io/global-employee-engagement/">Global engagement</a>
+            <a href="https://www.vantagefit.io/wellness-rewards-program/">Wellness rewards</a>
+            <a href="https://www.vantagefit.io/health-fitness-analytics/">Analytics</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Company</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/about-us/">About</a>
+            <a href="https://www.vantagefit.io/casestudy/">Case studies</a>
+            <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+            <a href="https://www.vantagefit.io/request-demo/">Contact sales</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Vantage Circle. All rights reserved.</span>
+        <span>SOC 2 Type II · HIPAA-aligned · Regional data residency</span>
+        <span>Wellness built for participation.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav
+    const menuButton = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation');
+      navLinks.classList.toggle('open', !open);
+    });
+
+    // Mega menus: hover on desktop, tap on mobile
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const navTriggers = [...document.querySelectorAll('.nav-trigger')];
+    const desktopNav = window.matchMedia('(min-width: 861px)');
+    let desktopCloseTimer;
+
+    const closeDesktopMenus = (except = null) => {
+      navItems.forEach((item) => {
+        if (item !== except) item.classList.remove('desktop-open');
+      });
+    };
+
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => {
+        if (!desktopNav.matches) return;
+        window.clearTimeout(desktopCloseTimer);
+        closeDesktopMenus(item);
+        item.classList.add('desktop-open');
+
+        const focusedTrigger = document.activeElement?.closest?.('.nav-trigger');
+        if (focusedTrigger && !item.contains(focusedTrigger)) focusedTrigger.blur();
+      });
+
+      item.addEventListener('pointerleave', () => {
+        if (!desktopNav.matches) return;
+        desktopCloseTimer = window.setTimeout(() => {
+          if (!item.matches(':hover') && !item.contains(document.activeElement)) {
+            item.classList.remove('desktop-open');
+          }
+        }, 120);
+      });
+    });
+
+    document.querySelectorAll('.nav-links > a').forEach((link) => {
+      link.addEventListener('pointerenter', () => {
+        if (desktopNav.matches) closeDesktopMenus();
+      });
+    });
+
+    navTriggers.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        if (window.matchMedia('(max-width: 860px)').matches) {
+          e.preventDefault();
+          const item = btn.closest('.nav-item');
+          const isOpen = item.classList.contains('open');
+          document.querySelectorAll('.nav-item').forEach((n) => {
+            n.classList.remove('open');
+            n.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        }
+      });
+    });
+
+    // Nav CTA: ghost over the hero, filled after
+    (function () {
+      const nav = document.querySelector('nav.nav');
+      const hero = document.querySelector('.hero');
+      if (!nav || !hero) return;
+      const state = () => nav.classList.toggle('lit', window.scrollY > hero.offsetHeight - 90);
+      window.addEventListener('scroll', state, { passive: true });
+      state();
+    })();
+
+    // Grayscale preview mode for accessibility review: append ?gray to the URL
+    if (new URLSearchParams(location.search).has('gray')) {
+      document.documentElement.style.filter = 'grayscale(1)';
+    }
+  </script>
+</body>
+</html>

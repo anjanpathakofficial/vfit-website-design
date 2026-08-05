@@ -1,0 +1,1021 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="description" content="Run a virtual marathon your whole company can enter. Everyday steps convert to distance automatically, tiered courses from 5K to 42K, and reporting HR can share.">
+  <meta name="theme-color" content="#18262b">
+  <title>Corporate Virtual Marathon for Global Teams | Vantage Fit</title>
+  <link rel="stylesheet" href="../styles/enterprise.css">
+  <style>
+    /* —— Virtual Marathon page components (built on enterprise.css tokens) —— */
+
+    /* Current-page marker inside the Solutions mega menu */
+    .mega-link[aria-current="page"] { position: relative; background: var(--soft); }
+    .mega-link[aria-current="page"]::after {
+      content: "You’re here";
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(241, 81, 98, .1);
+      color: var(--coral-dark);
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    /* Hero: distance leaderboard rows inside the dash mock */
+    .lb { margin-top: 12px; padding: 13px 15px; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
+    .lb-head { display: flex; align-items: center; justify-content: space-between; font-size: .7rem; font-weight: 800; }
+    .lb-head span { color: var(--muted); font-size: .6rem; font-weight: 650; }
+    .lb-row { display: flex; align-items: center; gap: 9px; margin-top: 9px; font-size: .72rem; font-weight: 650; }
+    .lb-rank {
+      display: grid;
+      place-items: center;
+      width: 20px;
+      height: 20px;
+      flex: none;
+      border-radius: 7px;
+      background: var(--soft);
+      color: var(--muted);
+      font-size: .6rem;
+      font-weight: 800;
+    }
+    .lb-row:first-of-type .lb-rank { background: rgba(241, 81, 98, .12); color: var(--coral-dark); }
+    .lb-name { flex: 1; }
+    .lb-name i { display: block; color: var(--muted); font-size: .54rem; font-style: normal; font-weight: 650; }
+    .lb-bar { width: 30%; height: 6px; overflow: hidden; border-radius: 999px; background: #edf0ee; }
+    .lb-bar i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--mint), var(--mint-dark)); }
+    .lb-dist { color: var(--ink); font-size: .68rem; font-weight: 800; }
+    .hero-visual .dash { transform: none; }
+    .hero-visual .phone { bottom: -8px; }
+    .tier-mini { display: flex; gap: 6px; margin-top: 12px; }
+    .tier-mini span {
+      flex: 1;
+      padding: 7px 4px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #fff;
+      text-align: center;
+      color: var(--muted);
+      font-size: .56rem;
+      font-weight: 700;
+    }
+    .tier-mini b { display: block; color: var(--ink); font-size: .72rem; }
+
+    /* S2 problem */
+    .pain-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 40px; }
+    .pain-card { padding: 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--paper); }
+    .pain-card h3 { display: flex; align-items: baseline; gap: 10px; font-size: 1rem; letter-spacing: -.015em; }
+    .pain-card h3::before {
+      content: "✕";
+      display: grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      flex: none;
+      border-radius: 8px;
+      background: rgba(241, 81, 98, .1);
+      color: var(--coral-dark);
+      font-size: .62rem;
+      font-weight: 800;
+      transform: translateY(3px);
+    }
+    .pain-card p { margin-top: 8px; color: var(--muted); font-size: .86rem; line-height: 1.5; }
+    .pain-pivot {
+      margin-top: 28px;
+      padding: 18px 22px;
+      border-left: 4px solid var(--mint);
+      border-radius: 0 14px 14px 0;
+      background: #e9f7f2;
+      font-size: .95rem;
+      font-weight: 650;
+    }
+
+    /* S3 how it works: 3 step cards + distance tier strip */
+    #how .steps { grid-template-columns: repeat(3, 1fr); margin: 44px 0 0; }
+    #how .step { min-height: 0; }
+    .tier-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 12px; }
+    .tier {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+      text-align: center;
+    }
+    .tier b {
+      display: block;
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -.03em;
+      background: linear-gradient(125deg, var(--coral) 20%, var(--coral-deep) 90%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+    .tier span { display: block; margin-top: 4px; color: var(--muted); font-size: .72rem; font-weight: 650; }
+    .tier-note { margin-top: 20px; text-align: center; color: var(--muted); font-size: .88rem; }
+    .tier-note b { color: var(--ink); }
+
+    /* S4 ways to run it */
+    .format-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 44px; }
+    .format-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 200px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .format-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-soft); }
+    .format-tag {
+      align-self: flex-start;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(241, 81, 98, .09);
+      color: var(--coral-dark);
+      font-size: .62rem;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+    .format-tag.mint { background: rgba(65, 216, 180, .14); color: var(--mint-dark); }
+    .format-card h3 { margin-top: 14px; font-size: 1.12rem; letter-spacing: -.02em; }
+    .format-card p { margin-top: 8px; color: var(--muted); font-size: .85rem; line-height: 1.5; }
+    .format-best { margin-top: auto; padding-top: 14px; color: var(--ink); font-size: .76rem; font-weight: 700; }
+    .format-best span { color: var(--muted); font-weight: 650; }
+    .format-note {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px 26px;
+      margin-top: 30px;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+    .format-note .text-link { margin-top: 0; font-size: .88rem; }
+
+    /* S5 playbook */
+    .play-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 44px; }
+    .play-card { padding: 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--paper); }
+    .play-card h3 { display: flex; align-items: center; gap: 10px; font-size: 1.02rem; letter-spacing: -.015em; }
+    .play-no {
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      flex: none;
+      border-radius: 50%;
+      background: var(--ink);
+      color: #fff;
+      font-size: .62rem;
+      font-weight: 800;
+    }
+    .play-card p { margin-top: 8px; color: var(--muted); font-size: .85rem; line-height: 1.5; }
+    .play-card.play-hint { background: #e9f7f2; border-color: rgba(65, 216, 180, .35); }
+    .play-hint .play-no { background: var(--mint-dark); }
+    .play-hint p { color: #3f5c55; }
+
+    /* S6 HR section */
+    .hr-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 52px; align-items: center; }
+    .hr-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; margin-top: 26px; }
+    .report-mock {
+      overflow: hidden;
+      border: 1px solid rgba(41, 41, 76, .1);
+      border-radius: 22px;
+      background: #f9faf8;
+      box-shadow: var(--shadow-soft);
+    }
+    .report-mock-body { padding: 18px; }
+    .recap {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .recap span { padding: 10px; border: 1px solid var(--line); border-radius: 11px; background: #fff; text-align: center; }
+    .recap b { display: block; font-size: 1.05rem; letter-spacing: -.02em; }
+    .recap i { color: var(--muted); font-size: .56rem; font-style: normal; font-weight: 700; }
+    .report-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: #fff;
+    }
+    .report-icon {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      flex: none;
+      border-radius: 11px;
+      background: rgba(65, 216, 180, .14);
+      color: var(--mint-dark);
+    }
+    .report-row b { display: block; font-size: .82rem; }
+    .report-row small { color: var(--muted); font-size: .66rem; font-weight: 650; }
+    .report-export {
+      margin-left: auto;
+      padding: 6px 11px;
+      flex: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink);
+      font-size: .62rem;
+      font-weight: 800;
+    }
+    .report-foot { margin-top: 14px; color: var(--muted); font-size: .68rem; font-weight: 650; text-align: center; }
+
+    /* S7 proof */
+    .results-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 44px; }
+    .stat-card {
+      padding: 22px;
+      border: 1px solid rgba(41, 41, 76, .08);
+      border-radius: 18px;
+      background: var(--paper);
+      box-shadow: 0 8px 24px rgba(30, 38, 38, .05);
+    }
+    .stat-num {
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -.05em;
+      line-height: 1;
+      background: linear-gradient(125deg, var(--coral) 20%, var(--coral-deep) 90%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+    .stat-org { margin-top: 12px; font-size: .95rem; font-weight: 800; letter-spacing: -.01em; }
+    .stat-org span { display: block; margin-top: 3px; color: var(--muted); font-size: .66rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .stat-card p { margin-top: 8px; color: var(--muted); font-size: .8rem; line-height: 1.5; }
+    .results-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 28px; margin-top: 26px; }
+    .results-actions .text-link { margin-top: 0; }
+    .results-note { margin-top: 18px; text-align: center; color: var(--muted); font-size: .62rem; }
+
+    /* S9 FAQ */
+    .faq { max-width: 780px; margin: 40px auto 0; }
+    .faq details { border-bottom: 1px solid var(--line); }
+    .faq details:first-child { border-top: 1px solid var(--line); }
+    .faq summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 4px;
+      cursor: pointer;
+      font-size: 1.02rem;
+      font-weight: 750;
+      letter-spacing: -.015em;
+      list-style: none;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: "+";
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      flex: none;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--coral-dark);
+      font-size: 1rem;
+      font-weight: 600;
+      transition: transform .2s ease;
+    }
+    .faq details[open] summary::after { transform: rotate(45deg); }
+    .faq summary:focus-visible { outline: 3px solid rgba(241, 81, 98, .35); outline-offset: 3px; border-radius: 8px; }
+    .faq details p { padding: 0 44px 22px 4px; color: var(--muted); font-size: .92rem; line-height: 1.6; }
+
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .pain-grid, .results-grid { grid-template-columns: 1fr 1fr; }
+      .format-grid, .play-grid, #how .steps { grid-template-columns: 1fr 1fr; }
+      .tier-strip { grid-template-columns: repeat(3, 1fr); }
+      .hr-grid { grid-template-columns: 1fr; gap: 36px; }
+    }
+    @media (max-width: 860px) {
+      .hero-visual .phone { right: 0; }
+    }
+    @media (max-width: 650px) {
+      .pain-grid, .hr-checks, .format-grid, .play-grid, #how .steps { grid-template-columns: 1fr; }
+      .tier-strip { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 560px) {
+      .results-grid { grid-template-columns: 1fr; }
+      .stat-num { font-size: 2.2rem; }
+      /* keep floating proof chips inside the clipped hero */
+      .hc1 { left: 6px; }
+      .hc2 { right: 6px; }
+      .tier-mini span:last-child { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .format-card { transition: none; }
+      .format-card:hover { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="#top" aria-label="Vantage Fit home">
+        <img src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37" style="height:32px;width:auto;display:block">
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="nav-links" id="nav-links">
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false" aria-current="page">
+            Solutions
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Solutions menu">
+            <div class="mega-body">
+              <div class="mega-grid cols-2">
+                <div>
+                  <div class="mega-col-title">By program</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/steps-challenge/">Step challenges<span>Company-wide step goals that get everyone moving</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/multi-activity-challenges/">Custom &amp; multi-activity challenges<span>Challenges across any mix of health goals</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/team-challenges/">Team challenges<span>Departments and squads, competing together</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/virtual-marathon/" aria-current="page">Virtual marathon<span>One-day events that unite a global workforce</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/mental-health-and-wellbeing-challenges/">Mental health &amp; wellbeing<span>Mindfulness, mood and stress support at work</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/holistic-wellness-program/">Year-round wellness program<span>An always-on calendar of challenges and events</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">By need</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/remote-team-wellness/">Support remote &amp; hybrid teams<span>Wellness that works away from the office</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/global-employee-engagement/">Engage a global workforce<span>One program across countries, languages, time zones</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/wellness-rewards-program/">Reward healthy habits<span>Points and gift cards tied to real effort</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/health-fitness-analytics/">Measure program impact<span>Participation analytics your board can read</span></a>
+                </div>
+              </div>
+            </div>
+            <a class="mega-banner" href="vantage-fit-solutions-v1.html">
+              Explore all programs and use cases
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Features
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">For employees</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/activity-tracking/">Activity &amp; health tracking<span>Steps, workouts, sleep and more, auto-synced</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/nutrition-and-hydration/">Nutrition &amp; hydration<span>Everyday habits, gently tracked</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/mental-health-and-mindfulness/">Mental wellbeing &amp; mindfulness<span>Sessions, streaks and mood check-ins</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/personalized-programs/">Personalized programs<span>Plans tuned to each employee's goals</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/engagement-tools/">Teams, leaderboards &amp; community<span>Squads, rankings and social buzz that keep people going</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">For HR teams</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/admin-dashboard/">Admin dashboard &amp; analytics<span>Participation, trends and insights in one console</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/program-builder/">Program builder &amp; templates<span>Launch challenges and calendars in minutes</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/audience-targeting/">Audience targeting<span>Segment by team, location, or activity level</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/reports/">Reports &amp; exports<span>Board-ready participation and outcomes reports</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/health-data-upload/">Health data upload, AI insights<span>Turn existing health data into program recommendations</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Enterprise platform</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/integrations/">Integrations &amp; SSO<span>Wearables, HRIS, SSO and more</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/security-and-compliance/">Security, privacy &amp; residency<span>HIPAA, SOC 2, GDPR, ISO 27001/27701</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/accessibility/">Global access &amp; localization<span>Inclusive across devices, locations and languages</span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Resources
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Resources menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">Learn</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/">Blog<span>Ideas and research for healthier workplaces</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/guides/">Guides &amp; eBooks<span>Playbooks for launching and scaling wellness</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/podcasts/">Podcasts<span>Conversations with HR and wellbeing leaders</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/2026-global-workplace-well-being-industry-report/">2026 Industry Report<span>The state of global workplace wellbeing</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Evaluate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/casestudy/">Customer stories<span>Results from real customer programs</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/compare/">Compare platforms<span>Vantage Fit vs the alternatives</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/">Help Center<span>Product docs and setup guides</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/tools-and-templates/step-challenge-diy-template/">Step Challenge Template<span>DIY template to plan and launch a step challenge</span></a>
+                </div>
+                <a class="mega-feature" href="https://www.vantagefit.io/wellness-challenges/">
+                  <span>
+                    <small>Featured</small>
+                    <b>Wellness Challenges Library</b>
+                    <p>Browse ready-to-run challenges your teams can start this month.</p>
+                  </span>
+                  <span class="go">Explore the library
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <!-- ========== S1 HERO ========== -->
+    <header class="hero" id="hero">
+      <div class="shell hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Solutions · Virtual Marathon</span>
+          <h1>A marathon your <em>whole company</em> can enter.</h1>
+          <p class="lead">Vantage Fit turns everyday steps into marathon distance. No GPS routes, no wearables to buy, no running required. Employees pick a distance that fits them, and HR gets a finish-line report worth sharing.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+            <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">See pricing</a>
+          </div>
+          <div class="hero-note">
+            <span>No wearable or GPS required</span>
+            <span>Distances from 5K to a full marathon</span>
+            <span>Trusted by 100+ organizations</span>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-label="Illustration: Vantage Fit admin dashboard showing a live one-day virtual marathon with 18,442 kilometers covered, alongside the employee app view of the same event">
+          <div class="dash" aria-hidden="true">
+            <div class="dash-top">
+              <span class="dash-dot"></span><span class="dash-dot"></span><span class="dash-dot"></span>
+              <span class="dash-url"></span>
+            </div>
+            <div class="dash-body">
+              <div class="dash-title">
+                <div>
+                  <small>Admin dashboard · Challenges</small>
+                  <strong>World Heart Day Marathon</strong>
+                </div>
+              </div>
+              <div class="metric-inline">
+                <span><i>Enrolled</i><b>2,140</b></span>
+                <span><i>Checked in</i><b>1,904</b></span>
+                <span><i>Countries</i><b>11</b></span>
+              </div>
+              <div class="metric-card metric-main">
+                <span class="metric-lab">Company distance · live event day</span>
+                <div class="metric-value">18,442 km</div>
+                <span class="metric-delta">Live · updates as steps sync</span>
+              </div>
+              <div class="lb">
+                <div class="lb-head">Distance leaderboard <span>total km today</span></div>
+                <div class="lb-row">
+                  <span class="lb-rank">1</span>
+                  <span class="lb-name">Priya S. <i>Half marathon tier</i></span>
+                  <span class="lb-bar"><i style="width:100%"></i></span>
+                  <span class="lb-dist">21.1</span>
+                </div>
+                <div class="lb-row">
+                  <span class="lb-rank">2</span>
+                  <span class="lb-name">Marcus T. <i>10K tier</i></span>
+                  <span class="lb-bar"><i style="width:72%"></i></span>
+                  <span class="lb-dist">15.2</span>
+                </div>
+                <div class="lb-row">
+                  <span class="lb-rank">3</span>
+                  <span class="lb-name">Ana R. <i>5K tier</i></span>
+                  <span class="lb-bar"><i style="width:58%"></i></span>
+                  <span class="lb-dist">12.4</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="phone" aria-hidden="true">
+            <div class="phone-screen">
+              <div class="phone-head"><span>9:41</span><span class="avatar"></span></div>
+              <div class="challenge">
+                <div class="challenge-art"><span class="challenge-person">🏃</span></div>
+                <div class="challenge-copy">
+                  <small>VIRTUAL MARATHON · TODAY</small>
+                  <b>World Heart Day Marathon</b>
+                  <p>Your race: Half marathon · 21.1 km</p>
+                  <div class="progress-label"><span>12.4 km</span><span>9 km to go</span></div>
+                  <div class="progress"><i style="width:59%"></i></div>
+                </div>
+              </div>
+              <div class="tier-mini">
+                <span><b>5K</b>412 done</span>
+                <span><b>10K</b>288 done</span>
+                <span><b>21K</b>96 done</span>
+                <span><b>42K</b>41 done</span>
+              </div>
+              <div class="phone-cta">Counted from steps · no GPS</div>
+            </div>
+          </div>
+
+          <div class="hero-chip hc2">
+            <span class="hc-dot" aria-hidden="true"></span>
+            <div><b>94%</b> engagement · Embrace Pet Insurance marathon</div>
+          </div>
+          <div class="hero-chip hc1">
+            <span class="hc-dot" aria-hidden="true"></span>
+            <div><b>42 km</b> avg per employee · Carter Myers Automotive</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="logo-band">
+        <div class="shell logos" aria-label="Selected customers">
+          <span class="logos-label">Trusted by 100+ organizations in 50+ countries</span>
+          <span class="logo-word">TATA MOTORS</span>
+          <span class="logo-word">WIPRO</span>
+          <span class="logo-word">ACCENTURE</span>
+          <span class="logo-word">TEVA</span>
+          <span class="logo-word">TEXAS INSTRUMENTS</span>
+          <span class="logo-word">HERSHEY</span>
+          <span class="logo-word">BRAZOSPORT ISD</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ========== S2 PROBLEM ========== -->
+    <section class="screen" id="why" aria-labelledby="why-heading" style="background: var(--canvas);">
+      <div class="shell">
+        <div class="center">
+          <span class="eyebrow">The familiar story</span>
+          <h2 id="why-heading">A parking-lot 5K was never going to include everyone.</h2>
+        </div>
+        <div class="pain-grid">
+          <div class="pain-card">
+            <h3>Only the runners show up</h3>
+            <p>A traditional race draws the same athletic few. Everyone else watches from the sidelines, or doesn't come at all.</p>
+          </div>
+          <div class="pain-card">
+            <h3>One city, one morning</h3>
+            <p>Remote and global teams can't join an event that happens in one parking lot at 7 a.m.</p>
+          </div>
+          <div class="pain-card">
+            <h3>Logistics eat the budget</h3>
+            <p>Permits, route marshals, insurance, and t-shirts, all paid for before anyone takes a single step.</p>
+          </div>
+          <div class="pain-card">
+            <h3>Over by 9 a.m.</h3>
+            <p>A nice photo, a sweaty email thread, and no numbers leadership can actually use.</p>
+          </div>
+        </div>
+        <p class="pain-pivot">A virtual marathon keeps the shared-start-line energy and drops every barrier. Same event, every office, every fitness level.</p>
+      </div>
+    </section>
+
+    <!-- ========== S3 HOW IT WORKS ========== -->
+    <section class="screen" id="how" aria-labelledby="how-heading">
+      <div class="shell">
+        <div class="center">
+          <span class="eyebrow">How it works</span>
+          <h2 id="how-heading">Every step becomes distance.</h2>
+          <p class="lead" style="margin-inline: auto;">Employees walk, run, or wheel as they normally do. Vantage Fit converts steps to kilometers on a live leaderboard.</p>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <span class="step-no">01</span>
+            <span class="step-tag" aria-hidden="true">01</span>
+            <h3>Move as you normally do</h3>
+            <p>Steps sync from the phone or wearable employees already have. Distance comes from step count, not GPS, so no routes to plan and no workouts to start.</p>
+          </article>
+          <article class="step">
+            <span class="step-no">02</span>
+            <span class="step-tag" aria-hidden="true">02</span>
+            <h3>Watch the distance add up</h3>
+            <p>1,000 steps becomes a kilometer by default, on a ratio and in units (km or miles) you choose. A lunch walk counts as much as a morning run.</p>
+          </article>
+          <article class="step">
+            <span class="step-no">03</span>
+            <span class="step-tag" aria-hidden="true">03</span>
+            <h3>Cross your finish line</h3>
+            <p>The leaderboard ranks total distance over the event. Progress is cumulative, so a rest day never resets anyone.</p>
+          </article>
+        </div>
+        <div class="tier-strip" aria-label="Distance tiers">
+          <div class="tier"><b>5K</b><span>the first finish line</span></div>
+          <div class="tier"><b>10K</b><span>the classic</span></div>
+          <div class="tier"><b>21.1K</b><span>half marathon</span></div>
+          <div class="tier"><b>42.2K</b><span>full marathon</span></div>
+          <div class="tier"><b>Custom</b><span>you set the distance</span></div>
+        </div>
+        <p class="tier-note"><b>Everyone picks the distance that motivates them.</b> Bigger targets earn bigger rewards, scaled automatically.</p>
+      </div>
+    </section>
+
+    <!-- ========== S4 WAYS TO RUN IT ========== -->
+    <section class="screen" id="formats" aria-labelledby="formats-heading" style="background: var(--canvas);">
+      <div class="shell">
+        <div class="center">
+          <span class="eyebrow">Ways to run it</span>
+          <h2 id="formats-heading">One format, three event styles.</h2>
+        </div>
+        <div class="format-grid">
+          <div class="format-card">
+            <span class="format-tag">24 hours</span>
+            <h3>One-day virtual marathon</h3>
+            <p>A single shared moment: everyone competes on the same day across distance tiers, and results land within 24 hours.</p>
+            <p class="format-best">Best for: <span>program launches and observance days</span></p>
+          </div>
+          <div class="format-card">
+            <span class="format-tag mint">2–4 weeks</span>
+            <h3>Multi-week E-Marathon</h3>
+            <p>Distance accumulates over weeks, so "Walk Across America" style campaigns have room to breathe. The simplest setup in our challenge catalog.</p>
+            <p class="format-best">Best for: <span>health months and themed campaigns</span></p>
+          </div>
+          <div class="format-card">
+            <span class="format-tag">Managed format</span>
+            <h3>GPS race day</h3>
+            <p>A real GPS-tracked marathon with live distance tracking for physical running events, configured with your account manager.</p>
+            <p class="format-best">Best for: <span>companies with an established running culture</span></p>
+          </div>
+        </div>
+        <div class="format-note">
+          <span>Looking for something adjacent?</span>
+          <a class="text-link" href="https://www.vantagefit.io/steps-challenge/">Step challenges &rarr;</a>
+          <a class="text-link" href="https://www.vantagefit.io/team-challenges/">Team challenges &rarr;</a>
+          <a class="text-link" href="https://www.vantagefit.io/holistic-wellness-program/">Year-round wellness program &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S5 EVENT PLAYBOOK ========== -->
+    <section class="screen" id="playbook" aria-labelledby="playbook-heading">
+      <div class="shell">
+        <div class="center">
+          <span class="eyebrow">The event playbook</span>
+          <h2 id="playbook-heading">When to put one on the calendar.</h2>
+        </div>
+        <div class="play-grid">
+          <div class="play-card">
+            <h3><span class="play-no">01</span> Program kickoff</h3>
+            <p>Launch or relaunch your wellness program with a shared moment. The energy carries into the challenges that follow.</p>
+          </div>
+          <div class="play-card">
+            <h3><span class="play-no">02</span> Observance days</h3>
+            <p>World Health Day, World Heart Day, a company anniversary. The event maps to the date, and participation becomes a quotable metric.</p>
+          </div>
+          <div class="play-card">
+            <h3><span class="play-no">03</span> Re-engagement spark</h3>
+            <p>One day feels manageable in a way a 30-day program doesn't. A low-barrier event pulls dormant employees back in.</p>
+          </div>
+          <div class="play-card">
+            <h3><span class="play-no">04</span> Regional head-to-head</h3>
+            <p>Which office or region logs the most kilometers? Clean, fast, unambiguous bragging rights.</p>
+          </div>
+          <div class="play-card">
+            <h3><span class="play-no">05</span> Energizer or finale</h3>
+            <p>Punctuate a longer program when engagement dips, or close a quarter with a finish line.</p>
+          </div>
+          <div class="play-card play-hint">
+            <h3><span class="play-no">+</span> Building a habit instead?</h3>
+            <p>A one-day event is a punctuation moment, not a program. Pair it with a Streak or Custom challenge for the weeks that follow.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S6 FOR HR ========== -->
+    <section class="screen" id="for-hr" aria-labelledby="for-hr-heading" style="background: var(--canvas);">
+      <div class="shell hr-grid">
+        <div>
+          <span class="eyebrow">For HR &amp; program managers</span>
+          <h2 id="for-hr-heading" style="font-size: clamp(1.7rem, 2.6vw, 2.5rem);">Launch in an afternoon. Recap it the next morning.</h2>
+          <p class="lead" style="margin-top: 14px;">An event this size shouldn't need an events team. Configuration takes minutes; the dashboard carries the proof.</p>
+          <ul class="tour-checks hr-checks">
+            <li>
+              <b>The simplest setup we make</b>
+              <p>Name, dates, distance ratio, audience, publish. No weekly themes, no task lists, no scoring rules to configure.</p>
+            </li>
+            <li>
+              <b>Promotion built in</b>
+              <p>Announce by email and in-app banner ahead of the event, then send a day-of push notification when the start line opens.</p>
+            </li>
+            <li>
+              <b>One event, every time zone</b>
+              <p>Start and end times localize to each participant's midnight, so a one-day marathon is one true day everywhere. Rewards set in USD display in local currency.</p>
+            </li>
+            <li>
+              <b>Leave with numbers</b>
+              <p>Watch check-ins and distance live, then share the recap: who joined, how far the company went, who crossed each finish line.</p>
+            </li>
+          </ul>
+        </div>
+        <div class="report-mock" role="img" aria-label="Illustration: Vantage Fit event recap showing check-ins, total distance, and finishers, with participation, leaderboard, and points reports">
+          <div class="dash-top" aria-hidden="true">
+            <span class="dash-dot"></span><span class="dash-dot"></span><span class="dash-dot"></span>
+            <span class="dash-url"></span>
+          </div>
+          <div class="report-mock-body" aria-hidden="true">
+            <div class="recap">
+              <span><b>1,904</b><i>Checked in</i></span>
+              <span><b>18,442</b><i>Km together</i></span>
+              <span><b>837</b><i>Finishers</i></span>
+            </div>
+            <div class="report-row">
+              <span class="report-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 15l4-6 4 3 5-8"/></svg></span>
+              <div><b>Participation Report</b><small>One row per enrolled employee: who joined, who finished</small></div>
+              <span class="report-export">CSV</span>
+            </div>
+            <div class="report-row">
+              <span class="report-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg></span>
+              <div><b>Challenge Leaderboard</b><small>Distance rankings by tier, department, and country</small></div>
+              <span class="report-export">CSV</span>
+            </div>
+            <div class="report-row">
+              <span class="report-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M15 9.5c0-1.4-1.3-2.5-3-2.5s-3 .9-3 2.2c0 3 6 1.6 6 4.6 0 1.3-1.3 2.2-3 2.2s-3-1.1-3-2.5"/></svg></span>
+              <div><b>Transaction Report</b><small>Every point earned and redeemed, reconciled</small></div>
+              <span class="report-export">CSV</span>
+            </div>
+            <div class="report-foot">World Heart Day Marathon · recap ready the next morning</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S7 PROOF ========== -->
+    <section class="screen" id="proof" aria-labelledby="proof-heading" style="background: #f6f7f4;">
+      <div class="shell">
+        <div class="center">
+          <span class="eyebrow">Results</span>
+          <h2 id="proof-heading">Finish-line numbers from real events.</h2>
+        </div>
+        <div class="results-grid">
+          <div class="stat-card">
+            <div class="stat-num">94%</div>
+            <div class="stat-org">Embrace Pet Insurance <span>Insurance · Ohio</span></div>
+            <p>engagement across an 8-week company marathon, with 19.3M+ steps logged together.</p>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">42 km</div>
+            <div class="stat-org">Carter Myers Automotive <span>Automotive · Virginia</span></div>
+            <p>average distance per employee in a 4-week walkathon. A full marathon each, from everyday steps.</p>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">89%</div>
+            <div class="stat-org">Cotiviti <span>IT services · Utah</span></div>
+            <p>engagement in a week-long virtual walkathon: 19,400+ km covered by 540+ employees.</p>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">24</div>
+            <div class="stat-org">Global Corporate Walkathon <span>Hosted on Vantage Fit</span></div>
+            <p>countries in one month-long event, with 3,700+ participants across 74 teams.</p>
+          </div>
+        </div>
+        <div class="results-actions">
+          <a class="text-link" href="https://www.vantagefit.io/casestudy/">Read the customer stories &rarr;</a>
+          <a class="text-link" href="https://www.vantagefit.io/request-demo/">Get results like these &rarr;</a>
+        </div>
+        <p class="results-note">Results from published Vantage Fit customer case studies. Engagement and distance figures are as reported by each program.</p>
+      </div>
+    </section>
+
+    <!-- ========== S8 TRUST ========== -->
+    <section class="trust-screen" id="security" aria-labelledby="security-heading">
+      <div class="shell">
+        <span class="eyebrow">Enterprise trust</span>
+        <h2 id="security-heading" style="color:#fff;">Global event. Local data.</h2>
+        <p class="lead">A company-wide marathon touches every employee's phone, so security, privacy, and residency are part of the product, not an appendix.</p>
+        <div class="trust-grid" style="margin-top: 44px;">
+          <div class="trust-card">
+            <span class="trust-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l7 3v5c0 4.4-3 8.4-7 10-4-1.6-7-5.6-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
+            <h3>Compliance</h3>
+            <p>HIPAA-aligned and GDPR compliant, with SOC 2 Type II and ISO 27001/27701 documentation available during evaluation.</p>
+          </div>
+          <div class="trust-card">
+            <span class="trust-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z"/></svg></span>
+            <h3>Regional data residency</h3>
+            <p>Employee data stays in its assigned region: US, EU, India, or UAE. Nothing moves across borders.</p>
+          </div>
+          <div class="trust-card">
+            <span class="trust-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
+            <h3>SSO &amp; HRIS ready</h3>
+            <p>SAML 2.0 single sign-on with Okta, Azure AD, OneLogin, or Ping. HRIS and SFTP provisioning keep rosters in sync.</p>
+          </div>
+          <div class="trust-card">
+            <span class="trust-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><path d="M4 4l16 16"/></svg></span>
+            <h3>Private by design</h3>
+            <p>Admins see aggregate metrics, never individual health profiles. Leaderboard opt-out is built in, and data is never sold or shared for advertising.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S9 FAQ ========== -->
+    <section class="screen" id="faq" aria-labelledby="faq-heading">
+      <div class="shell">
+        <div class="center">
+          <span class="eyebrow">FAQ</span>
+          <h2 id="faq-heading">Questions HR teams ask.</h2>
+        </div>
+        <div class="faq">
+          <details>
+            <summary>Do employees have to run, or use GPS?</summary>
+            <p>No. Everyday steps convert to distance automatically, so walking the dog, commuting, and lunch breaks all count. There are no routes to follow, no GPS workouts to start, and no running required. Distance is calculated from step count, not location tracking.</p>
+          </details>
+          <details>
+            <summary>Do employees need a fitness tracker?</summary>
+            <p>No. iPhones and Android phones count steps on their own through Apple Health and Google Fit, so anyone with a smartphone can join. Employees who have them can connect Fitbit or Garmin directly, and Apple Watch plus most popular bands sync through Apple Health. One primary device is active at a time, so steps never double-count.</p>
+          </details>
+          <details>
+            <summary>One day or multi-week: which should we pick?</summary>
+            <p>Pick a one-day marathon for a shared moment tied to a date, like a program launch or World Heart Day. Pick a multi-week E-Marathon (2 to 4 weeks works well) for distance campaigns and themed pushes. Many teams pair them: a one-day kickoff, then a multi-week main event.</p>
+          </details>
+          <details>
+            <summary>Can our global offices join the same event?</summary>
+            <p>Yes, that's the default. Start and end times localize to each participant's midnight, so a one-day marathon is one true calendar day in every time zone. Rewards configured in USD display in each employee's local currency with a country-relevant gift-card catalogue across 190+ countries.</p>
+          </details>
+          <details>
+            <summary>How do the distance tiers work?</summary>
+            <p>Employees choose the target that motivates them: 5K, 10K, half marathon, full marathon, or a custom distance you set. Rewards scale with the target automatically, so bigger efforts earn more and every fitness level has a real finish line.</p>
+          </details>
+          <details>
+            <summary>What can we report afterward?</summary>
+            <p>During the event, the admin dashboard tracks check-ins, distance covered, and finishers live. Afterward, export the leaderboard by tier, department, or country, a participation report with one row per enrolled employee, and a full points transaction ledger, all as CSVs.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== S10 FINAL CTA ========== -->
+    <section class="final" id="demo" aria-labelledby="demo-heading">
+      <div class="shell">
+        <h2 id="demo-heading">Pick a date. We'll build your marathon.</h2>
+        <p>Book a 30-minute walkthrough and we'll mock up a virtual marathon for your workforce: tiers, theme, and the reporting behind it.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+          <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">View pricing</a>
+        </div>
+        <div class="final-checks">
+          <span>Live in days</span>
+          <span>No wearables or GPS required</span>
+          <span>One event across every time zone</span>
+          <span>Rewards in local currency</span>
+        </div>
+        <div class="final-note">Give every employee a finish line worth crossing.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="#top">
+            <img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37" style="height:28px;width:auto;display:block">
+          </a>
+          <p class="footer-about">Inclusive wellness that turns participation into measurable progress.</p>
+        </div>
+        <div>
+          <div class="footer-title">Programs</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/steps-challenge/">Steps challenge</a>
+            <a href="https://www.vantagefit.io/team-challenges/">Team challenges</a>
+            <a href="https://www.vantagefit.io/virtual-marathon/">Virtual marathon</a>
+            <a href="https://www.vantagefit.io/multi-activity-challenges/">Custom challenges</a>
+            <a href="https://www.vantagefit.io/holistic-wellness-program/">Year-round program</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Solutions</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/remote-team-wellness/">Remote teams</a>
+            <a href="https://www.vantagefit.io/global-employee-engagement/">Global engagement</a>
+            <a href="https://www.vantagefit.io/wellness-rewards-program/">Wellness rewards</a>
+            <a href="https://www.vantagefit.io/health-fitness-analytics/">Analytics</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Company</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/about-us/">About</a>
+            <a href="https://www.vantagefit.io/casestudy/">Case studies</a>
+            <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+            <a href="https://www.vantagefit.io/request-demo/">Contact sales</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Vantage Circle. All rights reserved.</span>
+        <span>HIPAA · SOC 2 · GDPR · ISO 27001 · ISO 27701</span>
+        <span>Wellness built for participation.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav
+    const menuButton = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation');
+      navLinks.classList.toggle('open', !open);
+    });
+
+    // Mega menus: hover on desktop, tap on mobile
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const navTriggers = [...document.querySelectorAll('.nav-trigger')];
+    const desktopNav = window.matchMedia('(min-width: 861px)');
+    let desktopCloseTimer;
+
+    const closeDesktopMenus = (except = null) => {
+      navItems.forEach((item) => {
+        if (item !== except) item.classList.remove('desktop-open');
+      });
+    };
+
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => {
+        if (!desktopNav.matches) return;
+        window.clearTimeout(desktopCloseTimer);
+        closeDesktopMenus(item);
+        item.classList.add('desktop-open');
+
+        const focusedTrigger = document.activeElement?.closest?.('.nav-trigger');
+        if (focusedTrigger && !item.contains(focusedTrigger)) focusedTrigger.blur();
+      });
+
+      item.addEventListener('pointerleave', () => {
+        if (!desktopNav.matches) return;
+        desktopCloseTimer = window.setTimeout(() => {
+          if (!item.matches(':hover') && !item.contains(document.activeElement)) {
+            item.classList.remove('desktop-open');
+          }
+        }, 120);
+      });
+    });
+
+    document.querySelectorAll('.nav-links > a').forEach((link) => {
+      link.addEventListener('pointerenter', () => {
+        if (desktopNav.matches) closeDesktopMenus();
+      });
+    });
+
+    navTriggers.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        if (window.matchMedia('(max-width: 860px)').matches) {
+          e.preventDefault();
+          const item = btn.closest('.nav-item');
+          const isOpen = item.classList.contains('open');
+          document.querySelectorAll('.nav-item').forEach((n) => {
+            n.classList.remove('open');
+            n.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        }
+      });
+    });
+
+    // Nav CTA: ghost over the hero, filled after
+    (function () {
+      const nav = document.querySelector('nav.nav');
+      const hero = document.querySelector('.hero');
+      if (!nav || !hero) return;
+      const state = () => nav.classList.toggle('lit', window.scrollY > hero.offsetHeight - 90);
+      window.addEventListener('scroll', state, { passive: true });
+      state();
+    })();
+
+    // Grayscale preview mode for accessibility review: append ?gray to the URL
+    if (new URLSearchParams(location.search).has('gray')) {
+      document.documentElement.style.filter = 'grayscale(1)';
+    }
+  </script>
+</body>
+</html>

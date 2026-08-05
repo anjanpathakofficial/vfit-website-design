@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Team Wellness Challenge Platform for Employees | Vantage Fit</title>
+  <meta name="description" content="Build fair team wellness challenges with average scoring, flexible team setup, live standings and exportable results. See Vantage Fit in action.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&amp;family=Poppins:wght@600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/enterprise.css">
+  <style>
+    :root {
+      --tc-ink: #29294c;
+      --tc-coral: #f15162;
+      --tc-coral-deep: #b62e40;
+      --tc-mint: #41d8b4;
+      --tc-mint-deep: #169d7e;
+      --tc-canvas: #f8f8f9;
+      --tc-paper: #ffffff;
+      --tc-dark: #1d2228;
+      --tc-muted: #6b6b8a;
+      --tc-line: rgba(41, 41, 76, .12);
+      --tc-shadow: 0 24px 70px rgba(41, 41, 76, .14);
+      --tc-display: "Poppins", "Noto Sans", sans-serif;
+      --tc-body: "Noto Sans", sans-serif;
+      --tc-max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-padding-top: 82px; }
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background: var(--tc-canvas);
+      color: var(--tc-ink);
+      font-family: var(--tc-body);
+    }
+    h1, h2, h3 { font-family: var(--tc-display); }
+    a:focus-visible, summary:focus-visible {
+      outline: 3px solid rgba(241, 81, 98, .45);
+      outline-offset: 4px;
+      border-radius: 8px;
+    }
+    .tc-skip {
+      position: fixed;
+      z-index: 200;
+      top: 12px;
+      left: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: var(--tc-dark);
+      color: #fff;
+      font-weight: 800;
+      transform: translateY(-160%);
+      transition: transform .2s ease;
+    }
+    .tc-skip:focus { transform: translateY(0); }
+    .tc-shell { width: min(var(--tc-max), calc(100% - 48px)); margin-inline: auto; }
+    .tc-section { padding: 104px 0; }
+    .tc-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 15px;
+      color: var(--tc-coral-deep);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .tc-eyebrow::before {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+      content: "";
+    }
+    .tc-heading {
+      max-width: 720px;
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.35rem);
+      font-weight: 700;
+      letter-spacing: -.045em;
+      line-height: 1.06;
+    }
+    .tc-lede {
+      max-width: 650px;
+      margin: 18px 0 0;
+      color: var(--tc-muted);
+      font-size: clamp(1rem, 1.4vw, 1.12rem);
+      line-height: 1.65;
+    }
+    .tc-button-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .tc-button {
+      display: inline-flex;
+      min-height: 50px;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 0 21px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      font-size: .93rem;
+      font-weight: 800;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .tc-button:hover { transform: translateY(-2px); }
+    .tc-button-primary {
+      background: linear-gradient(125deg, var(--tc-coral) 5%, var(--tc-coral-deep) 125%);
+      box-shadow: 0 14px 28px rgba(241, 81, 98, .22);
+      color: #fff;
+    }
+    .tc-button-secondary { border-color: var(--tc-line); background: #fff; color: var(--tc-ink); }
+    .tc-button-secondary:hover { box-shadow: 0 12px 32px rgba(41, 41, 76, .1); }
+    .tc-button svg { width: 17px; }
+
+    /* Navigation */
+    .tc-nav {
+      position: sticky;
+      z-index: 80;
+      top: 0;
+      border-bottom: 1px solid var(--tc-line);
+      background: rgba(248, 248, 249, .92);
+      backdrop-filter: blur(16px);
+    }
+    .tc-nav-inner { display: flex; min-height: 68px; align-items: center; gap: 24px; }
+    .tc-brand { display: inline-flex; flex: none; align-items: center; }
+    .tc-brand img { width: 168px; height: auto; }
+    .tc-nav-links { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+    .tc-nav-links > a:not(.tc-nav-cta) {
+      padding: 10px 12px;
+      border-radius: 9px;
+      color: #536067;
+      font-size: .88rem;
+      font-weight: 700;
+    }
+    .tc-nav-links > a:not(.tc-nav-cta):hover { background: #f1f1f6; color: var(--tc-ink); }
+    .tc-nav-cta {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      margin-left: 8px;
+      padding: 0 18px;
+      border-radius: 999px;
+      background: linear-gradient(125deg, var(--tc-coral), var(--tc-coral-deep));
+      color: #fff;
+      font-size: .86rem;
+      font-weight: 800;
+    }
+    .tc-mobile-nav { display: none; margin-left: auto; }
+    .tc-mobile-nav summary {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      list-style: none;
+      place-items: center;
+      border: 1px solid var(--tc-line);
+      border-radius: 12px;
+      background: #fff;
+      cursor: pointer;
+    }
+    .tc-mobile-nav summary::-webkit-details-marker { display: none; }
+    .tc-mobile-nav summary svg { width: 21px; }
+    .tc-mobile-menu {
+      position: absolute;
+      top: 60px;
+      right: 24px;
+      display: grid;
+      min-width: 220px;
+      gap: 2px;
+      padding: 10px;
+      border: 1px solid var(--tc-line);
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: var(--tc-shadow);
+    }
+    .tc-mobile-menu a { padding: 11px 12px; border-radius: 9px; font-size: .9rem; font-weight: 750; }
+    .tc-mobile-menu a:hover { background: #f1f1f6; }
+
+    /* Hero */
+    .tc-hero {
+      position: relative;
+      min-height: 760px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 84% 18%, rgba(65, 216, 180, .16), transparent 26%),
+        radial-gradient(circle at 4% 80%, rgba(241, 81, 98, .1), transparent 30%),
+        #fff;
+    }
+    .tc-hero::after {
+      position: absolute;
+      inset: auto -10% -190px 45%;
+      height: 360px;
+      border: 1px solid rgba(41, 41, 76, .06);
+      border-radius: 50%;
+      content: "";
+      transform: rotate(-8deg);
+    }
+    .tc-hero-grid {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      min-height: 690px;
+      grid-template-columns: minmax(0, .9fr) minmax(520px, 1.1fr);
+      align-items: center;
+      gap: 70px;
+      padding: 76px 0 86px;
+    }
+    .tc-hero h1 {
+      max-width: 680px;
+      margin: 0;
+      font-size: clamp(3rem, 5.7vw, 5rem);
+      font-weight: 700;
+      letter-spacing: -.06em;
+      line-height: .98;
+    }
+    .tc-hero h1 em { color: var(--tc-coral); font-style: normal; }
+    .tc-hero-copy > p {
+      max-width: 600px;
+      margin: 24px 0 0;
+      color: var(--tc-muted);
+      font-size: clamp(1.06rem, 1.6vw, 1.22rem);
+      line-height: 1.65;
+    }
+    .tc-proof-notes { display: flex; flex-wrap: wrap; gap: 9px 18px; margin: 24px 0 0; padding: 0; list-style: none; }
+    .tc-proof-notes li {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #55556f;
+      font-size: .78rem;
+      font-weight: 700;
+    }
+    .tc-proof-notes svg { width: 15px; color: var(--tc-mint-deep); }
+    .tc-hero-visual { position: relative; min-height: 560px; }
+    .tc-scoreboard {
+      position: absolute;
+      top: 30px;
+      right: 20px;
+      left: 0;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 28px;
+      background: linear-gradient(145deg, #242a31, #152228);
+      box-shadow: 0 38px 90px rgba(29, 34, 40, .26);
+      color: #fff;
+    }
+    .tc-board-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 22px 24px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, .1);
+    }
+    .tc-board-head small {
+      display: block;
+      color: var(--tc-mint);
+      font-size: .64rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .tc-board-head strong { display: block; margin-top: 3px; font-family: var(--tc-display); font-size: 1.02rem; }
+    .tc-live {
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: rgba(65, 216, 180, .12);
+      color: var(--tc-mint);
+      font-size: .62rem;
+      font-weight: 800;
+    }
+    .tc-score-canvas { padding: 26px 24px 30px; }
+    .tc-team-id { display: flex; align-items: center; gap: 12px; }
+    .tc-team-badge {
+      display: grid;
+      width: 46px;
+      height: 46px;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 15px;
+      background: rgba(255,255,255,.08);
+      color: var(--tc-mint);
+      font-family: var(--tc-display);
+      font-size: .86rem;
+      font-weight: 800;
+    }
+    .tc-team-id b { display: block; font-size: .96rem; }
+    .tc-team-id span { display: block; margin-top: 2px; color: rgba(255,255,255,.56); font-size: .68rem; }
+    .tc-score-flow {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 118px;
+      align-items: center;
+      gap: 20px;
+      margin-top: 24px;
+    }
+    .tc-member-scores { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px; }
+    .tc-member-score {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 13px;
+      background: rgba(255,255,255,.06);
+      animation: tc-score-in .55s both;
+    }
+    .tc-member-score:nth-child(2) { animation-delay: .08s; }
+    .tc-member-score:nth-child(3) { animation-delay: .16s; }
+    .tc-member-score:nth-child(4) { animation-delay: .24s; }
+    .tc-member-score i {
+      display: grid;
+      width: 28px;
+      height: 28px;
+      flex: none;
+      place-items: center;
+      border-radius: 50%;
+      background: #f3a252;
+      color: #fff;
+      font-size: .58rem;
+      font-style: normal;
+      font-weight: 800;
+    }
+    .tc-member-score:nth-child(2) i { background: var(--tc-coral); }
+    .tc-member-score:nth-child(3) i { background: #7c80da; }
+    .tc-member-score:nth-child(4) i { background: var(--tc-mint-deep); }
+    .tc-member-score span { min-width: 0; }
+    .tc-member-score b { display: block; font-size: .76rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .tc-member-score small { display: block; color: rgba(255,255,255,.48); font-size: .56rem; }
+    .tc-member-score strong { margin-left: auto; font-family: var(--tc-display); font-size: 1rem; }
+    @keyframes tc-score-in {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .tc-average {
+      position: relative;
+      display: grid;
+      aspect-ratio: 1;
+      place-items: center;
+      border: 1px solid rgba(65,216,180,.32);
+      border-radius: 50%;
+      background: rgba(65,216,180,.1);
+      text-align: center;
+    }
+    .tc-average::before {
+      position: absolute;
+      inset: -8px;
+      border: 1px dashed rgba(65,216,180,.34);
+      border-radius: inherit;
+      content: "";
+    }
+    .tc-average small { display: block; color: var(--tc-mint); font-size: .56rem; font-weight: 800; text-transform: uppercase; }
+    .tc-average strong { display: block; font-family: var(--tc-display); font-size: 2.5rem; letter-spacing: -.07em; line-height: 1; }
+    .tc-calculation {
+      margin-top: 17px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.055);
+      color: rgba(255,255,255,.62);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: .65rem;
+      text-align: center;
+    }
+    .tc-calculation b { color: #fff; }
+    .tc-score-caption { margin-top: 13px; color: var(--tc-mint); font-size: .72rem; font-weight: 800; text-align: center; }
+    .tc-phone {
+      position: absolute;
+      z-index: 3;
+      right: -18px;
+      bottom: 4px;
+      width: 218px;
+      padding: 8px;
+      border-radius: 32px;
+      background: #10171c;
+      box-shadow: 0 26px 54px rgba(0,0,0,.3);
+      transform: rotate(2deg);
+      animation: tc-float 5.8s ease-in-out infinite;
+    }
+    @keyframes tc-float { 50% { transform: translateY(-7px) rotate(2deg); } }
+    .tc-phone-screen { min-height: 360px; overflow: hidden; border-radius: 25px; background: #f6f7f8; color: var(--tc-ink); }
+    .tc-phone-top { display: flex; justify-content: space-between; padding: 16px 14px 9px; font-size: .6rem; font-weight: 800; }
+    .tc-phone-title { padding: 7px 14px 12px; }
+    .tc-phone-title small { color: var(--tc-muted); font-size: .55rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .tc-phone-title b { display: block; margin-top: 3px; font-family: var(--tc-display); font-size: .88rem; }
+    .tc-phone-tabs { display: grid; grid-template-columns: 1fr 1fr; margin: 0 11px 11px; padding: 3px; border-radius: 10px; background: #e9eaee; }
+    .tc-phone-tabs span { padding: 6px; border-radius: 8px; color: #84849a; font-size: .55rem; font-weight: 800; text-align: center; }
+    .tc-phone-tabs .active { background: #fff; box-shadow: 0 3px 10px rgba(41,41,76,.08); color: var(--tc-ink); }
+    .tc-rank-row { display: grid; grid-template-columns: 18px 27px 1fr auto; align-items: center; gap: 7px; margin: 0 10px 7px; padding: 9px 8px; border: 1px solid var(--tc-line); border-radius: 11px; background: #fff; }
+    .tc-rank-row.current { border-color: rgba(241,81,98,.32); background: #fff6f7; }
+    .tc-rank-row .rank { color: var(--tc-muted); font-size: .58rem; font-weight: 800; }
+    .tc-rank-logo { display: grid; width: 27px; height: 27px; place-items: center; border-radius: 9px; background: var(--tc-mint); color: #fff; font-size: .5rem; font-weight: 800; }
+    .tc-rank-row:nth-of-type(2) .tc-rank-logo { background: var(--tc-coral); }
+    .tc-rank-row:nth-of-type(3) .tc-rank-logo { background: #7c80da; }
+    .tc-rank-row b { display: block; font-size: .61rem; }
+    .tc-rank-row small { display: block; color: var(--tc-muted); font-size: .48rem; }
+    .tc-rank-row strong { font-family: var(--tc-display); font-size: .73rem; }
+    .tc-phone-period { margin: 12px 12px 0; color: var(--tc-muted); font-size: .5rem; font-weight: 700; text-align: center; }
+    .tc-illustrative {
+      position: absolute;
+      z-index: 4;
+      right: 226px;
+      bottom: 20px;
+      padding: 7px 10px;
+      border: 1px solid var(--tc-line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.92);
+      color: var(--tc-muted);
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    /* Shared follow-through */
+    .tc-intro-row { display: flex; align-items: end; justify-content: space-between; gap: 44px; }
+    .tc-intro-row .tc-lede { max-width: 430px; margin-bottom: 5px; }
+    .tc-reason-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 46px; }
+    .tc-reason {
+      min-height: 245px;
+      padding: 26px;
+      border: 1px solid var(--tc-line);
+      border-radius: 22px;
+      background: #fff;
+      box-shadow: 0 12px 36px rgba(41,41,76,.05);
+    }
+    .tc-reason-icon { display: grid; width: 46px; height: 46px; place-items: center; border-radius: 15px; background: #fff0f2; color: var(--tc-coral-deep); }
+    .tc-reason:nth-child(2) .tc-reason-icon { background: #eafaf6; color: var(--tc-mint-deep); }
+    .tc-reason:nth-child(3) .tc-reason-icon { background: #efeffa; color: #6668b8; }
+    .tc-reason-icon svg { width: 22px; }
+    .tc-reason h3 { margin: 44px 0 0; font-size: 1.18rem; letter-spacing: -.03em; }
+    .tc-reason p { margin: 10px 0 0; color: var(--tc-muted); font-size: .92rem; line-height: 1.6; }
+
+    /* Formation */
+    .tc-formation { background: #fff; }
+    .tc-formation-grid { display: grid; grid-template-columns: .9fr 1.1fr; align-items: center; gap: 70px; }
+    .tc-mode-stack { display: grid; gap: 12px; margin-top: 30px; }
+    .tc-mode {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 14px;
+      padding: 19px;
+      border: 1px solid var(--tc-line);
+      border-radius: 18px;
+      background: #fff;
+    }
+    .tc-mode:first-child { border-color: rgba(241,81,98,.25); background: #fff8f8; }
+    .tc-mode-num { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 13px; background: var(--tc-ink); color: #fff; font-family: var(--tc-display); font-size: .74rem; }
+    .tc-mode:first-child .tc-mode-num { background: var(--tc-coral); }
+    .tc-mode h3 { margin: 0; font-size: 1rem; }
+    .tc-mode p { margin: 5px 0 0; color: var(--tc-muted); font-size: .85rem; line-height: 1.5; }
+    .tc-governance { margin-top: 17px; padding-left: 15px; border-left: 3px solid var(--tc-mint); color: var(--tc-muted); font-size: .78rem; line-height: 1.55; }
+    .tc-roster-window {
+      overflow: hidden;
+      border: 1px solid var(--tc-line);
+      border-radius: 24px;
+      background: #f8f9fa;
+      box-shadow: var(--tc-shadow);
+    }
+    .tc-window-bar { display: flex; align-items: center; gap: 6px; padding: 13px 16px; border-bottom: 1px solid var(--tc-line); background: #fff; }
+    .tc-window-bar i { width: 8px; height: 8px; border-radius: 50%; background: #d9dcdf; }
+    .tc-window-bar span { margin-left: 8px; color: var(--tc-muted); font-size: .64rem; font-weight: 700; }
+    .tc-roster-body { padding: 22px; }
+    .tc-roster-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .tc-roster-head small { display: block; color: var(--tc-muted); font-size: .6rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .tc-roster-head h3 { margin: 4px 0 0; font-size: 1.08rem; }
+    .tc-ui-button { padding: 8px 11px; border-radius: 9px; background: var(--tc-coral); color: #fff; font-size: .62rem; font-weight: 800; }
+    .tc-roster-tools { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 17px; }
+    .tc-roster-tools span { padding: 7px 9px; border: 1px solid var(--tc-line); border-radius: 8px; background: #fff; color: #55556f; font-size: .6rem; font-weight: 700; }
+    .tc-team-list { display: grid; gap: 8px; margin-top: 16px; }
+    .tc-team-row {
+      display: grid;
+      grid-template-columns: minmax(140px, 1.4fr) 76px 1fr 42px;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 12px;
+      border: 1px solid var(--tc-line);
+      border-radius: 12px;
+      background: #fff;
+    }
+    .tc-team-name { display: flex; min-width: 0; align-items: center; gap: 9px; }
+    .tc-team-name i { display: grid; width: 31px; height: 31px; flex: none; place-items: center; border-radius: 9px; background: #eafaf6; color: var(--tc-mint-deep); font-size: .54rem; font-style: normal; font-weight: 800; }
+    .tc-team-name b { display: block; overflow: hidden; font-size: .67rem; text-overflow: ellipsis; white-space: nowrap; }
+    .tc-team-name small, .tc-members, .tc-avg { color: var(--tc-muted); font-size: .56rem; }
+    .tc-score-bar { height: 6px; overflow: hidden; border-radius: 999px; background: #ebecef; }
+    .tc-score-bar i { display: block; height: 100%; border-radius: inherit; background: var(--tc-mint); }
+    .tc-avg { font-weight: 800; text-align: right; }
+    .tc-roster-note { margin: 14px 0 0; color: var(--tc-muted); font-size: .59rem; text-align: right; }
+    .tc-fill-82 { width: 82%; }
+    .tc-fill-79 { width: 79%; }
+    .tc-fill-76 { width: 76%; }
+    .tc-fill-71 { width: 71%; }
+
+    /* Flexible programs */
+    .tc-program { overflow: hidden; background: var(--tc-dark); color: #fff; }
+    .tc-program .tc-eyebrow { color: var(--tc-mint); }
+    .tc-program .tc-lede { color: rgba(255,255,255,.65); }
+    .tc-program-grid { display: grid; grid-template-columns: .82fr 1.18fr; align-items: center; gap: 72px; }
+    .tc-program-art { position: relative; min-height: 470px; }
+    .tc-task-card {
+      position: absolute;
+      width: 55%;
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,.11);
+      border-radius: 20px;
+      background: rgba(255,255,255,.07);
+      backdrop-filter: blur(10px);
+    }
+    .tc-task-card:nth-child(1) { top: 15px; left: 0; transform: rotate(-3deg); }
+    .tc-task-card:nth-child(2) { top: 142px; right: 0; transform: rotate(3deg); }
+    .tc-task-card:nth-child(3) { bottom: 28px; left: 9%; transform: rotate(-1deg); }
+    .tc-task-card .tc-task-icon { display: grid; width: 39px; height: 39px; place-items: center; border-radius: 12px; background: rgba(65,216,180,.12); color: var(--tc-mint); }
+    .tc-task-card:nth-child(2) .tc-task-icon { background: rgba(241,81,98,.14); color: #ff8996; }
+    .tc-task-card:nth-child(3) .tc-task-icon { background: rgba(255,255,255,.1); color: #fff; }
+    .tc-task-icon svg { width: 20px; }
+    .tc-task-card small { display: block; margin-top: 19px; color: rgba(255,255,255,.48); font-size: .58rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .tc-task-card b { display: block; margin-top: 4px; font-family: var(--tc-display); font-size: .92rem; }
+    .tc-task-card p { margin: 7px 0 0; color: rgba(255,255,255,.58); font-size: .7rem; line-height: 1.5; }
+    .tc-program-copy .tc-heading { max-width: 660px; }
+    .tc-task-list { display: grid; gap: 18px; margin-top: 34px; }
+    .tc-task-item { display: grid; grid-template-columns: 32px 1fr; gap: 13px; }
+    .tc-task-item > span { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 9px; background: rgba(65,216,180,.12); color: var(--tc-mint); font-family: var(--tc-display); font-size: .64rem; }
+    .tc-task-item h3 { margin: 1px 0 0; font-size: .98rem; }
+    .tc-task-item p { margin: 5px 0 0; color: rgba(255,255,255,.58); font-size: .84rem; line-height: 1.55; }
+    .tc-average-note { margin-top: 30px; padding: 17px 18px; border: 1px solid rgba(65,216,180,.22); border-radius: 15px; background: rgba(65,216,180,.07); color: rgba(255,255,255,.75); font-size: .84rem; line-height: 1.55; }
+    .tc-average-note b { color: var(--tc-mint); }
+
+    /* HR control */
+    .tc-control-grid { display: grid; grid-template-columns: .72fr 1.28fr; align-items: center; gap: 64px; }
+    .tc-control-steps { display: grid; gap: 4px; margin-top: 34px; }
+    .tc-control-step { display: grid; grid-template-columns: 42px 1fr; gap: 14px; padding: 15px 0; border-bottom: 1px solid var(--tc-line); }
+    .tc-control-step:last-child { border-bottom: 0; }
+    .tc-control-step > span { display: grid; width: 38px; height: 38px; place-items: center; border-radius: 12px; background: #fff0f2; color: var(--tc-coral-deep); font-family: var(--tc-display); font-size: .68rem; }
+    .tc-control-step h3 { margin: 0; font-size: .94rem; }
+    .tc-control-step p { margin: 5px 0 0; color: var(--tc-muted); font-size: .8rem; line-height: 1.5; }
+    .tc-dashboard {
+      overflow: hidden;
+      border: 1px solid var(--tc-line);
+      border-radius: 24px;
+      background: #f7f8f9;
+      box-shadow: var(--tc-shadow);
+    }
+    .tc-dash-bar { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 14px 17px; border-bottom: 1px solid var(--tc-line); background: #fff; }
+    .tc-dash-brand { display: flex; align-items: center; gap: 8px; font-size: .64rem; font-weight: 800; }
+    .tc-dash-brand i { width: 10px; height: 10px; border-radius: 4px; background: var(--tc-coral); box-shadow: 0 0 0 4px rgba(241,81,98,.1); }
+    .tc-dash-actions { display: flex; gap: 6px; }
+    .tc-dash-actions span { padding: 7px 9px; border: 1px solid var(--tc-line); border-radius: 8px; background: #fff; color: var(--tc-muted); font-size: .54rem; font-weight: 800; }
+    .tc-dash-actions span:last-child { border-color: var(--tc-coral); background: var(--tc-coral); color: #fff; }
+    .tc-dash-body { padding: 20px; }
+    .tc-dash-title { display: flex; align-items: end; justify-content: space-between; gap: 16px; }
+    .tc-dash-title small { color: var(--tc-muted); font-size: .56rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .tc-dash-title b { display: block; margin-top: 3px; font-size: .84rem; }
+    .tc-ui-label { color: var(--tc-muted); font-size: .53rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+    .tc-dash-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
+    .tc-dash-metric { padding: 12px; border: 1px solid var(--tc-line); border-radius: 12px; background: #fff; }
+    .tc-dash-metric small { display: block; color: var(--tc-muted); font-size: .53rem; }
+    .tc-dash-metric b { display: block; margin-top: 4px; font-family: var(--tc-display); font-size: 1.25rem; letter-spacing: -.05em; }
+    .tc-dash-metric i { display: block; margin-top: 4px; color: var(--tc-mint-deep); font-size: .5rem; font-style: normal; font-weight: 800; }
+    .tc-dash-main { display: grid; grid-template-columns: 1.1fr .9fr; gap: 9px; margin-top: 9px; }
+    .tc-dash-panel { padding: 13px; border: 1px solid var(--tc-line); border-radius: 13px; background: #fff; }
+    .tc-mini-head { display: flex; justify-content: space-between; color: var(--tc-muted); font-size: .54rem; font-weight: 800; }
+    .tc-bars { display: grid; gap: 10px; margin-top: 15px; }
+    .tc-bar-row { display: grid; grid-template-columns: 68px 1fr 28px; align-items: center; gap: 7px; font-size: .51rem; }
+    .tc-bar-row b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .tc-bar-track { height: 6px; overflow: hidden; border-radius: 999px; background: #ececf0; }
+    .tc-bar-track i { display: block; height: 100%; border-radius: inherit; background: var(--tc-mint); }
+    .tc-bar-row span { color: var(--tc-muted); font-weight: 800; text-align: right; }
+    .tc-nudge-card { margin-top: 13px; padding: 12px; border-radius: 11px; background: #fff3f4; }
+    .tc-nudge-card small { color: var(--tc-coral-deep); font-size: .5rem; font-weight: 800; text-transform: uppercase; }
+    .tc-nudge-card b { display: block; margin-top: 4px; font-size: .67rem; }
+    .tc-nudge-card p { margin: 4px 0 0; color: var(--tc-muted); font-size: .52rem; line-height: 1.45; }
+    .tc-dash-note { margin: 11px 0 0; color: var(--tc-muted); font-size: .53rem; text-align: right; }
+
+    /* Proof */
+    .tc-proof { padding: 88px 0; background: #fff; }
+    .tc-proof-panel {
+      position: relative;
+      overflow: hidden;
+      padding: 54px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #f15162 0%, #be3346 100%);
+      box-shadow: 0 24px 60px rgba(182, 46, 64, .2);
+      color: #fff;
+    }
+    .tc-proof-panel::before {
+      position: absolute;
+      top: -170px;
+      right: -70px;
+      width: 420px;
+      height: 420px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 50%;
+      content: "";
+    }
+    .tc-proof-panel::after {
+      position: absolute;
+      right: 80px;
+      bottom: -180px;
+      width: 360px;
+      height: 360px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 50%;
+      content: "";
+    }
+    .tc-proof-content { position: relative; z-index: 2; display: grid; grid-template-columns: 1.1fr .9fr; align-items: end; gap: 60px; }
+    .tc-proof .tc-eyebrow { color: #fff; }
+    .tc-proof .tc-heading { max-width: 650px; }
+    .tc-proof-copy p { max-width: 620px; margin: 18px 0 0; color: rgba(255,255,255,.77); font-size: .96rem; line-height: 1.65; }
+    .tc-proof-link { display: inline-flex; align-items: center; gap: 7px; margin-top: 22px; color: #fff; font-size: .86rem; font-weight: 800; }
+    .tc-proof-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+    .tc-proof-stats { display: grid; grid-template-columns: repeat(3, 1fr); overflow: hidden; border: 1px solid rgba(255,255,255,.2); border-radius: 18px; background: rgba(255,255,255,.09); }
+    .tc-proof-stat { padding: 23px 17px; border-right: 1px solid rgba(255,255,255,.16); }
+    .tc-proof-stat:last-child { border-right: 0; }
+    .tc-proof-stat b { display: block; font-family: var(--tc-display); font-size: clamp(1.75rem, 3vw, 2.5rem); letter-spacing: -.06em; }
+    .tc-proof-stat span { display: block; margin-top: 5px; color: rgba(255,255,255,.7); font-size: .61rem; line-height: 1.4; }
+    .tc-proof-source { margin: 12px 0 0; color: rgba(255,255,255,.6); font-size: .56rem; text-align: right; }
+
+    /* FAQ */
+    .tc-faq-grid { display: grid; grid-template-columns: .72fr 1.28fr; gap: 78px; }
+    .tc-faq-copy { position: sticky; top: 110px; align-self: start; }
+    .tc-faq-list { border-top: 1px solid var(--tc-line); }
+    .tc-faq-list details { border-bottom: 1px solid var(--tc-line); }
+    .tc-faq-list summary {
+      display: flex;
+      min-height: 76px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      list-style: none;
+      cursor: pointer;
+      font-family: var(--tc-display);
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .tc-faq-list summary::-webkit-details-marker { display: none; }
+    .tc-faq-list summary::after {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      flex: none;
+      place-items: center;
+      border: 1px solid var(--tc-line);
+      border-radius: 50%;
+      color: var(--tc-coral-deep);
+      content: "+";
+      font-family: var(--tc-body);
+      font-size: 1.15rem;
+    }
+    .tc-faq-list details[open] summary::after { content: "−"; }
+    .tc-faq-answer { padding: 0 52px 24px 0; color: var(--tc-muted); font-size: .9rem; line-height: 1.65; }
+
+    /* Closer and footer */
+    .tc-closer { position: relative; overflow: hidden; padding: 102px 0; background: var(--tc-dark); color: #fff; text-align: center; }
+    .tc-closer::before, .tc-closer::after { position: absolute; border: 1px solid rgba(65,216,180,.13); border-radius: 50%; content: ""; }
+    .tc-closer::before { top: -240px; left: -150px; width: 520px; height: 520px; }
+    .tc-closer::after { right: -180px; bottom: -310px; width: 620px; height: 620px; }
+    .tc-closer-content { position: relative; z-index: 2; }
+    .tc-closer .tc-eyebrow { color: var(--tc-mint); }
+    .tc-closer .tc-heading { max-width: 780px; margin-inline: auto; }
+    .tc-closer .tc-lede { max-width: 700px; margin-inline: auto; color: rgba(255,255,255,.68); }
+    .tc-closer .tc-button-row { justify-content: center; }
+    .tc-closer .tc-button-secondary { border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.08); color: #fff; }
+    .tc-demo-notes { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 22px; margin-top: 27px; color: rgba(255,255,255,.6); font-size: .75rem; font-weight: 700; }
+    .tc-demo-notes span { display: inline-flex; align-items: center; gap: 7px; }
+    .tc-demo-notes span::before { width: 5px; height: 5px; border-radius: 50%; background: var(--tc-mint); content: ""; }
+    .tc-footer { padding: 56px 0 24px; background: #13191e; color: #fff; }
+    .tc-footer-grid { display: grid; grid-template-columns: 1.4fr repeat(3, .7fr); gap: 48px; }
+    .tc-footer-brand img { width: 165px; }
+    .tc-footer-brand p { max-width: 330px; margin: 18px 0 0; color: rgba(255,255,255,.52); font-size: .78rem; line-height: 1.6; }
+    .tc-footer-col b { display: block; margin-bottom: 13px; color: rgba(255,255,255,.42); font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; }
+    .tc-footer-col a { display: block; width: fit-content; margin-top: 9px; color: rgba(255,255,255,.7); font-size: .78rem; }
+    .tc-footer-col a:hover { color: #fff; }
+    .tc-footer-bottom { display: flex; justify-content: space-between; gap: 24px; margin-top: 46px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.4); font-size: .68rem; }
+
+    @media (max-width: 1040px) {
+      .tc-hero-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .tc-hero-visual { transform: scale(.92); transform-origin: center; }
+      .tc-formation-grid, .tc-program-grid, .tc-control-grid { gap: 44px; }
+      .tc-proof-content { grid-template-columns: 1fr; }
+      .tc-proof-stats { max-width: 620px; }
+    }
+
+    @media (max-width: 860px) {
+      .tc-nav-links { display: none; }
+      .tc-mobile-nav { display: block; }
+      .tc-section { padding: 82px 0; }
+      .tc-hero-grid { grid-template-columns: 1fr; padding-top: 68px; }
+      .tc-hero-copy { max-width: 690px; }
+      .tc-hero-visual { width: min(620px, 100%); min-height: 520px; margin-inline: auto; transform: none; }
+      .tc-intro-row { display: block; }
+      .tc-reason-grid { grid-template-columns: 1fr; }
+      .tc-reason { min-height: auto; }
+      .tc-reason h3 { margin-top: 28px; }
+      .tc-formation-grid, .tc-program-grid, .tc-control-grid, .tc-faq-grid { grid-template-columns: 1fr; }
+      .tc-roster-window { margin-top: 10px; }
+      .tc-program-copy { grid-row: 1; }
+      .tc-program-art { min-height: 420px; }
+      .tc-dashboard { margin-top: 10px; }
+      .tc-faq-copy { position: static; }
+      .tc-footer-grid { grid-template-columns: 1.2fr 1fr 1fr; }
+      .tc-footer-brand { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 620px) {
+      .tc-shell { width: min(100% - 32px, var(--tc-max)); }
+      .tc-section { padding: 68px 0; }
+      .tc-brand img { width: 148px; }
+      .tc-hero { min-height: auto; }
+      .tc-hero-grid { padding: 54px 0 72px; }
+      .tc-hero h1 { font-size: clamp(2.65rem, 14vw, 4rem); }
+      .tc-button-row { display: grid; grid-template-columns: 1fr; }
+      .tc-button { width: 100%; }
+      .tc-proof-notes { display: grid; }
+      .tc-hero-visual { min-height: 570px; }
+      .tc-scoreboard { right: 0; }
+      .tc-board-head { padding-inline: 17px; }
+      .tc-score-canvas { padding: 20px 16px 126px; }
+      .tc-score-flow { grid-template-columns: 1fr 90px; gap: 14px; }
+      .tc-member-scores { grid-template-columns: 1fr; }
+      .tc-member-score:nth-child(n+4) { display: none; }
+      .tc-member-score strong { font-size: .9rem; }
+      .tc-average strong { font-size: 2rem; }
+      .tc-calculation { text-align: left; }
+      .tc-phone { right: 10px; bottom: 0; width: 190px; }
+      .tc-phone-screen { min-height: 312px; }
+      .tc-rank-row { padding-block: 7px; }
+      .tc-illustrative { right: auto; bottom: 8px; left: 4px; }
+      .tc-heading { font-size: clamp(1.9rem, 10vw, 2.7rem); }
+      .tc-reason { padding: 22px; }
+      .tc-formation-grid, .tc-program-grid, .tc-control-grid, .tc-faq-grid { gap: 42px; }
+      .tc-team-row { grid-template-columns: 1fr 48px; }
+      .tc-members, .tc-score-bar { display: none; }
+      .tc-program-art { min-height: 520px; }
+      .tc-task-card { width: 78%; }
+      .tc-task-card:nth-child(2) { top: 170px; }
+      .tc-task-card:nth-child(3) { bottom: 12px; }
+      .tc-dash-body { padding: 14px; }
+      .tc-dash-actions span:first-child { display: none; }
+      .tc-dash-metrics { grid-template-columns: 1fr 1fr; }
+      .tc-dash-metric:last-child { display: none; }
+      .tc-dash-main { grid-template-columns: 1fr; }
+      .tc-dash-panel:last-child { display: none; }
+      .tc-proof { padding: 62px 0; }
+      .tc-proof-panel { padding: 36px 22px; }
+      .tc-proof-stats { grid-template-columns: 1fr; }
+      .tc-proof-stat { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; border-right: 0; border-bottom: 1px solid rgba(255,255,255,.16); }
+      .tc-proof-stat:last-child { border-bottom: 0; }
+      .tc-proof-stat span { max-width: 130px; text-align: right; }
+      .tc-proof-source { text-align: left; }
+      .tc-faq-list summary { min-height: 84px; font-size: .92rem; }
+      .tc-faq-answer { padding-right: 0; }
+      .tc-footer-grid { grid-template-columns: 1fr 1fr; gap: 34px 28px; }
+      .tc-footer-col:last-child { grid-column: 1 / -1; }
+      .tc-footer-bottom { display: grid; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+      .tc-phone { transform: rotate(2deg); }
+    }
+  </style>
+</head>
+<body>
+  <a class="tc-skip" href="#main">Skip to main content</a>
+
+  <nav class="tc-nav" aria-label="Primary navigation">
+    <div class="tc-shell tc-nav-inner">
+      <a class="tc-brand" href="https://www.vantagefit.io/" aria-label="Vantage Fit home">
+        <img src="../styled-homepage/logo.png" alt="Vantage Fit">
+      </a>
+      <div class="tc-nav-links">
+        <a href="#program">Product</a>
+        <a href="#why-teams">Solutions</a>
+        <a href="#faq">Resources</a>
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="tc-nav-cta" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+      </div>
+      <details class="tc-mobile-nav">
+        <summary aria-label="Open navigation menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </summary>
+        <div class="tc-mobile-menu">
+          <a href="#program">Product</a>
+          <a href="#why-teams">Solutions</a>
+          <a href="#faq">Resources</a>
+          <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+          <a href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+        </div>
+      </details>
+    </div>
+  </nav>
+
+  <main id="main">
+    <header class="tc-hero">
+      <div class="tc-shell tc-hero-grid">
+        <div class="tc-hero-copy">
+          <span class="tc-eyebrow">Team challenge platform</span>
+          <h1>Every person counts. So should every <em>score.</em></h1>
+          <p>Turn wellness into a shared commitment with fair average scoring, flexible team setup and live standings that give colleagues a reason to keep showing up.</p>
+          <div class="tc-button-row">
+            <a class="tc-button tc-button-primary" href="https://www.vantagefit.io/request-demo/">Book a demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <a class="tc-button tc-button-secondary" href="https://www.vantagefit.io/pricing/">See pricing</a>
+          </div>
+          <ul class="tc-proof-notes">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Admin-led or captain-led teams</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Separate team leaderboard</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Team-linked CSV results</li>
+          </ul>
+        </div>
+
+        <div class="tc-hero-visual" role="img" aria-label="Illustrative Vantage Fit product view showing four member scores averaging to a team score of 82 and a team leaderboard on mobile">
+          <div class="tc-scoreboard">
+            <div class="tc-board-head">
+              <div><small>Spring Together</small><strong>Team score</strong></div>
+              <span class="tc-live">Live</span>
+            </div>
+            <div class="tc-score-canvas">
+              <div class="tc-team-id">
+                <span class="tc-team-badge">TN</span>
+                <div><b>Team Northstar</b><span>4 members · Weekly view</span></div>
+              </div>
+              <div class="tc-score-flow">
+                <div class="tc-member-scores">
+                  <div class="tc-member-score"><i>AR</i><span><b>Alex R.</b><small>Member score</small></span><strong>91</strong></div>
+                  <div class="tc-member-score"><i>PS</i><span><b>Priya S.</b><small>Member score</small></span><strong>84</strong></div>
+                  <div class="tc-member-score"><i>MC</i><span><b>Morgan C.</b><small>Member score</small></span><strong>78</strong></div>
+                  <div class="tc-member-score"><i>JL</i><span><b>Jamie L.</b><small>Member score</small></span><strong>75</strong></div>
+                </div>
+                <div class="tc-average"><span><small>Team average</small><strong>82</strong></span></div>
+              </div>
+              <div class="tc-calculation">(<b>91</b> + <b>84</b> + <b>78</b> + <b>75</b>) ÷ 4 members = <b>82</b></div>
+              <div class="tc-score-caption">Every member moves the average.</div>
+            </div>
+          </div>
+          <div class="tc-phone" aria-hidden="true">
+            <div class="tc-phone-screen">
+              <div class="tc-phone-top"><span>9:41</span><span>● ● ●</span></div>
+              <div class="tc-phone-title"><small>Spring Together</small><b>Leaderboard</b></div>
+              <div class="tc-phone-tabs"><span>Individual</span><span class="active">Team</span></div>
+              <div class="tc-rank-row current"><span class="rank">1</span><span class="tc-rank-logo">TN</span><span><b>Team Northstar</b><small>4 members</small></span><strong>82</strong></div>
+              <div class="tc-rank-row"><span class="rank">2</span><span class="tc-rank-logo">TT</span><span><b>Trailblazers</b><small>5 members</small></span><strong>79</strong></div>
+              <div class="tc-rank-row"><span class="rank">3</span><span class="tc-rank-logo">WP</span><span><b>Wellness Pack</b><small>4 members</small></span><strong>76</strong></div>
+              <div class="tc-phone-period">Weekly · Overall</div>
+            </div>
+          </div>
+          <span class="tc-illustrative">Illustrative product view</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="tc-section" id="why-teams" aria-labelledby="why-title">
+      <div class="tc-shell">
+        <div class="tc-intro-row">
+          <div>
+            <span class="tc-eyebrow">Shared follow-through</span>
+            <h2 class="tc-heading" id="why-title">Turn individual effort into a reason to come back</h2>
+          </div>
+          <p class="tc-lede">A good team challenge makes accountability feel shared without making competition the only way to participate.</p>
+        </div>
+        <div class="tc-reason-grid">
+          <article class="tc-reason">
+            <span class="tc-reason-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M4 19h16M6 16l4-4 3 2 5-7"/><circle cx="6" cy="16" r="1.5"/><circle cx="10" cy="12" r="1.5"/><circle cx="13" cy="14" r="1.5"/><circle cx="18" cy="7" r="1.5"/></svg></span>
+            <h3>Fair by design</h3>
+            <p>Team standings use the average member score, so headcount alone does not decide the winner.</p>
+          </article>
+          <article class="tc-reason">
+            <span class="tc-reason-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c.5-4 2.3-6 5.5-6s5 2 5.5 6M16 8h5M18.5 5.5v5"/></svg></span>
+            <h3>Form teams your way</h3>
+            <p>Prebuild teams for a structured rollout or let captains invite coworkers when employee team creation is enabled.</p>
+          </article>
+          <article class="tc-reason">
+            <span class="tc-reason-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M2.5 12s3.3-6 9.5-6 9.5 6 9.5 6-3.3 6-9.5 6-9.5-6-9.5-6z"/><path d="M4 4l16 16"/></svg></span>
+            <h3>Private without sitting out</h3>
+            <p>Employees can hide from individual rankings while their activity still supports the team and earns points.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="tc-section tc-formation" aria-labelledby="formation-title">
+      <div class="tc-shell tc-formation-grid">
+        <div>
+          <span class="tc-eyebrow">Team formation</span>
+          <h2 class="tc-heading" id="formation-title">Set the roster once. Let the team take it from there.</h2>
+          <div class="tc-mode-stack">
+            <article class="tc-mode">
+              <span class="tc-mode-num">01</span>
+              <div><h3>Admin-led teams</h3><p>Create teams for departments or locations, assign or move members and bulk-create from CSV or Google Sheets.</p></div>
+            </article>
+            <article class="tc-mode">
+              <span class="tc-mode-num">02</span>
+              <div><h3>Captain-led teams</h3><p>Let a captain choose a name, image and slogan, then invite colleagues who can accept or decline.</p></div>
+            </article>
+          </div>
+          <p class="tc-governance">Employee team creation is enabled at the company level. Your Vantage Fit account manager can confirm the setup for your program.</p>
+        </div>
+
+        <div class="tc-roster-window" role="img" aria-label="Illustrative admin team management view with team member counts and average scores">
+          <div class="tc-window-bar"><i></i><i></i><i></i><span>Vantage Fit Admin</span></div>
+          <div class="tc-roster-body">
+            <div class="tc-roster-head">
+              <div><small>Manage challenge</small><h3>Spring Together · Teams</h3></div>
+              <span class="tc-ui-button">Create team</span>
+            </div>
+            <div class="tc-roster-tools"><span>Bulk upload</span><span>Import teams</span><span>Move members</span><span>Maximum size: 6</span></div>
+            <div class="tc-team-list">
+              <div class="tc-team-row"><span class="tc-team-name"><i>TN</i><span><b>Team Northstar</b><small>Alex R. · Captain</small></span></span><span class="tc-members">4 members</span><span class="tc-score-bar"><i class="tc-fill-82"></i></span><span class="tc-avg">82</span></div>
+              <div class="tc-team-row"><span class="tc-team-name"><i>TT</i><span><b>Trailblazers</b><small>Morgan C. · Captain</small></span></span><span class="tc-members">5 members</span><span class="tc-score-bar"><i class="tc-fill-79"></i></span><span class="tc-avg">79</span></div>
+              <div class="tc-team-row"><span class="tc-team-name"><i>WP</i><span><b>Wellness Pack</b><small>Jamie L. · Captain</small></span></span><span class="tc-members">4 members</span><span class="tc-score-bar"><i class="tc-fill-76"></i></span><span class="tc-avg">76</span></div>
+              <div class="tc-team-row"><span class="tc-team-name"><i>MM</i><span><b>Momentum Makers</b><small>Priya S. · Captain</small></span></span><span class="tc-members">6 members</span><span class="tc-score-bar"><i class="tc-fill-71"></i></span><span class="tc-avg">71</span></div>
+            </div>
+            <p class="tc-roster-note">Illustrative data · Teams rank by average member score</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tc-section tc-program" id="program" aria-labelledby="program-title">
+      <div class="tc-shell tc-program-grid">
+        <div class="tc-program-art" aria-hidden="true">
+          <div class="tc-task-card">
+            <span class="tc-task-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M5 17c3-6 4-9 7-9 2 0 3 2 3 4 0 3 1 5 4 5"/><path d="M4 20h16"/></svg></span>
+            <small>Auto-tracked</small><b>Daily movement</b><p>Steps, distance and active calories update as activity syncs.</p>
+          </div>
+          <div class="tc-task-card">
+            <span class="tc-task-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 3s6 6.2 6 11a6 6 0 0 1-12 0c0-4.8 6-11 6-11z"/><path d="M9 15c.7 1.5 1.8 2.2 3.4 2.2"/></svg></span>
+            <small>Logged habits</small><b>More ways in</b><p>Water, yoga, meditation, mood and custom activities.</p>
+          </div>
+          <div class="tc-task-card">
+            <span class="tc-task-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h5M8 17h7"/></svg></span>
+            <small>Custom challenge</small><b>Weekly themes</b><p>Combine tasks, targets, content and points across multiple weeks.</p>
+          </div>
+        </div>
+
+        <div class="tc-program-copy">
+          <span class="tc-eyebrow">More ways to contribute</span>
+          <h2 class="tc-heading" id="program-title">One team model. More than one kind of wellness.</h2>
+          <p class="tc-lede">Build teams into a supported challenge experience, from a consistent movement habit to a multi-week program with different tasks and themes.</p>
+          <div class="tc-task-list">
+            <article class="tc-task-item"><span>01</span><div><h3>Auto-track movement</h3><p>Steps, distance and active calories can update from a phone or connected wearable.</p></div></article>
+            <article class="tc-task-item"><span>02</span><div><h3>Include logged habits</h3><p>Water, yoga, meditation, mood and other activities give more people a meaningful way to contribute.</p></div></article>
+            <article class="tc-task-item"><span>03</span><div><h3>Shape a multi-week program</h3><p>Combine tasks, targets, content and points in a Custom challenge with weekly themes.</p></div></article>
+          </div>
+          <p class="tc-average-note"><b>For team challenges, consistency is visible.</b> A few inactive members lower the average, so teammates have a reason to bring one another back in.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="tc-section" aria-labelledby="control-title">
+      <div class="tc-shell tc-control-grid">
+        <div>
+          <span class="tc-eyebrow">Control for HR</span>
+          <h2 class="tc-heading" id="control-title">Keep the competition moving without keeping a shadow spreadsheet</h2>
+          <div class="tc-control-steps">
+            <article class="tc-control-step"><span>01</span><div><h3>Build the field</h3><p>Create teams, bulk-add members and set the maximum team size.</p></div></article>
+            <article class="tc-control-step"><span>02</span><div><h3>Read the standings</h3><p>Switch between score, step and team leaderboards with weekly and overall views.</p></div></article>
+            <article class="tc-control-step"><span>03</span><div><h3>Nudge the challenge</h3><p>Send a push notification from the active challenge when participation needs a lift.</p></div></article>
+            <article class="tc-control-step"><span>04</span><div><h3>Close with a record</h3><p>Export the final leaderboard with team, participant, department, score, rank and step data.</p></div></article>
+          </div>
+        </div>
+
+        <div class="tc-dashboard" role="img" aria-label="Illustrative admin dashboard showing team standings, active participation and notification and export controls">
+          <div class="tc-dash-bar">
+            <span class="tc-dash-brand"><i></i>Vantage Fit Admin</span>
+            <div class="tc-dash-actions"><span>Send notification</span><span>Export CSV</span></div>
+          </div>
+          <div class="tc-dash-body">
+            <div class="tc-dash-title">
+              <div><small>Ongoing challenge</small><b>Spring Together</b></div>
+              <span class="tc-ui-label">Team standings</span>
+            </div>
+            <div class="tc-dash-metrics">
+              <div class="tc-dash-metric"><small>Teams</small><b>28</b><i>5 fully active</i></div>
+              <div class="tc-dash-metric"><small>Active this week</small><b>78%</b><i>Across all teams</i></div>
+              <div class="tc-dash-metric"><small>Unassigned</small><b>12</b><i>Members to place</i></div>
+            </div>
+            <div class="tc-dash-main">
+              <div class="tc-dash-panel">
+                <div class="tc-mini-head"><span>Team</span><span>Average score</span></div>
+                <div class="tc-bars">
+                  <div class="tc-bar-row"><b>Northstar</b><span class="tc-bar-track"><i class="tc-fill-82"></i></span><span>82</span></div>
+                  <div class="tc-bar-row"><b>Trailblazers</b><span class="tc-bar-track"><i class="tc-fill-79"></i></span><span>79</span></div>
+                  <div class="tc-bar-row"><b>Wellness Pack</b><span class="tc-bar-track"><i class="tc-fill-76"></i></span><span>76</span></div>
+                  <div class="tc-bar-row"><b>Momentum</b><span class="tc-bar-track"><i class="tc-fill-71"></i></span><span>71</span></div>
+                </div>
+              </div>
+              <div class="tc-dash-panel">
+                <div class="tc-mini-head"><span>Program pulse</span><span>This week</span></div>
+                <div class="tc-nudge-card"><small>Next action</small><b>Bring 3 teams back in</b><p>Send one focused reminder to members with no activity this week.</p></div>
+              </div>
+            </div>
+            <p class="tc-dash-note">Illustrative data</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tc-proof" aria-labelledby="proof-title">
+      <div class="tc-shell">
+        <div class="tc-proof-panel">
+          <div class="tc-proof-content">
+            <div class="tc-proof-copy">
+              <span class="tc-eyebrow">Team challenge in practice</span>
+              <h2 class="tc-heading" id="proof-title">Tata Motors made wellness a team-owned habit</h2>
+              <p>The Step Up &amp; Elevate program used 43 teams across plants and offices, team leaderboards and a mix of steps, weight logging and other wellness activities over nearly six months.</p>
+              <a class="tc-proof-link" href="https://www.vantagefit.io/casestudy/tata-motors-step-up-elevate/">Read the Tata Motors story <span aria-hidden="true">→</span></a>
+            </div>
+            <div>
+              <div class="tc-proof-stats">
+                <div class="tc-proof-stat"><b>70%</b><span>Employee engagement</span></div>
+                <div class="tc-proof-stat"><b>43</b><span>Teams participated</span></div>
+                <div class="tc-proof-stat"><b>7,600+</b><span>Average daily steps per person</span></div>
+              </div>
+              <p class="tc-proof-source">Source: Tata Motors Step Up &amp; Elevate case study</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tc-section" id="faq" aria-labelledby="faq-title">
+      <div class="tc-shell tc-faq-grid">
+        <div class="tc-faq-copy">
+          <span class="tc-eyebrow">Questions before rollout</span>
+          <h2 class="tc-heading" id="faq-title">Questions before you form the teams</h2>
+          <p class="tc-lede">Bring your audience, timeline and team model to the demo. We will map them to the right challenge experience.</p>
+        </div>
+        <div class="tc-faq-list">
+          <details open>
+            <summary>Are team scores totals or averages?</summary>
+            <div class="tc-faq-answer">Team score is the average of member scores, not the sum. That keeps a larger roster from winning on headcount alone and makes each member’s contribution matter.</div>
+          </details>
+          <details>
+            <summary>Can employees create their own teams?</summary>
+            <div class="tc-faq-answer">Yes, when employee team creation is enabled for your company. A captain can create a team and invite colleagues. HR can also pre-create teams, bulk-upload them and manage membership from the dashboard.</div>
+          </details>
+          <details>
+            <summary>Can someone participate without appearing on the leaderboard?</summary>
+            <div class="tc-faq-answer">Yes. An employee can opt out of individual leaderboard visibility and continue participating, earning points and contributing to the team average.</div>
+          </details>
+          <details>
+            <summary>Which challenge formats work with teams?</summary>
+            <div class="tc-faq-answer">Use a supported team format that fits the behavior you want to build. Custom, Streak and Journey experiences can support team configuration. Race is a pure individual steps leaderboard. We will confirm the best fit for your company setup during the demo.</div>
+          </details>
+          <details>
+            <summary>What can HR report after the challenge?</summary>
+            <div class="tc-faq-answer">HR can export leaderboard data to CSV, including participant, department, score, rank, step and team fields where applicable. The live dashboard also provides score, step and team views.</div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="tc-closer" aria-labelledby="closer-title">
+      <div class="tc-shell tc-closer-content">
+        <span class="tc-eyebrow">Build the first team</span>
+        <h2 class="tc-heading" id="closer-title">See how a shared score can change who shows up</h2>
+        <p class="tc-lede">In one demo, choose the right challenge experience, see how teams form and walk through the controls your HR team uses to run and report the program.</p>
+        <div class="tc-button-row">
+          <a class="tc-button tc-button-primary" href="https://www.vantagefit.io/request-demo/">Book a demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="tc-button tc-button-secondary" href="https://www.vantagefit.io/pricing/">See pricing</a>
+        </div>
+        <div class="tc-demo-notes"><span>Team setup</span><span>Employee app</span><span>Live standings</span><span>Reporting</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="tc-footer">
+    <div class="tc-shell">
+      <div class="tc-footer-grid">
+        <div class="tc-footer-brand">
+          <a href="https://www.vantagefit.io/" aria-label="Vantage Fit home"><img src="../styled-homepage/logo-white.png" alt="Vantage Fit"></a>
+          <p>Inclusive wellness programs that turn employee participation into measurable progress. A Vantage Circle product.</p>
+        </div>
+        <div class="tc-footer-col"><b>Explore</b><a href="#why-teams">Why teams</a><a href="#program">Challenge options</a><a href="#faq">FAQ</a></div>
+        <div class="tc-footer-col"><b>Evaluate</b><a href="https://www.vantagefit.io/pricing/">Pricing</a><a href="https://www.vantagefit.io/request-demo/">Book a demo</a><a href="https://www.vantagefit.io/casestudy/tata-motors-step-up-elevate/">Customer proof</a></div>
+        <div class="tc-footer-col"><b>Related programs</b><a href="https://www.vantagefit.io/steps-challenge/">Step challenges</a><a href="https://www.vantagefit.io/multi-activity-challenges/">Multi-activity</a><a href="https://www.vantagefit.io/virtual-marathon/">Virtual marathon</a></div>
+      </div>
+      <div class="tc-footer-bottom"><span>© 2026 Vantage Circle. All rights reserved.</span><span>Employee wellness built for participation.</span></div>
+    </div>
+  </footer>
+</body>
+</html>
