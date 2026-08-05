@@ -28,14 +28,38 @@ The existing Steps Challenge (and other use-case) pages on the site were built *
 
 Instead, **rebuild from product truth** — help docs, admin dashboard, and product specs — then package that into a best-in-class SaaS solutions page for a US enterprise HR buyer.
 
-## Research sources (read these; decide what matters)
+## Path resolution (main tree vs model worktrees)
 
-Pull latest `main` on each repo before you start. Resolve paths relative to this workspace (siblings / parent tree). Clone if missing.
+This design repo is used from either:
+
+| Checkout | Typical path |
+|---|---|
+| **Main tree** | `…/gitcode/vfit-website-design/` |
+| **Model worktree** | `…/gitcode/vfit-website-design/.worktrees/<model>/` |
+
+**In-repo design assets** (always relative to the repo root you are in — same for main and worktrees once the branch is current):
+
+- `SOLUTIONS-PAGE-PROMPT.md` (this file)
+- `styled-homepage/`
+- `styles/enterprise.css`
+
+**Sibling research repos** live next to `vfit-website-design` on disk, not inside it. Depth changes by one level under `.worktrees/`:
+
+| Resource | From main tree | From `.worktrees/<model>/` | Remote (clone if missing) |
+|---|---|---|---|
+| Marketing + help docs | `../vantagefit-astro` | `../../../vantagefit-astro` | https://github.com/VantageCircle/vantagefit-astro |
+| HR admin dashboard | `../vc-dashboard-design` | `../../../vc-dashboard-design` | https://github.com/VantageCircle/vc-dashboard-design |
+| Vantage Fit OS | `../vc-os/vfit-os` | `../../../vc-os/vfit-os` | https://github.com/VantageCircle/vfit-os |
+
+**Resolve rule:** if a sibling path does not exist, walk up parent directories until you find the sibling (or clone it). Do not invent product claims when a source is missing — note the gap in the brief.
+
+Pull latest `main` on each research repo before you start.
+
+## Research sources (read these; decide what matters)
 
 ### 1. Marketing site + **help docs** (how the product actually works)
 
-Sibling: `../vantagefit-astro`  
-Remote: `https://github.com/VantageCircle/vantagefit-astro`
+Use the path table above for `vantagefit-astro`.
 
 Prioritize **help content** over legacy use-case marketing YAML:
 
@@ -53,8 +77,7 @@ Legacy use-case file `content/en/pages/use-cases/steps-challenge.yaml` is **opti
 
 ### 2. HR admin dashboard (how HR runs and measures programs)
 
-Sibling: `../vc-dashboard-design`  
-Remote: `https://github.com/VantageCircle/vc-dashboard-design`
+Use the path table above for `vc-dashboard-design`.
 
 Use for: how admins launch challenges, see participation, leaderboards, program health, leagues / wellness modules — so the page reflects what HR can actually do and report.
 
@@ -62,14 +85,15 @@ Start from `README.md`, `docs/`, `docs/modules/` (e.g. wellness), and any challe
 
 ### 3. Vantage Fit OS (full product + marketing brain)
 
-Path: `../../vc-os/vfit-os` (or sibling equivalent under your Vantage Circle OS tree)  
-Remote: `https://github.com/VantageCircle/vfit-os`
+Use the path table above for `vc-os/vfit-os`.
 
 Use for: current feature depth, challenge/gamification specs, admin platform, rewards, integrations, positioning.
 
 Key entry points: `README.md`, `FEATURE-INDEX.md`, `MISSION.md`, `product-marketing/`, `specs/` (especially challenges / gamification, admin platform, rewards, core tracking).
 
 ### 4. This design repo (visual system only)
+
+Paths below are from the **repo root** (main or worktree):
 
 - `styled-homepage/` — enterprise homepage mock (nav, type, section rhythm, components)  
 - `styles/enterprise.css` — tokens  
@@ -97,9 +121,14 @@ Rough length: a focused conversion page, not an encyclopedia and not a thin broc
 
 ## Deliverables
 
-In `solutions-page/`:
+Write into **your model folder at the repo root** (same whether you are on main or in `.worktrees/<model>/`):
 
-1. **`SOLUTIONS-BRIEF.md`** — Your audit/research takeaways, why you structured the page the way you did, full copy deck, sources for any stats/quotes, meta title/description drafts.  
+- Claude → `claude-fable/`
+- Kimi → `kimi-k3/`
+- GPT → `gpt-sol/`
+- Grok → `grok/`
+
+1. **`STEPS-CHALLENGE-BRIEF.md`** — Your audit/research takeaways, why you structured the page the way you did, full copy deck, sources for any stats/quotes, meta title/description drafts.  
 2. **`vantage-fit-steps-challenge-v1.html`** — High-fidelity mock (prefer `../styles/enterprise.css` + patterns from `../styled-homepage/`).
 
 ## Quality bar
