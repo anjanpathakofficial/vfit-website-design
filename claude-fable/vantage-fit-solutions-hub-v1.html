@@ -1,0 +1,1516 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Required: these are unshipped preview mocks. Do not remove. -->
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <meta name="description" content="Choose a corporate wellness program by what you want to run or what you need to measure: challenges, health assessment, insights and rewards. Book a demo.">
+  <meta name="theme-color" content="#18262b">
+
+  <title>Employee Wellness Solutions for HR Teams | Vantage Fit</title>
+
+  <link rel="stylesheet" href="../styles/enterprise.css">
+
+  <style>
+    /* ============================================================
+       SOLUTIONS HUB (/solutions/) page-local styles.
+
+       Tokens, buttons, hero frame, .dash, .phone, chart card,
+       .logo-band, .final closer and the footer all come from
+       ../styles/enterprise.css. Nothing here redefines a token.
+
+       NEW ON THIS PAGE (not on any sibling):
+         .chain / .chain-link / .chain-arm / .chain-loop  the drawn
+           data-in to data-out to action loop, section S3.
+         .route-list / .route-row / .route-dest  the goal router, S5.
+         .assure-row / .mark-strip-light  the light compliance pill row
+           that replaces the full dark .trust-screen band on this page.
+         .hub-hero  the only page in the set that overrides --hero-h,
+           because a chooser has to reach its first row in one scroll.
+
+       Copied in from design-system.md section 3.B, unchanged in shape:
+         .hub-section, .hub-head, .reveal, .skip-link, contrast lifts,
+         focus visibility, .btn-primary contrast fix, forced-colors
+         fallback, .mock-tag, .format-*, .best-for, .fairband, .fair-*,
+         .results-grid, .result-card, .proof-fine, footer grid override.
+       ============================================================ */
+
+    /* --- Nav: which section is current. No .mega-link.is-page on this
+       page: the hub has no row inside the Solutions panel, only the
+       banner at the foot of it. Do not invent a row to light up. --- */
+    .nav-trigger.is-current { background: var(--soft); color: var(--ink); box-shadow: inset 0 -2px 0 var(--coral); border-radius: 9px 9px 0 0; }
+    .mega a.mega-banner[aria-current="page"] { box-shadow: inset 3px 0 0 var(--coral); font-weight: 800; }
+    /* Escape closes a mega menu even while focus stays on its trigger,
+       which :focus-within alone would keep open. */
+    .nav-item.esc-closed .mega { display: none; }
+
+    /* --- Shared section shells --- */
+    .hub-section { padding: 96px 0; }
+    .hub-head { max-width: 720px; }
+    .hub-head .lead { margin-top: 14px; }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s cubic-bezier(.22,.9,.24,1); }
+    .reveal.on { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+    /* --- Skip link: the nav carries three mega menus, so a keyboard user
+       needs a way past roughly 37 stops before the h1. WCAG 2.4.1. --- */
+    .skip-link { position: absolute; left: -9999px; }
+    .skip-link:focus {
+      left: 16px; top: 12px; z-index: 60;
+      padding: 10px 16px;
+      border-radius: 10px;
+      background: var(--ink);
+      color: #fff;
+      font-weight: 700;
+      outline: 3px solid var(--coral-dark);
+      outline-offset: 2px;
+    }
+
+    /* --- Contrast lifts on inherited small-text rules. Scoped here
+       because the stylesheet is shared; flag upstream separately. --- */
+    .logos-label { color: rgba(41,41,76,.72); }
+    .logo-word { color: rgba(41,41,76,.78); }
+    /* .eyebrow is --coral-dark, which clears 4.5:1 on white but not on the
+       tinted grounds this page uses. --coral-deep restores the margin. */
+    .run-screen .eyebrow,
+    .platform-screen .eyebrow,
+    .proof-hub .eyebrow { color: var(--coral-deep); }
+
+    /* --- Focus visibility. The inherited ring is a 16%-alpha ink outline,
+       which reads as no ring at all on white. --- */
+    .format-card:focus-visible,
+    .chain-link:focus-visible,
+    .route-row:focus-visible,
+    .chain-loop-label:focus-visible,
+    .text-link:focus-visible,
+    .route-note a:focus-visible { outline: 3px solid var(--coral-dark); outline-offset: 3px; border-radius: 12px; }
+    .text-link-light:focus-visible,
+    .fairband a:focus-visible { outline: 3px solid var(--lime); outline-offset: 3px; }
+
+    /* --- The primary CTA gradient starts on flat coral, which is 3.45:1
+       under a white label. Start it a step darker so it clears 4.5:1. --- */
+    .btn-primary { background: linear-gradient(125deg, var(--coral-dark) 0%, var(--coral-deep) 100%); }
+
+    /* --- Gradient-clipped text disappears in forced-colors mode. --- */
+    @media (forced-colors: active) {
+      .stat,
+      .hero-copy h1 em { background: none; -webkit-text-fill-color: currentColor; color: CanvasText; }
+    }
+
+    /* --- Illustrative-data label, required on every drawn mock that
+       shows a number. Sits a step darker than --muted: it is a
+       required disclosure, not a caption. --- */
+    .mock-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(41,41,76,.04);
+      color: rgba(41,41,76,.75);
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* --- Every digit run on the page --- */
+    .hub-hero .metric-inline b,
+    .hub-hero .metric-value,
+    .prow-score b,
+    .cm-kpi b,
+    .cm-bal b,
+    .connect-row span:last-child,
+    .result-card .stat { font-variant-numeric: tabular-nums; }
+
+    /* ============================================================
+       S1 HERO
+       The hub converts on next-click, so the first row of section 1
+       must be reachable in one scroll flick on a 1366x768 laptop.
+       This is the only page in the set that overrides --hero-h.
+       ============================================================ */
+    .hub-hero { min-height: auto; }
+    .hub-hero .hero-grid { grid-template-columns: 1.02fr .98fr; padding: 40px 0 26px; }
+    .hub-hero .hero-copy .lead { max-width: 560px; }
+    .hub-hero .dash { box-shadow: 0 30px 74px rgba(41,41,76,.18); }
+    /* Three long KPI labels in one row: the default flex min-width:auto
+       stops the cells shrinking and pushes the third one out of the card
+       on a 375px screen. */
+    .hub-hero .metric-inline span { min-width: 0; }
+    .hub-hero .metric-inline i { font-size: .5rem; line-height: 1.35; }
+    .hub-hero .chart svg polyline { fill: none; stroke: var(--mint-dark); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    .hub-hero .chart svg polygon { fill: rgba(65,216,180,.14); }
+
+    /* Employee app: Challenges tab. Sub-tabs and challenge rows.
+       Same shape as the [TEAM] page's .pseg / .prows. */
+    .pseg { display: flex; gap: 4px; margin: 11px 11px 0; padding: 3px; border-radius: 9px; background: rgba(41,41,76,.07); }
+    .pseg span { flex: 1; padding: 5px 0; border-radius: 7px; text-align: center; color: var(--muted); font-size: .52rem; font-weight: 800; }
+    .pseg span.on { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(41,41,76,.14); }
+    .prows { display: grid; gap: 6px; padding: 11px 11px 0; }
+    .prow { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; gap: 8px; align-items: center; padding: 7px 8px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+    .prow-art { width: 26px; height: 26px; border-radius: 8px; background: linear-gradient(135deg, #26594e, #3ccaa6); }
+    .prow:nth-child(2) .prow-art { background: linear-gradient(135deg, var(--coral), var(--coral-deep)); }
+    .prow:nth-child(3) .prow-art { background: linear-gradient(135deg, rgba(41,41,76,.72), var(--ink)); }
+    .prow b { display: block; font-size: .54rem; line-height: 1.25; letter-spacing: -.01em; }
+    .prow small { display: block; margin-top: 1px; color: var(--muted); font-size: .46rem; font-weight: 600; }
+    .prow-score { text-align: right; }
+    .prow-score b { font-size: .5rem; letter-spacing: -.01em; white-space: nowrap; }
+    .pbar { padding: 8px 11px 0; }
+    .pbar .progress-label { margin-top: 0; color: var(--muted); font-size: .5rem; font-weight: 700; }
+    .pbar .progress { background: rgba(41,41,76,.12); }
+    .pbar .progress i { background: var(--mint-dark); }
+    .phone .mock-tag { margin: 9px 11px 11px; padding: 2px 6px; font-size: .5rem; letter-spacing: .04em; }
+
+    /* ============================================================
+       S2 SECTION 1: the challenge grid
+       ============================================================ */
+    .run-screen { background: var(--canvas); }
+    .format-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; margin-top: 36px; }
+    .format-card { grid-column: span 2; }
+    .format-card:nth-child(4), .format-card:nth-child(5) { grid-column: span 3; }
+    .format-card {
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+      color: inherit;
+      text-decoration: none;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .format-card:hover { transform: translateY(-3px); border-color: rgba(41,41,76,.22); box-shadow: var(--shadow-soft); }
+    .format-glyph { display: grid; align-items: end; height: 46px; margin-bottom: 18px; }
+    .format-glyph svg { width: 74px; height: 44px; display: block; }
+    .fc-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .format-card h3 { display: flex; align-items: center; gap: 8px; font-size: 1.08rem; letter-spacing: -.02em; }
+    .format-card h3 svg { width: 14px; flex: none; color: var(--coral-dark); }
+    .card-flag {
+      flex: none;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--coral);
+      color: #fff;
+      font-size: .55rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .format-card > p { margin-top: 8px; color: var(--muted); font-size: .87rem; line-height: 1.55; }
+    .best-for {
+      display: block;
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .78rem;
+      line-height: 1.5;
+    }
+    .best-for b {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--mint-dark);
+      font-size: .6rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .format-note { margin-top: 22px; color: var(--muted); font-size: .8rem; }
+
+    /* ============================================================
+       S3 SECTION 2: the chain. This page's signature.
+       Three cards on one rail, arrowheads drawn between them, and a
+       dashed return arc that closes the loop back into section 1.
+       ============================================================ */
+    .chain-screen { background: #fff; }
+    .chain {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 34px 1fr 34px 1fr;
+      gap: 0;
+      margin-top: 40px;
+      padding-bottom: 58px;
+    }
+    .chain-link {
+      display: flex;
+      flex-direction: column;
+      padding: 20px 22px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+      color: inherit;
+      text-decoration: none;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .chain-link:hover { transform: translateY(-3px); border-color: rgba(41,41,76,.22); box-shadow: var(--shadow-soft); }
+    /* Fixed 22px head height plus 20px card padding puts every node-dot
+       centre on the same 31px line, so the rail reads as continuous. */
+    .chain-head { display: flex; height: 22px; align-items: center; gap: 10px; }
+    .chain-node { width: 9px; height: 9px; flex: none; border-radius: 50%; }
+    .chain-stage {
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    /* Hue is never the only signal: each pill also carries its word. */
+    .stage-in { background: rgba(65,216,180,.14); color: #128f72; }
+    .stage-out { background: rgba(41,41,76,.07); color: var(--ink); }
+    .stage-act { background: rgba(241,81,98,.10); color: var(--coral-deep); }
+    .node-in { background: var(--mint); }
+    .node-out { background: rgba(41,41,76,.45); }
+    .node-act { background: var(--coral); }
+
+    .chain-link h3 { margin-top: 16px; font-size: 1.08rem; letter-spacing: -.02em; }
+    .chain-link > p { margin-top: 7px; color: var(--muted); font-size: .84rem; line-height: 1.45; }
+
+    .chain-mini {
+      margin-top: 18px;
+      padding: 12px 13px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--canvas);
+    }
+    .cm-head { color: var(--muted); font-size: .62rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .cm-head-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .cm-row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--line); }
+    .cm-row:last-of-type { border-bottom: 0; padding-bottom: 0; }
+    .cm-row b { display: block; font-size: .78rem; letter-spacing: -.01em; }
+    .cm-row b + span { display: block; margin-top: 1px; color: var(--muted); font-size: .7rem; }
+    .cm-check { color: var(--mint-dark); font-size: .8rem; font-weight: 800; }
+    .cm-chip {
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(255,157,87,.16);
+      color: #a05a1e;
+      font-size: .55rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .cm-kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+    .cm-kpi { padding: 8px 9px; border: 1px solid var(--line); border-radius: 9px; background: var(--paper); }
+    .cm-kpi i { display: block; color: var(--muted); font-size: .6rem; font-weight: 700; font-style: normal; letter-spacing: .04em; text-transform: uppercase; line-height: 1.3; }
+    .cm-kpi b { display: block; margin-top: 3px; color: var(--ink); font-size: .95rem; font-weight: 800; letter-spacing: -.02em; }
+    .cm-fine { margin-top: 10px; color: var(--muted); font-size: .66rem; line-height: 1.45; }
+    .cm-bal { display: flex; align-items: baseline; gap: 5px; margin-top: 10px; }
+    .cm-bal b { color: var(--ink); font-size: 1.4rem; font-weight: 800; letter-spacing: -.04em; line-height: 1; }
+    .cm-bal span { color: var(--muted); font-size: .7rem; font-weight: 700; }
+    .cm-redeem {
+      display: block;
+      margin-top: 10px;
+      padding: 7px;
+      border-radius: 9px;
+      background: linear-gradient(125deg, var(--coral-dark) 0%, var(--coral-deep) 100%);
+      color: #fff;
+      text-align: center;
+      font-size: .68rem;
+      font-weight: 800;
+    }
+    .cm-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+    .cm-chips span { padding: 3px 8px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); font-size: .62rem; font-weight: 700; }
+
+    .chain-hand {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: var(--coral-deep);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: -.01em;
+    }
+    .chain-hand svg { width: 13px; height: 13px; flex: none; }
+
+    /* The drawn connection. Its vertical centre lands on the node-dot
+       centre line: 1px card border + 20px padding + half of the 22px
+       head = 32px, so the 12px svg is offset 26px. */
+    .chain-arm { display: flex; align-self: start; margin-top: 26px; align-items: center; justify-content: center; }
+
+    .chain-loop {
+      position: absolute;
+      right: 14%;
+      bottom: 0;
+      left: 14%;
+      height: 44px;
+      border: 2px dashed rgba(241,81,98,.32);
+      border-top: 0;
+      border-radius: 0 0 18px 18px;
+    }
+    .chain-loop-head { position: absolute; top: -1px; left: -7px; }
+    .chain-loop-label {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 15px;
+      transform: translate(-50%, 50%);
+      border: 1px solid rgba(241,81,98,.3);
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--coral-deep);
+      font-size: .74rem;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background .2s ease;
+    }
+    .chain-loop-label:hover { background: rgba(241,81,98,.06); }
+    .chain-caption { margin-top: 26px; color: var(--muted); font-size: .8rem; line-height: 1.55; }
+
+    /* ============================================================
+       S4 FEATURED: the platform
+       ============================================================ */
+    .platform-screen { background: var(--canvas); }
+    .fairband {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 48px;
+      align-items: center;
+      padding: 44px 48px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: linear-gradient(135deg, var(--dark), #2c4249);
+      color: #fff;
+    }
+    .fairband .eyebrow { color: var(--lime); margin-bottom: 12px; }
+    .fairband h2 { font-size: clamp(1.6rem, 2.8vw, 2.3rem); letter-spacing: -.03em; max-width: 460px; }
+    .fairband .lead { margin-top: 14px; color: rgba(255,255,255,.68); font-size: .95rem; max-width: 480px; }
+    .fair-list { display: grid; gap: 14px; margin-top: 26px; }
+    .fair-item { display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: start; }
+    .fair-item i {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      border: 1px solid var(--line-dark);
+      border-radius: 10px;
+      background: rgba(255,255,255,.06);
+      color: var(--mint);
+      font-style: normal;
+    }
+    .fair-item i svg { width: 17px; height: 17px; }
+    .fair-item b { display: block; font-size: .95rem; letter-spacing: -.015em; }
+    .fair-item p { margin-top: 3px; color: rgba(255,255,255,.6); font-size: .82rem; line-height: 1.5; }
+    .fair-fine { margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--line-dark); color: rgba(255,255,255,.62); font-size: .74rem; }
+
+    .connect-card {
+      justify-self: end;
+      width: min(100%, 380px);
+      padding: 20px 22px;
+      border: 1px solid rgba(41,41,76,.1);
+      border-radius: 18px;
+      background: #fff;
+      color: var(--ink);
+      box-shadow: 0 26px 60px rgba(0,0,0,.32);
+    }
+    .connect-card > b { display: block; padding-bottom: 12px; border-bottom: 1px solid var(--line); font-size: .84rem; }
+    .connect-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+    .connect-chips span { padding: 6px 11px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); font-size: .72rem; font-weight: 700; }
+    .connect-rows { margin-top: 14px; padding-top: 4px; border-top: 1px solid var(--line); }
+    .connect-row { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding: 8px 0; font-size: .78rem; }
+    .connect-row span:first-child { color: var(--muted); font-weight: 700; }
+    .connect-row span:last-child { font-weight: 700; }
+    .connect-note { margin-top: 10px; color: var(--muted); font-size: .66rem; line-height: 1.45; }
+
+    /* ============================================================
+       S5 DECISION HELPER
+       ============================================================ */
+    .route-screen { background: #fff; }
+    .route-list { display: grid; gap: 10px; margin-top: 36px; }
+    .route-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 18px;
+      min-height: 44px;
+      padding: 20px 24px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+      color: inherit;
+      text-decoration: none;
+      transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+    }
+    .route-row:hover { transform: translateY(-2px); border-color: rgba(241,81,98,.35); box-shadow: var(--shadow-soft); }
+    .route-row b { display: block; font-size: 1rem; letter-spacing: -.02em; }
+    .route-row p { margin-top: 5px; max-width: 620px; color: var(--muted); font-size: .85rem; line-height: 1.5; }
+    .route-dest {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex: none;
+      padding: 9px 15px;
+      border: 1px solid rgba(241,81,98,.3);
+      border-radius: 999px;
+      background: rgba(241,81,98,.06);
+      color: var(--coral-deep);
+      font-size: .76rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .route-dest svg { width: 13px; flex: none; }
+    .route-note { margin-top: 22px; max-width: 760px; color: var(--muted); font-size: .85rem; line-height: 1.6; }
+    .route-note a { color: var(--coral-dark); font-weight: 800; text-decoration: none; }
+    .route-note a:hover { text-decoration: underline; }
+
+    /* ============================================================
+       S6 PROOF STRIP
+       The full dark .trust-screen band is deliberately absent. Security
+       is answered by the three approved strings in .assure-row, which
+       keeps this the shortest page in the set and holds the page to two
+       dark moments instead of three.
+       ============================================================ */
+    .proof-hub { background: #f6f7f4; }
+    .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 40px; }
+    .result-card { padding: 24px; border: 1px solid var(--line); border-radius: 18px; background: var(--paper); box-shadow: 0 8px 24px rgba(30,38,38,.05); }
+    .result-card .stat {
+      display: block;
+      font-size: 2.9rem;
+      font-weight: 800;
+      letter-spacing: -.055em;
+      line-height: 1;
+      background: linear-gradient(125deg, var(--coral) 15%, var(--coral-deep) 95%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+    }
+    .result-card > p { margin-top: 10px; color: var(--ink); font-size: .87rem; font-weight: 600; line-height: 1.5; }
+    .result-card .segment {
+      display: block; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line);
+      color: var(--muted); font-size: .64rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; line-height: 1.6;
+    }
+    .proof-fine { margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; }
+    .proof-fine small { color: var(--muted); font-size: .68rem; }
+    .proof-fine .text-link { margin-top: 0; font-size: .82rem; }
+
+    .assure-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px 24px;
+      margin-top: 34px;
+      padding-top: 26px;
+      border-top: 1px solid var(--line);
+    }
+    .assure-row > div > b { display: block; font-size: .95rem; letter-spacing: -.02em; }
+    .mark-strip-light { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .mark-strip-light span {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--ink);
+      font-size: .74rem;
+      font-weight: 700;
+    }
+    .mark-strip-light svg { width: 14px; height: 14px; flex: none; color: var(--mint-dark); }
+    .assure-row .text-link { margin-top: 0; font-size: .82rem; }
+
+    /* --- Footer: five columns (brand + Solutions + Features + Resources
+       + Company). enterprise.css ships 1.7fr repeat(3,1fr). --- */
+    .footer-grid { grid-template-columns: 1.5fr repeat(4, 1fr); gap: 32px; }
+
+    /* ============================================================
+       Responsive
+       ============================================================ */
+    @media (max-width: 1100px) {
+      .hub-hero .hero-grid { grid-template-columns: 1fr; }
+      .format-grid { grid-template-columns: 1fr 1fr; }
+      .format-card, .format-card:nth-child(4), .format-card:nth-child(5) { grid-column: auto; }
+      /* The chain unstacks: arms rotate to vertical, the return arc
+         becomes a static full-width row under the last card. */
+      .chain { grid-template-columns: 1fr; padding-bottom: 0; }
+      .chain-arm { align-self: auto; margin: 10px auto; transform: rotate(90deg); }
+      .chain-loop {
+        position: static;
+        height: auto;
+        margin-top: 18px;
+        padding-top: 18px;
+        border: 0;
+        border-top: 2px dashed rgba(241,81,98,.32);
+        display: flex;
+        justify-content: center;
+      }
+      .chain-loop-head { display: none; }
+      /* 44px minimum tap target once this is a touch-width layout. */
+      .chain-loop-label { position: static; min-height: 44px; transform: none; white-space: normal; text-align: center; }
+      .fairband { grid-template-columns: 1fr; gap: 32px; padding: 34px; }
+      .connect-card { justify-self: start; }
+      .footer-grid { grid-template-columns: 1.4fr repeat(2, 1fr); gap: 32px 28px; }
+    }
+    @media (max-width: 860px) {
+      .hub-section { padding: 64px 0; }
+      .results-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+    }
+    @media (max-width: 640px) {
+      .format-grid { grid-template-columns: 1fr; }
+      .format-card, .format-card:nth-child(4), .format-card:nth-child(5) { grid-column: auto; }
+      .route-row { grid-template-columns: 1fr; gap: 14px; }
+      .route-dest { justify-self: start; }
+      .fairband { padding: 26px 22px; }
+      .assure-row { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 560px) {
+      /* The phone drops to 158px here, so the challenge rows give up
+         their third column and the day counter moves under the name. */
+      .prow { grid-template-columns: 22px minmax(0, 1fr); gap: 7px; }
+      .prow-art { width: 22px; height: 22px; }
+      .prow-score { grid-column: 2; margin-top: 2px; text-align: left; }
+      .prow-score b { color: var(--muted); font-size: .46rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#top">Skip to main content</a>
+
+  <!-- ===================== TOP NAV ===================== -->
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="https://www.vantagefit.io/" aria-label="Vantage Fit home">
+        <img src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37" style="height:32px;width:auto;display:block">
+      </a>
+
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+
+      <div class="nav-links" id="nav-links">
+
+        <!-- ---------- SOLUTIONS (signed-off IA: two sections) ---------- -->
+        <div class="nav-item">
+          <button class="nav-trigger is-current" type="button" aria-expanded="false">
+            Solutions
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Solutions menu">
+            <div class="mega-body">
+              <div class="mega-grid cols-2">
+                <div>
+                  <div class="mega-col-title">Wellness challenges: what you want to run</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/wellness-challenges/">Wellness challenges<span>The full library of ready-to-run challenges</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/step-challenges/">Step challenges<span>Company-wide step goals that get everyone moving</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/multi-activity-challenges/">Multi-activity challenges<span>Any activity, solo or in teams, over themed weeks</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/remote-team-wellness/">Remote &amp; hybrid team challenges<span>Wellness that works away from the office</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/virtual-marathon/">Virtual marathon<span>Distance events powered by steps</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Workforce health &amp; rewards: measure and motivate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/health-risk-assessment/">Health Risk Assessment<span>Baseline health screening with aggregate insights</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/workforce-health-insights/">Workforce health insights<span>Participation, challenge and activity analytics your board can read</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/wellness-rewards-program/">Wellness rewards program<span>Points and gift cards tied to real effort</span></a>
+                </div>
+              </div>
+            </div>
+            <div class="mega-foot">
+              <span>The whole product on one page: <strong>Wellness platform</strong></span>
+              <a class="text-link" style="margin-top:0;font-size:.8rem" href="https://www.vantagefit.io/solutions/wellness-platform/">See the platform
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </a>
+            </div>
+            <!-- This page. It is the panel banner, not a .mega-link row:
+                 the hub has no row of its own in the signed-off IA. -->
+            <a class="mega-banner" href="#top" aria-current="page">
+              See every program on one page: the Solutions overview
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- ---------- FEATURES ---------- -->
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Features
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">For employees</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/activity-tracking/">Activity &amp; health tracking<span>Steps, workouts, sleep and more, auto-synced</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/nutrition-and-hydration/">Nutrition &amp; hydration<span>Everyday habits, gently tracked</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/mental-health-and-mindfulness/">Mental wellbeing &amp; mindfulness<span>Sessions, streaks and mood check-ins</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/personalized-programs/">Personalized programs<span>Plans tuned to each employee's goals</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">For HR teams</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/admin-dashboard/">Participation analytics &amp; insights<span>Trends, AI insights and board-ready exports in one console</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/incentivization-and-rewards/">Incentives &amp; rewards<span>Points, badges and a global gift-card catalogue</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/engagement-tools/">Engagement tools &amp; community<span>Group chats, campaigns, streaks and certificates that keep people coming back</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/wellness-leagues/">Wellness leagues<span>Segment by activity level, lift every tier</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Platform</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/integrations/">Integrations<span>Wearables, HRIS, SSO and more</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/security-and-compliance/">Security &amp; compliance<span>Aggregate-only reporting, regional hosting, SOC 2 Type II</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/accessibility/">Accessibility<span>Inclusive across devices, locations and abilities</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/health-data-upload/">Health data upload<span>Turn existing health data into insight</span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---------- RESOURCES ---------- -->
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Resources
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Resources menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">Learn</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/">Blog<span>Ideas and research for healthier workplaces</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/guides/">Reports &amp; research<span>Playbooks and the annual industry report</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/tools-and-templates/">Tools &amp; templates<span>ROI calculator and DIY challenge templates</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/podcasts/">Podcasts<span>Conversations with HR and wellbeing leaders</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Evaluate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/casestudy/">Customer stories<span>Results from real customer programs</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/compare/">Comparisons<span>Vantage Fit vs the alternatives</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/trust-center/">Trust Center<span>Security and privacy documentation in one place</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/">Help Center<span>Product docs and setup guides</span></a>
+                </div>
+                <a class="mega-feature" href="https://www.vantagefit.io/solutions/wellness-challenges/">
+                  <div>
+                    <small>Featured</small>
+                    <b>Wellness Challenges Library</b>
+                    <p>Browse ready-to-run challenges your teams can start this month.</p>
+                  </div>
+                  <span class="go">Explore the library
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top" tabindex="-1">
+
+    <!-- ========================= S1 HERO ========================= -->
+    <header class="hero hub-hero" id="hero" aria-labelledby="hero-heading">
+      <div class="shell hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Solutions</span>
+          <h1 id="hero-heading">Pick the program you want to run. Then <em>see what it moved</em>.</h1>
+          <p class="lead">Every program below runs on the same platform: automatic step tracking, audience-rule enrollment, and one participation number for leadership.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+            <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">See pricing</a>
+          </div>
+          <div class="hero-note">
+            <span>Steps sync from Apple Health and Google Fit</span>
+            <span>No wearable required</span>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <!-- Mock A: the admin Overview. All four KPI labels are the
+               code-verified Overview cards. Values are illustrative. -->
+          <div class="dash" role="img" aria-label="Admin Overview showing 2,480 enrolled users, 1,712 active users, 9,240 dollars of incentivization, a 69 percent participation rate and a rising average step trend. Figures shown are illustrative.">
+            <div class="dash-top" aria-hidden="true">
+              <span class="dash-dot"></span><span class="dash-dot"></span><span class="dash-dot"></span>
+              <span class="dash-url"></span>
+            </div>
+            <div class="dash-body" aria-hidden="true">
+              <div class="dash-title">
+                <div>
+                  <small>Admin · Overview</small>
+                  <strong>All employees · Last 30 days</strong>
+                </div>
+                <span class="mock-tag">Illustrative data</span>
+              </div>
+              <div class="metric-inline">
+                <span><i>ENROLLED USERS</i><b>2,480</b></span>
+                <span><i>ACTIVE USERS</i><b>1,712</b></span>
+                <span><i>INCENTIVIZATION</i><b>$9,240</b></span>
+              </div>
+              <div class="metric-card metric-main">
+                <div class="metric-lab">Participation Rate · last 30 days</div>
+                <div class="metric-value">69%</div>
+                <span class="metric-delta">+7 pts vs previous 30 days</span>
+              </div>
+              <div class="chart-card">
+                <div class="chart-head">
+                  Avg steps
+                  <span class="legend"><i></i> Last 30 days</span>
+                </div>
+                <div class="chart">
+                  <div class="target-line"><span>Goal 8,000</span></div>
+                  <svg viewBox="0 0 300 84" preserveAspectRatio="none">
+                    <polygon points="0,68 50,60 100,54 150,45 200,39 250,27 300,19 300,84 0,84"></polygon>
+                    <polyline points="0,68 50,60 100,54 150,45 200,39 250,27 300,19"></polyline>
+                  </svg>
+                </div>
+                <div class="chart-labels"><span>W1</span><span>W2</span><span>W3</span><span>W4</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mock B: the employee app Challenges tab. Ongoing / Upcoming /
+               Past are the shipped sub-tabs; Race, Custom and Journey are
+               shipped format names. Values are illustrative. -->
+          <div class="phone" role="img" aria-label="Employee app Challenges tab showing three ongoing challenges and today's step progress. Figures shown are illustrative.">
+            <div class="phone-screen">
+              <div class="phone-head" aria-hidden="true">
+                Vantage Fit
+                <span class="avatar"></span>
+              </div>
+              <div class="pseg" aria-hidden="true">
+                <span class="on">Ongoing</span><span>Upcoming</span><span>Past</span>
+              </div>
+              <div class="prows" aria-hidden="true">
+                <div class="prow">
+                  <span class="prow-art"></span>
+                  <span><b>Spring Steps Race</b><small>Race · steps</small></span>
+                  <span class="prow-score"><b>Day 12 of 28</b></span>
+                </div>
+                <div class="prow">
+                  <span class="prow-art"></span>
+                  <span><b>Move, Nourish, Reset</b><small>Custom · themed weeks</small></span>
+                  <span class="prow-score"><b>Week 2 of 4</b></span>
+                </div>
+                <div class="prow">
+                  <span class="prow-art"></span>
+                  <span><b>Everest Run</b><small>Journey · milestones</small></span>
+                  <span class="prow-score"><b>3 of 7</b></span>
+                </div>
+              </div>
+              <div class="pbar" aria-hidden="true">
+                <div class="progress-label"><span>Today</span><span>8,412 / 10,000</span></div>
+                <div class="progress"><i style="width:84%"></i></div>
+              </div>
+              <div class="phone-cta" aria-hidden="true" style="margin-top:11px">View leaderboard</div>
+              <span class="mock-tag">Illustrative data</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="logo-band">
+        <div class="shell logos" role="group" aria-label="Selected customers">
+          <span class="logos-label">Trusted by 100+ organizations worldwide</span>
+          <span class="logo-word">TATA MOTORS</span>
+          <span class="logo-word">WIPRO</span>
+          <span class="logo-word">TEVA</span>
+          <span class="logo-word">GODREJ</span>
+          <span class="logo-word">TEXAS INSTRUMENTS</span>
+          <span class="logo-word">HEIDRICK &amp; STRUGGLES</span>
+          <span class="logo-word">BRAZOSPORT ISD</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============== S2 SECTION 1: WHAT YOU WANT TO RUN ============== -->
+    <section class="hub-section run-screen" id="run" aria-labelledby="run-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Wellness challenges</span>
+          <h2 id="run-heading">Five ways to run a challenge.</h2>
+          <p class="lead">Start with the library if you would rather browse before you decide.</p>
+        </div>
+
+        <div class="format-grid">
+          <!-- Card 1: the library, flagged to match the nav badge. -->
+          <a class="format-card reveal" href="https://www.vantagefit.io/solutions/wellness-challenges/">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44" fill="none">
+                <rect x="4" y="4" width="45" height="25" rx="5" fill="rgba(41,41,76,.06)" stroke="rgba(41,41,76,.16)" stroke-width="1.6"/>
+                <rect x="11" y="10" width="45" height="25" rx="5" fill="#fff" stroke="rgba(41,41,76,.24)" stroke-width="1.6"/>
+                <rect x="18" y="16" width="45" height="25" rx="5" fill="#fff" stroke="rgba(41,41,76,.34)" stroke-width="1.8"/>
+                <path d="M25 25h20M25 32h12" stroke="rgba(41,41,76,.34)" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="56" cy="30" r="4" fill="#41d8b4"/>
+              </svg>
+            </div>
+            <div class="fc-head">
+              <h3>Wellness challenges
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </h3>
+              <span class="card-flag">Library</span>
+            </div>
+            <p>The full library of ready-to-run challenges</p>
+            <span class="best-for"><b>Best for</b>Browsing ready-to-run designs across physical, mental, nutrition, sleep and team.</span>
+          </a>
+
+          <!-- Card 2 -->
+          <a class="format-card reveal" href="https://www.vantagefit.io/solutions/step-challenges/">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44" fill="none">
+                <path d="M4 41h66" stroke="rgba(41,41,76,.16)" stroke-width="2" stroke-linecap="round"/>
+                <rect x="6" y="29" width="10" height="10" rx="3" fill="rgba(41,41,76,.14)"/>
+                <rect x="20" y="23" width="10" height="16" rx="3" fill="rgba(41,41,76,.18)"/>
+                <rect x="34" y="16" width="10" height="23" rx="3" fill="rgba(41,41,76,.24)"/>
+                <rect x="48" y="10" width="10" height="29" rx="3" fill="rgba(41,41,76,.34)"/>
+                <rect x="62" y="4" width="8" height="35" rx="3" fill="#41d8b4"/>
+              </svg>
+            </div>
+            <div class="fc-head">
+              <h3>Step challenges
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </h3>
+            </div>
+            <p>Company-wide step goals that get everyone moving</p>
+            <span class="best-for"><b>Best for</b>The fastest launch and the widest audience you will get.</span>
+          </a>
+
+          <!-- Card 3 -->
+          <a class="format-card reveal" href="https://www.vantagefit.io/solutions/multi-activity-challenges/">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44" fill="none">
+                <rect x="3" y="9" width="14" height="22" rx="4" fill="rgba(41,41,76,.14)"/>
+                <rect x="21" y="9" width="14" height="22" rx="4" fill="rgba(41,41,76,.2)"/>
+                <rect x="39" y="9" width="14" height="22" rx="4" fill="rgba(65,216,180,.4)"/>
+                <rect x="57" y="9" width="14" height="22" rx="4" fill="rgba(41,41,76,.16)"/>
+                <path d="M7 38h6M25 38h6M43 38h6M61 38h6" stroke="rgba(41,41,76,.28)" stroke-width="2" stroke-linecap="round"/>
+                <path d="M43 20h6M46 17v6" stroke="#128f72" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="fc-head">
+              <h3>Multi-activity challenges
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </h3>
+            </div>
+            <p>Any activity, solo or in teams, over themed weeks</p>
+            <span class="best-for"><b>Best for</b>Reaching employees who will never join a step race.</span>
+          </a>
+
+          <!-- Card 4 -->
+          <a class="format-card reveal" href="https://www.vantagefit.io/solutions/remote-team-wellness/">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44" fill="none">
+                <path d="M11 22h52" stroke="rgba(41,41,76,.3)" stroke-width="2" stroke-linecap="round" stroke-dasharray="1 6"/>
+                <circle cx="11" cy="22" r="8" fill="#fff" stroke="rgba(41,41,76,.34)" stroke-width="2"/>
+                <circle cx="37" cy="22" r="8" fill="#fff" stroke="rgba(41,41,76,.34)" stroke-width="2"/>
+                <circle cx="63" cy="22" r="8" fill="#fff" stroke="#41d8b4" stroke-width="2.2"/>
+                <circle cx="11" cy="22" r="2.6" fill="rgba(41,41,76,.34)"/>
+                <circle cx="37" cy="22" r="2.6" fill="rgba(41,41,76,.34)"/>
+                <circle cx="63" cy="22" r="2.6" fill="#128f72"/>
+              </svg>
+            </div>
+            <div class="fc-head">
+              <h3>Remote &amp; hybrid team challenges
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </h3>
+            </div>
+            <p>Wellness that works away from the office</p>
+            <span class="best-for"><b>Best for</b>Teams split across offices, home and time zones.</span>
+          </a>
+
+          <!-- Card 5 -->
+          <a class="format-card reveal" href="https://www.vantagefit.io/solutions/virtual-marathon/">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44" fill="none">
+                <path d="M5 37C13 15 32 6 51 12" stroke="rgba(41,41,76,.28)" stroke-width="2.6" stroke-linecap="round"/>
+                <circle cx="5" cy="37" r="4" fill="rgba(41,41,76,.34)"/>
+                <path d="M55 38V9" stroke="rgba(41,41,76,.34)" stroke-width="2.4" stroke-linecap="round"/>
+                <path d="M56 9h13v9H56z" fill="#F15162"/>
+              </svg>
+            </div>
+            <div class="fc-head">
+              <h3>Virtual marathon
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </h3>
+            </div>
+            <p>Distance events powered by steps</p>
+            <span class="best-for"><b>Best for</b>One flagship event the whole company can enter.</span>
+          </a>
+        </div>
+
+        <p class="format-note">Employees are enrolled by audience rules, so there is no sign-up step to chase.</p>
+      </div>
+    </section>
+
+    <!-- ====== S3 SECTION 2: THE CHAIN. This page's signature. ====== -->
+    <section class="hub-section chain-screen" id="measure" aria-labelledby="measure-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Workforce health &amp; rewards</span>
+          <h2 id="measure-heading">Three pages that run as one loop.</h2>
+          <p class="lead">Health data in, aggregate insight out, rewards that pull people back into the next program.</p>
+        </div>
+
+        <div class="chain" role="group" aria-label="How the three workforce health and rewards pages connect: data in, then data out, then action, looping back into challenges.">
+
+          <!-- Link 1: data in -->
+          <a class="chain-link reveal" href="https://www.vantagefit.io/solutions/health-risk-assessment/">
+            <div class="chain-head">
+              <span class="chain-node node-in" aria-hidden="true"></span>
+              <span class="chain-stage stage-in">Data in</span>
+            </div>
+            <h3>Health Risk Assessment</h3>
+            <p>Baseline health screening with aggregate insights</p>
+            <div class="chain-mini" role="img" aria-label="Panel headed What goes in, listing three inputs: health profile with height, weight and BMI; the Health Risk Assessment with self-reported factors; and lab report upload with biomarkers extracted, marked premium.">
+              <div class="cm-head">What goes in</div>
+              <div class="cm-row">
+                <span><b>Health profile</b><span>Height, weight, BMI</span></span>
+                <span class="cm-check">&#10003;</span>
+              </div>
+              <div class="cm-row">
+                <span><b>Health Risk Assessment</b><span>Self-reported factors</span></span>
+                <span class="cm-check">&#10003;</span>
+              </div>
+              <div class="cm-row">
+                <span><b>Lab report upload</b><span>Biomarkers extracted</span></span>
+                <span class="cm-chip">Premium</span>
+              </div>
+            </div>
+            <span class="chain-hand">Feeds insights
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </span>
+          </a>
+
+          <span class="chain-arm" aria-hidden="true">
+            <svg width="34" height="12" viewBox="0 0 34 12" fill="none">
+              <defs>
+                <linearGradient id="armA" x1="0" y1="0" x2="34" y2="0" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#41d8b4"/>
+                  <stop offset="1" stop-color="#29294c" stop-opacity=".42"/>
+                </linearGradient>
+              </defs>
+              <path d="M0 6h25" stroke="url(#armA)" stroke-width="2" stroke-linecap="round"/>
+              <polyline points="24,2 30,6 24,10" fill="none" stroke="url(#armA)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+
+          <!-- Link 2: data out -->
+          <a class="chain-link reveal" href="https://www.vantagefit.io/solutions/workforce-health-insights/">
+            <div class="chain-head">
+              <span class="chain-node node-out" aria-hidden="true"></span>
+              <span class="chain-stage stage-out">Data out</span>
+            </div>
+            <h3>Workforce health insights</h3>
+            <p>Participation, challenge and activity analytics your board can read</p>
+            <div class="chain-mini" role="img" aria-label="Admin Overview panel showing 2,480 enrolled users, 1,712 active users, 9,240 dollars of incentivization and a 69 percent participation rate, with a note that reporting is aggregate only. Figures shown are illustrative.">
+              <div class="cm-head cm-head-row">
+                <span>Admin · Overview</span>
+                <span class="mock-tag">Illustrative data</span>
+              </div>
+              <div class="cm-kpis">
+                <div class="cm-kpi"><i>Enrolled Users</i><b>2,480</b></div>
+                <div class="cm-kpi"><i>Active Users</i><b>1,712</b></div>
+                <div class="cm-kpi"><i>Incentivization</i><b>$9,240</b></div>
+                <div class="cm-kpi"><i>Participation Rate</i><b>69%</b></div>
+              </div>
+              <p class="cm-fine">Aggregate only. No individual health data.</p>
+            </div>
+            <span class="chain-hand">Proves impact
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </span>
+          </a>
+
+          <span class="chain-arm" aria-hidden="true">
+            <svg width="34" height="12" viewBox="0 0 34 12" fill="none">
+              <defs>
+                <linearGradient id="armB" x1="0" y1="0" x2="34" y2="0" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#29294c" stop-opacity=".42"/>
+                  <stop offset="1" stop-color="#F15162"/>
+                </linearGradient>
+              </defs>
+              <path d="M0 6h25" stroke="url(#armB)" stroke-width="2" stroke-linecap="round"/>
+              <polyline points="24,2 30,6 24,10" fill="none" stroke="url(#armB)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+
+          <!-- Link 3: action -->
+          <a class="chain-link reveal" href="https://www.vantagefit.io/solutions/wellness-rewards-program/">
+            <div class="chain-head">
+              <span class="chain-node node-act" aria-hidden="true"></span>
+              <span class="chain-stage stage-act">Action</span>
+            </div>
+            <h3>Wellness rewards program</h3>
+            <p>Points and gift cards tied to real effort</p>
+            <div class="chain-mini" role="img" aria-label="Vantage Points wallet showing a balance of 1,240 points, a redeem action and gift-card categories including shopping, food and dining and travel. Figures shown are illustrative.">
+              <div class="cm-head cm-head-row">
+                <span>Vantage Points</span>
+                <span class="mock-tag">Illustrative data</span>
+              </div>
+              <div class="cm-bal"><b>1,240</b><span>pts</span></div>
+              <span class="cm-redeem">Redeem points</span>
+              <div class="cm-chips">
+                <span>Shopping</span><span>Food &amp; dining</span><span>Travel</span><span>+ more</span>
+              </div>
+              <p class="cm-fine">Gift cards in 190+ countries, priced for local purchasing power.</p>
+            </div>
+            <span class="chain-hand">Drives behavior
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 5v6h-6"/></svg>
+            </span>
+          </a>
+
+          <!-- The return arm: points send people back into section 1. -->
+          <div class="chain-loop">
+            <span class="chain-loop-head" aria-hidden="true">
+              <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
+                <polyline points="2,8 7,2 12,8" stroke="rgba(241,81,98,.55)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <a class="chain-loop-label" href="https://www.vantagefit.io/solutions/wellness-challenges/">Points send employees back into the next challenge</a>
+          </div>
+        </div>
+
+        <p class="chain-caption">Admins see participation, rankings and team scores. They never see an individual's assessment answers, lab results or mood logs.</p>
+      </div>
+    </section>
+
+    <!-- ================== S4 FEATURED: THE PLATFORM ================== -->
+    <section class="hub-section platform-screen" id="platform" aria-labelledby="platform-heading">
+      <div class="shell">
+        <div class="fairband reveal">
+          <div>
+            <span class="eyebrow">Featured</span>
+            <h2 id="platform-heading">Wellness platform.</h2>
+            <p class="lead">One platform under every program on this page. This is the page to send into a vendor comparison.</p>
+            <div class="fair-list">
+              <div class="fair-item">
+                <i aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2.5-6 4 13L16 12h5"/></svg>
+                </i>
+                <div>
+                  <b>Tracking</b>
+                  <p>Steps, workouts, sleep and 65+ activity types, synced or logged.</p>
+                </div>
+              </div>
+              <div class="fair-item">
+                <i aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="16" rx="3"/><path d="M3.5 9.5h17M8.5 2.5v4M15.5 2.5v4"/><path d="m9 14.5 2 2 4-4"/></svg>
+                </i>
+                <div>
+                  <b>Programs</b>
+                  <p>Nine challenge formats. Five an admin can launch alone.</p>
+                </div>
+              </div>
+              <div class="fair-item">
+                <i aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V5"/><path d="M4 20h16"/><path d="M8 17v-5M13 17V8M18 17v-7"/></svg>
+                </i>
+                <div>
+                  <b>Insight</b>
+                  <p>Participation, challenge and activity analytics, aggregate only.</p>
+                </div>
+              </div>
+              <div class="fair-item">
+                <i aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="11.5" rx="2.5"/><path d="M3 13.5h18M12 9v11.5"/><path d="M12 9S9.5 4 7.2 4.9C5.4 5.6 6.2 9 12 9Zm0 0s2.5-5 4.8-4.1C18.6 5.6 17.8 9 12 9Z"/></svg>
+                </i>
+                <div>
+                  <b>Rewards</b>
+                  <p>Vantage Points, real gift cards, priced for local purchasing power.</p>
+                </div>
+              </div>
+            </div>
+            <p class="fair-fine">People data arrives by CSV, SFTP or HRIS. Sign-in runs on SAML SSO.</p>
+            <a class="text-link text-link-light" href="https://www.vantagefit.io/solutions/wellness-platform/">See the platform
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+
+          <!-- Mock D. No .mock-tag: every figure here is a sourced product
+               fact, not an illustrative one. -->
+          <div class="connect-card" role="img" aria-label="Card listing the device, sign-in and people-data integrations Vantage Fit connects to, plus 13 languages and four data regions.">
+            <b>Connects to</b>
+            <div class="connect-chips" aria-hidden="true">
+              <span>Apple Health</span>
+              <span>Google Fit</span>
+              <span>Fitbit</span>
+              <span>Garmin</span>
+              <span>Apple Watch</span>
+              <span>SAML SSO</span>
+              <span>HRIS sync</span>
+              <span>CSV &amp; SFTP</span>
+            </div>
+            <div class="connect-rows" aria-hidden="true">
+              <div class="connect-row"><span>Languages</span><span>13</span></div>
+              <div class="connect-row"><span>Data regions</span><span>India, US, EU, UAE</span></div>
+            </div>
+            <p class="connect-note" aria-hidden="true">HRIS and SSO are set up with our integration team.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================== S5 DECISION HELPER ================== -->
+    <section class="hub-section route-screen" id="start" aria-labelledby="start-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Not sure where to start</span>
+          <h2 id="start-heading">Route by the goal you were given.</h2>
+          <p class="lead">Four situations we hear most. Each one has a shortest path.</p>
+        </div>
+
+        <div class="route-list">
+          <a class="route-row reveal" href="https://www.vantagefit.io/solutions/step-challenges/">
+            <div>
+              <b>&ldquo;This is our first wellness program.&rdquo;</b>
+              <p>Run a two-week step race. Steps track themselves, so nobody has to learn anything.</p>
+            </div>
+            <span class="route-dest">Step challenges
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </span>
+          </a>
+
+          <a class="route-row reveal" href="https://www.vantagefit.io/solutions/multi-activity-challenges/">
+            <div>
+              <b>&ldquo;Ours stalled after the first month.&rdquo;</b>
+              <p>Give people something to log besides steps: themed weeks, any activity, solo or in teams.</p>
+            </div>
+            <span class="route-dest">Multi-activity challenges
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </span>
+          </a>
+
+          <a class="route-row reveal" href="https://www.vantagefit.io/solutions/remote-team-wellness/">
+            <div>
+              <b>&ldquo;Our people are not in one building.&rdquo;</b>
+              <p>Run one challenge across offices and time zones, with each day resetting at local midnight.</p>
+            </div>
+            <span class="route-dest">Remote &amp; hybrid team challenges
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </span>
+          </a>
+
+          <a class="route-row reveal" href="https://www.vantagefit.io/solutions/workforce-health-insights/">
+            <div>
+              <b>&ldquo;Leadership wants a number, not a story.&rdquo;</b>
+              <p>Start at the reporting and work backwards to the program that produces it.</p>
+            </div>
+            <span class="route-dest">Workforce health insights
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </span>
+          </a>
+        </div>
+
+        <p class="route-note">Need a health baseline before you design anything? Start with the <a href="https://www.vantagefit.io/solutions/health-risk-assessment/">Health Risk Assessment</a>. Want one flagship event instead of a program? Run a <a href="https://www.vantagefit.io/solutions/virtual-marathon/">virtual marathon</a>.</p>
+      </div>
+    </section>
+
+    <!-- ================== S6 PROOF STRIP ================== -->
+    <section class="hub-section proof-hub" id="proof" aria-labelledby="proof-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Proof</span>
+          <h2 id="proof-heading">What these programs have produced.</h2>
+        </div>
+
+        <div class="results-grid">
+          <article class="result-card reveal">
+            <b class="stat">59%</b>
+            <p>engagement rate across plant locations over six months</p>
+            <span class="segment">TATA MOTORS · STEP &amp; STRIDE CHALLENGE<br>1,248 active participants</span>
+          </article>
+          <article class="result-card reveal">
+            <b class="stat">88%</b>
+            <p>engagement rate over 28 days</p>
+            <span class="segment">IBS SOFTWARE · MARCH TO FITNESS<br>500+ active participants of 660 invited</span>
+          </article>
+          <article class="result-card reveal">
+            <b class="stat">3X</b>
+            <p>participation increase, 163 to 550 active users</p>
+            <span class="segment">WIPRO · THREE 2025 CHALLENGES<br>Participants in 30+ countries</span>
+          </article>
+        </div>
+
+        <div class="proof-fine">
+          <small>Results from named customer programs. Outcomes vary by workforce and program design.</small>
+          <a class="text-link" href="https://www.vantagefit.io/casestudy/">Read customer stories
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </a>
+        </div>
+
+        <!-- The full dark trust band is deliberately not on this page.
+             Only these three strings are cleared by the claims gate.
+             Do not add ISO 27001, ISO 27701 or GDPR marks here. -->
+        <div class="assure-row">
+          <div>
+            <b>Employees see their own data. HR sees aggregate trends.</b>
+            <div class="mark-strip-light" role="list">
+              <span role="listitem">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4.5 6v5c0 4.6 3.1 8.3 7.5 10 4.4-1.7 7.5-5.4 7.5-10V6L12 3Z"/><path d="m9 12 2.2 2.2L15.5 9.7"/></svg>
+                Follows HIPAA guidelines
+              </span>
+              <span role="listitem">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 3.5H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9l-5.5-5.5Z"/><path d="M13.5 3.5V9H19"/><path d="m8.8 15 1.9 1.9 3.9-4.1"/></svg>
+                SOC 2 Type II
+              </span>
+              <span role="listitem">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.2 2.4 3.3 5.2 3.3 8.5S14.2 18.1 12 20.5c-2.2-2.4-3.3-5.2-3.3-8.5S9.8 5.9 12 3.5Z"/></svg>
+                Secured regional data hosting
+              </span>
+            </div>
+          </div>
+          <a class="text-link" href="https://www.vantagefit.io/features/security-and-compliance/">See security &amp; compliance
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================== S7 CLOSER ================== -->
+    <section class="final" id="demo" aria-labelledby="demo-heading">
+      <div class="shell">
+        <h2 id="demo-heading">Bring us your headcount. We will shape the program.</h2>
+        <p>In a 30-minute demo we will pick the format for your workforce, walk the employee app, and show the participation reporting your leadership will see.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+          <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">See pricing</a>
+        </div>
+        <div class="final-checks">
+          <span>Launch in minutes</span>
+          <span>No wearable required</span>
+          <span>No obligation</span>
+        </div>
+        <div class="final-note">Turn participation into progress.</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <!-- No aria-current in the Solutions column: the hub is not listed
+       there. The column starts at Wellness platform, per the IA. -->
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="#top">
+            <img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37" style="height:28px;width:auto;display:block">
+          </a>
+          <p class="footer-about">Inclusive wellness that turns participation into measurable progress. A Vantage Circle product.</p>
+        </div>
+
+        <div>
+          <div class="footer-title">Solutions</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/solutions/wellness-platform/">Wellness platform</a>
+            <a href="https://www.vantagefit.io/solutions/wellness-challenges/">Wellness challenges</a>
+            <a href="https://www.vantagefit.io/solutions/step-challenges/">Step challenges</a>
+            <a href="https://www.vantagefit.io/solutions/multi-activity-challenges/">Multi-activity challenges</a>
+            <a href="https://www.vantagefit.io/solutions/remote-team-wellness/">Remote &amp; hybrid team challenges</a>
+            <a href="https://www.vantagefit.io/solutions/virtual-marathon/">Virtual marathon</a>
+            <a href="https://www.vantagefit.io/solutions/health-risk-assessment/">Health Risk Assessment</a>
+            <a href="https://www.vantagefit.io/solutions/workforce-health-insights/">Workforce health insights</a>
+            <a href="https://www.vantagefit.io/solutions/wellness-rewards-program/">Wellness rewards program</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-title">Features</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/features/activity-tracking/">Activity &amp; health tracking</a>
+            <a href="https://www.vantagefit.io/features/admin-dashboard/">Participation analytics &amp; insights</a>
+            <a href="https://www.vantagefit.io/features/incentivization-and-rewards/">Incentives &amp; rewards</a>
+            <a href="https://www.vantagefit.io/features/engagement-tools/">Engagement tools &amp; community</a>
+            <a href="https://www.vantagefit.io/features/integrations/">Integrations</a>
+            <a href="https://www.vantagefit.io/features/security-and-compliance/">Security &amp; compliance</a>
+            <a href="https://www.vantagefit.io/features/accessibility/">Accessibility</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-title">Resources</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/en/blog/">Blog</a>
+            <a href="https://www.vantagefit.io/casestudy/">Customer stories</a>
+            <a href="https://www.vantagefit.io/compare/">Comparisons</a>
+            <a href="https://www.vantagefit.io/guides/">Reports &amp; research</a>
+            <a href="https://www.vantagefit.io/tools-and-templates/">Tools &amp; templates</a>
+            <a href="https://www.vantagefit.io/trust-center/">Trust Center</a>
+            <a href="https://www.vantagefit.io/en/help/">Help Center</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-title">Company</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/about-us/">About us</a>
+            <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+            <a href="https://www.vantagefit.io/casestudy/">Case studies</a>
+            <a href="https://www.vantagefit.io/request-demo/">Contact sales</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Claims gate: "HIPAA guidelines", never "HIPAA compliant".
+           Do not add ISO or GDPR marks to this line. -->
+      <div class="footer-bottom">
+        <span>© 2026 Vantage Circle. All rights reserved.</span>
+        <span>HIPAA guidelines · SOC 2 Type II</span>
+        <span>Wellness built for participation.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ---------- Mobile nav ----------
+    const menuButton = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation');
+      navLinks.classList.toggle('open', !open);
+    });
+
+    // ---------- Mega-menu behaviour (desktop hover, mobile accordion) ----------
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const navTriggers = [...document.querySelectorAll('.nav-trigger')];
+    const desktopNav = window.matchMedia('(min-width: 861px)');
+    let desktopCloseTimer;
+
+    // The mega opens on hover AND on focus-within, so aria-expanded has to
+    // follow both paths, not only the mobile accordion.
+    const setExpanded = (item, open) => {
+      item.querySelector('.nav-trigger')?.setAttribute('aria-expanded', String(open));
+    };
+
+    const closeDesktopMenus = (except = null) => {
+      navItems.forEach((item) => {
+        if (item !== except) {
+          item.classList.remove('desktop-open');
+          if (!item.contains(document.activeElement)) setExpanded(item, false);
+        }
+      });
+    };
+
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => {
+        if (!desktopNav.matches) return;
+        window.clearTimeout(desktopCloseTimer);
+        closeDesktopMenus(item);
+        item.classList.add('desktop-open');
+        setExpanded(item, true);
+        const focusedTrigger = document.activeElement?.closest?.('.nav-trigger');
+        if (focusedTrigger && !item.contains(focusedTrigger)) focusedTrigger.blur();
+      });
+
+      item.addEventListener('pointerleave', () => {
+        if (!desktopNav.matches) return;
+        desktopCloseTimer = window.setTimeout(() => {
+          if (!item.matches(':hover') && !item.contains(document.activeElement)) {
+            item.classList.remove('desktop-open');
+            setExpanded(item, false);
+          }
+        }, 120);
+      });
+
+      item.addEventListener('focusin', () => {
+        if (desktopNav.matches) setExpanded(item, true);
+      });
+
+      item.addEventListener('focusout', () => {
+        if (!desktopNav.matches) return;
+        window.setTimeout(() => {
+          if (!item.contains(document.activeElement) && !item.matches(':hover')) setExpanded(item, false);
+        }, 0);
+      });
+    });
+
+    // Escape dismisses an open mega and returns focus to its trigger.
+    // WCAG 1.4.13 Dismissible.
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      const active = document.activeElement?.closest?.('.nav-item')
+        || document.querySelector('.nav-item.desktop-open');
+      if (!active) return;
+      active.classList.remove('desktop-open');
+      active.classList.remove('open');
+      active.classList.add('esc-closed');
+      setExpanded(active, false);
+      active.querySelector('.nav-trigger')?.focus();
+    });
+
+    // The panel becomes available again as soon as the user leaves or reopens it.
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => item.classList.remove('esc-closed'));
+      item.addEventListener('focusout', () => {
+        window.setTimeout(() => {
+          if (!item.contains(document.activeElement)) item.classList.remove('esc-closed');
+        }, 0);
+      });
+      item.querySelector('.nav-trigger')?.addEventListener('click', () => item.classList.remove('esc-closed'));
+    });
+
+    document.querySelectorAll('.nav-links > a').forEach((link) => {
+      link.addEventListener('pointerenter', () => {
+        if (desktopNav.matches) closeDesktopMenus();
+      });
+    });
+
+    navTriggers.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (window.matchMedia('(max-width: 860px)').matches) {
+          const item = btn.closest('.nav-item');
+          const isOpen = item.classList.contains('open');
+          document.querySelectorAll('.nav-item').forEach((n) => {
+            n.classList.remove('open');
+            n.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        }
+      });
+    });
+
+    // ---------- Nav CTA: ghost over the hero, filled after ----------
+    (function () {
+      const nav = document.querySelector('nav.nav');
+      const hero = document.querySelector('.hero');
+      if (!nav || !hero) return;
+      const state = () => nav.classList.toggle('lit', window.scrollY > hero.offsetHeight - 90);
+      window.addEventListener('scroll', state, { passive: true });
+      state();
+    })();
+
+    // ---------- Subtle scroll reveal (.reveal -> .reveal.on) ----------
+    (function () {
+      const nodes = document.querySelectorAll('.reveal');
+      if (!nodes.length) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+        nodes.forEach((n) => n.classList.add('on'));
+        return;
+      }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('on');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+      nodes.forEach((n) => io.observe(n));
+    })();
+
+    // ---------- Grayscale preview mode for accessibility review: append ?gray ----------
+    if (new URLSearchParams(location.search).has('gray')) {
+      document.documentElement.style.filter = 'grayscale(1)';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1590 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/enterprise.css">
+  <meta name="description" content="See Org Wellness Score, participation, activity, and challenge adherence in one dashboard. AI insights, drill-downs, and CSV export for program design. Book a demo.">
+  <meta name="theme-color" content="#18262b">
+  <title>Workforce Health Insights for HR | Vantage Fit</title>
+  <style>
+    /* Workforce Health Insights page-scoped styles */
+    .nav-item.is-current .nav-trigger { color: var(--ink); background: var(--soft); }
+
+    .wh-hero {
+      position: relative;
+      overflow: hidden;
+      min-height: calc(100svh - var(--nav-h));
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 52px 0 56px;
+      background:
+        radial-gradient(900px 520px at 88% 8%, rgba(65, 216, 180, .12), transparent 58%),
+        radial-gradient(720px 480px at 4% 96%, rgba(241, 81, 98, .08), transparent 55%),
+        linear-gradient(180deg, #fff 0%, #f5f8f9 100%);
+    }
+    .wh-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.08fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .wh-hero h1 { max-width: 620px; }
+    .wh-hero h1 em {
+      font-style: normal;
+      background: linear-gradient(125deg, var(--coral) 20%, var(--coral-deep) 90%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .wh-hero .lead { max-width: 500px; margin-top: 18px; }
+    .wh-hero .btn-row { margin-top: 26px; }
+    .wh-micro {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: .75rem;
+      font-weight: 650;
+    }
+    .wh-micro span {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .wh-micro span::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--mint);
+      box-shadow: 0 0 0 3px rgba(65, 216, 180, .12);
+      flex: none;
+    }
+
+    /* Admin dashboard mock */
+    .dash-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 560px;
+      margin-left: auto;
+    }
+    .dash-shell {
+      border-radius: 20px;
+      background: #fff;
+      border: 1px solid rgba(41, 41, 76, .1);
+      box-shadow: 0 28px 64px rgba(41, 41, 76, .12), 0 0 0 1px rgba(255,255,255,.6) inset;
+      overflow: hidden;
+    }
+    .dash-chrome {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: #f3f3f7;
+      border-bottom: 1px solid var(--line);
+    }
+    .dash-chrome .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #d0d0dc;
+    }
+    .dash-chrome .dot:nth-child(1) { background: #f5a8b0; }
+    .dash-chrome .dot:nth-child(2) { background: #f6d48a; }
+    .dash-chrome .dot:nth-child(3) { background: #9ee0cf; }
+    .dash-chrome .title {
+      margin-left: 8px;
+      color: var(--muted);
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+    .dash-body {
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      min-height: 420px;
+    }
+    .dash-rail {
+      background: var(--dark);
+      padding: 14px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .dash-rail span {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.08);
+    }
+    .dash-rail span.is-on {
+      background: linear-gradient(135deg, var(--coral), var(--coral-deep));
+      box-shadow: 0 4px 12px rgba(241, 81, 98, .35);
+    }
+    .dash-main { padding: 16px 16px 18px; background: #fafafb; }
+    .dash-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .dash-head b {
+      display: block;
+      font-size: .88rem;
+      letter-spacing: -.02em;
+    }
+    .dash-head em {
+      display: block;
+      margin-top: 2px;
+      font-style: normal;
+      color: var(--muted);
+      font-size: .62rem;
+      font-weight: 600;
+    }
+    .dash-pill {
+      flex: none;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: rgba(65, 216, 180, .14);
+      color: var(--mint-dark);
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .dash-score-row {
+      display: grid;
+      grid-template-columns: 132px 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 14px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid rgba(41, 41, 76, .08);
+      margin-bottom: 12px;
+    }
+    .score-ring {
+      position: relative;
+      width: 112px;
+      height: 112px;
+      margin: 0 auto;
+    }
+    .score-ring svg { width: 112px; height: 112px; transform: rotate(-90deg); }
+    .score-ring .track { fill: none; stroke: #ececf2; stroke-width: 9; }
+    .score-ring .prog {
+      fill: none;
+      stroke: url(#scoreGrad);
+      stroke-width: 9;
+      stroke-linecap: round;
+      stroke-dasharray: 283;
+      stroke-dashoffset: 79;
+    }
+    .score-ring .center-num {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      text-align: center;
+    }
+    .score-ring .center-num strong {
+      display: block;
+      font-size: 1.65rem;
+      letter-spacing: -.04em;
+      line-height: 1;
+      color: var(--ink);
+    }
+    .score-ring .center-num span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: .55rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .comp-bars { display: grid; gap: 9px; }
+    .comp-row {
+      display: grid;
+      grid-template-columns: 78px 1fr 28px;
+      gap: 8px;
+      align-items: center;
+    }
+    .comp-row label {
+      color: var(--muted);
+      font-size: .62rem;
+      font-weight: 700;
+    }
+    .comp-row .bar {
+      height: 7px;
+      border-radius: 999px;
+      background: #ececf2;
+      overflow: hidden;
+    }
+    .comp-row .bar i {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      font-style: normal;
+    }
+    .comp-row .bar i.b { width: 62%; background: linear-gradient(90deg, #6b7cff, #3d4db8); }
+    .comp-row .bar i.p { width: 71%; background: linear-gradient(90deg, var(--mint), #169d7e); }
+    .comp-row .bar i.a { width: 78%; background: linear-gradient(90deg, var(--coral), var(--coral-deep)); }
+    .comp-row .bar i.h { width: 58%; background: linear-gradient(90deg, #F6B93B, #d49214); }
+    .comp-row .val {
+      text-align: right;
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: -.02em;
+    }
+    .insight-list { display: grid; gap: 8px; }
+    .insight-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid rgba(41, 41, 76, .07);
+    }
+    .insight-item .tag {
+      padding: 3px 7px;
+      border-radius: 6px;
+      background: rgba(241, 81, 98, .1);
+      color: var(--coral-deep);
+      font-size: .55rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .insight-item .tag.mint {
+      background: rgba(65, 216, 180, .14);
+      color: var(--mint-dark);
+    }
+    .insight-item .tag.amber {
+      background: rgba(246, 185, 59, .18);
+      color: #a87200;
+    }
+    .insight-item p {
+      margin: 0;
+      color: var(--ink);
+      font-size: .7rem;
+      font-weight: 600;
+      line-height: 1.35;
+      letter-spacing: -.01em;
+    }
+    .dash-caption {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: .68rem;
+      text-align: center;
+    }
+
+    /* Chain */
+    .chain-strip {
+      padding: 22px 0;
+      background: #fff;
+      border-block: 1px solid var(--line);
+    }
+    .chain-inner {
+      display: grid;
+      grid-template-columns: auto repeat(3, 1fr);
+      gap: 12px;
+      align-items: stretch;
+    }
+    .chain-label {
+      max-width: 120px;
+      align-self: center;
+      color: var(--muted);
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      line-height: 1.35;
+    }
+    .chain-card {
+      display: grid;
+      gap: 4px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(41, 41, 76, .08);
+      background: var(--canvas);
+      transition: border-color .2s, box-shadow .2s;
+    }
+    a.chain-card:hover {
+      border-color: rgba(65, 216, 180, .4);
+      box-shadow: var(--shadow-soft);
+    }
+    .chain-card.is-current {
+      background: #fff;
+      border-color: rgba(241, 81, 98, .28);
+      box-shadow: 0 8px 22px rgba(241, 81, 98, .08);
+    }
+    .chain-card .step {
+      color: var(--coral-dark);
+      font-size: .62rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .chain-card b {
+      font-size: .92rem;
+      letter-spacing: -.015em;
+    }
+    .chain-card span {
+      color: var(--muted);
+      font-size: .74rem;
+      line-height: 1.4;
+    }
+
+    /* Score anatomy */
+    .anatomy-screen {
+      min-height: auto;
+      padding: 88px 0;
+      background: var(--canvas);
+    }
+    .anatomy-screen .center { max-width: 700px; margin-inline: auto; }
+    .comp-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 40px;
+    }
+    .comp-card {
+      padding: 22px 18px;
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid rgba(41, 41, 76, .08);
+      box-shadow: 0 8px 24px rgba(41, 41, 76, .04);
+    }
+    .comp-card .w {
+      display: inline-flex;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(65, 216, 180, .12);
+      color: var(--mint-dark);
+      font-size: .65rem;
+      font-weight: 800;
+      letter-spacing: .05em;
+    }
+    .comp-card h3 {
+      margin-top: 12px;
+      font-size: 1.05rem;
+    }
+    .comp-card p {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: .82rem;
+      line-height: 1.5;
+    }
+    .comp-card .act {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      color: var(--ink);
+      font-size: .76rem;
+      font-weight: 650;
+      line-height: 1.4;
+    }
+    .anatomy-note {
+      margin: 24px auto 0;
+      max-width: 720px;
+      text-align: center;
+      color: var(--muted);
+      font-size: .82rem;
+      line-height: 1.5;
+    }
+
+    /* AI insights section */
+    .ai-screen {
+      min-height: auto;
+      padding: 88px 0;
+      background: #fff;
+    }
+    .ai-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 48px;
+      align-items: center;
+      margin-top: 12px;
+    }
+    .ai-stream { display: grid; gap: 10px; }
+    .ai-card {
+      padding: 16px 18px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: var(--canvas);
+    }
+    .ai-card .meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .ai-card .meta span {
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(241, 81, 98, .1);
+      color: var(--coral-deep);
+      font-size: .62rem;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .ai-card .meta em {
+      font-style: normal;
+      color: var(--muted);
+      font-size: .68rem;
+      font-weight: 600;
+    }
+    .ai-card p {
+      margin: 0;
+      font-size: .9rem;
+      font-weight: 650;
+      letter-spacing: -.01em;
+      line-height: 1.4;
+    }
+    .ai-foot {
+      margin-top: 22px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: #eef9f6;
+      color: var(--mint-dark);
+      font-size: .84rem;
+      font-weight: 650;
+      line-height: 1.45;
+    }
+
+    /* Unified lenses */
+    .lenses-screen {
+      min-height: auto;
+      padding: 88px 0;
+      background: var(--canvas);
+    }
+    .lenses-screen .center { max-width: 700px; margin-inline: auto; }
+    .lens-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 40px;
+    }
+    .lens-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      padding: 22px 20px;
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid rgba(41, 41, 76, .08);
+    }
+    .lens-card .icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: .72rem;
+      font-weight: 800;
+      color: #fff;
+      flex: none;
+    }
+    .lens-card .icon.p { background: linear-gradient(135deg, var(--mint), #169d7e); }
+    .lens-card .icon.a { background: linear-gradient(135deg, var(--coral), var(--coral-deep)); }
+    .lens-card .icon.c { background: linear-gradient(135deg, #F6B93B, #d49214); }
+    .lens-card .icon.b { background: linear-gradient(135deg, #6b7cff, #3d4db8); }
+    .lens-card h3 { font-size: 1.05rem; }
+    .lens-card p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: .84rem;
+      line-height: 1.5;
+    }
+
+    /* Drill-down */
+    .drill-screen {
+      min-height: auto;
+      padding: 88px 0;
+      background: #fff;
+    }
+    .drill-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+      margin-top: 12px;
+    }
+    .drill-list {
+      list-style: none;
+      margin: 28px 0 0;
+      padding: 0;
+      display: grid;
+      gap: 0;
+    }
+    .drill-list li {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .drill-list li:last-child { border-bottom: 0; }
+    .drill-list .n {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: var(--canvas);
+      border: 1px solid var(--line);
+      color: var(--coral-dark);
+      font-size: .72rem;
+      font-weight: 800;
+    }
+    .drill-list b {
+      display: block;
+      font-size: .95rem;
+      letter-spacing: -.01em;
+    }
+    .drill-list p {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: .82rem;
+      line-height: 1.45;
+    }
+    .table-mock {
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .table-mock .tm-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 16px;
+      background: var(--canvas);
+      border-bottom: 1px solid var(--line);
+    }
+    .table-mock .tm-head b { font-size: .84rem; }
+    .table-mock .tm-head span {
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--dark);
+      color: #fff;
+      font-size: .65rem;
+      font-weight: 700;
+    }
+    .table-mock table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .74rem;
+    }
+    .table-mock th {
+      text-align: left;
+      padding: 10px 12px;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: .62rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--line);
+    }
+    .table-mock td {
+      padding: 11px 12px;
+      border-bottom: 1px solid rgba(41, 41, 76, .06);
+      font-weight: 600;
+    }
+    .table-mock tr:last-child td { border-bottom: 0; }
+    .table-mock .score-cell {
+      font-weight: 800;
+      letter-spacing: -.02em;
+    }
+    .table-mock .score-cell.hi { color: var(--mint-dark); }
+    .table-mock .score-cell.mid { color: #a87200; }
+    .table-mock .score-cell.lo { color: var(--coral-deep); }
+    .table-cap {
+      padding: 10px 14px;
+      color: var(--muted);
+      font-size: .68rem;
+      border-top: 1px solid var(--line);
+      background: #fafafb;
+    }
+    .drill-callout {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: #fff5f6;
+      border: 1px solid rgba(241, 81, 98, .15);
+      color: var(--ink);
+      font-size: .8rem;
+      line-height: 1.5;
+      font-weight: 600;
+    }
+    .drill-callout strong { color: var(--coral-deep); }
+
+    /* Privacy */
+    .privacy-screen {
+      min-height: auto;
+      padding: 88px 0;
+      background: var(--canvas);
+    }
+    .privacy-screen .center { max-width: 700px; margin-inline: auto; }
+    .privacy-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 40px;
+    }
+    .privacy-card {
+      padding: 24px 20px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+    .privacy-card .n {
+      color: var(--coral-dark);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+    }
+    .privacy-card h3 {
+      margin-top: 10px;
+      font-size: 1.05rem;
+    }
+    .privacy-card p {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: .86rem;
+      line-height: 1.5;
+    }
+
+    /* HR ops */
+    .hr-screen {
+      min-height: auto;
+      padding: 88px 0;
+      background: #fff;
+    }
+    .hr-screen .center { max-width: 680px; margin-inline: auto; }
+    .hr-steps {
+      list-style: none;
+      margin: 36px 0 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+    .hr-steps li {
+      padding: 18px 16px;
+      border-radius: 16px;
+      background: var(--canvas);
+      border: 1px solid rgba(41, 41, 76, .07);
+    }
+    .hr-steps .num {
+      display: inline-grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--coral-dark);
+      font-size: .72rem;
+      font-weight: 800;
+    }
+    .hr-steps b {
+      display: block;
+      margin-top: 12px;
+      font-size: .9rem;
+      letter-spacing: -.01em;
+    }
+    .hr-steps p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: .78rem;
+      line-height: 1.45;
+    }
+
+    /* FAQ */
+    .faq-screen {
+      min-height: auto;
+      padding: 88px 0;
+      background: var(--canvas);
+    }
+    .faq-screen .center { max-width: 640px; margin-inline: auto; }
+    .faq-list {
+      max-width: 760px;
+      margin: 36px auto 0;
+      display: grid;
+      gap: 10px;
+    }
+    .faq-item {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      overflow: hidden;
+    }
+    .faq-item summary {
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 20px;
+      font-size: .95rem;
+      font-weight: 700;
+      letter-spacing: -.01em;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after {
+      content: "+";
+      flex: none;
+      color: var(--coral-dark);
+      font-size: 1.2rem;
+      font-weight: 500;
+      line-height: 1;
+    }
+    .faq-item[open] summary::after { content: "-"; }
+    .faq-item summary:focus-visible {
+      outline: 2px solid var(--coral);
+      outline-offset: -2px;
+    }
+    .faq-item .ans {
+      padding: 0 20px 18px;
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.55;
+    }
+
+    /* Related + trust + final */
+    .related {
+      padding: 22px 0;
+      background: #fff;
+      border-block: 1px solid var(--line);
+    }
+    .related-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 12px;
+    }
+    .related-label {
+      color: var(--muted);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-right: 4px;
+    }
+    .related a {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      font-size: .8rem;
+      font-weight: 700;
+    }
+    .related a:hover { border-color: rgba(41, 41, 76, .28); }
+
+    .trust-band {
+      padding: 72px 0;
+      background: var(--dark);
+      color: #fff;
+    }
+    .trust-band .eyebrow { color: var(--lime); }
+    .trust-band h2 { color: #fff; max-width: 640px; }
+    .trust-band .lead {
+      color: rgba(255, 255, 255, .68);
+      max-width: 560px;
+    }
+    .trust-certs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+    .trust-certs span {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, .16);
+      background: rgba(255, 255, 255, .06);
+      font-size: .78rem;
+      font-weight: 700;
+    }
+    .trust-band .btn-row { margin-top: 28px; }
+    .trust-band .btn-outline {
+      border-color: rgba(255, 255, 255, .28);
+      color: #fff;
+    }
+    .trust-band .btn-outline:hover { background: rgba(255, 255, 255, .1); }
+
+    .final {
+      padding: 72px 0 88px;
+      background: linear-gradient(180deg, #1D2228 0%, #15191e 100%);
+      color: #fff;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, .08);
+    }
+    .final h2 {
+      color: #fff;
+      max-width: 720px;
+      margin-inline: auto;
+    }
+    .final p {
+      margin: 16px auto 0;
+      max-width: 540px;
+      color: rgba(255, 255, 255, .68);
+      font-size: 1.02rem;
+      line-height: 1.55;
+    }
+    .final .btn-row { justify-content: center; margin-top: 28px; }
+    .final .btn-outline {
+      border-color: rgba(255, 255, 255, .28);
+      color: #fff;
+    }
+    .final-checks {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px 18px;
+      margin-top: 28px;
+      color: rgba(255, 255, 255, .6);
+      font-size: .78rem;
+      font-weight: 650;
+    }
+    .final-checks span {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .final-checks span::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--mint);
+    }
+    .final-note {
+      margin-top: 18px;
+      color: rgba(255, 255, 255, .45);
+      font-size: .78rem;
+    }
+
+    @media (max-width: 1100px) {
+      .wh-hero-grid { grid-template-columns: 1fr; gap: 32px; }
+      .dash-wrap { max-width: 520px; margin-inline: auto; }
+      .comp-grid { grid-template-columns: 1fr 1fr; }
+      .ai-layout, .drill-layout { grid-template-columns: 1fr; gap: 28px; }
+      .privacy-grid { grid-template-columns: 1fr; }
+      .hr-steps { grid-template-columns: 1fr 1fr; }
+      .chain-inner { grid-template-columns: 1fr 1fr; }
+      .chain-label { max-width: none; grid-column: 1 / -1; }
+    }
+    @media (max-width: 860px) {
+      .wh-hero { min-height: auto; padding: 36px 0 40px; }
+      .anatomy-screen, .ai-screen, .lenses-screen, .drill-screen, .privacy-screen, .hr-screen, .faq-screen { padding: 64px 0; }
+      .comp-grid, .lens-grid { grid-template-columns: 1fr; }
+      .chain-inner { grid-template-columns: 1fr; }
+      .hr-steps { grid-template-columns: 1fr; }
+      .dash-score-row { grid-template-columns: 1fr; justify-items: center; }
+      .comp-bars { width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      a.chain-card:hover { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="../styled-homepage/index.html" aria-label="Vantage Fit home">
+        <img src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37" style="height:32px;width:auto;display:block">
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="nav-links" id="nav-links">
+        <div class="nav-item is-current">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Solutions
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Solutions menu">
+            <div class="mega-body">
+              <div class="mega-grid cols-2">
+                <div>
+                  <div class="mega-col-title">Wellness challenges</div>
+                  <a class="mega-link" href="vantage-fit-wellness-challenges-v1.html">Challenges library<span>Browse programs by goal and format</span></a>
+                  <a class="mega-link" href="vantage-fit-steps-challenge-v1.html">Step challenges<span>Company-wide step goals that get everyone moving</span></a>
+                  <a class="mega-link" href="vantage-fit-multi-activity-challenge-v1.html">Multi-activity challenges<span>Custom challenges across any mix of activities</span></a>
+                  <a class="mega-link" href="vantage-fit-team-challenge-v1.html">Team challenges<span>Departments and squads, competing together</span></a>
+                  <a class="mega-link" href="vantage-fit-virtual-marathon-v1.html">Virtual marathon<span>Distance programs without race-day logistics</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Workforce health &amp; rewards</div>
+                  <a class="mega-link" href="vantage-fit-health-risk-assessment-v1.html">Health Risk Assessment<span>Data in · baseline screening for the score</span></a>
+                  <a class="mega-link" href="#top" aria-current="page">Workforce health insights<span>Data out · board-readable program analytics</span></a>
+                  <a class="mega-link" href="vantage-fit-wellness-rewards-v1.html">Wellness rewards program<span>Action · points tied to real effort</span></a>
+                  <a class="mega-link" href="vantage-fit-wellness-platform-v1.html">Wellness platform<span>How Vantage Fit works as a system</span></a>
+                  <a class="mega-link" href="vantage-fit-solutions-hub-v1.html">All solutions<span>Choose the right entry point</span></a>
+                </div>
+              </div>
+            </div>
+            <a class="mega-banner" href="https://www.vantagefit.io/request-demo/">
+              Book a demo: see Org Wellness Score with your leadership lens
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Features
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu">
+            <div class="mega-body">
+              <div class="mega-grid cols-2">
+                <div>
+                  <div class="mega-col-title">For employees</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/activity-tracking/">Activity &amp; health tracking<span>Steps, habits, mindfulness, and more</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/engagement-tools/">Teams &amp; leaderboards<span>Competition with privacy controls</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/incentivization-and-rewards/">Rewards<span>Points that redeem for gift cards</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">For HR teams</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/admin-dashboard/">Admin dashboard<span>Participation, trends, and challenge health</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/program-builder/">Program builder<span>Launch multi-activity challenges</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/security-and-compliance/">Security &amp; compliance<span>HIPAA, SOC 2, GDPR, ISO</span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Resources
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Resources menu">
+            <div class="mega-body">
+              <div class="mega-grid cols-2">
+                <div>
+                  <div class="mega-col-title">Learn</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/">Blog</a>
+                  <a class="mega-link" href="vantage-fit-wellness-challenges-v1.html">Challenges library</a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/">Help Center</a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Evaluate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/casestudy/">Customer stories</a>
+                  <a class="mega-link" href="https://www.vantagefit.io/compare/">Compare platforms</a>
+                  <a class="mega-link" href="https://www.vantagefit.io/pricing/">Pricing</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <!-- S1 Hero -->
+    <header class="wh-hero" aria-labelledby="hero-heading">
+      <div class="shell wh-hero-grid">
+        <div>
+          <span class="eyebrow">Solutions · Workforce health insights · Data out</span>
+          <h1 id="hero-heading">Workforce health insights your <em>board</em> can read.</h1>
+          <p class="lead">One Org Wellness Score (0-100), four explainable components, and AI observations that turn participation, activity, and challenge data into program decisions. Built for HR leadership reporting, not clinical surveillance.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+            <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">See pricing</a>
+          </div>
+          <div class="wh-micro" aria-label="Key benefits">
+            <span>Org Wellness Score</span>
+            <span>AI streamed insights</span>
+            <span>Drill-down + CSV export</span>
+          </div>
+        </div>
+
+        <div class="dash-wrap">
+          <div class="dash-shell" role="img" aria-label="Illustrative Workforce Health admin dashboard with Org Wellness Score, four component bars, and AI insight stream">
+            <div class="dash-chrome" aria-hidden="true">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              <span class="title">Admin · Workforce Health</span>
+            </div>
+            <div class="dash-body">
+              <div class="dash-rail" aria-hidden="true">
+                <span></span><span class="is-on"></span><span></span><span></span><span></span>
+              </div>
+              <div class="dash-main">
+                <div class="dash-head">
+                  <div>
+                    <b>Workforce Health</b>
+                    <em>Figures as of yesterday · illustrative</em>
+                  </div>
+                  <span class="dash-pill">Org view</span>
+                </div>
+                <div class="dash-score-row">
+                  <div class="score-ring">
+                    <svg viewBox="0 0 112 112" aria-hidden="true">
+                      <defs>
+                        <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                          <stop offset="0%" stop-color="#41d8b4"/>
+                          <stop offset="100%" stop-color="#F15162"/>
+                        </linearGradient>
+                      </defs>
+                      <circle class="track" cx="56" cy="56" r="45"/>
+                      <circle class="prog" cx="56" cy="56" r="45"/>
+                    </svg>
+                    <div class="center-num">
+                      <strong>72</strong>
+                      <span>Org score</span>
+                    </div>
+                  </div>
+                  <div class="comp-bars" aria-hidden="true">
+                    <div class="comp-row">
+                      <label>Baseline 20%</label>
+                      <div class="bar"><i class="b"></i></div>
+                      <span class="val">62</span>
+                    </div>
+                    <div class="comp-row">
+                      <label>Particip. 30%</label>
+                      <div class="bar"><i class="p"></i></div>
+                      <span class="val">71</span>
+                    </div>
+                    <div class="comp-row">
+                      <label>Activity 30%</label>
+                      <div class="bar"><i class="a"></i></div>
+                      <span class="val">78</span>
+                    </div>
+                    <div class="comp-row">
+                      <label>Adherence 20%</label>
+                      <div class="bar"><i class="h"></i></div>
+                      <span class="val">58</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="insight-list" aria-hidden="true">
+                  <div class="insight-item">
+                    <span class="tag">Watch</span>
+                    <p>Participation down vs last week in two departments</p>
+                  </div>
+                  <div class="insight-item">
+                    <span class="tag amber">Pattern</span>
+                    <p>Engineering: high Activity, low Adherence</p>
+                  </div>
+                  <div class="insight-item">
+                    <span class="tag mint">Signal</span>
+                    <p>Monday strongest; Friday engagement softens</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="dash-caption">Illustrative UI · Org Wellness Score, four components, streamed insights</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- S2 Chain -->
+    <section class="chain-strip" aria-label="Workforce health data chain">
+      <div class="shell chain-inner">
+        <div class="chain-label">Workforce health &amp; rewards</div>
+        <a class="chain-card" href="vantage-fit-health-risk-assessment-v1.html">
+          <span class="step">1 · Data in</span>
+          <b>Health Risk Assessment</b>
+          <span>Baseline screening that feeds 20% of the Org Score</span>
+        </a>
+        <div class="chain-card is-current" aria-current="page">
+          <span class="step">2 · Data out</span>
+          <b>Workforce health insights</b>
+          <span>Score, AI insights, and program analytics leadership can read</span>
+        </div>
+        <a class="chain-card" href="vantage-fit-wellness-rewards-v1.html">
+          <span class="step">3 · Action</span>
+          <b>Wellness rewards</b>
+          <span>Points and redemptions tied to real effort</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- S3 Score anatomy -->
+    <section class="screen anatomy-screen" id="score" aria-labelledby="score-heading">
+      <div class="shell">
+        <div class="center">
+          <span class="eyebrow">Org Wellness Score</span>
+          <h2 id="score-heading">One number. Four levers you can pull.</h2>
+          <p class="lead">The Org Wellness Score is a weighted blend of health baseline and daily behavior. Diagnose which component moved, then design the next challenge or communication.</p>
+        </div>
+
+        <div class="comp-grid">
+          <article class="comp-card">
+            <span class="w">20% weight</span>
+            <h3>Baseline</h3>
+            <p>Health fundamentals from the Health Risk Assessment: BMI, blood pressure, chronic conditions, and lifestyle factors.</p>
+            <div class="act">When weak: drive HRA completion and pair with annual check-up programs.</div>
+          </article>
+          <article class="comp-card">
+            <span class="w">30% weight</span>
+            <h3>Participation</h3>
+            <p>Daily engagement. Are employees opening the app, logging activities, and joining challenges?</p>
+            <div class="act">When weak: reminders, simpler entry challenges, broader audience rules.</div>
+          </article>
+          <article class="comp-card">
+            <span class="w">30% weight</span>
+            <h3>Activity</h3>
+            <p>Physical effort and improvement over time: steps, workouts, calories, and personal trends.</p>
+            <div class="act">When weak: Race or movement challenges that raise effort without excluding beginners.</div>
+          </article>
+          <article class="comp-card">
+            <span class="w">20% weight</span>
+            <h3>Adherence</h3>
+            <p>Challenge compliance. Are people completing assigned tasks and maintaining habits they committed to?</p>
+            <div class="act">When weak: Streaks, habit tasks, and clearer multi-week commitments.</div>
+          </article>
+        </div>
+        <p class="anatomy-note">A balanced profile is healthier than a high score driven by one pillar. Review monthly. Daily noise is not a strategy.</p>
+      </div>
+    </section>
+
+    <!-- S4 AI insights -->
+    <section class="screen ai-screen" id="insights" aria-labelledby="insights-heading">
+      <div class="shell ai-layout">
+        <div>
+          <span class="eyebrow">Streamed insights</span>
+          <h2 id="insights-heading">Spot the pattern before the quarter ends.</h2>
+          <p class="lead">AI-generated observations stream from your wellness data so program managers act without building a manual analysis deck.</p>
+          <p class="ai-foot">Insights cue action. You still launch challenges, communications, and rewards based on what you see.</p>
+        </div>
+        <div class="ai-stream" aria-label="Example streamed insights, illustrative">
+          <article class="ai-card">
+            <div class="meta"><span>Participation</span><em>Illustrative</em></div>
+            <p>Participation dropped versus last week in two departments. Consider a mid-program nudge.</p>
+          </article>
+          <article class="ai-card">
+            <div class="meta"><span style="background:rgba(246,185,59,.18);color:#a87200">Department</span><em>Illustrative</em></div>
+            <p>Engineering shows the highest Activity score and the lowest Adherence. Habit tasks may fit better than pure volume goals.</p>
+          </article>
+          <article class="ai-card">
+            <div class="meta"><span style="background:rgba(65,216,180,.14);color:#169d7e">Weekday</span><em>Illustrative</em></div>
+            <p>Monday is your strongest engagement day. Friday softens. Time communications for early week.</p>
+          </article>
+          <article class="ai-card">
+            <div class="meta"><span>Coverage</span><em>Illustrative</em></div>
+            <p>Three departments have no active challenge participants this month.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- S5 Unified lenses -->
+    <section class="screen lenses-screen" id="lenses" aria-labelledby="lenses-heading">
+      <div class="shell">
+        <div class="center">
+          <span class="eyebrow">One analytics story</span>
+          <h2 id="lenses-heading">Participation, challenges, and activity in one place.</h2>
+          <p class="lead">Stop hopping across three reports to answer one leadership question. Workforce Health unifies the lenses that drive the Org Score.</p>
+        </div>
+        <div class="lens-grid">
+          <article class="lens-card">
+            <div class="icon p" aria-hidden="true">P</div>
+            <div>
+              <h3>Participation</h3>
+              <p>Who is showing up daily, who joined, and who has gone dormant. The engagement spine leadership asks for first.</p>
+            </div>
+          </article>
+          <article class="lens-card">
+            <div class="icon a" aria-hidden="true">A</div>
+            <div>
+              <h3>Activity</h3>
+              <p>Effort trends over time: steps, workouts, calories, and improvement versus personal baselines.</p>
+            </div>
+          </article>
+          <article class="lens-card">
+            <div class="icon c" aria-hidden="true">C</div>
+            <div>
+              <h3>Challenge health</h3>
+              <p>Adherence to tasks and habits in live programs. See whether people finish what they started.</p>
+            </div>
+          </article>
+          <article class="lens-card">
+            <div class="icon b" aria-hidden="true">B</div>
+            <div>
+              <h3>Baseline signal</h3>
+              <p>Aggregate HRA fundamentals that feed the score. Complements, not replaces, clinical partners.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- S6 Drill-down -->
+    <section class="screen drill-screen" id="drill-down" aria-labelledby="drill-heading">
+      <div class="shell drill-layout">
+        <div>
+          <span class="eyebrow">From board pack to program detail</span>
+          <h2 id="drill-heading">Drill down without losing the plot.</h2>
+          <p class="lead">Start with the Org Score, then open the segment that needs attention. Export when stakeholders want the underlying table.</p>
+          <ul class="drill-list">
+            <li>
+              <span class="n">1</span>
+              <div>
+                <b>Department, team, location</b>
+                <p>Compare scores across structure. Target weak areas with challenges or communications.</p>
+              </div>
+            </li>
+            <li>
+              <span class="n">2</span>
+              <div>
+                <b>Employee wellness list</b>
+                <p>Individual scores with the four component breakdowns for program design, not performance cases.</p>
+              </div>
+            </li>
+            <li>
+              <span class="n">3</span>
+              <div>
+                <b>Weekly and monthly trends</b>
+                <p>Tell the quarterly story: is the program working, and which lever moved?</p>
+              </div>
+            </li>
+            <li>
+              <span class="n">4</span>
+              <div>
+                <b>CSV export</b>
+                <p>Download scores and standard admin reports for leadership packs and audits.</p>
+              </div>
+            </li>
+          </ul>
+          <p class="drill-callout"><strong>Use policy:</strong> Employee-level scores support aggregate analysis and better program design. They are not for performance evaluation or HR discipline.</p>
+        </div>
+
+        <div class="table-mock" aria-label="Illustrative department wellness comparison table">
+          <div class="tm-head">
+            <b>Department comparison</b>
+            <span>Export CSV</span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Department</th>
+                <th>Score</th>
+                <th>Particip.</th>
+                <th>Activity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Operations</td>
+                <td class="score-cell hi">81</td>
+                <td>84</td>
+                <td>79</td>
+              </tr>
+              <tr>
+                <td>Sales</td>
+                <td class="score-cell mid">64</td>
+                <td>58</td>
+                <td>70</td>
+              </tr>
+              <tr>
+                <td>Engineering</td>
+                <td class="score-cell mid">69</td>
+                <td>62</td>
+                <td>86</td>
+              </tr>
+              <tr>
+                <td>Finance</td>
+                <td class="score-cell lo">54</td>
+                <td>49</td>
+                <td>57</td>
+              </tr>
+              <tr>
+                <td>Customer Success</td>
+                <td class="score-cell hi">76</td>
+                <td>78</td>
+                <td>74</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="table-cap">Illustrative data for layout only. Not a customer metric.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S7 Privacy + activation -->
+    <section class="screen privacy-screen" id="privacy" aria-labelledby="privacy-heading">
+      <div class="shell">
+        <div class="center">
+          <span class="eyebrow">Trust and access</span>
+          <h2 id="privacy-heading">Insights for program design. Not performance management.</h2>
+          <p class="lead">Workforce Health is built so leadership can measure program health without turning personal wellbeing into open surveillance.</p>
+        </div>
+        <div class="privacy-grid">
+          <article class="privacy-card">
+            <div class="n">01</div>
+            <h3>Program design use</h3>
+            <p>Individual wellness scores exist for aggregate analysis and targeted interventions. Use them to improve programs, not to evaluate people.</p>
+          </article>
+          <article class="privacy-card">
+            <div class="n">02</div>
+            <h3>Aggregate lab insights</h3>
+            <p>When lab reports are enabled, HR sees anonymized prevalence patterns. Employees keep private access to their own biomarkers.</p>
+          </article>
+          <article class="privacy-card">
+            <div class="n">03</div>
+            <h3>Account manager activation</h3>
+            <p>Workforce Health is enabled by your Vantage Fit account manager. Plan two to four weeks of data for a stable baseline score.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- S8 How HR runs it -->
+    <section class="screen hr-screen" id="for-hr" aria-labelledby="hr-heading">
+      <div class="shell">
+        <div class="center">
+          <span class="eyebrow">How HR runs it</span>
+          <h2 id="hr-heading">From activation to board pack.</h2>
+          <p class="lead">A simple monthly rhythm keeps the Org Score useful without turning analytics into busywork.</p>
+        </div>
+        <ol class="hr-steps">
+          <li>
+            <span class="num">1</span>
+            <b>Activate</b>
+            <p>Ask your account manager to enable Workforce Health. Pair HRA for meaningful Baseline.</p>
+          </li>
+          <li>
+            <span class="num">2</span>
+            <b>Review monthly</b>
+            <p>Read the Org Score and component bars. Ignore day-to-day noise.</p>
+          </li>
+          <li>
+            <span class="num">3</span>
+            <b>Diagnose</b>
+            <p>Use streamed insights and segment views to find the weak lever.</p>
+          </li>
+          <li>
+            <span class="num">4</span>
+            <b>Act</b>
+            <p>Launch or retarget challenges and rewards against Participation, Activity, or Adherence.</p>
+          </li>
+          <li>
+            <span class="num">5</span>
+            <b>Export</b>
+            <p>CSV for leadership packs, quarterly wellness reports, and program ROI conversations.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- S9 FAQ -->
+    <section class="screen faq-screen" id="faq" aria-labelledby="faq-heading">
+      <div class="shell">
+        <div class="center">
+          <span class="eyebrow">Questions HR asks first</span>
+          <h2 id="faq-heading">Straight answers before the demo.</h2>
+        </div>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>Is Workforce Health available on every plan out of the box?</summary>
+            <div class="ans">Not as a silent self-serve toggle for every company. Your Vantage Fit account manager activates Workforce Health / Org Wellness Score for your organization. Once enabled, data begins accumulating immediately.</div>
+          </details>
+          <details class="faq-item">
+            <summary>Can we use wellness scores for performance or promotion decisions?</summary>
+            <div class="ans">No. Individual wellness scores are intended for aggregate program analysis and targeted interventions. Use the data to improve program design, not for HR decisions about specific employees.</div>
+          </details>
+          <details class="faq-item">
+            <summary>Do we need the Health Risk Assessment for the score to work?</summary>
+            <div class="ans">The score can run without HRA, but Baseline (20%) is less meaningful without it. Product defaults Baseline to a neutral value when HRA is missing. Enable HRA alongside Workforce Health for a fuller picture.</div>
+          </details>
+          <details class="faq-item">
+            <summary>Is this three separate products for participation, challenges, and activity?</summary>
+            <div class="ans">No. This Solutions page is one unified data-out story. Workforce Health combines those lenses into Org Score components, insights, and drill-downs. Standard Reports (enrollment, leaderboards, transactions) remain available for operational audits.</div>
+          </details>
+          <details class="faq-item">
+            <summary>Can HR see individual lab values from health check-ups?</summary>
+            <div class="ans">No. When lab upload is enabled, admins see aggregate, anonymized insights. Employees retain private access to their own reports and biomarker breakdowns.</div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related -->
+    <div class="related" aria-label="Related solutions">
+      <div class="shell related-inner">
+        <span class="related-label">Related</span>
+        <a href="vantage-fit-health-risk-assessment-v1.html">Health Risk Assessment</a>
+        <a href="vantage-fit-wellness-rewards-v1.html">Wellness rewards</a>
+        <a href="vantage-fit-wellness-challenges-v1.html">Challenges library</a>
+        <a href="vantage-fit-wellness-platform-v1.html">Wellness platform</a>
+        <a href="vantage-fit-solutions-hub-v1.html">Solutions hub</a>
+      </div>
+    </div>
+
+    <!-- S10 Trust + CTA -->
+    <section id="security" aria-labelledby="security-heading">
+      <div class="trust-band">
+        <div class="shell">
+          <span class="eyebrow">Enterprise security</span>
+          <h2 id="security-heading">Leadership visibility with clear privacy boundaries.</h2>
+          <p class="lead">Measure program health without turning personal logs into open surveillance. Compliance documentation available during evaluation.</p>
+          <div class="trust-certs" aria-label="Compliance certifications">
+            <span>HIPAA</span>
+            <span>SOC 2</span>
+            <span>GDPR</span>
+            <span>ISO 27001</span>
+            <span>ISO 27701</span>
+          </div>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+            <a class="btn btn-outline" href="https://www.vantagefit.io/features/security-and-compliance/">Explore security</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="final" id="demo" aria-labelledby="demo-heading">
+        <div class="shell">
+          <h2 id="demo-heading">Ready to show leadership a workforce health score they can act on?</h2>
+          <p>See Org Wellness Score, component breakdowns, AI insights, and export workflows in a 30-minute walkthrough with your account team.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+            <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">See pricing</a>
+          </div>
+          <div class="final-checks">
+            <span>Org Wellness Score</span>
+            <span>AI insights</span>
+            <span>Drill-down + CSV</span>
+            <span>Privacy-aware design</span>
+          </div>
+          <div class="final-note">Data out for program design. Not performance management.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../styled-homepage/index.html">
+            <img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37" style="height:28px;width:auto;display:block">
+          </a>
+          <p class="footer-about">Inclusive wellness that turns participation into measurable progress.</p>
+        </div>
+        <div>
+          <div class="footer-title">Product</div>
+          <div class="footer-links">
+            <a href="#for-hr">How HR runs it</a>
+            <a href="https://www.vantagefit.io/features/admin-dashboard/">HR analytics</a>
+            <a href="https://www.vantagefit.io/features/security-and-compliance/">Security</a>
+            <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Solutions</div>
+          <div class="footer-links">
+            <a href="#top">Workforce health insights</a>
+            <a href="vantage-fit-health-risk-assessment-v1.html">Health Risk Assessment</a>
+            <a href="vantage-fit-wellness-rewards-v1.html">Wellness rewards</a>
+            <a href="vantage-fit-wellness-challenges-v1.html">Challenges library</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Company</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/about-us/">About</a>
+            <a href="https://www.vantagefit.io/casestudy/">Case studies</a>
+            <a href="https://www.vantagefit.io/request-demo/">Contact sales</a>
+            <a href="vantage-fit-solutions-hub-v1.html">Solutions hub</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Vantage Circle. All rights reserved.</span>
+        <span>HIPAA · SOC 2 · GDPR · ISO 27001 · ISO 27701</span>
+        <span>Wellness built for participation.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuButton = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation');
+      navLinks.classList.toggle('open', !open);
+    });
+
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const navTriggers = [...document.querySelectorAll('.nav-trigger')];
+    const desktopNav = window.matchMedia('(min-width: 861px)');
+    let desktopCloseTimer;
+
+    const closeDesktopMenus = (except = null) => {
+      navItems.forEach((item) => {
+        if (item !== except) item.classList.remove('desktop-open');
+      });
+    };
+
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => {
+        if (!desktopNav.matches) return;
+        window.clearTimeout(desktopCloseTimer);
+        closeDesktopMenus(item);
+        item.classList.add('desktop-open');
+      });
+      item.addEventListener('pointerleave', () => {
+        if (!desktopNav.matches) return;
+        desktopCloseTimer = window.setTimeout(() => {
+          if (!item.matches(':hover') && !item.contains(document.activeElement)) {
+            item.classList.remove('desktop-open');
+          }
+        }, 120);
+      });
+    });
+
+    document.querySelectorAll('.nav-links > a').forEach((link) => {
+      link.addEventListener('pointerenter', () => {
+        if (desktopNav.matches) closeDesktopMenus();
+      });
+    });
+
+    navTriggers.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        if (window.matchMedia('(max-width: 860px)').matches) {
+          e.preventDefault();
+          const item = btn.closest('.nav-item');
+          const isOpen = item.classList.contains('open');
+          document.querySelectorAll('.nav-item').forEach((n) => {
+            n.classList.remove('open');
+            n.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

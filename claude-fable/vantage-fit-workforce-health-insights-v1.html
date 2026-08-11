@@ -1,0 +1,2119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Unshipped preview mock. Do not remove. -->
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="description" content="See participation, challenge and activity analytics in one admin console. Aggregate by design, with CSV exports your board can read. Book a demo.">
+  <meta name="theme-color" content="#18262b">
+  <title>Workforce Health Insights for HR | Vantage Fit</title>
+
+  <link rel="canonical" href="https://www.vantagefit.io/solutions/workforce-health-insights/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Workforce Health Insights for HR | Vantage Fit">
+  <meta property="og:description" content="Participation, challenge and activity analytics in one admin console, aggregate by design.">
+  <meta property="og:image" content="https://www.vantagefit.io/og/workforce-health-insights.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="stylesheet" href="../styles/enterprise.css">
+
+  <style>
+    /* ============================================================
+       WORKFORCE HEALTH INSIGHTS solutions page.
+       Tokens, buttons, hero frame, .dash, .chart, trust band and
+       .final all come from ../styles/enterprise.css.
+
+       NEW on this page and on no sibling: the .console family
+       (.console, .console-chrome, .console-side, .console-tabs,
+       .console-pane and every kpi- / er- / lb- / ag- / ws- / lg- /
+       hd- child), plus .ledger, .dim-row/.dim-chip, .seg-case,
+       .report-list, .limit-row, .chain-row, .ra-* .
+
+       Copied per the design system because enterprise.css does not
+       ship them: .format-card family, .fairband, .audit-board,
+       .employee-cols/.join-point, .results-grid/.result-card,
+       .quote-band, .solutions-trust overrides, .mark-strip, .faq-*,
+       .related-*. All page-local; a sibling page redeclares its own.
+       ============================================================ */
+
+    /* --- Nav: Solutions is the current section, this is the current page --- */
+    .nav-trigger.is-current { background: var(--soft); color: var(--ink); box-shadow: inset 0 -2px 0 var(--coral); border-radius: 9px 9px 0 0; }
+    .mega a.mega-link.is-page { background: var(--soft); box-shadow: inset 3px 0 0 var(--coral); }
+    /* Escape closes a mega even while focus stays on its trigger. */
+    .nav-item.esc-closed .mega { display: none; }
+
+    /* --- Shared section shells (hub vocabulary) --- */
+    .hub-section { padding: 96px 0; }
+    .hub-head { max-width: 720px; }
+    .hub-head .lead { margin-top: 14px; }
+    .format-note { margin-top: 22px; color: var(--muted); font-size: .8rem; line-height: 1.55; }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s cubic-bezier(.22,.9,.24,1); }
+    .reveal.on { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+    /* --- Skip link: the nav carries three mega menus. WCAG 2.4.1. --- */
+    .skip-link { position: absolute; left: -9999px; }
+    .skip-link:focus {
+      left: 16px; top: 12px; z-index: 60;
+      padding: 10px 16px; border-radius: 10px;
+      background: var(--ink); color: #fff; font-weight: 700;
+      outline: 3px solid var(--coral-dark); outline-offset: 2px;
+    }
+
+    /* --- Contrast lifts on inherited small-text rules. Flag upstream. --- */
+    .logos-label { color: rgba(41,41,76,.72); }
+    .logo-word { color: rgba(41,41,76,.78); }
+    .solutions-trust .trust-plaque .trust-support { color: rgba(255,255,255,.62); }
+    /* .eyebrow is --coral-dark, AA on white but not on tinted grounds. */
+    .console-screen .eyebrow,
+    .privacy-screen .eyebrow,
+    .exports-screen .eyebrow,
+    .proof-hub .eyebrow,
+    .related-screen .eyebrow { color: var(--coral-deep); }
+
+    /* --- Focus visibility. The inherited ring is invisible on white. --- */
+    .console-tabs button:focus-visible,
+    .lb-subtab:focus-visible { outline: 3px solid var(--coral-dark); outline-offset: 2px; border-radius: 8px; }
+
+    /* --- Flat coral under a white label is 3.45:1. Start a step darker. --- */
+    .btn-primary { background: linear-gradient(125deg, var(--coral-dark) 0%, var(--coral-deep) 100%); }
+
+    /* --- Gradient-clipped text disappears in forced-colors mode. --- */
+    @media (forced-colors: active) {
+      .stat,
+      .hero-copy h1 em { background: none; -webkit-text-fill-color: currentColor; color: CanvasText; }
+    }
+
+    /* --- Illustrative-data label, required on every drawn mock --- */
+    .mock-tag {
+      display: inline-flex; align-items: center;
+      padding: 3px 8px;
+      border: 1px solid var(--line); border-radius: 999px;
+      background: rgba(41,41,76,.04);
+      color: rgba(41,41,76,.75);
+      font-size: .58rem; font-weight: 800; letter-spacing: .1em;
+      text-transform: uppercase; white-space: nowrap;
+    }
+
+    /* ============================================================
+       S1 HERO: compact .dash plus one floating export chip.
+       No phone on this page. The subject is the admin console.
+       ============================================================ */
+    .insights-hero .hero-grid { grid-template-columns: 1.04fr .96fr; }
+    .insights-hero .hero-copy .lead { max-width: 560px; }
+    .insights-hero .hero-visual { min-height: 470px; }
+    .insights-hero .hero-copy .text-link { margin-top: 18px; }
+    .insights-hero .hero-note { margin-top: 22px; }
+    .insights-hero .dash { width: min(100%, 470px); box-shadow: 0 30px 74px rgba(41,41,76,.18); }
+    /* The shipped .dash-url is an empty pill; this page prints the real host. */
+    .insights-hero .dash-url {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: auto; height: auto; padding: 3px 12px;
+      color: var(--muted); font-size: .55rem; font-weight: 700; letter-spacing: .02em;
+    }
+    .insights-hero .chart svg polyline { fill: none; stroke: var(--mint-dark); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    .insights-hero .chart svg polygon { fill: rgba(65,216,180,.14); }
+    .insights-hero .target-line { top: 30%; }
+    /* .hc2 ships top-right; this page floats it bottom-right as an export receipt. */
+    .insights-hero .hero-chip.hc2 {
+      right: -8px; top: auto; bottom: 4%;
+      display: block; padding: 13px 17px; max-width: 220px;
+    }
+    .hc-lab { display: block; color: var(--muted); font-size: .62rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .hc-file { display: block; margin-top: 4px; color: var(--ink); font-size: .86rem; font-weight: 700; letter-spacing: -.01em; }
+    .hc-rows { display: flex; align-items: center; gap: 6px; margin-top: 5px; color: var(--mint-dark); font-size: .66rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .hc-rows svg { width: 12px; height: 12px; flex: none; }
+
+    /* ============================================================
+       S2 THE THREE QUESTIONS: format-card shape, 3-up
+       ============================================================ */
+    .questions-screen { background: #fff; }
+    .format-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 36px; }
+    .format-card {
+      display: flex; flex-direction: column;
+      padding: 24px;
+      border: 1px solid var(--line); border-radius: 18px;
+      background: var(--paper);
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .format-card:hover { transform: translateY(-3px); border-color: rgba(41,41,76,.22); box-shadow: var(--shadow-soft); }
+    .format-glyph { display: grid; align-items: end; height: 46px; margin-bottom: 18px; }
+    .format-glyph svg { width: 74px; height: 44px; display: block; }
+    .format-card h3 { font-size: 1.08rem; letter-spacing: -.02em; }
+    .format-card > p { margin-top: 8px; color: var(--muted); font-size: .87rem; line-height: 1.55; }
+    .best-for {
+      display: block; margin-top: auto; padding-top: 16px;
+      border-top: 1px solid var(--line);
+      color: var(--muted); font-size: .78rem; line-height: 1.5;
+    }
+    .best-for b {
+      display: block; margin-bottom: 2px;
+      color: var(--mint-dark); font-size: .6rem; font-weight: 800;
+      letter-spacing: .12em; text-transform: uppercase;
+    }
+
+    /* ============================================================
+       S3 THE CONSOLE: the page-defining mock. No sibling uses it.
+       ============================================================ */
+    .console-screen { background: var(--canvas); }
+    .console {
+      max-width: 1100px;
+      margin: 40px auto 0;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--paper);
+      box-shadow: 0 30px 76px rgba(41,41,76,.13);
+      overflow: hidden;
+    }
+    .console-chrome {
+      display: flex; align-items: center; gap: 8px;
+      padding: 11px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfbfc;
+    }
+    .console-chrome i { width: 8px; height: 8px; border-radius: 50%; background: #e4e4ea; flex: none; }
+    .console-chrome .cc-url {
+      display: flex; align-items: center; justify-content: center;
+      width: 46%; min-height: 16px; margin-left: 8px;
+      border-radius: 999px; background: #ececed;
+      color: var(--muted); font-size: .6rem; font-weight: 600;
+    }
+    .console-body { display: grid; grid-template-columns: 196px 1fr; }
+    .console-side { border-right: 1px solid var(--line); background: #fcfcfd; padding: 18px 12px; }
+    .cs-group { margin-top: 16px; color: var(--muted); font-size: .6rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; padding: 0 10px 6px; }
+    .cs-group:first-child { margin-top: 0; }
+    .cs-row { display: flex; align-items: center; gap: 7px; padding: 7px 10px; border-radius: 8px; color: var(--muted); font-size: .775rem; font-weight: 600; }
+    .cs-row.is-on { background: var(--soft); box-shadow: inset 2px 0 0 var(--coral); color: var(--ink); }
+    .cs-row.is-sub { margin-left: 12px; padding-right: 4px; font-size: .73rem; gap: 6px; white-space: nowrap; }
+    .cs-row svg { width: 11px; height: 11px; flex: none; color: rgba(41,41,76,.38); }
+    .cs-new { margin-left: auto; padding: 1px 5px; border-radius: 999px; background: rgba(65,216,180,.18); color: #0f7a61; font-size: .46rem; font-weight: 800; letter-spacing: .08em; }
+
+    .console-main { padding: 20px 22px 24px; min-width: 0; }
+    .console-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .cf-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cf-chip {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 6px 11px;
+      border: 1px solid var(--line); border-radius: 999px;
+      background: #fff;
+      font-size: .72rem; font-weight: 600;
+    }
+    .cf-chip svg { width: 8px; height: 8px; color: var(--muted); flex: none; }
+    .cf-right { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+    .console-asof { color: var(--muted); font-size: .64rem; font-weight: 600; }
+
+    .console-tabs { position: relative; display: flex; border-bottom: 1px solid var(--line); margin-top: 14px; }
+    .console-tabs button {
+      flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      min-height: 44px; padding: 11px 8px;
+      border: 0; background: transparent; cursor: pointer;
+      color: var(--muted); font: inherit; font-size: .82rem; font-weight: 700;
+    }
+    .console-tabs button[aria-selected="true"] { color: var(--ink); }
+    .console-thumb {
+      position: absolute; bottom: -1px; left: 0; height: 2px; width: calc(100% / 3);
+      background: var(--coral);
+      transition: transform .22s cubic-bezier(.22,.9,.24,1);
+    }
+    .console-tabs.i1 .console-thumb { transform: translateX(100%); }
+    .console-tabs.i2 .console-thumb { transform: translateX(200%); }
+    @media (prefers-reduced-motion: reduce) { .console-thumb { transition: none; } }
+    .tab-chip {
+      padding: 2px 7px; border-radius: 999px;
+      background: rgba(246,185,59,.18); color: #8a5a06;
+      font-size: .55rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    }
+    .console-pane { padding-top: 18px; }
+    .console-note {
+      margin-top: 14px; padding-top: 12px;
+      border-top: 1px solid var(--line);
+      color: var(--muted); font-size: .68rem; line-height: 1.55;
+    }
+    .console-note.is-def {
+      margin-top: 10px; padding: 10px 0 10px 12px;
+      border-top: 0; border-left: 2px solid rgba(246,185,59,.55);
+    }
+
+    /* --- Pane 1: KPI row + Employee Report --- */
+    .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .kpi-card { padding: 14px; border: 1px solid var(--line); border-radius: 15px; background: #fff; min-width: 0; }
+    .kpi-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+    .kpi-head b { font-size: .68rem; font-weight: 750; }
+    .kpi-more { color: var(--coral-dark); font-size: .6rem; font-weight: 700; white-space: nowrap; }
+    .kpi-val { margin-top: 8px; font-size: 1.42rem; font-weight: 800; letter-spacing: -.045em; line-height: 1; font-variant-numeric: tabular-nums; }
+    .kpi-delta { display: inline-flex; align-items: center; gap: 5px; margin-top: 7px; }
+    .kpi-delta b { padding: 2px 7px; border-radius: 999px; background: rgba(20,123,100,.1); color: var(--mint-dark); font-size: .6rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .kpi-delta span { color: var(--muted); font-size: .58rem; font-weight: 600; }
+    .kpi-extra { display: block; margin-top: 5px; color: var(--muted); font-size: .58rem; font-variant-numeric: tabular-nums; }
+    .kpi-spark { display: block; width: 100%; height: 26px; margin-top: 8px; }
+    .kpi-spark polyline { fill: none; stroke: var(--mint-dark); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .kpi-spark polygon { fill: rgba(65,216,180,.12); }
+
+    .er { margin-top: 14px; border: 1px solid var(--line); border-radius: 15px; background: #fff; overflow: hidden; }
+    .er-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding: 13px 15px; border-bottom: 1px solid var(--line); }
+    .er-title b { display: block; font-size: .82rem; }
+    .er-title span { display: block; margin-top: 2px; color: var(--muted); font-size: .66rem; }
+    .er-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-left: auto; }
+    .er-search, .er-sel {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 10px; border: 1px solid var(--line); border-radius: 999px;
+      background: #fbfbfc; color: var(--muted); font-size: .64rem; font-weight: 600;
+    }
+    .er-search svg, .er-sel svg { width: 9px; height: 9px; flex: none; }
+    .er-export { padding: 6px 12px; border-radius: 9px; background: linear-gradient(125deg, var(--coral-dark) 0%, var(--coral-deep) 100%); color: #fff; font-size: .64rem; font-weight: 800; }
+    .er-scroll { overflow-x: auto; }
+    .er-table { min-width: 560px; }
+    .er-cols, .er-row { display: grid; grid-template-columns: 1.05fr .82fr .95fr .8fr .72fr; gap: 10px; align-items: center; padding: 10px 15px; }
+    .er-cols { border-bottom: 1px solid var(--line); background: #fcfcfd; color: var(--muted); font-size: .6rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .er-row { border-bottom: 1px solid var(--line); font-size: .76rem; }
+    .er-row:last-child { border-bottom: 0; }
+    .er-row b { font-weight: 700; }
+    .er-row span { color: var(--muted); }
+    .er-date { font-variant-numeric: tabular-nums; }
+    .st { display: inline-flex; padding: 3px 9px; border-radius: 999px; font-size: .6rem; font-style: normal; font-weight: 800; letter-spacing: .04em; }
+    .st-active { background: rgba(65,216,180,.16); color: #128f72; }
+    .st-inactive { background: rgba(246,185,59,.20); color: #8a5a06; }
+    .st-dormant { background: rgba(41,41,76,.07); color: rgba(41,41,76,.7); }
+
+    /* --- Pane 2: challenge header + leaderboard with one expanded row --- */
+    .ch-card { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 14px 15px; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
+    .ch-art { position: relative; width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #26594e, #3ccaa6); overflow: hidden; flex: none; }
+    .ch-art::before { content: ""; position: absolute; top: -14px; right: -12px; width: 44px; height: 44px; border: 2px solid rgba(255,255,255,.5); border-radius: 50%; }
+    .ch-meta b { display: block; font-size: .88rem; letter-spacing: -.02em; }
+    .ch-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+    .ch-pill { padding: 2px 8px; border-radius: 999px; background: rgba(41,41,76,.07); color: rgba(41,41,76,.7); font-size: .58rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+    .ch-pill.is-type { background: transparent; border: 1px solid var(--line); color: var(--muted); }
+    .ch-hero { margin-left: auto; text-align: right; }
+    .ch-hero b { display: block; color: #128f72; font-size: 1.02rem; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+    .ch-hero span { display: block; margin-top: 2px; color: var(--muted); font-size: .62rem; font-weight: 700; }
+    .ch-foot { display: flex; flex-wrap: wrap; gap: 6px 16px; width: 100%; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: .68rem; font-variant-numeric: tabular-nums; }
+
+    .lb { margin-top: 12px; border: 1px solid var(--line); border-radius: 15px; background: #fff; overflow: hidden; }
+    .lb-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 4px 15px; border-bottom: 1px solid var(--line); }
+    .lb-subtabs { display: flex; gap: 4px; }
+    .lb-subtab { padding: 11px 10px; color: var(--muted); font-size: .72rem; font-weight: 700; }
+    .lb-subtab.is-on { color: var(--ink); box-shadow: inset 0 -2px 0 var(--coral); }
+    .board-pill { margin-left: auto; padding: 4px 10px; border-radius: 999px; background: rgba(41,41,76,.06); color: rgba(41,41,76,.7); font-size: .62rem; font-weight: 700; }
+    .lb-scroll { overflow-x: auto; }
+    .lb-table { min-width: 520px; }
+    .lb-cols, .lb-row { display: grid; grid-template-columns: 36px 1fr 76px 132px; gap: 10px; align-items: center; padding: 10px 15px; }
+    .lb-cols { border-bottom: 1px solid var(--line); background: #fcfcfd; color: var(--muted); font-size: .6rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .lb-row { border-bottom: 1px solid var(--line); font-size: .78rem; }
+    .lb-rank { color: var(--muted); font-size: .72rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .lb-name { font-weight: 700; display: flex; align-items: center; gap: 7px; }
+    .lb-name svg { width: 10px; height: 10px; color: var(--coral-dark); flex: none; }
+    .lb-score { font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+    .lb-dept { color: var(--muted); }
+    .lb-row.is-open { background: rgba(41,41,76,.02); border-bottom: 0; }
+
+    .lb-panel { margin: 0 15px 14px; padding: 15px 16px; border-radius: 12px; background: var(--soft); }
+    .lb-split { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .lb-subhead { display: block; color: var(--muted); font-size: .6rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .lb-task { display: grid; grid-template-columns: 1fr 52px auto; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(41,41,76,.08); font-size: .74rem; }
+    .lb-task b { font-weight: 700; font-variant-numeric: tabular-nums; text-align: right; }
+    .lb-total { display: grid; grid-template-columns: 1fr 52px; gap: 10px; padding: 9px 0 0; font-size: .76rem; font-weight: 800; }
+    .lb-total b { text-align: right; font-variant-numeric: tabular-nums; }
+    .tk { display: inline-flex; padding: 2px 8px; border-radius: 999px; font-size: .56rem; font-style: normal; font-weight: 800; letter-spacing: .04em; white-space: nowrap; }
+    .tk-done { background: rgba(65,216,180,.16); color: #128f72; }
+    .tk-part { background: rgba(246,185,59,.20); color: #8a5a06; }
+    .lb-week { display: grid; grid-template-columns: 52px 1fr 44px; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(41,41,76,.08); font-size: .74rem; }
+    .lb-week i { display: block; height: 7px; border-radius: 999px; background: rgba(41,41,76,.10); }
+    .lb-week i em { display: block; height: 7px; border-radius: 999px; background: var(--mint-dark); }
+    .lb-week b { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+    /* --- Pane 3: At a Glance + wellness score + leagues + health domains --- */
+    .ag-head { display: flex; align-items: baseline; gap: 10px; }
+    .ag-head b { font-size: .82rem; }
+    .ag-head span { color: var(--muted); font-size: .66rem; font-weight: 700; }
+    .ag-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
+    .ag-card { padding: 12px 13px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+    .ag-icon { display: grid; width: 26px; height: 26px; place-items: center; border-radius: 8px; background: rgba(41,41,76,.05); color: rgba(41,41,76,.55); }
+    .ag-icon svg { width: 15px; height: 15px; }
+    .ag-lab { display: block; margin-top: 9px; color: var(--muted); font-size: .62rem; font-weight: 750; }
+    .ag-val { display: block; margin-top: 3px; font-size: 1.02rem; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+    .ag-val em { font-style: normal; color: var(--muted); font-size: .62rem; font-weight: 700; letter-spacing: 0; }
+    .ag-spark { display: block; width: 100%; height: 20px; margin-top: 7px; }
+    .ag-spark polyline { fill: none; stroke: var(--mint-dark); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .ag-spark polygon { fill: rgba(65,216,180,.10); }
+
+    .gate-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
+    .gate-card { padding: 15px; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
+    .gate-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+    .gate-head b { font-size: .8rem; margin-right: auto; }
+    .chip-annual { padding: 2px 7px; border-radius: 999px; background: rgba(246,185,59,.18); color: #8a5a06; font-size: .53rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; white-space: nowrap; }
+    .chip-org { padding: 2px 7px; border-radius: 999px; background: rgba(41,41,76,.07); color: rgba(41,41,76,.72); font-size: .53rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; white-space: nowrap; }
+    .gate-sub { display: block; margin-top: 6px; color: var(--muted); font-size: .64rem; }
+
+    .ws-val { margin-top: 10px; font-size: 2rem; font-weight: 800; letter-spacing: -.055em; line-height: 1; font-variant-numeric: tabular-nums; }
+    .ws-val em { font-style: normal; font-size: 1rem; font-weight: 700; letter-spacing: -.02em; color: var(--muted); }
+    .ws-lab { margin-top: 12px; color: var(--muted); font-size: .6rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .ws-comp { display: grid; grid-template-columns: 1fr 26px; gap: 9px; align-items: center; margin-top: 9px; font-size: .66rem; }
+    .ws-comp span { color: rgba(41,41,76,.78); font-weight: 600; }
+    .ws-track { grid-column: 1 / -1; height: 6px; border-radius: 999px; background: rgba(41,41,76,.09); overflow: hidden; margin-top: -4px; }
+    .ws-track i { display: block; height: 6px; border-radius: 999px; }
+    .ws-comp b { text-align: right; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+    .lg-donut { display: flex; justify-content: center; margin-top: 10px; }
+    .lg-donut svg { width: 106px; height: 106px; }
+    .lg-legend { display: grid; gap: 5px; margin-top: 10px; }
+    .lg-legend span { display: flex; align-items: center; gap: 7px; font-size: .68rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .lg-legend i { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+    .lg-cap { margin-top: 10px; color: var(--muted); font-size: .62rem; }
+    .lg-foot { margin-top: 6px; color: var(--muted); font-size: .62rem; line-height: 1.45; }
+
+    .hd-quarter { display: inline-flex; margin-top: 9px; padding: 3px 9px; border: 1px solid var(--line); border-radius: 999px; font-size: .62rem; font-weight: 700; }
+    .hd-row { margin-top: 11px; }
+    .hd-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; font-size: .72rem; }
+    .hd-top b { font-weight: 700; }
+    .hd-top span { color: rgba(41,41,76,.72); font-weight: 700; font-variant-numeric: tabular-nums; }
+    .hd-bar { height: 6px; margin-top: 5px; border-radius: 999px; background: rgba(41,41,76,.10); overflow: hidden; }
+    .hd-bar i { display: block; height: 6px; border-radius: 999px; background: #F6B93B; }
+    .hd-foot { display: block; margin-top: 4px; color: var(--muted); font-size: .6rem; font-variant-numeric: tabular-nums; }
+
+    /* Console quote, sits directly under the console, not its own section. */
+    .console-quote {
+      max-width: 1100px; margin: 26px auto 0;
+      padding: 20px 24px;
+      border-left: 4px solid var(--coral);
+      border-radius: 0 18px 18px 0;
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+    }
+    .console-quote p { font-size: .95rem; font-weight: 700; letter-spacing: -.015em; line-height: 1.5; }
+    .console-quote small { display: block; margin-top: 7px; color: var(--muted); font-size: .74rem; }
+    .console-screen .format-note { max-width: 1100px; margin-inline: auto; }
+
+    /* ============================================================
+       S4 SEGMENTS
+       ============================================================ */
+    .segments-screen { background: #fff; }
+    .dim-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 34px; }
+    .dim-chip { padding: 15px 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--paper); }
+    .dim-chip b { display: block; font-size: .84rem; letter-spacing: -.015em; }
+    .dim-chip span { display: block; margin-top: 5px; color: var(--muted); font-size: .72rem; line-height: 1.45; }
+    .seg-cases { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+    .seg-case { padding: 20px 22px; border: 1px solid var(--line); border-radius: 16px; background: #fbfbfc; }
+    .seg-case h3 { font-size: 1rem; letter-spacing: -.02em; }
+    .seg-case p { margin-top: 7px; color: var(--muted); font-size: .85rem; line-height: 1.5; }
+    .limits-note { margin-top: 22px; max-width: 860px; color: rgba(41,41,76,.75); font-size: .82rem; line-height: 1.6; }
+
+    /* ============================================================
+       S5 PRIVACY: dark fairband inset with the CAN / CANNOT ledger
+       Columns are 1.15fr .85fr rather than the house 1.08fr .92fr
+       because the ledger is itself two columns and needs the width.
+       ============================================================ */
+    .privacy-screen { background: var(--canvas); }
+    .fairband {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 48px;
+      align-items: center;
+      padding: 44px 48px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: linear-gradient(135deg, var(--dark), #2c4249);
+      color: #fff;
+    }
+    .fairband .eyebrow { color: var(--lime); margin-bottom: 12px; }
+    .fairband h2 { font-size: clamp(1.6rem, 2.8vw, 2.3rem); letter-spacing: -.03em; max-width: 520px; }
+    .fairband .lead { margin-top: 14px; color: rgba(255,255,255,.68); font-size: .95rem; max-width: 480px; }
+    .ledger { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 26px; margin-top: 26px; }
+    .ledger-head { font-size: .62rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; padding-bottom: 9px; border-bottom: 1px solid var(--line-dark); }
+    .ledger-col.can .ledger-head { color: var(--lime); }
+    .ledger-col.cannot .ledger-head { color: rgba(255,255,255,.6); }
+    .ledger-col ul { list-style: none; margin: 0; padding: 0; }
+    .ledger-col li { display: grid; grid-template-columns: 16px 1fr; gap: 9px; align-items: start; padding: 9px 0; color: rgba(255,255,255,.78); font-size: .8rem; line-height: 1.45; }
+    .ledger-col li svg { width: 14px; height: 14px; margin-top: 3px; flex: none; }
+    .ledger-col.can li svg { color: var(--mint); }
+    .ledger-col.cannot li { color: rgba(255,255,255,.6); }
+    .ledger-col.cannot li svg { color: rgba(255,255,255,.42); }
+    .ledger-note { margin-top: 20px; color: rgba(255,255,255,.6); font-size: .78rem; line-height: 1.6; }
+    .fair-fine { margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--line-dark); color: rgba(255,255,255,.6); font-size: .8rem; line-height: 1.55; }
+    .fair-fine small { display: block; margin-top: 7px; color: rgba(255,255,255,.45); font-size: .7rem; }
+
+    .audit-board {
+      justify-self: end;
+      width: min(100%, 380px);
+      padding: 18px 20px;
+      border: 1px solid rgba(41,41,76,.1);
+      border-radius: 18px;
+      background: #f9faf8;
+      color: var(--ink);
+      box-shadow: 0 26px 60px rgba(0,0,0,.32);
+    }
+    .ab-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+    .ab-head b { font-size: .86rem; }
+    .ab-head span { color: var(--muted); font-size: .66rem; font-weight: 700; white-space: nowrap; }
+    .ab-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: .78rem; }
+    .ab-row > span:first-child { color: var(--muted); font-size: .72rem; font-weight: 700; }
+    .ab-val { font-weight: 700; }
+    .ab-val.is-big { font-size: 1.24rem; font-weight: 800; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+    .ab-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; background: rgba(65,216,180,.14); color: #0f7a61; font-size: .68rem; font-weight: 750; }
+    .ab-chip.is-neutral { background: rgba(41,41,76,.07); color: rgba(41,41,76,.72); }
+    .ab-chip svg { width: 10px; height: 10px; flex: none; }
+    .ab-callout { margin-top: 14px; padding: 12px 14px; border: 1px solid rgba(241,81,98,.3); border-radius: 12px; background: rgba(241,81,98,.07); color: var(--coral-deep); font-size: .76rem; font-weight: 700; line-height: 1.45; }
+    .audit-caption { margin-top: 12px; color: var(--muted); font-size: .68rem; line-height: 1.5; }
+    .audit-board .mock-tag { margin-top: 12px; }
+
+    /* ============================================================
+       S6 INSIGHT TO ACTION
+       ============================================================ */
+    .action-screen { background: #fff; }
+    .employee-cols { display: grid; grid-template-columns: 1.04fr .96fr; gap: 56px; align-items: center; margin-top: 40px; }
+    .join-points { display: grid; gap: 6px; }
+    .join-point { display: grid; grid-template-columns: 40px 1fr; gap: 16px; align-items: start; padding: 14px 16px; border-radius: 14px; transition: background .2s ease; }
+    .join-point:hover { background: var(--soft); }
+    .join-icon { display: grid; width: 40px; height: 40px; place-items: center; border-radius: 11px; background: rgba(65,216,180,.13); color: #128f72; }
+    .join-point:nth-child(even) .join-icon { background: rgba(241,81,98,.1); color: var(--coral-deep); }
+    .join-icon svg { width: 19px; height: 19px; }
+    .join-point b { display: block; font-size: .98rem; letter-spacing: -.015em; }
+    .join-point p { margin-top: 3px; color: var(--muted); font-size: .85rem; line-height: 1.5; }
+
+    .ra-mock { width: min(100%, 460px); padding: 20px 22px; border: 1px solid var(--line); border-radius: 18px; background: #fff; box-shadow: 0 22px 54px rgba(41,41,76,.10); }
+    .ra-head b { display: block; font-size: .88rem; }
+    .ra-head span { display: block; margin-top: 3px; color: var(--muted); font-size: .68rem; }
+    .ra-row { display: grid; grid-template-columns: 32px 1fr; gap: 12px; align-items: start; padding: 13px 0; border-bottom: 1px solid var(--line); }
+    .ra-row:first-of-type { margin-top: 8px; border-top: 1px solid var(--line); }
+    .ra-row:last-of-type { border-bottom: 0; }
+    .ra-ico { display: grid; width: 32px; height: 32px; place-items: center; border-radius: 9px; background: rgba(41,41,76,.06); color: rgba(41,41,76,.5); }
+    .ra-ico.is-mint { background: rgba(65,216,180,.14); color: #128f72; }
+    .ra-ico.is-coral { background: rgba(241,81,98,.1); color: var(--coral-deep); }
+    .ra-ico svg { width: 16px; height: 16px; }
+    .ra-txt b { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; font-size: .82rem; letter-spacing: -.01em; }
+    .ra-txt p { margin-top: 3px; color: var(--muted); font-size: .74rem; line-height: 1.45; font-variant-numeric: tabular-nums; }
+    .ra-mock .mock-tag { margin-top: 14px; }
+
+    .chain-row { display: flex; flex-wrap: wrap; gap: 12px 34px; margin-top: 34px; padding-top: 22px; border-top: 1px solid var(--line); }
+    .chain-row .text-link { margin-top: 0; font-size: .82rem; }
+
+    /* ============================================================
+       S7 EXPORTS
+       ============================================================ */
+    .exports-screen { background: var(--canvas); }
+    .exports-cols { display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: start; margin-top: 38px; }
+    .report-list { border-top: 1px solid var(--line); }
+    .report-item { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 15px 2px; border-bottom: 1px solid var(--line); }
+    .report-item b { font-size: .92rem; letter-spacing: -.015em; }
+    .report-item span { color: var(--muted); font-size: .74rem; }
+    /* .report-item span is more specific than .chip-annual, so restate the chip. */
+    .report-item .chip-annual { margin-left: auto; color: #8a5a06; font-size: .53rem; }
+    .limit-row { padding: 15px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--paper); }
+    .limit-row + .limit-row { margin-top: 10px; }
+    .limit-row b { display: block; font-size: .92rem; letter-spacing: -.015em; }
+    .limit-row p { margin-top: 5px; color: var(--muted); font-size: .82rem; line-height: 1.5; }
+
+    /* ============================================================
+       S8 PROOF
+       ============================================================ */
+    .proof-hub { background: #f6f7f4; }
+    .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 38px; }
+    .result-card { padding: 24px; border: 1px solid var(--line); border-radius: 18px; background: var(--paper); box-shadow: 0 8px 24px rgba(30,38,38,.05); }
+    .result-card .stat {
+      display: block; font-size: 2.9rem; font-weight: 800; letter-spacing: -.055em; line-height: 1;
+      background: linear-gradient(125deg, var(--coral) 15%, var(--coral-deep) 95%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+    }
+    .result-card > p { margin-top: 10px; color: var(--ink); font-size: .87rem; font-weight: 600; line-height: 1.5; }
+    .result-card .segment {
+      display: block; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line);
+      color: var(--muted); font-size: .64rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; line-height: 1.6;
+    }
+    .proof-fine { margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; }
+    .proof-fine small { color: var(--muted); font-size: .68rem; }
+    .proof-fine .text-link { margin-top: 0; font-size: .82rem; }
+    .quote-band {
+      display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 18px;
+      margin-top: 24px; padding: 22px 26px;
+      border-left: 4px solid var(--coral); border-radius: 0 18px 18px 0;
+      background: var(--paper); box-shadow: var(--shadow-soft);
+    }
+    .quote-band.text-only { grid-template-columns: 1fr; }
+    .quote-band blockquote { margin: 0; font-size: .95rem; font-weight: 700; letter-spacing: -.015em; line-height: 1.5; }
+    .quote-band .quote-who { display: block; margin-top: 6px; color: var(--muted); font-size: .74rem; font-weight: 500; }
+
+    /* ============================================================
+       S9 TRUST (solutions variant) + typeset compliance plaque
+       ============================================================ */
+    .solutions-trust .trust-grid { grid-template-columns: 1fr 1fr; margin-top: 0; }
+    .solutions-trust .trust-card { min-height: 0; }
+    .solutions-trust .trust-cols { align-items: start; gap: 48px; }
+    .solutions-trust .trust-plaque { margin-top: 28px; padding: 32px 34px 22px; }
+    /* The baseline plaque raster carries certification marks that no source in
+       the knowledge base supports, so it is replaced with a typeset strip
+       carrying only the three approved compliance strings. */
+    .mark-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+    .mark {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 12px 16px;
+      border: 1px solid rgba(255,255,255,.16); border-radius: 14px;
+      background: rgba(255,255,255,.06);
+      color: #fff; font-size: .82rem; font-weight: 700; letter-spacing: -.015em; text-align: left;
+    }
+    .mark svg { flex: none; width: 20px; height: 20px; color: var(--mint); }
+
+    /* ============================================================
+       S10 FAQ: native details, zero JS
+       ============================================================ */
+    .faq-screen { background: #fff; }
+    .faq-list { max-width: 840px; margin-top: 34px; border-top: 1px solid var(--line); }
+    .faq-item { border-bottom: 1px solid var(--line); padding: 18px 0; }
+    .faq-item summary { display: flex; align-items: center; justify-content: space-between; gap: 18px; cursor: pointer; list-style: none; min-height: 44px; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary h3 { font-size: 1.02rem; font-weight: 700; letter-spacing: -.02em; }
+    .faq-item summary::after { content: ""; flex: none; width: 9px; height: 9px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); transition: transform .2s ease; }
+    .faq-item[open] summary::after { transform: rotate(-135deg); }
+    .faq-item summary:focus-visible { outline: 3px solid rgba(41,41,76,.16); outline-offset: 2px; border-radius: 8px; }
+    .faq-item p { margin-top: 12px; max-width: 720px; color: var(--muted); font-size: .9rem; line-height: 1.6; }
+
+    /* ============================================================
+       S11 RELATED
+       ============================================================ */
+    .related-screen { padding: 72px 0; background: var(--canvas); }
+    .related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; }
+    .related-row {
+      display: grid; grid-template-columns: 38px 1fr; align-items: start; gap: 14px;
+      padding: 20px 22px; border: 1px solid var(--line); border-radius: 16px; background: var(--paper);
+      transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+    }
+    .related-row:hover { transform: translateY(-2px); border-color: rgba(241,81,98,.35); box-shadow: var(--shadow-soft); }
+    .related-icon { display: grid; width: 38px; height: 38px; place-items: center; border-radius: 11px; background: rgba(41,41,76,.06); color: var(--ink); }
+    .related-icon svg { width: 18px; height: 18px; }
+    .related-row h3 { display: flex; align-items: center; gap: 8px; font-size: .98rem; letter-spacing: -.015em; }
+    .related-row h3 svg { width: 14px; color: var(--coral-dark); }
+    .related-row p { margin-top: 4px; color: var(--muted); font-size: .82rem; line-height: 1.45; }
+
+    /* --- Footer: five columns (brand + Solutions + Features + Resources + Company) --- */
+    .footer-grid { grid-template-columns: 1.5fr repeat(4, 1fr); gap: 32px; }
+    @media (max-width: 1100px) { .footer-grid { grid-template-columns: 1.4fr repeat(2, 1fr); gap: 32px 28px; } }
+    @media (max-width: 860px)  { .footer-grid { grid-template-columns: 1fr; gap: 28px; } }
+
+    /* ============================================================
+       Responsive
+       ============================================================ */
+    @media (max-width: 1100px) {
+      .insights-hero .hero-grid { grid-template-columns: 1fr; }
+      .insights-hero .hero-chip.hc2 { right: 4px; }
+      .format-grid { grid-template-columns: 1fr 1fr; }
+      .dim-row { grid-template-columns: 1fr 1fr 1fr; }
+      .fairband { grid-template-columns: 1fr; gap: 32px; padding: 34px; }
+      .audit-board { justify-self: start; }
+      .employee-cols { grid-template-columns: 1fr; gap: 36px; }
+      .exports-cols { grid-template-columns: 1fr; gap: 34px; }
+      .results-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 900px) {
+      .console-body { grid-template-columns: 1fr; }
+      .console-side { display: none; }
+      .lb-split { grid-template-columns: 1fr; gap: 14px; }
+      .gate-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 860px) {
+      .hub-section { padding: 64px 0; }
+      .console { margin-top: 30px; }
+      .console-main { padding: 16px 14px 20px; }
+      .console-tabs button { font-size: .74rem; padding: 11px 4px; }
+      /* The two .insights-hero overrides above outrank enterprise.css's own
+         mobile hero rules, so restore the inherited height and dash gutter
+         at each of its breakpoints. Without this the absolutely-positioned
+         .dash overruns a 470px visual and collides with the logo band. */
+      .insights-hero .hero-visual { min-height: 500px; }
+      .insights-hero .dash { width: calc(100% - 34px); }
+    }
+    @media (max-width: 560px) {
+      .insights-hero .hero-visual { min-height: 455px; }
+      .insights-hero .dash { width: calc(100% - 20px); }
+    }
+    @media (max-width: 640px) {
+      .format-grid { grid-template-columns: 1fr; }
+      .dim-row { grid-template-columns: 1fr; }
+      .seg-cases { grid-template-columns: 1fr; }
+      .related-grid { grid-template-columns: 1fr; }
+      .solutions-trust .trust-grid { grid-template-columns: 1fr; }
+      .fairband { padding: 26px 22px; }
+      .ledger { grid-template-columns: 1fr; gap: 18px; }
+      .kpi-row { grid-template-columns: 1fr 1fr; }
+      /* "View more" cannot wrap, so at 2-up it needs its own line. */
+      .kpi-head { flex-direction: column; align-items: flex-start; gap: 3px; }
+      .ag-row { grid-template-columns: 1fr 1fr; }
+      .ag-card, .gate-card { min-width: 0; }
+      .er-cols, .er-row { grid-template-columns: 1.05fr .82fr .8fr .72fr; }
+      .er-table { min-width: 460px; }
+      .er-c-country { display: none; }
+      .console-tabs { flex-wrap: nowrap; }
+      .tab-chip { display: none; }
+      .chain-row { gap: 12px; }
+    }
+    @media (max-width: 420px) {
+      .console-tabs button { font-size: .68rem; }
+      .cf-chips .cf-chip:nth-child(n+4) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#top">Skip to main content</a>
+
+  <!-- ===================== TOP NAV ===================== -->
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="https://www.vantagefit.io/" aria-label="Vantage Fit home">
+        <img src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37" style="height:32px;width:auto;display:block">
+      </a>
+
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+
+      <div class="nav-links" id="nav-links">
+
+        <!-- ---------- SOLUTIONS (current section) ---------- -->
+        <div class="nav-item">
+          <button class="nav-trigger is-current" type="button" aria-expanded="false">
+            Solutions
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Solutions menu">
+            <div class="mega-body">
+              <div class="mega-grid cols-2">
+                <div>
+                  <div class="mega-col-title">Wellness challenges: what you want to run</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/wellness-challenges/">Wellness challenges<span>The full library of ready-to-run challenges</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/step-challenges/">Step challenges<span>Company-wide step goals that get everyone moving</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/multi-activity-challenges/">Multi-activity challenges<span>Any activity, solo or in teams, over themed weeks</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/remote-team-wellness/">Remote &amp; hybrid team challenges<span>Wellness that works away from the office</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/virtual-marathon/">Virtual marathon<span>Distance events powered by steps</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Workforce health &amp; rewards: measure and motivate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/health-risk-assessment/">Health Risk Assessment<span>Baseline health screening with aggregate insights</span></a>
+                  <!-- IS-PAGE: this page -->
+                  <a class="mega-link is-page" href="#top" aria-current="page">Workforce health insights<span>Participation, challenge and activity analytics your board can read</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/wellness-rewards-program/">Wellness rewards program<span>Points and gift cards tied to real effort</span></a>
+                </div>
+              </div>
+            </div>
+            <div class="mega-foot">
+              <span>The whole product on one page: <strong>Wellness platform</strong></span>
+              <a class="text-link" style="margin-top:0;font-size:.8rem" href="https://www.vantagefit.io/solutions/wellness-platform/">See the platform
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </a>
+            </div>
+            <a class="mega-banner" href="https://www.vantagefit.io/solutions/">
+              See every program on one page: the Solutions overview
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- ---------- FEATURES ---------- -->
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Features
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">For employees</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/activity-tracking/">Activity &amp; health tracking<span>Steps, workouts, sleep and more, auto-synced</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/nutrition-and-hydration/">Nutrition &amp; hydration<span>Everyday habits, gently tracked</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/mental-health-and-mindfulness/">Mental wellbeing &amp; mindfulness<span>Sessions, streaks and mood check-ins</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/personalized-programs/">Personalized programs<span>Plans tuned to each employee's goals</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">For HR teams</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/admin-dashboard/">Participation analytics &amp; insights<span>Trends, AI insights and board-ready exports in one console</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/incentivization-and-rewards/">Incentives &amp; rewards<span>Points, badges and a global gift-card catalogue</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/engagement-tools/">Engagement tools &amp; community<span>Group chats, campaigns, streaks and certificates that keep people coming back</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/wellness-leagues/">Wellness leagues<span>Segment by activity level, lift every tier</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Platform</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/integrations/">Integrations<span>Wearables, HRIS, SSO and more</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/security-and-compliance/">Security &amp; compliance<span>Aggregate-only reporting, regional hosting, SOC 2 Type II</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/accessibility/">Accessibility<span>Inclusive across devices, locations and abilities</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/health-data-upload/">Health data upload<span>Turn existing health data into insight</span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---------- RESOURCES ---------- -->
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Resources
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Resources menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">Learn</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/">Blog<span>Ideas and research for healthier workplaces</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/guides/">Reports &amp; research<span>Playbooks and the annual industry report</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/tools-and-templates/">Tools &amp; templates<span>ROI calculator and DIY challenge templates</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/podcasts/">Podcasts<span>Conversations with HR and wellbeing leaders</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Evaluate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/casestudy/">Customer stories<span>Results from real customer programs</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/compare/">Comparisons<span>Vantage Fit vs the alternatives</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/trust-center/">Trust Center<span>Security and privacy documentation in one place</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/">Help Center<span>Product docs and setup guides</span></a>
+                </div>
+                <a class="mega-feature" href="https://www.vantagefit.io/solutions/wellness-challenges/">
+                  <span>
+                    <small>Featured</small>
+                    <b>Wellness Challenges Library</b>
+                    <p>Browse ready-to-run challenges your teams can start this month.</p>
+                  </span>
+                  <span class="go">Explore the library
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- tabindex="-1" so the skip link actually moves keyboard focus here. -->
+  <main id="top" tabindex="-1">
+
+    <!-- ========================= S1 HERO ========================= -->
+    <section class="hero insights-hero" id="hero" aria-labelledby="hero-heading">
+      <div class="shell hero-grid">
+        <div class="hero-copy">
+          <span class="kicker"><i aria-hidden="true"></i> Data out · Workforce health &amp; rewards</span>
+          <h1 id="hero-heading">The participation number your board asks for, <em>and the report behind it.</em></h1>
+          <p class="lead">Participation, challenge and activity analytics live in one admin console. Every number is aggregate by design, and every report leaves as a CSV you can hand to leadership.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+            <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">See pricing</a>
+          </div>
+          <a class="text-link" href="#privacy">See what HR can and cannot see
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </a>
+          <div class="hero-note">
+            <span>Aggregate by design. Admins never see HRA answers or lab results.</span>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="dash" role="img" aria-label="Admin overview card showing a 65 percent participation rate, up 4 points against the previous quarter, with an active users trend line. Figures shown are illustrative.">
+            <div class="dash-top" aria-hidden="true">
+              <span class="dash-dot"></span><span class="dash-dot"></span><span class="dash-dot"></span>
+              <span class="dash-url">dashboard.vantagecircle.com</span>
+            </div>
+            <div class="dash-body">
+              <div class="dash-title">
+                <div>
+                  <small>Admin · Overview</small>
+                  <strong>Participation</strong>
+                </div>
+                <span class="mock-tag">Illustrative data</span>
+              </div>
+
+              <div class="metric-inline" aria-hidden="true">
+                <span><i>ENROLLED</i><b>4,820</b></span>
+                <span><i>ACTIVE</i><b>3,140</b></span>
+                <span><i>AS OF</i><b>Yesterday</b></span>
+              </div>
+
+              <div class="metric-card metric-main" aria-hidden="true">
+                <div class="metric-lab">Participation Rate</div>
+                <div class="metric-value">65%</div>
+                <span class="metric-delta">+4 pts vs Prev Quarter</span>
+              </div>
+
+              <div class="chart-card" aria-hidden="true">
+                <div class="chart-head">
+                  Active users
+                  <span class="legend"><i></i> This quarter</span>
+                </div>
+                <div class="chart">
+                  <div class="target-line"><span>Prev quarter 61%</span></div>
+                  <svg viewBox="0 0 300 84" preserveAspectRatio="none">
+                    <polygon points="0,64 50,58 100,55 150,47 200,42 250,33 300,26 300,84 0,84"></polygon>
+                    <polyline points="0,64 50,58 100,55 150,47 200,42 250,33 300,26"></polyline>
+                  </svg>
+                </div>
+                <div class="chart-labels"><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-chip hc2" role="img" aria-label="Export confirmation chip for an Employee Report CSV. Figures shown are illustrative.">
+            <span class="hc-lab">Exported</span>
+            <span class="hc-file">Employee Report.csv</span>
+            <span class="hc-rows">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+              4,820 rows · filters applied
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="logo-band">
+        <div class="shell logos" role="group" aria-label="Selected customers">
+          <span class="logos-label">Trusted by 100+ organizations worldwide</span>
+          <span class="logo-word">TATA MOTORS</span>
+          <span class="logo-word">WIPRO</span>
+          <span class="logo-word">IBS SOFTWARE</span>
+          <span class="logo-word">BRAZOSPORT ISD</span>
+          <span class="logo-word">LANDMARK GROUP</span>
+          <span class="logo-word">POSOCO</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== S2 THE THREE QUESTIONS ==================== -->
+    <section class="hub-section questions-screen" id="questions" aria-labelledby="questions-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">The merge</span>
+          <h2 id="questions-heading">Three questions HR has to answer, in one place.</h2>
+          <p class="lead">These were three separate pages. They are three views of one console now, because they run on the same workforce, the same date range and the same filters.</p>
+        </div>
+
+        <div class="format-grid">
+          <article class="format-card reveal">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44" fill="none">
+                <rect x="2" y="3" width="58" height="7" rx="3.5" fill="#41d8b4" opacity=".85"/>
+                <rect x="2" y="14" width="46" height="7" rx="3.5" fill="#41d8b4" opacity=".5"/>
+                <rect x="2" y="25" width="34" height="7" rx="3.5" fill="rgba(41,41,76,.16)"/>
+                <rect x="2" y="36" width="22" height="6" rx="3" fill="rgba(41,41,76,.24)"/>
+                <circle cx="29" cy="39" r="3.2" fill="#F15162"/>
+              </svg>
+            </div>
+            <h3>"Is anyone actually using it?"</h3>
+            <p>Enrolled, active and participation rate, plus a named list of who has gone quiet.</p>
+            <span class="best-for"><b>Console view</b>Participation</span>
+          </article>
+
+          <article class="format-card reveal">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44" fill="none">
+                <rect x="2" y="2" width="52" height="8" rx="4" fill="rgba(41,41,76,.14)"/>
+                <rect x="2" y="13" width="60" height="8" rx="4" fill="rgba(41,41,76,.26)"/>
+                <path d="M66 15.5l3 3 3-3" stroke="#F15162" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M6 21v14M6 27.5h3M6 35.5h3" stroke="rgba(41,41,76,.24)" stroke-width="1.4" stroke-linecap="round"/>
+                <rect x="12" y="25" width="38" height="5" rx="2.5" fill="#41d8b4" opacity=".8"/>
+                <rect x="12" y="33" width="26" height="5" rx="2.5" fill="rgba(41,41,76,.16)"/>
+              </svg>
+            </div>
+            <h3>"Did the program land?"</h3>
+            <p>Participation per challenge, three leaderboards, and the per task breakdown of what people skipped.</p>
+            <span class="best-for"><b>Console view</b>Challenges</span>
+          </article>
+
+          <article class="format-card reveal">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44" fill="none">
+                <path d="M2 42.2h70" stroke="rgba(41,41,76,.16)" stroke-width="1.3"/>
+                <path d="M16 8v34M30 8v34M44 8v34" stroke="rgba(41,41,76,.09)" stroke-width="1"/>
+                <polyline points="4,36 19,31 34,24 49,15" stroke="#41d8b4" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="49" cy="15" r="2.8" fill="#41d8b4"/>
+                <path d="M62.6 12V9.4a3.4 3.4 0 0 1 6.8 0V12" stroke="#F15162" stroke-width="1.7" stroke-linecap="round"/>
+                <rect x="60" y="12" width="12" height="9.5" rx="2.4" fill="#F15162"/>
+              </svg>
+            </div>
+            <h3>"Is behavior actually changing?"</h3>
+            <p>Average steps, active minutes and sleep, league tiers, and the org wellness score.</p>
+            <span class="best-for"><b>Console view</b>Activity &amp; health</span>
+          </article>
+        </div>
+
+        <p class="format-note">One workforce, one date range, three answers. Nothing has to be reconciled by hand afterwards.</p>
+      </div>
+    </section>
+
+    <!-- ==================== S3 THE CONSOLE ==================== -->
+    <section class="hub-section console-screen" id="console" aria-labelledby="console-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">The console</span>
+          <h2 id="console-heading">One console, switched three ways.</h2>
+          <p class="lead">Real screens, real report names, real columns. Switch the view, keep the filters.</p>
+        </div>
+
+        <div class="console">
+          <div class="console-chrome" aria-hidden="true">
+            <i></i><i></i><i></i>
+            <span class="cc-url">dashboard.vantagecircle.com</span>
+          </div>
+
+          <div class="console-body">
+            <!-- Product sidebar, drawn as a picture. Insights Hub is deliberately absent. -->
+            <div class="console-side" aria-hidden="true">
+              <div class="cs-group">Analyze</div>
+              <div class="cs-row is-on">Overview</div>
+              <div class="cs-row">Workforce Health</div>
+              <div class="cs-row is-sub">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3"/></svg>
+                Health Insights
+              </div>
+              <div class="cs-row is-sub">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3"/></svg>
+                Wellness Score
+                <span class="cs-new">NEW</span>
+              </div>
+              <div class="cs-row is-sub">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3"/></svg>
+                Wellness Leagues
+              </div>
+              <div class="cs-row">Reports</div>
+
+              <div class="cs-group">Challenges</div>
+              <div class="cs-row">Create Challenge</div>
+              <div class="cs-row">Manage Challenge</div>
+              <div class="cs-row">Past Challenges</div>
+
+              <div class="cs-group">Engage</div>
+              <div class="cs-row">Announcements</div>
+              <div class="cs-row">Publish Notifications</div>
+
+              <div class="cs-group">Manage</div>
+              <div class="cs-row">Rewards Hub</div>
+              <div class="cs-row">Configuration</div>
+            </div>
+
+            <div class="console-main">
+              <div class="console-filters">
+                <div class="cf-chips" aria-hidden="true">
+                  <span class="cf-chip">Last Quarter <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg></span>
+                  <span class="cf-chip">All Countries <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg></span>
+                  <span class="cf-chip">All Departments <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg></span>
+                  <span class="cf-chip">All Ages <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg></span>
+                  <span class="cf-chip">All Genders <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg></span>
+                </div>
+                <div class="cf-right">
+                  <span class="console-asof">As of yesterday</span>
+                  <span class="mock-tag">Illustrative data</span>
+                </div>
+              </div>
+
+              <div class="console-tabs i0" role="tablist" aria-label="Console views">
+                <span class="console-thumb" aria-hidden="true"></span>
+                <button type="button" role="tab" id="tab-participation" aria-controls="pane-participation" aria-selected="true">Participation</button>
+                <button type="button" role="tab" id="tab-challenges" aria-controls="pane-challenges" aria-selected="false" tabindex="-1">Challenges</button>
+                <button type="button" role="tab" id="tab-activity" aria-controls="pane-activity" aria-selected="false" tabindex="-1">Activity &amp; health <span class="tab-chip">Annual contract</span></button>
+              </div>
+
+              <!-- ---------- PANE 1: PARTICIPATION ---------- -->
+              <div class="console-pane" id="pane-participation" role="tabpanel" aria-labelledby="tab-participation" tabindex="0">
+                <div role="img" aria-label="Participation view showing four key metrics, enrolled users 4,820, active users 3,140, incentivization 12,400 dollars, participation rate 65 percent, above an employee report table with five rows. Figures shown are illustrative.">
+                  <div class="kpi-row" aria-hidden="true">
+                    <div class="kpi-card">
+                      <div class="kpi-head"><b>Enrolled Users</b><span class="kpi-more">View more &rarr;</span></div>
+                      <div class="kpi-val">4,820</div>
+                      <div class="kpi-delta"><b>+180</b><span>vs Prev Quarter</span></div>
+                      <svg class="kpi-spark" viewBox="0 0 120 30" preserveAspectRatio="none">
+                        <polygon points="0,24 24,22 48,19 72,16 96,13 120,9 120,30 0,30"></polygon>
+                        <polyline points="0,24 24,22 48,19 72,16 96,13 120,9"></polyline>
+                      </svg>
+                    </div>
+                    <div class="kpi-card">
+                      <div class="kpi-head"><b>Active Users</b><span class="kpi-more">View more &rarr;</span></div>
+                      <div class="kpi-val">3,140</div>
+                      <div class="kpi-delta"><b>+265</b><span>vs Prev Quarter</span></div>
+                      <svg class="kpi-spark" viewBox="0 0 120 30" preserveAspectRatio="none">
+                        <polygon points="0,26 24,21 48,22 72,15 96,12 120,7 120,30 0,30"></polygon>
+                        <polyline points="0,26 24,21 48,22 72,15 96,12 120,7"></polyline>
+                      </svg>
+                    </div>
+                    <div class="kpi-card">
+                      <div class="kpi-head"><b>Incentivization</b><span class="kpi-more">View more &rarr;</span></div>
+                      <div class="kpi-val">$12,400</div>
+                      <div class="kpi-delta"><b>+8%</b><span>vs Prev Quarter</span></div>
+                      <span class="kpi-extra">Avg ~$2.57 per employee</span>
+                      <svg class="kpi-spark" viewBox="0 0 120 30" preserveAspectRatio="none">
+                        <polygon points="0,25 24,23 48,18 72,17 96,11 120,8 120,30 0,30"></polygon>
+                        <polyline points="0,25 24,23 48,18 72,17 96,11 120,8"></polyline>
+                      </svg>
+                    </div>
+                    <div class="kpi-card">
+                      <div class="kpi-head"><b>Participation Rate</b><span class="kpi-more">View more &rarr;</span></div>
+                      <div class="kpi-val">65%</div>
+                      <div class="kpi-delta"><b>+4 pts</b><span>vs Prev Quarter</span></div>
+                      <svg class="kpi-spark" viewBox="0 0 120 30" preserveAspectRatio="none">
+                        <polygon points="0,23 24,20 48,20 72,14 96,12 120,6 120,30 0,30"></polygon>
+                        <polyline points="0,23 24,20 48,20 72,14 96,12 120,6"></polyline>
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div class="er" aria-hidden="true">
+                    <div class="er-head">
+                      <div class="er-title">
+                        <b>Employee Report</b>
+                        <span>Reports &rarr; Employee Report</span>
+                      </div>
+                      <div class="er-tools">
+                        <span class="er-search">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+                          Search by name or email...
+                        </span>
+                        <span class="er-sel">All Departments <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg></span>
+                        <span class="er-sel">All Countries <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg></span>
+                        <span class="er-export">Export CSV</span>
+                      </div>
+                    </div>
+                    <div class="er-scroll">
+                      <div class="er-table">
+                        <div class="er-cols">
+                          <span>Employee</span><span>Department</span><span class="er-c-country">Country</span><span>Enrollment status</span><span>Last active</span>
+                        </div>
+                        <div class="er-row">
+                          <b>A. Rivera</b><span>Operations</span><span class="er-c-country">United States</span><span><i class="st st-active">Active</i></span><span class="er-date">Aug 10, 2026</span>
+                        </div>
+                        <div class="er-row">
+                          <b>M. Okafor</b><span>Engineering</span><span class="er-c-country">United Kingdom</span><span><i class="st st-active">Active</i></span><span class="er-date">Aug 09, 2026</span>
+                        </div>
+                        <div class="er-row">
+                          <b>S. Nakamura</b><span>Finance</span><span class="er-c-country">Japan</span><span><i class="st st-inactive">Inactive</i></span><span class="er-date">Jun 24, 2026</span>
+                        </div>
+                        <div class="er-row">
+                          <b>L. Fernandes</b><span>Sales</span><span class="er-c-country">India</span><span><i class="st st-dormant">Dormant</i></span><span class="er-date">Apr 02, 2026</span>
+                        </div>
+                        <div class="er-row">
+                          <b>K. Haddad</b><span>Operations</span><span class="er-c-country">United Arab Emirates</span><span><i class="st st-active">Active</i></span><span class="er-date">Aug 10, 2026</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <p class="console-note">Enrollment status runs Active, Inactive, Dormant. Cross-reference this report with the Transaction Report to find employees who enrolled and then went quiet.</p>
+              </div>
+
+              <!-- ---------- PANE 2: CHALLENGES ---------- -->
+              <div class="console-pane" id="pane-challenges" role="tabpanel" aria-labelledby="tab-challenges" tabindex="0" hidden>
+                <div role="img" aria-label="Challenges view showing an ended challenge at 71 percent participation, a score leaderboard, and one expanded row decomposed into per task and per week contributions. Figures shown are illustrative.">
+                  <div class="ch-card" aria-hidden="true">
+                    <span class="ch-art"></span>
+                    <div class="ch-meta">
+                      <b>Mid-Year Reset 2026</b>
+                      <div class="ch-pills">
+                        <span class="ch-pill">Ended</span>
+                        <span class="ch-pill is-type">Custom</span>
+                      </div>
+                    </div>
+                    <div class="ch-hero">
+                      <b>&#8599; 71%</b>
+                      <span>Participation</span>
+                    </div>
+                    <div class="ch-foot">
+                      <span>1,284 participants</span>
+                      <span>06 Jul 2026 - 02 Aug 2026</span>
+                    </div>
+                  </div>
+
+                  <div class="lb" aria-hidden="true">
+                    <div class="lb-head">
+                      <div class="lb-subtabs">
+                        <span class="lb-subtab is-on">Score Leaderboard</span>
+                        <span class="lb-subtab">Steps Leaderboard</span>
+                        <span class="lb-subtab">Team Leaderboard</span>
+                      </div>
+                      <span class="board-pill">Team score = average of member scores</span>
+                    </div>
+                    <div class="lb-scroll">
+                      <div class="lb-table">
+                        <div class="lb-cols">
+                          <span>Rank</span><span>Employee name</span><span>Score</span><span>Department</span>
+                        </div>
+                        <div class="lb-row">
+                          <span class="lb-rank">1</span>
+                          <span class="lb-name">A. Rivera</span>
+                          <span class="lb-score">1,840</span>
+                          <span class="lb-dept">Operations</span>
+                        </div>
+                        <div class="lb-row">
+                          <span class="lb-rank">2</span>
+                          <span class="lb-name">M. Okafor</span>
+                          <span class="lb-score">1,795</span>
+                          <span class="lb-dept">Engineering</span>
+                        </div>
+                        <div class="lb-row is-open">
+                          <span class="lb-rank">3</span>
+                          <span class="lb-name">P. Alvarez
+                            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 8l4-4 4 4"/></svg>
+                          </span>
+                          <span class="lb-score">1,742</span>
+                          <span class="lb-dept">Finance</span>
+                        </div>
+                        <div class="lb-panel">
+                          <div class="lb-split">
+                            <div class="lb-sub">
+                              <b class="lb-subhead">Score breakdown by task</b>
+                              <div class="lb-task"><span>Steps</span><b>720</b><i class="tk tk-done">Completed</i></div>
+                              <div class="lb-task"><span>Water intake</span><b>480</b><i class="tk tk-done">Completed</i></div>
+                              <div class="lb-task"><span>Meditation</span><b>300</b><i class="tk tk-part">Partially completed</i></div>
+                              <div class="lb-task"><span>Sleep log</span><b>242</b><i class="tk tk-part">Partially completed</i></div>
+                              <div class="lb-total"><span>Total</span><b>1,742</b></div>
+                            </div>
+                            <div class="lb-sub">
+                              <b class="lb-subhead">Score breakdown by week</b>
+                              <div class="lb-week"><span>Week 1</span><i><em style="width:100%"></em></i><b>512</b></div>
+                              <div class="lb-week"><span>Week 2</span><i><em style="width:91%"></em></i><b>468</b></div>
+                              <div class="lb-week"><span>Week 3</span><i><em style="width:77%"></em></i><b>396</b></div>
+                              <div class="lb-week"><span>Week 4</span><i><em style="width:71%"></em></i><b>366</b></div>
+                              <div class="lb-total"><span>Total</span><b>1,742</b></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="lb-row">
+                          <span class="lb-rank">4</span>
+                          <span class="lb-name">K. Haddad</span>
+                          <span class="lb-score">1,690</span>
+                          <span class="lb-dept">Operations</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <p class="console-note">Click any row to see per task and per week contribution. Export after the 3-day buffer so late-syncing activity is included.</p>
+              </div>
+
+              <!-- ---------- PANE 3: ACTIVITY &amp; HEALTH ---------- -->
+              <div class="console-pane" id="pane-activity" role="tabpanel" aria-labelledby="tab-activity" tabindex="0" hidden>
+                <div role="img" aria-label="Activity and health view showing average steps, active minutes, mindful minutes and sleep, an org wellness score of 74 out of 100 with its four components, wellness league tier distribution, and organization level health domain prevalence. Figures shown are illustrative.">
+                  <div aria-hidden="true">
+                    <div class="ag-head">
+                      <b>At a Glance</b>
+                      <span>This Month</span>
+                    </div>
+                    <div class="ag-row">
+                      <div class="ag-card">
+                        <span class="ag-icon">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="8.5" cy="8" rx="3.2" ry="4.6" transform="rotate(-14 8.5 8)"/><ellipse cx="15.5" cy="15.5" rx="3.2" ry="4.6" transform="rotate(-14 15.5 15.5)"/></svg>
+                        </span>
+                        <span class="ag-lab">Avg Steps</span>
+                        <span class="ag-val">7,240 <em>/day</em></span>
+                        <svg class="ag-spark" viewBox="0 0 120 22" preserveAspectRatio="none">
+                          <polygon points="0,17 30,15 60,12 90,13 120,9 120,22 0,22"></polygon>
+                          <polyline points="0,17 30,15 60,12 90,13 120,9"></polyline>
+                        </svg>
+                      </div>
+                      <div class="ag-card">
+                        <span class="ag-icon">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="13" r="7.5"/><path d="M12 9.5V13l2.5 1.8M9.5 3h5"/></svg>
+                        </span>
+                        <span class="ag-lab">Active Minutes</span>
+                        <span class="ag-val">38 <em>min/day</em></span>
+                        <svg class="ag-spark" viewBox="0 0 120 22" preserveAspectRatio="none">
+                          <polygon points="0,18 30,14 60,15 90,11 120,10 120,22 0,22"></polygon>
+                          <polyline points="0,18 30,14 60,15 90,11 120,10"></polyline>
+                        </svg>
+                      </div>
+                      <div class="ag-card">
+                        <span class="ag-icon">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 20c-4 0-7.2-2.9-7.2-6.6 2.3 0 4.2.9 5.4 2.4M12 20c4 0 7.2-2.9 7.2-6.6-2.3 0-4.2.9-5.4 2.4M12 20c1.9-1.7 2.9-3.9 2.9-6.2 0-2.5-1-4.8-2.9-6.4-1.9 1.6-2.9 3.9-2.9 6.4 0 2.3 1 4.5 2.9 6.2Z"/></svg>
+                        </span>
+                        <span class="ag-lab">Mindful Minutes</span>
+                        <span class="ag-val">9 <em>min/day</em></span>
+                        <svg class="ag-spark" viewBox="0 0 120 22" preserveAspectRatio="none">
+                          <polygon points="0,16 30,16 60,13 90,14 120,11 120,22 0,22"></polygon>
+                          <polyline points="0,16 30,16 60,13 90,14 120,11"></polyline>
+                        </svg>
+                      </div>
+                      <div class="ag-card">
+                        <span class="ag-icon">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 13.6A8.2 8.2 0 0 1 10.4 4 8.6 8.6 0 1 0 20 13.6Z"/></svg>
+                        </span>
+                        <span class="ag-lab">Avg Sleep</span>
+                        <span class="ag-val">6 hr 52 mins</span>
+                        <svg class="ag-spark" viewBox="0 0 120 22" preserveAspectRatio="none">
+                          <polygon points="0,13 30,15 60,12 90,14 120,12 120,22 0,22"></polygon>
+                          <polyline points="0,13 30,15 60,12 90,14 120,12"></polyline>
+                        </svg>
+                      </div>
+                    </div>
+
+                    <div class="gate-row">
+                      <!-- Card 1: Org Wellness Score -->
+                      <div class="gate-card">
+                        <div class="gate-head">
+                          <b>Org Wellness Score</b>
+                          <span class="chip-annual">Annual contract</span>
+                        </div>
+                        <div class="ws-val">74 <em>/100</em></div>
+                        <div class="ws-lab">Score breakdown</div>
+                        <div class="ws-comp"><span>Health Baselines (20%)</span><b>15</b><i class="ws-track"><i style="width:75%;background:#9BAFC8"></i></i></div>
+                        <div class="ws-comp"><span>Participation (30%)</span><b>22</b><i class="ws-track"><i style="width:73%;background:#21B8A6"></i></i></div>
+                        <div class="ws-comp"><span>Activity Levels (30%)</span><b>21</b><i class="ws-track"><i style="width:70%;background:#7A56E4"></i></i></div>
+                        <div class="ws-comp"><span>Program Adherence (20%)</span><b>16</b><i class="ws-track"><i style="width:80%;background:#F59E0B"></i></i></div>
+                      </div>
+
+                      <!-- Card 2: Wellness Leagues -->
+                      <div class="gate-card">
+                        <div class="gate-head">
+                          <b>Wellness Leagues</b>
+                          <span class="chip-annual">Annual contract</span>
+                        </div>
+                        <span class="gate-sub">On 10 Aug 2026</span>
+                        <div class="lg-donut">
+                          <svg viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="42" fill="none" stroke="rgba(41,41,76,.07)" stroke-width="16"/>
+                            <g transform="rotate(-90 60 60)" fill="none" stroke-width="16">
+                              <circle cx="60" cy="60" r="42" stroke="#F59E0B" stroke-dasharray="48.6 215.3" stroke-dashoffset="0"/>
+                              <circle cx="60" cy="60" r="42" stroke="#94A3B8" stroke-dasharray="121.9 142.0" stroke-dashoffset="-48.6"/>
+                              <circle cx="60" cy="60" r="42" stroke="#D4A574" stroke-dasharray="93.4 170.5" stroke-dashoffset="-170.5"/>
+                            </g>
+                          </svg>
+                        </div>
+                        <div class="lg-legend">
+                          <span><i style="background:#F59E0B"></i> Gold 18.4%</span>
+                          <span><i style="background:#94A3B8"></i> Silver 46.2%</span>
+                          <span><i style="background:#D4A574"></i> Bronze 35.4%</span>
+                        </div>
+                        <p class="lg-cap">Based on avg daily steps over 30 days</p>
+                        <p class="lg-foot">Trends reflect only employees currently active in the system.</p>
+                      </div>
+
+                      <!-- Card 3: Health domain breakdown -->
+                      <div class="gate-card">
+                        <div class="gate-head">
+                          <b>Health domain breakdown</b>
+                          <span class="chip-annual">Annual contract</span>
+                          <span class="chip-org">Org level only</span>
+                        </div>
+                        <span class="hd-quarter">Jul - Sep, 2026</span>
+                        <div class="hd-row">
+                          <div class="hd-top"><b>Diabetes</b><span>14% flagged</span></div>
+                          <div class="hd-bar"><i style="width:14%"></i></div>
+                          <span class="hd-foot">86% Normal</span>
+                        </div>
+                        <div class="hd-row">
+                          <div class="hd-top"><b>Heart Health</b><span>11% flagged</span></div>
+                          <div class="hd-bar"><i style="width:11%"></i></div>
+                          <span class="hd-foot">89% Normal</span>
+                        </div>
+                        <div class="hd-row">
+                          <div class="hd-top"><b>Kidney Health</b><span>6% flagged</span></div>
+                          <div class="hd-bar"><i style="width:6%"></i></div>
+                          <span class="hd-foot">94% Normal</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <p class="console-note">Wellness figures are calculated daily and read as of yesterday. Health domain figures are organization level and reported by quarter, not sliced by department.</p>
+                <p class="console-note is-def">Participation appears twice in this console and means two different things. On the Overview it is active users divided by enrolled users. Inside the wellness score it is daily engagement over the last seven days. They are not the same number and they are never reconciled.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="console-quote">
+          <p>"The score breakdown per user is one of the most useful tools in the dashboard. It shows exactly which tasks employees are completing and which they are skipping."</p>
+          <small>Vantage Fit Help Center, admin reports guide</small>
+        </div>
+
+        <p class="format-note">Wellness Score, Wellness Leagues and Health Insights are included on annual contracts and set up with your account manager. Participation and challenge analytics ship with every plan.</p>
+      </div>
+    </section>
+
+    <!-- ==================== S4 SEGMENTS ==================== -->
+    <section class="hub-section segments-screen" id="segments" aria-labelledby="segments-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Segments</span>
+          <h2 id="segments-heading">Slice it the way your organization is actually shaped.</h2>
+          <p class="lead">Five dimensions apply across the console and across every report. The values come from the employee data you already load, so departments and countries match your own records.</p>
+        </div>
+
+        <div class="dim-row">
+          <div class="dim-chip reveal"><b>Date range</b><span>This Month, Last Quarter, Last 90 Days, This Year, Custom, Lifetime</span></div>
+          <div class="dim-chip reveal"><b>Country</b><span>From your employee data</span></div>
+          <div class="dim-chip reveal"><b>Department</b><span>From your employee data</span></div>
+          <div class="dim-chip reveal"><b>Age group</b><span>Bucketed ranges</span></div>
+          <div class="dim-chip reveal"><b>Gender</b><span>Male, female, other</span></div>
+        </div>
+
+        <div class="seg-cases">
+          <article class="seg-case reveal">
+            <h3>A department is lagging.</h3>
+            <p>Filter the leaderboard by department, then send that department a targeted announcement.</p>
+          </article>
+          <article class="seg-case reveal">
+            <h3>A department is 80% Bronze.</h3>
+            <p>That group may need its own challenge or a walking group, not another company-wide announcement.</p>
+          </article>
+        </div>
+
+        <p class="limits-note">Vantage Fit does not carry a business unit, tenure, job level or manager hierarchy dimension, and filters are applied ad hoc rather than saved as cohorts. Challenge and notification audiences add three more: City, Language and Health Risk Code.</p>
+      </div>
+    </section>
+
+    <!-- ==================== S5 PRIVACY ==================== -->
+    <section class="hub-section privacy-screen" id="privacy" aria-labelledby="privacy-heading">
+      <div class="shell">
+        <div class="fairband reveal">
+          <div>
+            <span class="eyebrow">Privacy</span>
+            <h2 id="privacy-heading">HR sees who is participating. Never what the assessment said.</h2>
+            <p class="lead">The boundary is set in the product, not in a policy document.</p>
+
+            <div class="ledger">
+              <div class="ledger-col can">
+                <h3 class="ledger-head">HR can see</h3>
+                <ul>
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+                    Company and department enrollment rates
+                  </li>
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+                    Active user percentages and last active date
+                  </li>
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+                    Challenge participation, leaderboard rankings, team scores
+                  </li>
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+                    Wellness scores, where the feature is enabled
+                  </li>
+                </ul>
+              </div>
+              <div class="ledger-col cannot">
+                <h3 class="ledger-head">HR can never see</h3>
+                <ul>
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m6.5 17.5 11-11"/></svg>
+                    Individual health data: weight, BMI, body measurements
+                  </li>
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m6.5 17.5 11-11"/></svg>
+                    Health Risk Assessment answers and risk categories
+                  </li>
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m6.5 17.5 11-11"/></svg>
+                    Lab report results and biomarker values
+                  </li>
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m6.5 17.5 11-11"/></svg>
+                    Mood logs, food diary and sleep patterns
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <p class="ledger-note">One nuance worth stating out loud: where wellness scores are enabled, an admin sees a score derived from the assessment, never the assessment. The help docs are explicit that individual scores are for program design, not for decisions about specific employees.</p>
+
+            <p class="fair-fine">"Your HR team sees whether you are participating and your challenge rankings, but we cannot see your weight, health assessment results, lab reports, or personal health data."
+              <small>The sentence Vantage Fit gives HR to tell employees, from the admin privacy guide</small>
+            </p>
+          </div>
+
+          <div class="audit-board" role="img" aria-label="Challenge target audience step with a health risk code selected, showing a matching count of 214 employees and the product disclaimer that the list of users is not displayed. Figures shown are illustrative.">
+            <div class="ab-head" aria-hidden="true">
+              <b>Create challenge</b>
+              <span>Step 5 of 7 · Target Audience</span>
+            </div>
+            <div class="ab-row" aria-hidden="true"><span>Department</span><span class="ab-val">Any</span></div>
+            <div class="ab-row" aria-hidden="true"><span>Country</span><span class="ab-val">Any</span></div>
+            <div class="ab-row" aria-hidden="true"><span>Health Risk Code</span><span class="ab-chip">At risk for diabetes</span></div>
+            <div class="ab-row" aria-hidden="true"><span>Matching employees</span><span class="ab-val is-big">214</span></div>
+            <div class="ab-row" aria-hidden="true"><span>Challenge privacy</span>
+              <span class="ab-chip is-neutral">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3"/></svg>
+                Private
+              </span>
+            </div>
+            <p class="ab-callout" aria-hidden="true">"The list of users is not displayed to protect individual privacy."</p>
+            <p class="audit-caption" aria-hidden="true">Applying any audience filter marks the challenge private. Matching employees are enrolled automatically.</p>
+            <span class="mock-tag">Illustrative data</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== S6 INSIGHT TO ACTION ==================== -->
+    <section class="hub-section action-screen" id="action" aria-labelledby="action-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Insight to action</span>
+          <h2 id="action-heading">The loop closes inside the same console.</h2>
+          <p class="lead">Every number on this page has a next step attached to it, and the next step runs against the same segment you were just looking at.</p>
+        </div>
+
+        <div class="employee-cols">
+          <div class="join-points">
+            <div class="join-point reveal">
+              <span class="join-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5M11 8v6M8 11h6"/></svg>
+              </span>
+              <div>
+                <b>Spot the gap</b>
+                <p>The Overview flags who has gone quiet. The Employee Report names them, with department and last active date.</p>
+              </div>
+            </div>
+            <div class="join-point reveal">
+              <span class="join-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 5h17l-6.5 7.6V20l-4-2.4v-5z"/></svg>
+              </span>
+              <div>
+                <b>Target the exact segment</b>
+                <p>Audience rules enroll matching employees automatically. Any filter marks the challenge private, so nobody outside the group sees it.</p>
+              </div>
+            </div>
+            <div class="join-point reveal">
+              <span class="join-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9M10 19V5M16 19v-6M22 19H2"/></svg>
+              </span>
+              <div>
+                <b>Pick the format that fixes the weak component</b>
+                <p>A Streak lifts adherence, a Race lifts activity, and a content-led Custom challenge lifts participation.</p>
+              </div>
+            </div>
+            <div class="join-point reveal">
+              <span class="join-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12A8.5 8.5 0 1 1 18 6"/><path d="M20.5 4v4.5H16"/></svg>
+              </span>
+              <div>
+                <b>Measure it the same way next quarter</b>
+                <p>Same reports, same denominators, so the before and after actually compare.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="ra-mock" role="img" aria-label="Recommended actions panel listing three suggested next steps, including 312 employees inactive for 30 or more days. Figures shown are illustrative.">
+            <div class="ra-head" aria-hidden="true">
+              <b>Recommended Actions</b>
+              <span>System suggested next steps</span>
+            </div>
+            <div class="ra-row" aria-hidden="true">
+              <span class="ra-ico is-mint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 20c.4-3.4 2.9-5.6 6.2-5.6 1.3 0 2.4.3 3.4.9M16 16.5h5.5M18.8 13.8v5.4"/></svg>
+              </span>
+              <div class="ra-txt">
+                <b>View Inactive Employees</b>
+                <p>312 employees inactive for 30+ days</p>
+              </div>
+            </div>
+            <div class="ra-row" aria-hidden="true">
+              <span class="ra-ico is-coral">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2.4"/><path d="m3.8 7 8.2 6 8.2-6"/></svg>
+              </span>
+              <div class="ra-txt">
+                <b>Nudge Inactive Users</b>
+                <p>Pre-fills a custom email to that cohort</p>
+              </div>
+            </div>
+            <div class="ra-row" aria-hidden="true">
+              <span class="ra-ico">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 12V7.5M12 12l3.4 2.6"/></svg>
+              </span>
+              <div class="ra-txt">
+                <b>Review Org Wellness Score <span class="chip-annual">Annual contract</span></b>
+                <p>Component contributions for the last quarter</p>
+              </div>
+            </div>
+            <span class="mock-tag">Illustrative data</span>
+          </div>
+        </div>
+
+        <div class="chain-row">
+          <a class="text-link" href="https://www.vantagefit.io/solutions/health-risk-assessment/">Where the data comes from: Health Risk Assessment
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </a>
+          <a class="text-link" href="https://www.vantagefit.io/solutions/wellness-challenges/">What you run against it: Wellness challenges
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </a>
+          <a class="text-link" href="https://www.vantagefit.io/solutions/wellness-rewards-program/">What keeps people coming back: Wellness rewards program
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== S7 WHAT LEAVES THE PLATFORM ==================== -->
+    <section class="hub-section exports-screen" id="exports" aria-labelledby="exports-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Exports</span>
+          <h2 id="exports-heading">Six reports, and an honest account of what they do not do.</h2>
+          <p class="lead">Filter first, then export. The CSV downloads straight to your browser with the columns you were looking at.</p>
+        </div>
+
+        <div class="exports-cols">
+          <div class="report-list">
+            <div class="report-item reveal"><b>Employee Report</b><span>Reports &rarr; Employee Report</span></div>
+            <div class="report-item reveal"><b>Transaction Report</b><span>Reports &rarr; Transaction Report</span></div>
+            <div class="report-item reveal"><b>Redemption Report</b><span>Reports &rarr; Redemption Report</span></div>
+            <div class="report-item reveal"><b>Challenge Leaderboard</b><span>Challenges &rarr; Manage &rarr; Leaderboard</span></div>
+            <div class="report-item reveal"><b>League Report</b><span>Reports &rarr; League Report</span><span class="chip-annual">Annual contract</span></div>
+            <div class="report-item reveal"><b>Wellness Score Report</b><span>Workforce Health &rarr; Employee report</span><span class="chip-annual">Annual contract</span></div>
+          </div>
+
+          <div>
+            <div class="limit-row reveal">
+              <b>Exports are manual</b>
+              <p>There is no scheduled report and no emailed delivery today. The documented practice is a monthly reminder and a monthly archive.</p>
+            </div>
+            <div class="limit-row reveal">
+              <b>Wait out the buffer</b>
+              <p>Export a Race challenge after the 3-day buffer so late-syncing wearable data is included.</p>
+            </div>
+            <div class="limit-row reveal">
+              <b>CSV, not a data warehouse</b>
+              <p>Reports leave as CSV files. There is no warehouse connector today.</p>
+            </div>
+            <div class="limit-row reveal">
+              <b>Reconcile two reports, not one</b>
+              <p>Cross-reference the Employee Report against the Transaction Report to find people who enrolled and then went quiet.</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="format-note">Export rights are a role permission. Admins without them see the export button disabled.</p>
+      </div>
+    </section>
+
+    <!-- ==================== S8 PROOF ==================== -->
+    <section class="hub-section proof-hub" id="proof" aria-labelledby="proof-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Proof</span>
+          <h2 id="proof-heading">What one program looked like when it was measured over time.</h2>
+          <p class="lead">Wipro ran three challenges between April and August 2025. These are the numbers the program left behind, each labelled with what it measured.</p>
+        </div>
+
+        <!-- Figures approved in vfit-os/.claude/rules/data-accuracy.md (Wipro, three 2025 challenges). -->
+        <div class="results-grid">
+          <article class="result-card reveal">
+            <b class="stat">3X</b>
+            <p>Participation increase, 163 to 550 active users, first challenge to third</p>
+            <span class="segment">Wipro · 3 challenges, Apr to Aug 2025<br>Active users, not enrolled</span>
+          </article>
+          <article class="result-card reveal">
+            <b class="stat">46.53M</b>
+            <p>Cumulative steps logged across the three challenges</p>
+            <span class="segment">Wipro · 3 challenges, Apr to Aug 2025<br>Program total</span>
+          </article>
+          <article class="result-card reveal">
+            <b class="stat">30+</b>
+            <p>Countries with participants in this program</p>
+            <span class="segment">Wipro · 3 challenges, Apr to Aug 2025<br>Participant footprint, not a customer footprint</span>
+          </article>
+        </div>
+
+        <div class="proof-fine">
+          <small>Results from a named customer program. Outcomes vary by workforce and program design.</small>
+          <a class="text-link" href="https://www.vantagefit.io/casestudy/wipro-global-wellbeing/">Read the Wipro story
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </a>
+        </div>
+
+        <div class="quote-band text-only reveal">
+          <div>
+            <blockquote>"The app's analytics provided clear insights into participation levels and helped us recognize and celebrate achievements effectively."</blockquote>
+            <span class="quote-who">Shubham Sanghavi, Consultant, Avalon Consulting</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== S9 SECURITY AND COMPLIANCE ==================== -->
+    <section class="screen trust-screen solutions-trust" id="security" aria-labelledby="security-heading">
+      <div class="shell">
+        <div class="trust-cols">
+          <div class="trust-copy">
+            <span class="eyebrow">Enterprise security &amp; compliance</span>
+            <h2 id="security-heading">Built to survive a privacy review, not just a demo.</h2>
+            <p class="lead">Vantage Fit operates under HIPAA guidelines and is SOC 2 Type II. The reporting layer is aggregate by design, and the data never leaves the region you pick.</p>
+            <div class="trust-actions">
+              <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+              <a class="text-link text-link-light" href="https://www.vantagefit.io/features/security-and-compliance/">Explore security &amp; compliance &rarr;</a>
+            </div>
+          </div>
+          <div class="trust-grid">
+            <div class="trust-card">
+              <span class="trust-icon" aria-hidden="true">&#9673;</span>
+              <h3>Aggregate by design</h3>
+              <p>Admins see company and department level metrics. No admin screen and no export exposes one person's assessment answers, lab values, mood logs or food diary.</p>
+            </div>
+            <div class="trust-card">
+              <span class="trust-icon" aria-hidden="true">&#9737;</span>
+              <h3>Your data stays in your region</h3>
+              <p>Four isolated regional instances: India, US, EU and UAE. Chosen at signup, with no cross-region sharing.</p>
+            </div>
+            <div class="trust-card">
+              <span class="trust-icon" aria-hidden="true">&#8644;</span>
+              <h3>No personal data in the AI layer</h3>
+              <p>Leadership Insights runs on aggregated signal buckets. No employee identifiers are sent to the insights service.</p>
+            </div>
+            <div class="trust-card">
+              <span class="trust-icon" aria-hidden="true">&#10003;</span>
+              <h3>Employees hold the delete key</h3>
+              <p>Employees delete their own lab reports, and delete their own account with OTP verification. An admin cannot do it on their behalf.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Do NOT restore the certification raster here. Only these three strings
+             are cleared by the claims gate. -->
+        <div class="trust-plaque">
+          <div class="mark-strip" role="list">
+            <span class="mark" role="listitem">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4.5 6v5c0 4.6 3.1 8.3 7.5 10 4.4-1.7 7.5-5.4 7.5-10V6L12 3Z"/><path d="m9 12 2.2 2.2L15.5 9.7"/></svg>
+              Operates under HIPAA guidelines
+            </span>
+            <span class="mark" role="listitem">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 3.5H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9l-5.5-5.5Z"/><path d="M13.5 3.5V9H19"/><path d="m8.8 15 1.9 1.9 3.9-4.1"/></svg>
+              SOC 2 Type II
+            </span>
+            <span class="mark" role="listitem">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.2 2.4 3.3 5.2 3.3 8.5S14.2 18.1 12 20.5c-2.2-2.4-3.3-5.2-3.3-8.5S9.8 5.9 12 3.5Z"/></svg>
+              Secured regional data hosting
+            </span>
+          </div>
+          <p class="trust-support">Security documentation is available during evaluation.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== S10 FAQ ==================== -->
+    <section class="hub-section faq-screen" id="faq" aria-labelledby="faq-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Questions</span>
+          <h2 id="faq-heading">Questions HR asks before the first review.</h2>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item" open>
+            <summary><h3>What are workforce health insights?</h3></summary>
+            <p>Workforce health insights are the aggregate reports an HR team uses to see whether a wellness program is working: how many employees enrolled and stayed active, how each challenge performed and which tasks people skipped, and how average activity and wellness scores move over time. In Vantage Fit they live in one admin console, and every figure is company or department level rather than individual health data.</p>
+          </details>
+          <details class="faq-item">
+            <summary><h3>Can HR see an individual employee's health data?</h3></summary>
+            <p>No. Admins see aggregate metrics, challenge participation and leaderboard rankings, plus employee reports that show registration status and last active date. They cannot see weight, BMI, Health Risk Assessment answers or risk categories, lab report values, mood logs, food diaries or sleep patterns. Where wellness scores are enabled, an admin sees a score derived from the assessment, never the assessment itself, and the product documentation states that individual scores are for program design rather than decisions about specific employees.</p>
+          </details>
+          <details class="faq-item">
+            <summary><h3>Which analytics are included, and which need an annual contract?</h3></summary>
+            <p>Participation analytics, challenge analytics and the six CSV reports ship with every plan. Org Wellness Score, Wellness Leagues and Health Insights are included on annual contracts, are set up by your account manager rather than a toggle, and need 2 to 4 weeks of data collection before the baseline reads reliably.</p>
+          </details>
+          <details class="faq-item">
+            <summary><h3>Can reports be scheduled or emailed to leadership?</h3></summary>
+            <p>Not today. Every report has an Export CSV button and the file downloads to your browser with the filters you applied. The documented practice is to set a monthly reminder, export, and archive. There is no scheduled delivery, no emailed report and no data warehouse connector.</p>
+          </details>
+          <details class="faq-item">
+            <summary><h3>How do we know the activity behind the numbers is real?</h3></summary>
+            <p>Steps count only from approved apps and devices, one primary device at a time so nothing is double counted, and GPS workouts are checked for unrealistic pace and for vehicle travel. Flagged activity does not reach the rankings, source tracking supports investigation, and challenge results stay provisional for 3 days after the end date so late-syncing wearable data lands before winners are picked.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== S11 RELATED ==================== -->
+    <section class="related-screen" id="related" aria-labelledby="related-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Keep going</span>
+          <h2 id="related-heading">Where this connects.</h2>
+        </div>
+        <div class="related-grid">
+          <a class="related-row reveal" href="https://www.vantagefit.io/solutions/health-risk-assessment/">
+            <span class="related-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="17" rx="2.5"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>
+            </span>
+            <span>
+              <h3>Health Risk Assessment
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </h3>
+              <p>The baseline screening that feeds the wellness score.</p>
+            </span>
+          </a>
+          <a class="related-row reveal" href="https://www.vantagefit.io/solutions/wellness-rewards-program/">
+            <span class="related-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="9" width="17" height="11" rx="2"/><path d="M3.5 13h17M12 9v11M12 9c-2.6 0-4.4-1-4.4-2.5S9 4.5 12 9Zm0 0c2.6 0 4.4-1 4.4-2.5S15 4.5 12 9Z"/></svg>
+            </span>
+            <span>
+              <h3>Wellness rewards program
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </h3>
+              <p>Points and gift cards tied to the effort you just measured.</p>
+            </span>
+          </a>
+          <a class="related-row reveal" href="https://www.vantagefit.io/solutions/wellness-challenges/">
+            <span class="related-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 4h11l-2.5 4L17 12H6"/></svg>
+            </span>
+            <span>
+              <h3>Wellness challenges
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </h3>
+              <p>The full library of ready-to-run challenges.</p>
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== S12 CLOSER ==================== -->
+    <section class="final" id="demo" aria-labelledby="demo-heading">
+      <div class="shell">
+        <h2 id="demo-heading">Leave your next review with a number you can defend.</h2>
+        <p>See the console with your own departments, your own date range, and the reports you would actually export.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+          <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">See pricing</a>
+        </div>
+        <div class="final-checks">
+          <span>Aggregate by design</span>
+          <span>CSV exports on demand</span>
+          <span>Set up with your account manager</span>
+        </div>
+        <div class="final-note">Wellness Score, Wellness Leagues and Health Insights are included on annual contracts.</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="https://www.vantagefit.io/" aria-label="Vantage Fit home">
+            <img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37" style="height:28px;width:auto;display:block">
+          </a>
+          <p class="footer-about">Inclusive wellness that turns participation into measurable progress. A Vantage Circle product.</p>
+        </div>
+
+        <div>
+          <div class="footer-title">Solutions</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/solutions/wellness-platform/">Wellness platform</a>
+            <a href="https://www.vantagefit.io/solutions/wellness-challenges/">Wellness challenges</a>
+            <a href="https://www.vantagefit.io/solutions/step-challenges/">Step challenges</a>
+            <a href="https://www.vantagefit.io/solutions/multi-activity-challenges/">Multi-activity challenges</a>
+            <a href="https://www.vantagefit.io/solutions/remote-team-wellness/">Remote &amp; hybrid team challenges</a>
+            <a href="https://www.vantagefit.io/solutions/virtual-marathon/">Virtual marathon</a>
+            <a href="https://www.vantagefit.io/solutions/health-risk-assessment/">Health Risk Assessment</a>
+            <a href="#top" aria-current="page" style="color:#fff;font-weight:700">Workforce health insights</a>
+            <a href="https://www.vantagefit.io/solutions/wellness-rewards-program/">Wellness rewards program</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-title">Features</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/features/activity-tracking/">Activity &amp; health tracking</a>
+            <a href="https://www.vantagefit.io/features/admin-dashboard/">Participation analytics &amp; insights</a>
+            <a href="https://www.vantagefit.io/features/incentivization-and-rewards/">Incentives &amp; rewards</a>
+            <a href="https://www.vantagefit.io/features/engagement-tools/">Engagement tools &amp; community</a>
+            <a href="https://www.vantagefit.io/features/integrations/">Integrations</a>
+            <a href="https://www.vantagefit.io/features/security-and-compliance/">Security &amp; compliance</a>
+            <a href="https://www.vantagefit.io/features/accessibility/">Accessibility</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-title">Resources</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/en/blog/">Blog</a>
+            <a href="https://www.vantagefit.io/casestudy/">Customer stories</a>
+            <a href="https://www.vantagefit.io/compare/">Comparisons</a>
+            <a href="https://www.vantagefit.io/guides/">Reports &amp; research</a>
+            <a href="https://www.vantagefit.io/tools-and-templates/">Tools &amp; templates</a>
+            <a href="https://www.vantagefit.io/trust-center/">Trust Center</a>
+            <a href="https://www.vantagefit.io/en/help/">Help Center</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-title">Company</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/about-us/">About us</a>
+            <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+            <a href="https://www.vantagefit.io/casestudy/">Case studies</a>
+            <a href="https://www.vantagefit.io/request-demo/">Contact sales</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>&copy; 2026 Vantage Circle. All rights reserved.</span>
+        <span>HIPAA guidelines · SOC 2 Type II</span>
+        <span>Wellness built for participation.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are workforce health insights?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Workforce health insights are the aggregate reports an HR team uses to see whether a wellness program is working: how many employees enrolled and stayed active, how each challenge performed and which tasks people skipped, and how average activity and wellness scores move over time. In Vantage Fit they live in one admin console, and every figure is company or department level rather than individual health data."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can HR see an individual employee's health data?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Admins see aggregate metrics, challenge participation and leaderboard rankings, plus employee reports that show registration status and last active date. They cannot see weight, BMI, Health Risk Assessment answers or risk categories, lab report values, mood logs, food diaries or sleep patterns. Where wellness scores are enabled, an admin sees a score derived from the assessment, never the assessment itself, and the product documentation states that individual scores are for program design rather than decisions about specific employees."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which analytics are included, and which need an annual contract?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Participation analytics, challenge analytics and the six CSV reports ship with every plan. Org Wellness Score, Wellness Leagues and Health Insights are included on annual contracts, are set up by your account manager rather than a toggle, and need 2 to 4 weeks of data collection before the baseline reads reliably."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can reports be scheduled or emailed to leadership?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Not today. Every report has an Export CSV button and the file downloads to your browser with the filters you applied. The documented practice is to set a monthly reminder, export, and archive. There is no scheduled delivery, no emailed report and no data warehouse connector."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do we know the activity behind the numbers is real?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Steps count only from approved apps and devices, one primary device at a time so nothing is double counted, and GPS workouts are checked for unrealistic pace and for vehicle travel. Flagged activity does not reach the rankings, source tracking supports investigation, and challenge results stay provisional for 3 days after the end date so late-syncing wearable data lands before winners are picked."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Vantage Fit",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "iOS, Android, Web",
+    "description": "Participation, challenge and activity analytics in one admin console, aggregate by design.",
+    "url": "https://www.vantagefit.io/solutions/workforce-health-insights/",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Vantage Circle",
+      "url": "https://www.vantagecircle.com/"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.vantagefit.io/" },
+      { "@type": "ListItem", "position": 2, "name": "Solutions", "item": "https://www.vantagefit.io/solutions/" },
+      { "@type": "ListItem", "position": 3, "name": "Workforce health insights", "item": "https://www.vantagefit.io/solutions/workforce-health-insights/" }
+    ]
+  }
+  </script>
+
+  <script>
+    // ---------- Mobile nav ----------
+    const menuButton = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation');
+      navLinks.classList.toggle('open', !open);
+    });
+
+    // ---------- Mega-menu behaviour (desktop hover, mobile accordion) ----------
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const navTriggers = [...document.querySelectorAll('.nav-trigger')];
+    const desktopNav = window.matchMedia('(min-width: 861px)');
+    let desktopCloseTimer;
+
+    const setExpanded = (item, open) => {
+      item.querySelector('.nav-trigger')?.setAttribute('aria-expanded', String(open));
+    };
+
+    const closeDesktopMenus = (except = null) => {
+      navItems.forEach((item) => {
+        if (item !== except) {
+          item.classList.remove('desktop-open');
+          if (!item.contains(document.activeElement)) setExpanded(item, false);
+        }
+      });
+    };
+
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => {
+        if (!desktopNav.matches) return;
+        window.clearTimeout(desktopCloseTimer);
+        closeDesktopMenus(item);
+        item.classList.add('desktop-open');
+        setExpanded(item, true);
+        const focusedTrigger = document.activeElement?.closest?.('.nav-trigger');
+        if (focusedTrigger && !item.contains(focusedTrigger)) focusedTrigger.blur();
+      });
+
+      item.addEventListener('pointerleave', () => {
+        if (!desktopNav.matches) return;
+        desktopCloseTimer = window.setTimeout(() => {
+          if (!item.matches(':hover') && !item.contains(document.activeElement)) {
+            item.classList.remove('desktop-open');
+            setExpanded(item, false);
+          }
+        }, 120);
+      });
+
+      item.addEventListener('focusin', () => {
+        if (desktopNav.matches) setExpanded(item, true);
+      });
+
+      item.addEventListener('focusout', () => {
+        if (!desktopNav.matches) return;
+        window.setTimeout(() => {
+          if (!item.contains(document.activeElement) && !item.matches(':hover')) setExpanded(item, false);
+        }, 0);
+      });
+    });
+
+    // Escape dismisses an open mega and returns focus to its trigger. WCAG 1.4.13.
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      const active = document.activeElement?.closest?.('.nav-item')
+        || document.querySelector('.nav-item.desktop-open');
+      if (!active) return;
+      active.classList.remove('desktop-open');
+      active.classList.remove('open');
+      active.classList.add('esc-closed');
+      setExpanded(active, false);
+      active.querySelector('.nav-trigger')?.focus();
+    });
+
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => item.classList.remove('esc-closed'));
+      item.addEventListener('focusout', () => {
+        window.setTimeout(() => {
+          if (!item.contains(document.activeElement)) item.classList.remove('esc-closed');
+        }, 0);
+      });
+      item.querySelector('.nav-trigger')?.addEventListener('click', () => item.classList.remove('esc-closed'));
+    });
+
+    document.querySelectorAll('.nav-links > a').forEach((link) => {
+      link.addEventListener('pointerenter', () => {
+        if (desktopNav.matches) closeDesktopMenus();
+      });
+    });
+
+    navTriggers.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (window.matchMedia('(max-width: 860px)').matches) {
+          const item = btn.closest('.nav-item');
+          const isOpen = item.classList.contains('open');
+          document.querySelectorAll('.nav-item').forEach((n) => {
+            n.classList.remove('open');
+            n.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        }
+      });
+    });
+
+    // ---------- Console: three-tab control ----------
+    // The shipped .seg handler only slides a two-tab thumb, so this page
+    // carries its own handler with roving tabindex and arrow-key support.
+    (function () {
+      const tabs = document.querySelector('.console-tabs');
+      if (!tabs) return;
+      const buttons = [...tabs.querySelectorAll('[role="tab"]')];
+
+      function select(index, moveFocus) {
+        buttons.forEach((btn, i) => {
+          const active = i === index;
+          const pane = document.getElementById(btn.getAttribute('aria-controls'));
+          btn.setAttribute('aria-selected', String(active));
+          btn.tabIndex = active ? 0 : -1;
+          if (pane) pane.hidden = !active;
+        });
+        tabs.className = 'console-tabs i' + index;
+        if (moveFocus) buttons[index].focus();
+      }
+
+      buttons.forEach((btn, i) => {
+        btn.addEventListener('click', () => select(i, false));
+        btn.addEventListener('keydown', (e) => {
+          if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft' && e.key !== 'Home' && e.key !== 'End') return;
+          e.preventDefault();
+          let next = i;
+          if (e.key === 'ArrowRight') next = (i + 1) % buttons.length;
+          if (e.key === 'ArrowLeft') next = (i - 1 + buttons.length) % buttons.length;
+          if (e.key === 'Home') next = 0;
+          if (e.key === 'End') next = buttons.length - 1;
+          select(next, true);
+        });
+      });
+    })();
+
+    // ---------- Nav CTA: ghost over the hero, filled after ----------
+    (function () {
+      const nav = document.querySelector('nav.nav');
+      const hero = document.querySelector('.hero');
+      if (!nav || !hero) return;
+      const state = () => nav.classList.toggle('lit', window.scrollY > hero.offsetHeight - 90);
+      window.addEventListener('scroll', state, { passive: true });
+      state();
+    })();
+
+    // ---------- Subtle scroll reveal (.reveal -> .reveal.on) ----------
+    (function () {
+      const nodes = document.querySelectorAll('.reveal');
+      if (!nodes.length) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+        nodes.forEach((n) => n.classList.add('on'));
+        return;
+      }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('on');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+      nodes.forEach((n) => io.observe(n));
+    })();
+
+    // ---------- Grayscale preview mode for accessibility review: append ?gray ----------
+    if (new URLSearchParams(location.search).has('gray')) {
+      document.documentElement.style.filter = 'grayscale(1)';
+    }
+  </script>
+</body>
+</html>

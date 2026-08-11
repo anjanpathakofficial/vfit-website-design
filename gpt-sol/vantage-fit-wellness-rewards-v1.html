@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Connect wellness effort to points, employee wallets, gift-card redemption, and auditable HR reporting with Vantage Fit.">
+  <meta name="theme-color" content="#29294c">
+  <title>Employee Wellness Rewards Program | Vantage Fit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/enterprise.css">
+  <style>
+    :root { --reward-gold: #f6b93b; --reward-wash: #fff8e8; --receipt-line: rgba(41,41,76,.16); }
+    body { overflow-x: hidden; }
+    a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--reward-gold); outline-offset: 3px; }
+    .topbar { position: sticky; z-index: 30; top: 0; border-bottom: 1px solid var(--line); background: rgba(248,248,249,.92); backdrop-filter: blur(16px); }
+    .topbar-inner { display: flex; min-height: 68px; align-items: center; gap: 24px; }
+    .vf-logo { width: 150px; height: auto; }
+    .top-links { display: flex; align-items: center; gap: 24px; margin-left: auto; color: #55556f; font-size: .87rem; font-weight: 700; }
+    .top-links a:hover { color: var(--ink); }
+    .top-links .nav-demo { min-height: 42px; padding-inline: 18px; color: #fff; }
+    .crumbs { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: .78rem; font-weight: 700; }
+    .crumbs span { opacity: .55; }
+    .hero { position: relative; padding: 26px 0 92px; overflow: hidden; }
+    .hero::before { position: absolute; top: -320px; left: 45%; width: 850px; height: 850px; border-radius: 50%; background: radial-gradient(circle, rgba(246,185,59,.18), rgba(246,185,59,0) 67%); content: ""; pointer-events: none; }
+    .hero-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 72px; align-items: center; padding-top: 74px; }
+    .hero h1 { font-size: clamp(3rem, 5.8vw, 5.3rem); letter-spacing: -.06em; }
+    .hero h1 em { color: var(--coral-text); font-style: normal; }
+    .hero .lead { max-width: 610px; font-size: clamp(1.05rem, 1.5vw, 1.22rem); }
+    .hero-proof { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 22px; }
+    .proof-chip { display: inline-flex; align-items: center; gap: 7px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--muted); font-size: .72rem; font-weight: 700; }
+    .proof-chip i { width: 7px; height: 7px; border-radius: 50%; background: var(--mint-dark); }
+    .receipt-wrap { position: relative; padding: 22px; }
+    .receipt-wrap::before, .receipt-wrap::after { position: absolute; width: 150px; height: 150px; border-radius: 50%; content: ""; }
+    .receipt-wrap::before { top: 0; right: 0; background: var(--coral); opacity: .11; }
+    .receipt-wrap::after { bottom: 6px; left: 0; background: var(--mint); opacity: .14; }
+    .receipt { position: relative; z-index: 2; max-width: 500px; margin-inline: auto; padding: 26px 28px 31px; border: 1px solid rgba(41,41,76,.13); border-radius: 24px 24px 8px 8px; background: #fff; box-shadow: 0 34px 90px rgba(41,41,76,.18); }
+    .receipt::after { position: absolute; right: 0; bottom: -11px; left: 0; height: 22px; background: linear-gradient(135deg, transparent 10px, #fff 0) 0 0/22px 22px repeat-x, linear-gradient(45deg, transparent 10px, #fff 0) 0 0/22px 22px repeat-x; content: ""; transform: rotate(180deg); }
+    .receipt-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding-bottom: 18px; border-bottom: 1px dashed var(--receipt-line); }
+    .receipt-brand { display: flex; align-items: center; gap: 10px; font-size: .85rem; font-weight: 800; }
+    .receipt-brand i { display: grid; width: 34px; height: 34px; place-items: center; border-radius: 10px; background: var(--coral); color: #fff; font-size: .7rem; font-style: normal; }
+    .live-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px; border-radius: 999px; background: #e8faf5; color: #117a63; font-size: .65rem; font-weight: 800; }
+    .live-pill i { width: 6px; height: 6px; border-radius: 50%; background: var(--mint-dark); }
+    .receipt-task { padding: 22px 0; border-bottom: 1px dashed var(--receipt-line); }
+    .receipt-label { color: var(--muted); font-size: .65rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+    .task-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-top: 8px; }
+    .task-row strong { font-size: 1rem; }
+    .task-row span { flex: none; color: var(--coral-dark); font-size: .82rem; font-weight: 800; }
+    .task-note { margin-top: 5px; color: var(--muted); font-size: .73rem; }
+    .flow { display: grid; gap: 2px; padding-top: 12px; }
+    .flow-row { position: relative; display: grid; grid-template-columns: 42px 1fr auto; gap: 12px; align-items: center; min-height: 69px; }
+    .flow-row:not(:last-child)::after { position: absolute; top: 52px; bottom: -17px; left: 20px; width: 2px; background: var(--line); content: ""; }
+    .flow-icon { z-index: 1; display: grid; width: 42px; height: 42px; place-items: center; border-radius: 13px; background: #fff0f2; color: var(--coral-dark); }
+    .flow-row:nth-child(2) .flow-icon { background: #fff8e8; color: #a66a00; }
+    .flow-row:nth-child(3) .flow-icon { background: #e8faf5; color: var(--mint-dark); }
+    .flow-icon svg { width: 20px; }
+    .flow-copy strong { display: block; font-size: .79rem; }
+    .flow-copy span { color: var(--muted); font-size: .68rem; }
+    .flow-status { padding: 5px 8px; border-radius: 999px; background: var(--soft); color: var(--muted); font-size: .61rem; font-weight: 800; }
+    .section { padding: 92px 0; }
+    .section-white { background: #fff; }
+    .section-dark { background: var(--dark); color: #fff; }
+    .section-head { max-width: 730px; margin-bottom: 40px; }
+    .step-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .step { position: relative; min-height: 250px; padding: 28px; border: 1px solid var(--line); border-radius: 22px; background: #fff; }
+    .step-num { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 13px; background: #fff0f2; color: var(--coral-dark); font-size: .8rem; font-weight: 800; }
+    .step:nth-child(2) .step-num { background: var(--reward-wash); color: #9b6500; }
+    .step:nth-child(3) .step-num { background: #e8faf5; color: var(--mint-dark); }
+    .step h3 { margin-top: 38px; font-size: 1.2rem; }
+    .step p { margin-top: 9px; color: var(--muted); font-size: .89rem; }
+    .control-grid { display: grid; grid-template-columns: .82fr 1.18fr; gap: 64px; align-items: center; }
+    .admin-ui { overflow: hidden; border: 1px solid var(--line); border-radius: 24px; background: #fff; box-shadow: var(--shadow); }
+    .admin-head { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 16px 18px; border-bottom: 1px solid var(--line); }
+    .admin-title { display: flex; align-items: center; gap: 10px; font-size: .8rem; font-weight: 800; }
+    .admin-title i { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 8px; background: var(--ink); color: #fff; font-size: .63rem; font-style: normal; }
+    .illustrative { padding: 5px 8px; border-radius: 999px; background: var(--soft); color: var(--muted); font-size: .62rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; }
+    .admin-tabs { display: flex; gap: 16px; padding: 12px 18px 0; border-bottom: 1px solid var(--line); color: var(--muted); font-size: .67rem; font-weight: 700; }
+    .admin-tabs span { padding-bottom: 11px; }
+    .admin-tabs .active { border-bottom: 2px solid var(--coral); color: var(--ink); }
+    .admin-body { padding: 18px; }
+    .field-label { display: block; margin-bottom: 7px; color: var(--muted); font-size: .65rem; font-weight: 800; }
+    .task-control { padding: 16px; border: 1px solid var(--line); border-radius: 14px; }
+    .task-control-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+    .task-control h4 { margin: 0; font-size: .82rem; }
+    .status { padding: 4px 8px; border-radius: 999px; background: #e8faf5; color: #117a63; font-size: .61rem; font-weight: 800; }
+    .form-grid { display: grid; grid-template-columns: 1.3fr .7fr; gap: 10px; margin-top: 14px; }
+    .fake-input { min-height: 42px; padding: 11px 12px; border: 1px solid var(--line); border-radius: 9px; background: #fafafd; color: var(--ink); font-size: .7rem; font-weight: 700; }
+    .preview { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-top: 12px; padding: 12px; border-radius: 10px; background: var(--reward-wash); color: #76500b; font-size: .68rem; }
+    .preview strong { font-size: .72rem; }
+    .upload-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 12px; padding: 14px 16px; border: 1px dashed rgba(41,41,76,.2); border-radius: 13px; }
+    .upload-copy strong { display: block; font-size: .75rem; }
+    .upload-copy span { color: var(--muted); font-size: .64rem; }
+    .mini-btn { padding: 7px 10px; border: 0; border-radius: 8px; background: var(--ink); color: #fff; font-size: .64rem; font-weight: 800; }
+    .wallet-stage { padding: 86px 0; background: linear-gradient(160deg, #29294c, #1d2228); color: #fff; }
+    .wallet-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 70px; align-items: center; }
+    .wallet-stage .eyebrow { color: var(--reward-gold); }
+    .wallet-stage .lead { color: #c8cad9; }
+    .phone-catalog { display: grid; grid-template-columns: .72fr 1.28fr; gap: 14px; align-items: center; }
+    .wallet-card { padding: 22px; border: 1px solid rgba(255,255,255,.18); border-radius: 24px; background: linear-gradient(145deg, #4a497b, #343360); box-shadow: 0 22px 60px rgba(0,0,0,.25); }
+    .wallet-card small { color: #c8cad9; font-size: .66rem; font-weight: 700; }
+    .wallet-card h3 { margin-top: 5px; font-size: 1.35rem; }
+    .balance-block { margin-top: 24px; padding: 16px; border-radius: 15px; background: rgba(255,255,255,.08); }
+    .balance-block span { display: block; color: #c8cad9; font-size: .66rem; }
+    .balance-block strong { display: block; margin-top: 4px; font-size: 1rem; }
+    .wallet-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+    .wallet-actions span { display: grid; min-height: 40px; place-items: center; border-radius: 10px; background: #fff; color: var(--ink); font-size: .66rem; font-weight: 800; }
+    .wallet-actions span + span { border: 1px solid rgba(255,255,255,.18); background: transparent; color: #fff; }
+    .catalog { padding: 18px; border-radius: 22px; background: #f8f8f9; color: var(--ink); }
+    .catalog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .catalog-head strong { font-size: .84rem; }
+    .catalog-head span { color: var(--muted); font-size: .62rem; }
+    .catalog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 14px; }
+    .gift { min-height: 105px; padding: 13px; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
+    .gift-icon { display: grid; width: 32px; height: 32px; place-items: center; border-radius: 9px; background: #fff0f2; color: var(--coral-dark); }
+    .gift:nth-child(2) .gift-icon { background: var(--reward-wash); color: #9b6500; }
+    .gift:nth-child(3) .gift-icon { background: #e8faf5; color: var(--mint-dark); }
+    .gift:nth-child(4) .gift-icon { background: #eeecff; color: #6057c8; }
+    .gift-icon svg { width: 17px; }
+    .gift strong { display: block; margin-top: 15px; font-size: .68rem; }
+    .gift span { color: var(--muted); font-size: .58rem; }
+    .report-grid { display: grid; grid-template-columns: .82fr 1.18fr; gap: 64px; align-items: start; }
+    .report-stack { display: grid; gap: 12px; }
+    .report-card { display: grid; grid-template-columns: 48px 1fr auto; gap: 15px; align-items: center; padding: 20px; border: 1px solid var(--line); border-radius: 18px; background: #fff; }
+    .report-icon { display: grid; width: 48px; height: 48px; place-items: center; border-radius: 14px; background: #fff0f2; color: var(--coral-dark); }
+    .report-icon svg { width: 21px; }
+    .report-card:nth-child(2) .report-icon { background: var(--reward-wash); color: #9b6500; }
+    .report-card:nth-child(3) .report-icon { background: #e8faf5; color: var(--mint-dark); }
+    .report-card h3 { font-size: .94rem; }
+    .report-card p { margin-top: 5px; color: var(--muted); font-size: .75rem; }
+    .report-card > span { color: var(--coral-dark); font-size: .7rem; font-weight: 800; }
+    .setup { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .setup-col { padding: 30px; border: 1px solid var(--line); border-radius: 22px; background: #fff; }
+    .setup-col:nth-child(2) { background: var(--ink); color: #fff; }
+    .setup-col h3 { font-size: 1.12rem; }
+    .setup-col ul { display: grid; gap: 13px; margin: 24px 0 0; padding: 0; list-style: none; }
+    .setup-col li { display: flex; gap: 10px; color: var(--muted); font-size: .84rem; }
+    .setup-col:nth-child(2) li { color: #c8cad9; }
+    .setup-col li::before { flex: none; color: var(--mint-dark); content: "✓"; font-weight: 900; }
+    .handoff { padding: 38px; border: 1px solid rgba(241,81,98,.18); border-radius: 26px; background: linear-gradient(120deg, #fff, #fff3f4); }
+    .handoff-inner { display: flex; align-items: center; justify-content: space-between; gap: 40px; }
+    .handoff h2 { max-width: 620px; }
+    .handoff p { max-width: 690px; margin-top: 10px; color: var(--muted); }
+    .faq-list { max-width: 820px; margin: 36px auto 0; border-top: 1px solid var(--line); }
+    .faq-left { text-align: left; }
+    details { border-bottom: 1px solid var(--line); }
+    summary { display: flex; min-height: 68px; align-items: center; justify-content: space-between; gap: 24px; font-weight: 800; cursor: pointer; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { color: var(--coral-dark); content: "+"; font-size: 1.35rem; font-weight: 500; }
+    details[open] summary::after { content: "−"; }
+    details p { max-width: 720px; padding: 0 40px 22px 0; color: var(--muted); font-size: .9rem; }
+    .cta-band { padding: 76px 0; background: linear-gradient(130deg, #29294c, #343360); color: #fff; }
+    .cta-inner { display: flex; align-items: center; justify-content: space-between; gap: 40px; }
+    .cta-band p { max-width: 630px; margin-top: 12px; color: #ced0e0; }
+    .site-footer { padding: 34px 0; background: #191a20; color: #fff; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .footer-inner img { width: 135px; filter: brightness(0) invert(1); }
+    .footer-inner p { color: #aeb2bd; font-size: .76rem; }
+    @media (max-width: 920px) {
+      .top-links a:not(.nav-demo) { display: none; }
+      .hero-grid, .control-grid, .wallet-grid, .report-grid { grid-template-columns: 1fr; gap: 48px; }
+      .hero-copy { max-width: 760px; }
+      .phone-catalog { max-width: 660px; }
+      .handoff-inner { align-items: flex-start; flex-direction: column; }
+    }
+    @media (max-width: 640px) {
+      .shell { width: min(var(--max), calc(100% - 32px)); }
+      .vf-logo { width: 130px; }
+      .topbar-inner { min-height: 62px; }
+      .top-links { gap: 0; }
+      .top-links .nav-demo { min-height: 40px; padding-inline: 14px; font-size: .78rem; }
+      .hero { padding-bottom: 62px; }
+      .hero-grid { padding-top: 44px; }
+      .hero h1 { font-size: clamp(2.65rem, 13vw, 4rem); }
+      .receipt-wrap { padding: 6px; }
+      .receipt { padding: 21px 20px 26px; }
+      .flow-row { grid-template-columns: 42px 1fr; }
+      .flow-status { grid-column: 2; width: fit-content; }
+      .section { padding: 68px 0; }
+      .step-grid, .setup { grid-template-columns: 1fr; }
+      .step { min-height: 0; }
+      .phone-catalog { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .report-card { grid-template-columns: 45px 1fr; }
+      .report-card > span { grid-column: 2; }
+      .handoff { padding: 26px; }
+      .cta-inner, .footer-inner { align-items: flex-start; flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a href="../index.html" aria-label="Vantage Fit home"><img class="vf-logo" src="../styled-homepage/logo.png" alt="Vantage Fit"></a>
+      <nav class="top-links" aria-label="Primary navigation">
+        <a href="vantage-fit-solutions-hub-v1.html">Solutions</a>
+        <a href="vantage-fit-wellness-platform-v1.html">Platform</a>
+        <a href="https://www.vantagefit.io/en/blog/">Resources</a>
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="btn btn-primary nav-demo" href="#demo">Book a demo</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="shell">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="vantage-fit-solutions-hub-v1.html">Solutions</a><span>/</span><span>Wellness rewards program</span></nav>
+        <div class="hero-grid">
+          <div class="hero-copy"><span class="eyebrow">Wellness rewards program</span><h1>Reward the effort you want <em>repeated.</em></h1><p class="lead">Connect challenge tasks and wellness milestones to points employees can see, understand, and redeem for gift cards. Give HR the controls and reports to run the program responsibly.</p><div class="btn-row"><a class="btn btn-primary" href="#demo">Book a demo</a><a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">See pricing</a></div><div class="hero-proof"><span class="proof-chip"><i></i>Configurable task points</span><span class="proof-chip"><i></i>Wallet statement</span><span class="proof-chip"><i></i>Redemption reporting</span></div></div>
+          <div class="receipt-wrap" role="group" aria-label="Illustrative effort-to-reward flow">
+            <div class="receipt"><div class="receipt-head"><div class="receipt-brand"><i>VF</i>Wellness reward</div><span class="live-pill"><i></i>Credited</span></div><div class="receipt-task"><span class="receipt-label">Completed effort</span><div class="task-row"><strong>Challenge task completed</strong><span>+ configured points</span></div><p class="task-note">Point value follows the challenge setup.</p></div><div class="flow"><div class="flow-row"><div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></div><div class="flow-copy"><strong>Effort verified</strong><span>Task completion recorded</span></div><span class="flow-status">Complete</span></div><div class="flow-row"><div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16v12H4zM4 10h16M16 15h.01"/><path d="M7 7V5h10v2"/></svg></div><div class="flow-copy"><strong>Points reach the wallet</strong><span>Balance and statement update</span></div><span class="flow-status">Visible</span></div><div class="flow-row"><div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 11h18M8 7V4m8 3V4"/></svg></div><div class="flow-copy"><strong>Employee redeems</strong><span>Gift card and denomination selected</span></div><span class="flow-status">Rewarded</span></div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-white">
+      <div class="shell"><div class="section-head"><span class="eyebrow">Employee experience</span><h2>From completed task to usable reward.</h2></div><div class="step-grid"><article class="step"><span class="step-num">01</span><h3>Earn through real participation.</h3><p>Attach point values to challenge tasks, milestones, and completion.</p></article><article class="step"><span class="step-num">02</span><h3>See every movement.</h3><p>Employees can check their balance and review earned and redeemed transactions in their wallet statement.</p></article><article class="step"><span class="step-num">03</span><h3>Redeem with a clear finish.</h3><p>Browse available gift cards, select a denomination, confirm, and receive the gift-card details.</p></article></div></div>
+    </section>
+
+    <section class="section">
+      <div class="shell control-grid">
+        <div><span class="eyebrow">Program design</span><h2>Put the incentive behind the behavior that matters.</h2><p class="lead">Set point values while creating challenge tasks, then use admin awards when a program needs a separate recognition moment.</p></div>
+        <div class="admin-ui" role="group" aria-label="Illustrative reward configuration interface"><div class="admin-head"><div class="admin-title"><i>VF</i>Challenge rewards</div><span class="illustrative">Illustrative</span></div><div class="admin-tabs"><span>Details</span><span>Tasks</span><span class="active">Rewards</span><span>Review</span></div><div class="admin-body"><div class="task-control"><div class="task-control-head"><div><span class="field-label">Challenge task</span><h4>Complete the daily target</h4></div><span class="status">Enabled</span></div><div class="form-grid"><div><span class="field-label">Completion rule</span><div class="fake-input">Completed once per day</div></div><div><span class="field-label">Point value</span><div class="fake-input">Configured value</div></div></div><div class="preview"><span>Employee sees the reward with the task.</span><strong>Preview reward</strong></div></div><div class="upload-row"><div class="upload-copy"><strong>Award points by CSV</strong><span>Upload, verify with OTP, then process.</span></div><button class="mini-btn" type="button">Upload points</button></div></div></div>
+      </div>
+    </section>
+
+    <section class="wallet-stage">
+      <div class="shell wallet-grid">
+        <div><span class="eyebrow">Employee wallet</span><h2>Make earned value easy to follow.</h2><p class="lead">The wallet keeps the employee experience coherent from balance to statement to redemption.</p></div>
+        <div class="phone-catalog" role="group" aria-label="Illustrative employee wallet and gift-card catalog"><div class="wallet-card"><small>Wellness wallet</small><h3>Points and rewards</h3><div class="balance-block"><span>Available points</span><strong>Current wallet balance</strong></div><div class="wallet-actions"><span>Redeem points</span><span>View statement</span></div></div><div class="catalog"><div class="catalog-head"><strong>Choose a gift card</strong><span>Configured catalog</span></div><div class="catalog-grid"><article class="gift"><div class="gift-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M7.5 8C4 8 4 3.5 7 3.5c2.5 0 5 4.5 5 4.5m4.5 0c3.5 0 3.5-4.5.5-4.5-2.5 0-5 4.5-5 4.5"/></svg></div><strong>Everyday essentials</strong><span>Choose denomination</span></article><article class="gift"><div class="gift-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 10h16M6 10l1 10h10l1-10M8 10l2-6h4l2 6"/></svg></div><strong>Food and dining</strong><span>Choose denomination</span></article><article class="gift"><div class="gift-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12h18M12 3v18M5 5l14 14M19 5 5 19"/></svg></div><strong>Entertainment</strong><span>Choose denomination</span></article><article class="gift"><div class="gift-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 7h14l-1 13H6L5 7Zm3 0a4 4 0 0 1 8 0"/></svg></div><strong>Shopping</strong><span>Choose denomination</span></article></div></div></div>
+      </div>
+    </section>
+
+    <section class="section section-white">
+      <div class="shell report-grid"><div><span class="eyebrow">Reward governance</span><h2>See where points came from and where they went.</h2><p class="lead">Keep the motivation visible to employees and the movement traceable for the team running the program.</p></div><div class="report-stack"><article class="report-card"><div class="report-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16v16H4zM8 9h8M8 13h8M8 17h5"/></svg></div><div><h3>Transaction report</h3><p>Audit earned, awarded, and deducted points with their source and timestamp.</p></div><span>Trace points</span></article><article class="report-card"><div class="report-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18v14H3zM3 10h18M8 15h3"/></svg></div><div><h3>Redemption report</h3><p>Review gift-card redemptions by item, denomination, category, and date.</p></div><span>Review use</span></article><article class="report-card"><div class="report-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg></div><div><h3>Filtered CSV exports</h3><p>Carry the relevant view into reconciliation and internal reporting workflows.</p></div><span>Export view</span></article></div></div>
+    </section>
+
+    <section class="section">
+      <div class="shell"><div class="section-head"><span class="eyebrow">Enterprise setup</span><h2>Know what HR controls and what is configured with you.</h2></div><div class="setup"><article class="setup-col"><h3>Self-serve in the admin dashboard</h3><ul><li>Set challenge task point values.</li><li>Upload points by CSV with OTP verification.</li><li>Review transaction and redemption reports.</li></ul></article><article class="setup-col"><h3>Configured with your account manager</h3><ul><li>Wallet availability and employee-facing points label.</li><li>Points value and conversion-rate display.</li><li>Multi-country setup and catalog configuration.</li><li>Separate wallet setup where required.</li></ul></article></div></div>
+    </section>
+
+    <section class="section section-white">
+      <div class="shell"><div class="handoff"><div class="handoff-inner"><div><span class="eyebrow">From insight to action</span><h2>Use the signal to choose what you reinforce.</h2><p>Workforce health insights shows where participation or behavior needs attention. Rewards gives the next program a tangible reinforcement layer.</p></div><a class="btn btn-outline" href="vantage-fit-workforce-health-insights-v1.html">Explore workforce health insights</a></div></div></div>
+    </section>
+
+    <section class="section">
+      <div class="shell center"><span class="eyebrow">Common questions</span><h2>What teams ask before rollout.</h2><div class="faq-list center faq-left"><details><summary>What can employees redeem wellness points for?</summary><p>The Vantage Fit wellness wallet supports gift cards and vouchers available in the configured catalog.</p></details><details><summary>Can we award points outside a challenge?</summary><p>Yes. Admins can upload awards by CSV, with OTP verification in the current admin flow.</p></details><details><summary>Can wellness rewards stay separate from our recognition program?</summary><p>A separate wellness wallet can be configured. Each wallet keeps its own balance, catalog, and history, and points do not move between wallets.</p></details><details><summary>How can HR audit rewards?</summary><p>Transaction and redemption reports show point movements and redemptions, with filters and CSV export.</p></details></div></div>
+    </section>
+
+    <section class="cta-band" id="demo">
+      <div class="shell cta-inner"><div><h2>Make healthy effort feel worth repeating.</h2><p>See how points, wallets, gift-card redemption, and reporting work together in Vantage Fit.</p></div><div class="btn-row"><a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a><a class="btn btn-light" href="https://www.vantagefit.io/pricing/">See pricing</a></div></div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="shell footer-inner"><img src="../styled-homepage/logo.png" alt="Vantage Fit"><p>Wellness effort, recognized and responsibly rewarded.</p></div></footer>
+</body>
+</html>

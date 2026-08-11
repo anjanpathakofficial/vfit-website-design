@@ -1,0 +1,1844 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Required: these are unshipped preview mocks. Do not remove. -->
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="description" content="Browse ready-to-run employee wellness challenges for steps, mind, food, sleep and teams. Employees are enrolled automatically, not by sign-up. Book a demo.">
+  <meta name="theme-color" content="#18262b">
+  <title>Employee Wellness Challenges | Vantage Fit</title>
+  <link rel="stylesheet" href="../styles/enterprise.css">
+
+  <!--
+    IA FLAGS FOR A HUMAN (from WELLNESS-CHALLENGES-BRIEF.md section 9.1). Neither blocks this build:
+    1. Slug collision. The shipped multi-activity consolidated page already claims
+       /solutions/wellness-challenge (singular). This page follows the signed-off menu URL
+       /solutions/wellness-challenges/ (plural). Two near-identical slugs will cannibalise.
+    2. Relationship to the live vantagefit.io/wellness-challenges/ library. This build assumes this
+       page sits ABOVE it, which is why the library cards are summaries and not links.
+       If the decision goes the other way, each .lib-card becomes an <a> to its detail-page href.
+    3. "21" is hard-coded in the h1, the section 3 h2, the All pill and the status line. On the real
+       page it must be derived from challenges.length, exactly as the live library derives displayTotal.
+  -->
+
+  <style>
+    /* ============================================================
+       Wellness challenges (library, flagship). Tokens, buttons, hero
+       frame, .dash, .steps, .final, nav and footer all come from
+       ../styles/enterprise.css.
+       NEW on this page: the browse-and-pick catalogue (.lib-filters /
+       .lib-grid / .lib-card), the 12-month planning calendar
+       (.year-grid), the hero library-browse frame (.hl-pills /
+       .hl-grid) and audience card (.aud-card), the ops-configured
+       formats strip (.ops-strip), and the employee score-breakdown
+       board (.sb-row / .cap-flag).
+       No .trust-screen band on this page: the compliance line rides
+       in .fair-fine instead. See brief section 2.4.
+       ============================================================ */
+
+    /* --- Nav: Solutions is the current section, Wellness challenges the current page --- */
+    .nav-trigger.is-current { background: var(--soft); color: var(--ink); box-shadow: inset 0 -2px 0 var(--coral); border-radius: 9px 9px 0 0; }
+    .mega a.mega-link.is-page { background: var(--soft); box-shadow: inset 3px 0 0 var(--coral); }
+    /* Escape closes a mega even while focus stays on its trigger. */
+    .nav-item.esc-closed .mega { display: none; }
+
+    /* --- Shared section shells (hub vocabulary) --- */
+    .hub-section { padding: 96px 0; }
+    .hub-head { max-width: 720px; }
+    .hub-head .lead { margin-top: 14px; }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s cubic-bezier(.22,.9,.24,1); }
+    .reveal.on { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+    /* --- Skip link. The nav carries three mega menus. WCAG 2.4.1. --- */
+    .skip-link { position: absolute; left: -9999px; }
+    .skip-link:focus {
+      left: 16px; top: 12px; z-index: 60;
+      padding: 10px 16px;
+      border-radius: 10px;
+      background: var(--ink);
+      color: #fff;
+      font-weight: 700;
+      outline: 3px solid var(--coral-dark);
+      outline-offset: 2px;
+    }
+
+    /* --- Contrast lifts on inherited small-text rules. Scoped here because the
+       stylesheet is shared; flag upstream separately. --- */
+    .logos-label { color: rgba(41,41,76,.72); }
+    .logo-word { color: rgba(41,41,76,.78); }
+    /* .eyebrow is --coral-dark, which clears 4.5:1 on white but not on tinted grounds. */
+    .outcomes-screen .eyebrow,
+    .calendar-screen .eyebrow,
+    .rollout-screen .eyebrow,
+    .proof-hub .eyebrow,
+    .related-screen .eyebrow { color: var(--coral-deep); }
+
+    /* --- Focus visibility. The inherited ring is a 16%-alpha ink outline, which
+       reads as no ring at all on white. --- */
+    .seg-btn:focus-visible,
+    .lib-pill:focus-visible { outline: 3px solid var(--coral-dark); outline-offset: 2px; border-radius: 999px; }
+    .text-link:focus-visible,
+    .lib-card a:focus-visible { outline: 3px solid var(--coral-dark); outline-offset: 3px; border-radius: 6px; }
+    .text-link-light:focus-visible { outline: 3px solid var(--lime); outline-offset: 3px; }
+
+    /* --- The primary CTA gradient starts on flat coral, which is 3.45:1 under a
+       white label. Start it a step darker so the label always clears 4.5:1. --- */
+    .btn-primary { background: linear-gradient(125deg, var(--coral-dark) 0%, var(--coral-deep) 100%); }
+
+    /* --- Gradient-clipped text disappears in forced-colors mode. --- */
+    @media (forced-colors: active) {
+      .stat,
+      .hero-copy h1 em { background: none; -webkit-text-fill-color: currentColor; color: CanvasText; }
+      .lib-pill[aria-pressed="true"] { forced-color-adjust: none; }
+    }
+
+    /* --- Illustrative-data label, required on every drawn mock --- */
+    .mock-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(41,41,76,.04);
+      /* A required disclosure, so it sits a step darker than --muted. */
+      color: rgba(41,41,76,.75);
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* --- S1 Hero: a library-browse frame plus a create-challenge audience card.
+       No phone here on purpose. Every sibling page opens with one; this page's
+       signature is the catalogue, so the hero shows the shelf. --- */
+    .challenges-hero .hero-grid { grid-template-columns: 1.02fr .98fr; }
+    .challenges-hero .hero-copy .lead { max-width: 566px; }
+    .challenges-hero .hero-visual { min-height: 548px; }
+    /* Narrower than the 430px house default so the audience card can sit beside it
+       rather than across it: the six library tiles are the point of this surface. */
+    .challenges-hero .dash { width: min(100%, 400px); box-shadow: 0 30px 74px rgba(41,41,76,.18); }
+    .challenges-hero .dash-body { padding: 16px 16px 18px; }
+
+    .hl-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+    .hl-pills span {
+      padding: 5px 10px;
+      border-radius: 9px;
+      background: var(--soft);
+      color: var(--muted);
+      font-size: .7rem;
+      font-weight: 700;
+    }
+    .hl-pills span:first-child { background: var(--ink); color: #fff; }
+    .hl-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 12px; }
+    .hl-tile { padding: 10px 11px; border: 1px solid var(--line); border-radius: 11px; background: #fff; }
+    .hl-tile b { display: block; font-size: .74rem; font-weight: 700; letter-spacing: -.015em; }
+    .hl-tile span { display: block; margin-top: 3px; color: var(--muted); font-size: .62rem; font-variant-numeric: tabular-nums; }
+
+    .aud-card {
+      position: absolute;
+      right: -16px;
+      bottom: 2px;
+      z-index: 2;
+      width: 232px;
+      padding: 16px 18px 14px;
+      border: 1px solid rgba(41,41,76,.1);
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 22px 54px rgba(41,41,76,.16);
+      transform: rotate(-2.4deg);
+    }
+    .aud-card .lm-head { display: flex; flex-direction: column; gap: 3px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+    .aud-card .lm-head b { font-size: .84rem; letter-spacing: -.015em; }
+    .aud-card .lm-head span { color: var(--muted); font-size: .58rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+    .aud-card .lm-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 1px; border-bottom: 1px solid var(--line); font-size: .74rem; }
+    .aud-card .lm-row > span:first-child { color: var(--muted); font-weight: 700; font-size: .68rem; }
+    .lm-val { font-weight: 700; font-variant-numeric: tabular-nums; }
+    .lm-chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 999px; background: rgba(65,216,180,.13); color: #0f7a61; font-size: .66rem; font-weight: 750; font-variant-numeric: tabular-nums; }
+    .lm-chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--mint); }
+    .lm-label { display: block; margin: 12px 1px 7px; color: var(--muted); font-size: .66rem; font-weight: 700; }
+    .lm-opts { display: grid; gap: 6px; }
+    .lm-opt { display: grid; grid-template-columns: 15px 1fr; gap: 9px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: 11px; }
+    .lm-opt i { width: 14px; height: 14px; border: 2px solid rgba(41,41,76,.24); border-radius: 50%; }
+    .lm-opt.is-selected { border-color: rgba(65,216,180,.55); background: rgba(65,216,180,.07); }
+    .lm-opt.is-selected i { border-color: var(--mint-dark); background: radial-gradient(circle, var(--mint-dark) 0 3.2px, #fff 3.2px); }
+    .lm-opt b { display: block; font-size: .73rem; letter-spacing: -.012em; }
+    .lm-note { margin-top: 10px; color: var(--muted); font-size: .61rem; line-height: 1.45; }
+    .aud-card .mock-tag { margin-top: 10px; }
+
+    /* --- S2 Outcome chooser + S5 Formats: shared format-card vocabulary --- */
+    .outcomes-screen { background: var(--canvas); }
+    .formats-screen { background: #fff; }
+    .format-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; margin-top: 36px; }
+    .format-card { grid-column: span 2; }
+    .format-card:nth-child(4), .format-card:nth-child(5) { grid-column: span 3; }
+    .format-card {
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .format-card:hover { transform: translateY(-3px); border-color: rgba(41,41,76,.22); box-shadow: var(--shadow-soft); }
+    .format-glyph { display: grid; align-items: end; height: 46px; margin-bottom: 18px; }
+    .format-glyph svg { display: block; width: 74px; height: 44px; }
+    .format-card h3 { font-size: 1.08rem; letter-spacing: -.02em; }
+    .format-card > p { margin-top: 8px; color: var(--muted); font-size: .87rem; line-height: 1.55; }
+    .best-for {
+      display: block;
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .78rem;
+      line-height: 1.5;
+    }
+    .best-for b {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--mint-dark);
+      font-size: .6rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .format-card .text-link { margin-top: 12px; font-size: .8rem; }
+    .format-note { margin-top: 22px; color: var(--muted); font-size: .8rem; }
+
+    /* --- S3 The library. THE SIGNATURE SECTION.
+       A real browse-and-pick catalogue: two filter groups, a polite live
+       region, and 21 typographic cards built from wellness-challenges.ts.
+       No photography: 21 rasters would cost 21 requests on a page whose
+       whole value is scanning speed. --- */
+    .library-screen { background: #fff; }
+    .lib-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 30px; }
+    .lib-filters + .lib-filters { margin-top: 10px; }
+    .lib-group-label { margin-right: 4px; color: var(--muted); font-size: .68rem; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+    .lib-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 44px;
+      padding: 0 15px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: inherit;
+      font-size: .82rem;
+      font-weight: 700;
+      letter-spacing: -.01em;
+      cursor: pointer;
+      transition: background .2s ease, border-color .2s ease, color .2s ease;
+    }
+    .lib-pill:hover { background: var(--soft); border-color: rgba(41,41,76,.22); }
+    .lib-pill[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+    .lib-count { padding: 2px 7px; border-radius: 999px; background: rgba(41,41,76,.07); color: var(--muted); font-size: .66rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .lib-pill[aria-pressed="true"] .lib-count { background: rgba(255,255,255,.2); color: #fff; }
+    .lib-status { margin-top: 20px; color: var(--muted); font-size: .78rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+    .lib-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 14px; }
+    .lib-card {
+      display: flex;
+      flex-direction: column;
+      padding: 18px 20px 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+      transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    }
+    .lib-card:hover { transform: translateY(-3px); border-color: rgba(41,41,76,.22); box-shadow: var(--shadow-soft); }
+    .lib-card[hidden] { display: none; }
+    .lib-tag {
+      align-self: flex-start;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: .57rem;
+      font-weight: 800;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    /* Category tints. Every tint also carries its category name as text, so
+       nothing on this grid depends on hue alone. */
+    .lib-card[data-cat="physical"]  .lib-tag { background: rgba(241,81,98,.1);  color: var(--coral-deep); }
+    .lib-card[data-cat="mental"]    .lib-tag { background: rgba(65,216,180,.16); color: #0f7a61; }
+    .lib-card[data-cat="nutrition"] .lib-tag { background: rgba(246,185,59,.22); color: #8a5f0b; }
+    .lib-card[data-cat="sleep"]     .lib-tag { background: rgba(41,41,76,.09);   color: #3d3d68; }
+    .lib-card[data-cat="team"]      .lib-tag { background: rgba(44,66,73,.11);   color: #1f545f; }
+    .lib-card h3 { margin-top: 12px; font-size: 1.02rem; letter-spacing: -.022em; }
+    .lib-line { display: block; margin-top: 5px; color: var(--coral-dark); font-size: .73rem; font-weight: 700; letter-spacing: -.005em; }
+    .lib-card > p { margin-top: 9px; color: var(--muted); font-size: .83rem; line-height: 1.5; }
+    .lib-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 15px; }
+    .lib-meta span {
+      padding: 3px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: .63rem;
+      font-weight: 650;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* --- S4 A themed program for every month --- */
+    .calendar-screen { background: var(--canvas); }
+    .year-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 36px; }
+    .year-card { padding: 18px 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); }
+    .year-month { display: block; color: var(--coral-dark); font-size: .62rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .year-theme { display: block; margin-top: 6px; color: var(--muted); font-size: .72rem; }
+    .year-name { display: block; margin-top: 4px; color: var(--ink); font-size: .95rem; font-weight: 750; letter-spacing: -.02em; }
+    .year-weeks { display: block; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: .7rem; line-height: 1.5; }
+
+    /* --- S5 Formats: the ops-configured strip under the self-serve grid --- */
+    .ops-strip { margin-top: 14px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 16px; background: var(--canvas); }
+    .ops-label { display: block; color: var(--muted); font-size: .62rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .ops-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 14px; }
+    .ops-item b { display: block; font-size: .88rem; letter-spacing: -.015em; }
+    .ops-item span { display: block; margin-top: 3px; color: var(--muted); font-size: .8rem; line-height: 1.45; }
+
+    /* --- S6 How any challenge runs --- */
+    .rollout-screen { background: var(--canvas); }
+    .rollout-screen .steps { margin-top: 40px; margin-bottom: 0; }
+
+    /* --- S7 Fair, inclusive, and private: dark inset + score-breakdown board --- */
+    .fairness-screen { background: #fff; }
+    .fairness-screen .fairband { margin-top: 40px; }
+    .fairband {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 48px;
+      align-items: center;
+      padding: 44px 48px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: linear-gradient(135deg, var(--dark), #2c4249);
+      color: #fff;
+    }
+    .fairband .eyebrow { margin-bottom: 12px; color: var(--lime); }
+    /* h3, not h2: this band sits inside a section already titled by #fairness-heading,
+       so a second h2 would read as a peer of the section heading in the outline. */
+    .fairband h3 { font-size: clamp(1.6rem, 2.8vw, 2.3rem); letter-spacing: -.03em; max-width: 460px; }
+    .fairband .lead { margin-top: 14px; max-width: 480px; color: rgba(255,255,255,.68); font-size: .95rem; }
+    .fair-list { display: grid; gap: 14px; margin-top: 26px; }
+    .fair-item { display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: start; }
+    .fair-item i {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      border: 1px solid var(--line-dark);
+      border-radius: 10px;
+      background: rgba(255,255,255,.06);
+      color: var(--mint);
+      font-style: normal;
+    }
+    .fair-item i svg { width: 17px; height: 17px; }
+    .fair-item b { display: block; font-size: .95rem; letter-spacing: -.015em; }
+    .fair-item p { margin-top: 3px; color: rgba(255,255,255,.62); font-size: .82rem; line-height: 1.5; }
+    .fair-fine { margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--line-dark); color: rgba(255,255,255,.62); font-size: .72rem; line-height: 1.6; }
+    .fairband .text-link { margin-top: 12px; font-size: .84rem; }
+
+    .audit-board {
+      justify-self: end;
+      width: min(100%, 380px);
+      padding: 20px 22px;
+      border: 1px solid rgba(41,41,76,.1);
+      border-radius: 18px;
+      background: #f9faf8;
+      color: var(--ink);
+      box-shadow: 0 26px 60px rgba(0,0,0,.32);
+    }
+    .audit-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+    .audit-head b { font-size: .84rem; letter-spacing: -.015em; }
+    .audit-live { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: .58rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; text-align: right; }
+    .audit-live i { flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 0 3px rgba(65,216,180,.16); }
+    .audit-cols, .sb-row { display: grid; grid-template-columns: 1fr 72px 70px 38px; gap: 6px; align-items: center; }
+    .audit-cols { padding: 10px 2px 8px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: .56rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+    .audit-cols span:last-child, .sb-pts { text-align: right; }
+    .sb-row { padding: 11px 2px; border-bottom: 1px solid var(--line); font-size: .78rem; }
+    .sb-row:last-of-type { border-bottom: 0; }
+    .sb-task { font-weight: 700; letter-spacing: -.015em; }
+    .sb-num { color: var(--muted); font-size: .72rem; font-weight: 650; font-variant-numeric: tabular-nums; }
+    .sb-scored { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .sb-pts { font-weight: 800; font-variant-numeric: tabular-nums; }
+    .cap-flag {
+      padding: 2px 6px;
+      border: 1px solid rgba(65,216,180,.35);
+      border-radius: 999px;
+      background: rgba(65,216,180,.14);
+      color: #128f72;
+      font-size: .52rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .audit-caption { margin-top: 12px; color: var(--muted); font-size: .68rem; line-height: 1.5; }
+    .audit-board .mock-tag { margin-top: 10px; }
+
+    /* --- S8 Proof: four programs, four lengths, four measured results --- */
+    .proof-hub { background: #f6f7f4; }
+    .results-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 40px; }
+    .result-card { display: flex; flex-direction: column; padding: 24px; border: 1px solid var(--line); border-radius: 18px; background: var(--paper); box-shadow: 0 8px 24px rgba(30,38,38,.05); }
+    .result-card .stat {
+      display: block;
+      font-size: 2.9rem;
+      font-weight: 800;
+      letter-spacing: -.055em;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      background: linear-gradient(125deg, var(--coral) 15%, var(--coral-deep) 95%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+    }
+    .result-card > p { margin-top: 10px; color: var(--ink); font-size: .87rem; font-weight: 600; line-height: 1.5; }
+    .result-card .segment {
+      display: block;
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .64rem;
+      font-weight: 800;
+      letter-spacing: .09em;
+      line-height: 1.6;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    a.segment:hover { color: var(--coral-deep); text-decoration: underline; }
+    a.segment:focus-visible { outline: 3px solid var(--coral-dark); outline-offset: 3px; border-radius: 6px; }
+    .quote-duo { display: grid; grid-template-columns: 1.15fr .85fr; gap: 14px; margin-top: 28px; }
+    .quote-band {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 18px;
+      padding: 22px 26px;
+      border-left: 4px solid var(--coral);
+      border-radius: 0 18px 18px 0;
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+    }
+    .quote-band.text-only { grid-template-columns: 1fr; align-content: center; }
+    .quote-band blockquote { margin: 0; font-size: .95rem; font-weight: 700; letter-spacing: -.015em; line-height: 1.5; }
+    .quote-band .quote-who { display: block; margin-top: 6px; color: var(--muted); font-size: .74rem; font-weight: 500; }
+    .proof-fine { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; margin-top: 18px; }
+    .proof-fine small { max-width: 720px; color: var(--muted); font-size: .68rem; line-height: 1.6; }
+    .proof-fine .text-link { margin-top: 0; font-size: .82rem; }
+
+    /* --- S9 FAQ. Native <details>, zero JS. --- */
+    .faq-screen { background: #fff; }
+    .faq-list { max-width: 840px; margin-top: 34px; border-top: 1px solid var(--line); }
+    .faq-item { padding: 18px 0; border-bottom: 1px solid var(--line); }
+    .faq-item summary { display: flex; align-items: center; justify-content: space-between; gap: 18px; cursor: pointer; list-style: none; min-height: 44px; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary h3 { font-size: 1.02rem; font-weight: 700; letter-spacing: -.02em; }
+    .faq-item summary::after { content: ""; flex: none; width: 9px; height: 9px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); transition: transform .2s ease; }
+    .faq-item[open] summary::after { transform: rotate(-135deg); }
+    .faq-item summary:focus-visible { outline: 3px solid var(--coral-dark); outline-offset: 2px; border-radius: 8px; }
+    .faq-item p { margin-top: 12px; max-width: 720px; color: var(--muted); font-size: .9rem; line-height: 1.6; }
+
+    /* --- S10 Related programs. Four columns, not the standard three: routing to
+       all four Section 1 siblings is this page's stated job in the IA. --- */
+    .related-screen { padding: 72px 0; background: var(--canvas); }
+    .related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; }
+    .challenges-related .related-grid { grid-template-columns: repeat(4, 1fr); }
+    /* Four columns means these titles wrap, and the flex arrow would strand itself
+       on the far right of the second line. Trail it after the last word instead. */
+    .challenges-related .related-row h3 { display: block; }
+    .challenges-related .related-row h3 svg { display: inline-block; margin-left: 6px; vertical-align: -1px; }
+    .related-row {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      align-items: start;
+      gap: 14px;
+      padding: 20px 22px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+      transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+    }
+    .related-row:hover { transform: translateY(-2px); border-color: rgba(241,81,98,.35); box-shadow: var(--shadow-soft); }
+    .related-row:focus-visible { outline: 3px solid var(--coral-dark); outline-offset: 3px; }
+    .related-icon { display: grid; width: 38px; height: 38px; place-items: center; border-radius: 11px; background: rgba(41,41,76,.06); color: var(--ink); }
+    .related-icon svg { width: 18px; height: 18px; }
+    .related-row h3 { display: flex; align-items: center; gap: 8px; font-size: .98rem; letter-spacing: -.015em; }
+    .related-row h3 svg { width: 14px; flex: none; color: var(--coral-dark); }
+    .related-row p { margin-top: 4px; color: var(--muted); font-size: .82rem; line-height: 1.45; }
+
+    /* --- Footer: five columns (brand + Solutions + Features + Resources + Company) --- */
+    .footer-grid { grid-template-columns: 1.5fr repeat(4, 1fr); gap: 32px; }
+
+    /* --- Responsive --- */
+    @media (max-width: 1100px) {
+      .challenges-hero .hero-grid { grid-template-columns: 1fr; }
+      .format-grid { grid-template-columns: 1fr 1fr; }
+      .format-card, .format-card:nth-child(4), .format-card:nth-child(5) { grid-column: auto; }
+      .lib-grid { grid-template-columns: repeat(2, 1fr); }
+      .year-grid { grid-template-columns: repeat(2, 1fr); }
+      .ops-grid { grid-template-columns: 1fr 1fr; }
+      .fairband { grid-template-columns: 1fr; gap: 32px; padding: 34px; }
+      .audit-board { justify-self: start; }
+      .results-grid { grid-template-columns: 1fr 1fr; }
+      .quote-duo { grid-template-columns: 1fr; }
+      .challenges-related .related-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1.4fr repeat(2, 1fr); gap: 32px 28px; }
+    }
+    @media (max-width: 860px) {
+      .hub-section { padding: 64px 0; }
+      .challenges-hero .hero-visual { min-height: 0; }
+      .challenges-hero .dash { position: static; width: 100%; transform: none; }
+      .aud-card { position: static; width: 100%; max-width: 320px; margin: 14px auto 0; transform: none; }
+      .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+    }
+    @media (max-width: 640px) {
+      .format-grid { grid-template-columns: 1fr; }
+      .format-card, .format-card:nth-child(4), .format-card:nth-child(5) { grid-column: auto; }
+      .lib-grid { grid-template-columns: 1fr; }
+      .year-grid { grid-template-columns: 1fr; }
+      .ops-grid { grid-template-columns: 1fr; }
+      .results-grid { grid-template-columns: 1fr; }
+      .quote-band { grid-template-columns: 1fr; }
+      .fairband { padding: 26px 22px; }
+      .challenges-related .related-grid { grid-template-columns: 1fr; }
+      .audit-cols, .sb-row { grid-template-columns: 1fr 66px 64px 34px; }
+    }
+    @media (max-width: 400px) {
+      .lib-group-label { flex-basis: 100%; }
+      .audit-board { padding: 18px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#top">Skip to main content</a>
+
+  <!-- ===================== TOP NAV ===================== -->
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="https://www.vantagefit.io/" aria-label="Vantage Fit home">
+        <img src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37" style="height:32px;width:auto;display:block">
+      </a>
+
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+
+      <div class="nav-links" id="nav-links">
+
+        <!-- ---------- SOLUTIONS (signed-off IA: two sections) ---------- -->
+        <div class="nav-item">
+          <button class="nav-trigger is-current" type="button" aria-expanded="false">
+            Solutions
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Solutions menu">
+            <div class="mega-body">
+              <div class="mega-grid cols-2">
+                <div>
+                  <div class="mega-col-title">Wellness challenges: what you want to run</div>
+                  <a class="mega-link is-page" aria-current="page" href="#top">Wellness challenges<span>The full library of ready-to-run challenges</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/step-challenges/">Step challenges<span>Company-wide step goals that get everyone moving</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/multi-activity-challenges/">Multi-activity challenges<span>Any activity, solo or in teams, over themed weeks</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/remote-team-wellness/">Remote &amp; hybrid team challenges<span>Wellness that works away from the office</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/virtual-marathon/">Virtual marathon<span>Distance events powered by steps</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Workforce health &amp; rewards: measure and motivate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/health-risk-assessment/">Health Risk Assessment<span>Baseline health screening with aggregate insights</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/workforce-health-insights/">Workforce health insights<span>Participation, challenge and activity analytics your board can read</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/wellness-rewards-program/">Wellness rewards program<span>Points and gift cards tied to real effort</span></a>
+                </div>
+              </div>
+            </div>
+            <div class="mega-foot">
+              <span>The whole product on one page: <strong>Wellness platform</strong></span>
+              <a class="text-link" style="margin-top:0;font-size:.8rem" href="https://www.vantagefit.io/solutions/wellness-platform/">See the platform
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </a>
+            </div>
+            <a class="mega-banner" href="https://www.vantagefit.io/solutions/">
+              See every program on one page: the Solutions overview
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- ---------- FEATURES ---------- -->
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Features
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">For employees</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/activity-tracking/">Activity &amp; health tracking<span>Steps, workouts, sleep and more, auto-synced</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/nutrition-and-hydration/">Nutrition &amp; hydration<span>Everyday habits, gently tracked</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/mental-health-and-mindfulness/">Mental wellbeing &amp; mindfulness<span>Sessions, streaks and mood check-ins</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/personalized-programs/">Personalized programs<span>Plans tuned to each employee's goals</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">For HR teams</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/admin-dashboard/">Participation analytics &amp; insights<span>Trends, AI insights and board-ready exports in one console</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/incentivization-and-rewards/">Incentives &amp; rewards<span>Points, badges and a global gift-card catalogue</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/engagement-tools/">Engagement tools &amp; community<span>Group chats, campaigns, streaks and certificates that keep people coming back</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/wellness-leagues/">Wellness leagues<span>Segment by activity level, lift every tier</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Platform</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/integrations/">Integrations<span>Wearables, HRIS, SSO and more</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/security-and-compliance/">Security &amp; compliance<span>Aggregate-only reporting, regional hosting, SOC 2 Type II</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/accessibility/">Accessibility<span>Inclusive across devices, locations and abilities</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/health-data-upload/">Health data upload<span>Turn existing health data into insight</span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---------- RESOURCES ---------- -->
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Resources
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Resources menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">Learn</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/">Blog<span>Ideas and research for healthier workplaces</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/guides/">Reports &amp; research<span>Playbooks and the annual industry report</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/tools-and-templates/">Tools &amp; templates<span>ROI calculator and DIY challenge templates</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/podcasts/">Podcasts<span>Conversations with HR and wellbeing leaders</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Evaluate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/casestudy/">Customer stories<span>Results from real customer programs</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/compare/">Comparisons<span>Vantage Fit vs the alternatives</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/trust-center/">Trust Center<span>Security and privacy documentation in one place</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/">Help Center<span>Product docs and setup guides</span></a>
+                </div>
+                <a class="mega-feature" href="#library">
+                  <span>
+                    <small>Featured</small>
+                    <b>Wellness Challenges Library</b>
+                    <p>Browse ready-to-run challenges your teams can start this month.</p>
+                  </span>
+                  <span class="go">Explore the library
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- tabindex="-1" so the skip link actually moves focus. Without it Chrome and
+       Safari scroll to #top but leave focus on <body>. -->
+  <main id="top" tabindex="-1">
+
+    <!-- ========================= S1 HERO ========================= -->
+    <header class="hero challenges-hero" id="hero" aria-labelledby="hero-heading">
+      <div class="shell hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Challenge library</span>
+          <h1 id="hero-heading">21 employee wellness challenges, ready to run. <em>Enrollment is automatic.</em></h1>
+          <p class="lead">Browse by what you want to change, pick a program, and set the audience. Employees are enrolled by rule, so there is nothing for them to go and join.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+            <a class="btn btn-outline" href="#library">Browse the library</a>
+          </div>
+          <div class="hero-note">
+            <span>Creating a challenge takes 5 to 10 minutes from the admin dashboard.</span>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+
+          <!-- Hero surface 1: the library browse frame -->
+          <div class="dash" role="img" aria-label="Challenge library browser showing filter chips for focus areas and six ready-to-run challenge cards including Step it up challenge and Team step challenge. Figures shown are illustrative.">
+            <div class="dash-top" aria-hidden="true">
+              <span class="dash-dot"></span><span class="dash-dot"></span><span class="dash-dot"></span>
+              <span class="dash-url"></span>
+            </div>
+            <div class="dash-body">
+              <div class="dash-title">
+                <div>
+                  <small>Vantage Fit &middot; Challenge library</small>
+                  <strong>Pick a program to run</strong>
+                </div>
+                <span class="mock-tag">Illustrative data</span>
+              </div>
+
+              <div class="hl-pills" aria-hidden="true">
+                <span>All</span><span>Physical</span><span>Mental</span><span>Nutrition</span><span>Sleep</span>
+              </div>
+
+              <div class="hl-grid" aria-hidden="true">
+                <div class="hl-tile"><b>Step it up challenge</b><span>30 days &middot; Solo or teams</span></div>
+                <div class="hl-tile"><b>Mental health awareness</b><span>30 days &middot; Solo or teams</span></div>
+                <div class="hl-tile"><b>Sleep challenge</b><span>30 days &middot; Solo or teams</span></div>
+                <div class="hl-tile"><b>Team step challenge</b><span>30 days &middot; Teams</span></div>
+                <div class="hl-tile"><b>Mindful eating challenge</b><span>30 days &middot; Solo or teams</span></div>
+                <div class="hl-tile"><b>Lunch walk</b><span>21 days &middot; Solo or teams</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero surface 2: the create-challenge audience card -->
+          <div class="aud-card" role="img" aria-label="Create-challenge wizard on the target audience step, with all filters set to All, 1,284 employees matching, and Enroll immediately selected. Figures shown are illustrative.">
+            <div class="lm-head" aria-hidden="true">
+              <b>Create challenge</b>
+              <span>Step 5 of 7 &middot; Target audience</span>
+            </div>
+            <div class="lm-row" aria-hidden="true"><span>Country</span><span class="lm-val">All</span></div>
+            <div class="lm-row" aria-hidden="true"><span>Department</span><span class="lm-val">All</span></div>
+            <div class="lm-row" aria-hidden="true"><span>Age range</span><span class="lm-val">All</span></div>
+            <div class="lm-row" aria-hidden="true"><span>Audience</span><span class="lm-chip">1,284 employees match</span></div>
+            <span class="lm-label" aria-hidden="true">Enrollment</span>
+            <div class="lm-opts" aria-hidden="true">
+              <div class="lm-opt is-selected"><i></i><b>Enroll immediately</b></div>
+              <div class="lm-opt"><i></i><b>Enroll when active</b></div>
+            </div>
+            <p class="lm-note" aria-hidden="true">Matching employees are enrolled when the challenge starts. Nothing for them to accept.</p>
+            <span class="mock-tag">Illustrative data</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="logo-band">
+        <div class="shell logos" role="group" aria-label="Selected customers">
+          <span class="logos-label">Trusted by 100+ organizations worldwide</span>
+          <span class="logo-word">TATA MOTORS</span>
+          <span class="logo-word">WIPRO</span>
+          <span class="logo-word">TEVA</span>
+          <span class="logo-word">GODREJ</span>
+          <span class="logo-word">TEXAS INSTRUMENTS</span>
+          <span class="logo-word">HEIDRICK &amp; STRUGGLES</span>
+          <span class="logo-word">BRAZOSPORT ISD</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============= S2 START FROM THE OUTCOME YOU WANT ============= -->
+    <section class="hub-section outcomes-screen" id="outcomes" aria-labelledby="outcomes-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Start here</span>
+          <h2 id="outcomes-heading">Start from the outcome you want.</h2>
+          <p class="lead">Five goals HR teams actually get handed, and the programs that produce them.</p>
+        </div>
+
+        <div class="format-grid">
+          <article class="format-card grows reveal">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44">
+                <ellipse cx="8" cy="35" rx="4" ry="6" fill="rgba(41,41,76,.14)"/>
+                <ellipse cx="20" cy="30" rx="4" ry="6" fill="rgba(41,41,76,.16)"/>
+                <ellipse cx="32" cy="25" rx="4" ry="6" fill="rgba(41,41,76,.24)"/>
+                <ellipse cx="44" cy="19" rx="4" ry="6" fill="rgba(41,41,76,.34)"/>
+                <ellipse cx="56" cy="12" rx="4" ry="6" fill="#F15162"/>
+                <path d="M4 42h64" stroke="rgba(41,41,76,.14)" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Get everyone moving</h3>
+            <p>One number everyone understands, and a phone is enough to count it.</p>
+            <span class="best-for"><b>Start with</b>Step it up challenge, Team step challenge</span>
+            <a class="text-link" href="https://www.vantagefit.io/solutions/step-challenges/">See step challenges
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </article>
+
+          <article class="format-card grows reveal">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44">
+                <rect x="5" y="6" width="46" height="6" rx="3" fill="rgba(41,41,76,.16)"/>
+                <rect x="5" y="17" width="62" height="6" rx="3" fill="#41d8b4"/>
+                <rect x="5" y="28" width="34" height="6" rx="3" fill="rgba(41,41,76,.24)"/>
+                <rect x="5" y="36" width="52" height="6" rx="3" fill="#F15162"/>
+              </svg>
+            </div>
+            <h3>Cover more than steps</h3>
+            <p>Weekly themes that pull in sleep, food, mind and movement.</p>
+            <span class="best-for"><b>Start with</b>Mental health awareness, Sleep challenge</span>
+            <a class="text-link" href="https://www.vantagefit.io/solutions/multi-activity-challenges/">See multi-activity challenges
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </article>
+
+          <article class="format-card grows reveal">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44">
+                <circle cx="9" cy="9" r="4" fill="rgba(41,41,76,.24)"/>
+                <circle cx="20" cy="15" r="4" fill="rgba(41,41,76,.16)"/>
+                <circle cx="11" cy="21" r="4" fill="rgba(41,41,76,.16)"/>
+                <circle cx="53" cy="9" r="4" fill="rgba(41,41,76,.24)"/>
+                <circle cx="64" cy="15" r="4" fill="rgba(41,41,76,.16)"/>
+                <circle cx="55" cy="21" r="4" fill="rgba(41,41,76,.16)"/>
+                <path d="M26 15h22" stroke="rgba(41,41,76,.24)" stroke-width="1.5" stroke-dasharray="3 3" stroke-linecap="round"/>
+                <rect x="18" y="33" width="38" height="7" rx="3.5" fill="#41d8b4"/>
+              </svg>
+            </div>
+            <h3>Bring remote and hybrid teams together</h3>
+            <p>Teams rank on the average of member scores, so nobody carries the group.</p>
+            <span class="best-for"><b>Start with</b>Team yoga, Lunch walk</span>
+            <a class="text-link" href="https://www.vantagefit.io/solutions/remote-team-wellness/">See remote and hybrid challenges
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </article>
+
+          <article class="format-card grows reveal">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44">
+                <rect x="3"  y="14" width="15" height="15" rx="4" fill="#41d8b4"/>
+                <rect x="21" y="14" width="15" height="15" rx="4" fill="#41d8b4"/>
+                <rect x="39" y="14" width="15" height="15" rx="4" fill="none" stroke="rgba(41,41,76,.24)" stroke-width="1.6"/>
+                <rect x="57" y="14" width="15" height="15" rx="4" fill="#41d8b4"/>
+                <path d="M3 37h69" stroke="rgba(41,41,76,.14)" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M3 37h33" stroke="#F15162" stroke-width="2.4" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Build a habit that survives a bad week</h3>
+            <p>One small target a day, so a missed day costs that day and not the program.</p>
+            <span class="best-for"><b>Start with</b>Breathing exercise, Sugar free</span>
+            <a class="text-link" href="#library">Browse habit challenges
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </article>
+
+          <article class="format-card grows reveal">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44">
+                <path d="M8 34c14-22 38-22 52-2" stroke="rgba(41,41,76,.24)" stroke-width="1.8" fill="none" stroke-dasharray="4 4" stroke-linecap="round"/>
+                <path d="M8 34a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z" fill="rgba(41,41,76,.34)"/>
+                <path d="M60 34V10" stroke="rgba(41,41,76,.34)" stroke-width="2" stroke-linecap="round"/>
+                <path d="M60 11h11l-3 4.5 3 4.5H60Z" fill="#F15162"/>
+              </svg>
+            </div>
+            <h3>Run one company-wide moment</h3>
+            <p>A distance event the whole company can finish, counted in kilometres.</p>
+            <span class="best-for"><b>Start with</b>Charity walk</span>
+            <a class="text-link" href="https://www.vantagefit.io/solutions/virtual-marathon/">See virtual marathon
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============= S3 THE LIBRARY (signature section) ============= -->
+    <!-- The 21 cards below are built from src/data/wellness-challenges.ts. Names,
+         taglines, categories, durations and run modes are sourced; the one-line
+         descriptions are editorial rewrites of the sourced description field.
+         No format chip on the cards on purpose: two of the 21 rows are typed Race
+         in the data file in a way that contradicts the product's Race definition.
+         Format taxonomy is explained once, correctly, in S5. -->
+    <section class="hub-section library-screen" id="library" aria-labelledby="library-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">The library</span>
+          <h2 id="library-heading">21 challenges, grouped by what they change.</h2>
+          <p class="lead">Filter by focus, and by whether it runs solo or in teams. Every program here is built from one of the five challenge formats in the dashboard.</p>
+        </div>
+
+        <div class="lib-filters" role="group" aria-label="Filter by focus" data-filter="cat">
+          <button class="lib-pill" type="button" aria-pressed="true" data-value="all">All <span class="lib-count">21</span></button>
+          <button class="lib-pill" type="button" aria-pressed="false" data-value="physical">Physical fitness <span class="lib-count">5</span></button>
+          <button class="lib-pill" type="button" aria-pressed="false" data-value="mental">Mental wellness <span class="lib-count">5</span></button>
+          <button class="lib-pill" type="button" aria-pressed="false" data-value="nutrition">Nutrition &amp; hydration <span class="lib-count">4</span></button>
+          <button class="lib-pill" type="button" aria-pressed="false" data-value="sleep">Sleep &amp; recovery <span class="lib-count">3</span></button>
+          <button class="lib-pill" type="button" aria-pressed="false" data-value="team">Team &amp; social <span class="lib-count">4</span></button>
+        </div>
+
+        <div class="lib-filters" role="group" aria-label="Filter by how it runs" data-filter="runs">
+          <span class="lib-group-label" aria-hidden="true">Runs as</span>
+          <button class="lib-pill" type="button" aria-pressed="true" data-value="all">Any</button>
+          <button class="lib-pill" type="button" aria-pressed="false" data-value="solo">Solo</button>
+          <button class="lib-pill" type="button" aria-pressed="false" data-value="teams">Teams</button>
+        </div>
+
+        <p class="lib-status" id="lib-status" role="status" aria-live="polite">Showing 21 of 21 challenges</p>
+
+        <div class="lib-grid" id="lib-grid">
+
+          <article class="lib-card reveal" data-cat="physical" data-runs="both">
+            <span class="lib-tag">Physical fitness</span>
+            <h3>Step it up challenge</h3>
+            <span class="lib-line">One Step Ahead</span>
+            <p>Log daily steps and race up the team leaderboard.</p>
+            <div class="lib-meta"><span>30 days</span><span>Solo or teams</span><span>Steps, auto-synced</span></div>
+          </article>
+
+          <article class="lib-card reveal" data-cat="physical" data-runs="both">
+            <span class="lib-tag">Physical fitness</span>
+            <h3>Cardio challenge</h3>
+            <span class="lib-line">Every Workout Earns Points</span>
+            <p>Any workout counts, ranked on calories burned.</p>
+            <div class="lib-meta"><span>30 days</span><span>Solo or teams</span><span>Workout calories</span></div>
+          </article>
+
+          <article class="lib-card reveal" data-cat="physical" data-runs="both">
+            <span class="lib-tag">Physical fitness</span>
+            <h3>Weight loss challenge</h3>
+            <span class="lib-line">Sustainable Progress, Real Results</span>
+            <p>Movement, food logging and mindful habits in one program.</p>
+            <div class="lib-meta"><span>30 days</span><span>Solo or teams</span><span>Weight, food and activity logs</span></div>
+          </article>
+
+          <article class="lib-card reveal" data-cat="physical" data-runs="individual">
+            <span class="lib-tag">Physical fitness</span>
+            <h3>Cycle to work</h3>
+            <span class="lib-line">Commute Smarter, Live Better</span>
+            <p>A streak for every day someone commutes by bike.</p>
+            <div class="lib-meta"><span>30 days</span><span>Solo</span><span>Cycling, app or wearable</span></div>
+          </article>
+
+          <article class="lib-card reveal" data-cat="physical" data-runs="both">
+            <span class="lib-tag">Physical fitness</span>
+            <h3>Push-up challenge</h3>
+            <span class="lib-line">Stronger Every Day</span>
+            <p>Daily push-up sets, no equipment and no gym.</p>
+            <div class="lib-meta"><span>30 days</span><span>Solo or teams</span><span>Manual activity log</span></div>
+          </article>
+
+          <article class="lib-card reveal" data-cat="mental" data-runs="both">
+            <span class="lib-tag">Mental wellness</span>
+            <h3>Breathing exercise</h3>
+            <span class="lib-line">Ten Minutes to Reset</span>
+            <p>Ten minutes of breathwork a day, logged as a streak.</p>
+            <div class="lib-meta"><span>30 days</span><span>Solo or teams</span><span>Mindfulness session log</span></div>
+          </article>
+
+          <article class="lib-card reveal" data-cat="mental" data-runs="individual">
+            <span class="lib-tag">Mental wellness</span>
+            <h3>Daily affirmations</h3>
+            <span class="lib-line">Rewire How You Think</span>
+            <p>One positive affirmation a day, checked off in the app.</p>
+            <div class="lib-meta"><span>30 days</span><span>Solo</span><span>Daily task check-in</span></div>
+          </article>
+
+          <article class="lib-card reveal" data-cat="mental" data-runs="both">
+            <span class="lib-tag">Mental wellness</span>
+            <h3>Work life balance</h3>
+            <span class="lib-line">Sustainable Beats Heroic</span>
+            <p>Breaks, offline hours and mindful transitions, logged daily.</p>
+            <div class="lib-meta"><span>30 days</span><span>Solo or teams</span><span>Daily task check-in</span></div>
+          </article>
+
+          <article class="lib-card reveal" data-cat="mental" data-runs="both">
+            <span class="lib-tag">Mental wellness</span>
+            <h3>Mental health awareness</h3>
+            <span class="lib-line">Check In, Not Out</span>
+            <p>Mood check-ins and mindfulness sessions across four weeks.</p>
+            <div class="lib-meta"><span>30 days</span><span>Solo or teams</span><span>Mood log and mindfulness</span></div>
+          </article>
+
+          <!-- Data-file defect flagged upstream: this row is category "mental" in
+               wellness-challenges.ts but renders under Sleep and recovery on the live
+               page. The data file is the declared single source of truth, so it prints
+               as Mental wellness here. See brief section 9.2. -->
+          <article class="lib-card reveal" data-cat="mental" data-runs="both">
+            <span class="lib-tag">Mental wellness</span>
+            <h3>Digital detox challenge</h3>
+            <span class="lib-line">Unplug to Recharge</span>
+            <p>A daily screen-time limit, with offline hours logged.</p>
+            <div class="lib-meta"><span>4 weeks</span><span>Solo or teams</span><span>Daily task check-in</span></div>
+          </article>
+
+          <article class="lib-card reveal" data-cat="nutrition" data-runs="both">
+            <span class="lib-tag">Nutrition &amp; hydration</span>
+            <h3>Mindful eating challenge</h3>
+            <span class="lib-line">The Mindful Plate</span>
+            <p>Slow down and log every meal for four weeks.</p>
+            <div class="lib-meta"><span>30 days</span><span>Solo or teams</span><span>Meal log</span></div>
+          </article>
+
+          <article class="lib-card reveal" data-cat="nutrition" data-runs="individual">
+            <span class="lib-tag">Nutrition &amp; hydration</span>
+            <h3>No caffeine</h3>
+            <span class="lib-line">Break the Dependency</span>
+            <p>Thirty clean days off caffeine, tracked one day at a time.</p>
+            <div class="lib-meta"><span>30 days</span><span>Solo</span><span>Food log and daily check-in</span></div>
+          </article>
+
+          <article class="lib-card reveal" data-cat="nutrition" data-runs="both">
+            <span class="lib-tag">Nutrition &amp; hydration</span>
+            <h3>Plant based diet</h3>
+            <span class="lib-line">Eat Clean, Feel the Difference</span>
+            <p>Thirty days of plant-based meals, logged in the food diary.</p>
+            <div class="lib-meta"><span>30 days</span><span>Solo or teams</span><span>Meal log</span></div>
+          </article>
+
+          <article class="lib-card reveal" data-cat="nutrition" data-runs="individual">
+            <span class="lib-tag">Nutrition &amp; hydration</span>
+            <h3>Sugar free</h3>
+            <span class="lib-line">Cut the Sugar, Feel the Shift</span>
+            <p>Thirty sugar-free days, one check-in at a time.</p>
+            <div class="lib-meta"><span>30 days</span><span>Solo</span><span>Food log and daily check-in</span></div>
+          </article>
+
+          <article class="lib-card reveal" data-cat="sleep" data-runs="individual">
+            <span class="lib-tag">Sleep &amp; recovery</span>
+            <h3>Time to wind down</h3>
+            <span class="lib-line">Signal Your Body It's Time</span>
+            <p>A 30-minute evening wind-down routine, every night.</p>
+            <div class="lib-meta"><span>30 days</span><span>Solo</span><span>Mindfulness session log</span></div>
+          </article>
+
+          <!-- Data-file defect flagged upstream: format "team" in wellness-challenges.ts,
+               Format: Individual on its own detail page. The detail page is the more
+               specific source, so it prints as Solo. See brief section 9.2. -->
+          <article class="lib-card reveal" data-cat="sleep" data-runs="individual">
+            <span class="lib-tag">Sleep &amp; recovery</span>
+            <h3>Bed time crafts</h3>
+            <span class="lib-line">Create Your Way to Sleep</span>
+            <p>Swap pre-bed screens for journaling, sketching or reading.</p>
+            <div class="lib-meta"><span>21 days</span><span>Solo</span><span>Daily task check-in</span></div>
+          </article>
+
+          <article class="lib-card reveal" data-cat="sleep" data-runs="both">
+            <span class="lib-tag">Sleep &amp; recovery</span>
+            <h3>Sleep challenge</h3>
+            <span class="lib-line">7 Hours, Every Night</span>
+            <p>Seven hours a night, logged daily and tracked as a streak.</p>
+            <div class="lib-meta"><span>30 days</span><span>Solo or teams</span><span>Sleep log</span></div>
+          </article>
+
+          <article class="lib-card reveal" data-cat="team" data-runs="team">
+            <span class="lib-tag">Team &amp; social</span>
+            <h3>Team step challenge</h3>
+            <span class="lib-line">May the Best Team Win</span>
+            <p>Departments head to head on steps, scored on the team average.</p>
+            <div class="lib-meta"><span>30 days</span><span>Teams</span><span>Steps, auto-synced</span></div>
+          </article>
+
+          <article class="lib-card reveal" data-cat="team" data-runs="both">
+            <span class="lib-tag">Team &amp; social</span>
+            <h3>Team yoga</h3>
+            <span class="lib-line">Stretch Together, Stress Less</span>
+            <p>A shared weekly yoga session your department shows up for.</p>
+            <div class="lib-meta"><span>21 days</span><span>Solo or teams</span><span>Yoga log and active minutes</span></div>
+          </article>
+
+          <article class="lib-card reveal" data-cat="team" data-runs="both">
+            <span class="lib-tag">Team &amp; social</span>
+            <h3>Lunch walk</h3>
+            <span class="lib-line">Best Conversations Happen Walking</span>
+            <p>A midday team walk away from the desk, every working day.</p>
+            <div class="lib-meta"><span>21 days</span><span>Solo or teams</span><span>Steps, auto-synced</span></div>
+          </article>
+
+          <article class="lib-card reveal" data-cat="team" data-runs="team">
+            <span class="lib-tag">Team &amp; social</span>
+            <h3>Charity walk</h3>
+            <span class="lib-line">Walk for a Cause</span>
+            <p>Team kilometres counted toward a shared cause.</p>
+            <div class="lib-meta"><span>30 days</span><span>Teams</span><span>Distance from GPS workouts and wearables</span></div>
+          </article>
+
+        </div>
+
+        <p class="format-note">Durations are the recommended program length. Your admin sets the real start and end dates when the challenge is published.</p>
+
+        <a class="text-link" href="https://www.vantagefit.io/solutions/multi-activity-challenges/">See how a multi-activity program is built
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============= S4 A THEMED PROGRAM FOR EVERY MONTH ============= -->
+    <section class="hub-section calendar-screen" id="calendar" aria-labelledby="calendar-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Plan the year</span>
+          <h2 id="calendar-heading">A themed program for every month.</h2>
+          <p class="lead">Run it as it stands or take the months that suit your calendar. Each one carries a theme, a challenge name and four weekly focuses.</p>
+        </div>
+
+        <div class="year-grid">
+          <article class="year-card reveal">
+            <span class="year-month">Jan</span>
+            <span class="year-theme">Dry January</span>
+            <span class="year-name">New Year, Better You Challenge</span>
+            <span class="year-weeks">Hydrate and Elevate &middot; Move to Improve &middot; Stress Less &middot; Healthy Replacements</span>
+          </article>
+          <article class="year-card reveal">
+            <span class="year-month">Feb</span>
+            <span class="year-theme">Heart Month</span>
+            <span class="year-name">Heart Health Month Challenge</span>
+            <span class="year-weeks">Start Strong &middot; Cardio Boost &middot; Stress-Free Heart &middot; Rest and Recover</span>
+          </article>
+          <article class="year-card reveal">
+            <span class="year-month">Mar</span>
+            <span class="year-theme">National Nutrition Month</span>
+            <span class="year-name">Mindful March</span>
+            <span class="year-weeks">Mindful Beginnings &middot; Building Consistency &middot; Stress Relief &middot; Mindful Celebration</span>
+          </article>
+          <article class="year-card reveal">
+            <span class="year-month">Apr</span>
+            <span class="year-theme">Stress Awareness Month</span>
+            <span class="year-name">Spring Into Fitness</span>
+            <span class="year-weeks">Fresh Start &middot; Move with Nature &middot; Stress Less &middot; Fitness Boost</span>
+          </article>
+          <article class="year-card reveal">
+            <span class="year-month">May</span>
+            <span class="year-theme">Mental Health Awareness Month</span>
+            <span class="year-name">Mind in Motion</span>
+            <span class="year-weeks">Check In Daily &middot; Move for Your Mind &middot; Connect and Share &middot; Sustain the Practice</span>
+          </article>
+          <article class="year-card reveal">
+            <span class="year-month">Jun</span>
+            <span class="year-theme">Men's Health Month</span>
+            <span class="year-name">Strong June</span>
+            <span class="year-weeks">Foundations &middot; Cardio and Core &middot; Yoga Day Build-Up &middot; Preventive Care Week</span>
+          </article>
+          <article class="year-card reveal">
+            <span class="year-month">Jul</span>
+            <span class="year-theme">Plastic Free July</span>
+            <span class="year-name">Plastic-Free Steps</span>
+            <span class="year-weeks">Hydration without Plastic &middot; Outdoor Focus &middot; Active Commuting &middot; Team Cleanup</span>
+          </article>
+          <article class="year-card reveal">
+            <span class="year-month">Aug</span>
+            <span class="year-theme">National Wellness Month</span>
+            <span class="year-name">Wellness Habit Stack</span>
+            <span class="year-weeks">Water and Steps &middot; Add Movement &middot; Add Mindfulness &middot; Stack and Sustain</span>
+          </article>
+          <article class="year-card reveal">
+            <span class="year-month">Sep</span>
+            <span class="year-theme">Self-Care Awareness Month</span>
+            <span class="year-name">Whole-Self September</span>
+            <span class="year-weeks">Physical &middot; Mental &middot; Social Self-Care &middot; Integration Week</span>
+          </article>
+          <article class="year-card reveal">
+            <span class="year-month">Oct</span>
+            <span class="year-theme">Breast Cancer Awareness Month</span>
+            <span class="year-name">Pink Steps</span>
+            <span class="year-weeks">Aware and Active &middot; Cardio for Cause &middot; Team Walkathon &middot; Sustain and Celebrate</span>
+          </article>
+          <article class="year-card reveal">
+            <span class="year-month">Nov</span>
+            <span class="year-theme">World Vegan Month</span>
+            <span class="year-name">Plant-Powered November</span>
+            <span class="year-weeks">One Plant Meal Daily &middot; Plant + Move &middot; Conscious Consumption &middot; Plant-Based Streak</span>
+          </article>
+          <article class="year-card reveal">
+            <span class="year-month">Dec</span>
+            <span class="year-theme">Universal Human Rights Month</span>
+            <span class="year-name">Finish Strong</span>
+            <span class="year-weeks">Inclusive Start &middot; Reflect and Recharge &middot; Holiday-Proof Your Wellness &middot; Close the Year</span>
+          </article>
+        </div>
+
+        <p class="format-note">A planning calendar, not a product setting. Four themed weeks is exactly how a Custom Challenge is configured, one week at a time.</p>
+      </div>
+    </section>
+
+    <!-- ============= S5 FORMATS ============= -->
+    <section class="hub-section formats-screen" id="formats" aria-labelledby="formats-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Formats</span>
+          <h2 id="formats-heading">Five formats you build yourself. Four your account manager sets up.</h2>
+          <p class="lead">Every program in the library is one of these. Pick the format and the scoring rule comes with it.</p>
+        </div>
+
+        <div class="format-grid">
+          <article class="format-card grows reveal">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44">
+                <rect x="4" y="4" width="30" height="36" rx="5" fill="rgba(41,41,76,.06)"/>
+                <rect x="40" y="4" width="30" height="36" rx="5" fill="rgba(41,41,76,.06)"/>
+                <rect x="9" y="10" width="20" height="5" rx="2.5" fill="rgba(41,41,76,.24)"/>
+                <rect x="9" y="19" width="14" height="5" rx="2.5" fill="#41d8b4"/>
+                <rect x="9" y="28" width="17" height="5" rx="2.5" fill="rgba(41,41,76,.16)"/>
+                <rect x="45" y="10" width="17" height="5" rx="2.5" fill="rgba(41,41,76,.16)"/>
+                <rect x="45" y="19" width="20" height="5" rx="2.5" fill="rgba(41,41,76,.24)"/>
+                <rect x="45" y="28" width="12" height="5" rx="2.5" fill="rgba(41,41,76,.16)"/>
+              </svg>
+            </div>
+            <h3>Custom Challenge</h3>
+            <p>Weekly themes, each with its own mix of tasks drawn from 27 task types. The Help Center calls it the go-to format if you are unsure.</p>
+            <span class="best-for"><b>Ranked by</b>Total points across all tasks and weeks</span>
+          </article>
+
+          <article class="format-card grows reveal">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44">
+                <rect x="4" y="9" width="66" height="12" rx="6" fill="rgba(41,41,76,.08)"/>
+                <rect x="4" y="26" width="66" height="12" rx="6" fill="rgba(41,41,76,.08)"/>
+                <rect x="4" y="9" width="50" height="12" rx="6" fill="#F15162"/>
+                <rect x="4" y="26" width="30" height="12" rx="6" fill="rgba(41,41,76,.28)"/>
+              </svg>
+            </div>
+            <h3>Race Challenge</h3>
+            <p>A pure step leaderboard with no target. No tasks, no teams, no certificate.</p>
+            <span class="best-for"><b>Ranked by</b>Total steps</span>
+          </article>
+
+          <article class="format-card grows reveal">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44">
+                <path d="M6 34c10 0 12-22 25-22s18 20 37 20" stroke="rgba(41,41,76,.2)" stroke-width="1.8" fill="none" stroke-dasharray="4 4" stroke-linecap="round"/>
+                <circle cx="15" cy="29" r="4.5" fill="rgba(41,41,76,.24)"/>
+                <circle cx="34" cy="13" r="4.5" fill="rgba(41,41,76,.34)"/>
+                <circle cx="60" cy="30" r="5.5" fill="#41d8b4"/>
+              </svg>
+            </div>
+            <h3>Journey Challenge</h3>
+            <p>Steps unlock milestones along a route map. Three built-in templates ship with it.</p>
+            <span class="best-for"><b>Ranked by</b>Points earned at milestones</span>
+          </article>
+
+          <article class="format-card grows reveal">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44">
+                <rect x="2"  y="8" width="12" height="12" rx="3.5" fill="#41d8b4"/>
+                <rect x="17" y="8" width="12" height="12" rx="3.5" fill="#41d8b4"/>
+                <rect x="32" y="8" width="12" height="12" rx="3.5" fill="#41d8b4"/>
+                <rect x="47" y="8" width="12" height="12" rx="3.5" fill="none" stroke="rgba(41,41,76,.28)" stroke-width="1.6"/>
+                <rect x="62" y="8" width="10" height="12" rx="3.5" fill="#41d8b4"/>
+                <path d="M2 30h70" stroke="rgba(41,41,76,.14)" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M2 30h42" stroke="#F15162" stroke-width="2.6" stroke-linecap="round"/>
+                <path d="M53 30h19" stroke="#F15162" stroke-width="2.6" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Streak Challenge</h3>
+            <p>One daily step target. A miss resets the streak, it does not end the challenge.</p>
+            <span class="best-for"><b>Ranked by</b>Days completed, with total steps as the tiebreaker</span>
+          </article>
+
+          <article class="format-card grows reveal">
+            <div class="format-glyph" aria-hidden="true">
+              <svg viewBox="0 0 74 44">
+                <rect x="4" y="6" width="26" height="11" rx="5.5" fill="rgba(41,41,76,.24)"/>
+                <path d="M34 11.5h8m0 0-3-3m3 3-3 3" stroke="rgba(41,41,76,.34)" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                <rect x="46" y="6" width="24" height="11" rx="3" fill="rgba(41,41,76,.1)"/>
+                <path d="M4 32h66M14 32v-6M28 32v-6M42 32v-6M56 32v-6" stroke="rgba(41,41,76,.24)" stroke-width="1.6" stroke-linecap="round"/>
+                <path d="M66 32v-9" stroke="#F15162" stroke-width="2.4" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>E-Marathon</h3>
+            <p>Steps convert to distance at a ratio you set, 1,000 steps to 1 km by default.</p>
+            <span class="best-for"><b>Ranked by</b>Total distance covered</span>
+          </article>
+        </div>
+
+        <div class="ops-strip reveal">
+          <span class="ops-label">Set up with your Vantage Fit account manager</span>
+          <div class="ops-grid">
+            <div class="ops-item"><b>Level Challenge</b><span>Escalating step targets, one level per week.</span></div>
+            <div class="ops-item"><b>Marathon Event</b><span>A real GPS-tracked running event with distance tiers.</span></div>
+            <div class="ops-item"><b>Weight Burn</b><span>Available on request.</span></div>
+            <div class="ops-item"><b>Training plans</b><span>Employees start their own from a Vantage Fit library.</span></div>
+          </div>
+        </div>
+
+        <p class="format-note">Nine formats in total: five you create from the dashboard, four your account manager configures.</p>
+
+        <a class="text-link" href="https://www.vantagefit.io/solutions/step-challenges/">See the step formats in depth
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============= S6 HOW ANY CHALLENGE RUNS ============= -->
+    <section class="hub-section rollout-screen" id="rollout" aria-labelledby="rollout-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Rollout</span>
+          <h2 id="rollout-heading">How any challenge in this library runs.</h2>
+          <p class="lead">Same four beats, whichever program you pick.</p>
+        </div>
+
+        <div class="steps">
+          <article class="step reveal">
+            <span class="step-no">1</span>
+            <h3>Set who is in it</h3>
+            <p>Filter by country, city, department, age range, language and more, with a live count of who matches before you publish.</p>
+            <span class="step-tag" aria-hidden="true">01</span>
+          </article>
+          <article class="step reveal">
+            <span class="step-no">2</span>
+            <h3>Employees are enrolled, not recruited</h3>
+            <p>Everyone who matches is added when the challenge starts, or when they next open the app, so new hires are picked up too.</p>
+            <span class="step-tag" aria-hidden="true">02</span>
+          </article>
+          <article class="step reveal">
+            <span class="step-no">3</span>
+            <h3>Activity tracks itself</h3>
+            <p>Steps sync from Apple Health and Google Fit, or from a connected Fitbit or Garmin. Everything else is a tap in the app.</p>
+            <span class="step-tag" aria-hidden="true">03</span>
+          </article>
+          <article class="step reveal">
+            <span class="step-no">4</span>
+            <h3>Recognition lands on its own</h3>
+            <p>Badges fire on thresholds within minutes, certificates generate at the end if you enabled them, and Vantage Points land in the wallet.</p>
+            <span class="step-tag" aria-hidden="true">04</span>
+          </article>
+        </div>
+
+        <p class="format-note">Creating a challenge takes 5 to 10 minutes from the admin dashboard, and you can run as many at the same time as you want.</p>
+
+        <a class="text-link" href="https://www.vantagefit.io/solutions/wellness-rewards-program/">See how points and gift cards work
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============= S7 FAIR, INCLUSIVE, AND PRIVATE ============= -->
+    <section class="hub-section fairness-screen" id="fairness" aria-labelledby="fairness-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Fair by design</span>
+          <h2 id="fairness-heading">The rules protect the people most likely to opt out.</h2>
+          <p class="lead">Scoring, teams and privacy settings are built so a first-time participant is not out of it on day one.</p>
+        </div>
+
+        <div class="fairband reveal">
+          <div>
+            <span class="eyebrow">Built into the scoring</span>
+            <h3>Nobody has to be an athlete to place well.</h3>
+            <p class="lead">Four rules that apply to every challenge in the library, whatever format it runs on.</p>
+
+            <div class="fair-list">
+              <div class="fair-item">
+                <i aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17a8 8 0 1 1 16 0"/><path d="M12 17 17 9.5"/></svg>
+                </i>
+                <div>
+                  <b>Everyone can max out the day</b>
+                  <p>Non-step tasks score as a percentage of the daily target and cap at 100% a day, so going far over the target does not buy a bigger lead.</p>
+                </div>
+              </div>
+
+              <div class="fair-item">
+                <i aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="6" r="2.2"/><circle cx="12" cy="6" r="2.2"/><circle cx="18.5" cy="6" r="2.2"/><path d="M5.5 10.5v3M12 10.5v3M18.5 10.5v3"/><rect x="3.5" y="16" width="17" height="4.5" rx="2.25"/></svg>
+                </i>
+                <div>
+                  <b>Team score is an average</b>
+                  <p>Team leaderboards rank on the average of member scores, not the total, so a bigger team is not a better team.</p>
+                </div>
+              </div>
+
+              <div class="fair-item">
+                <i aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 11.5S5.5 6.5 10 6.5c1 0 1.9.2 2.7.6"/><path d="M15.2 9c1.3 1.1 2.3 2.5 2.3 2.5S14.5 16.5 10 16.5c-.9 0-1.7-.2-2.4-.5"/><path d="m3.5 4.5 13 13"/><rect x="16" y="16" width="6" height="6" rx="1.6"/><path d="m17.4 19 1.2 1.2 2.2-2.4"/></svg>
+                </i>
+                <div>
+                  <b>Opting out of the leaderboard does not opt you out</b>
+                  <p>Employees can hide from individual rankings in Settings, keep taking part, keep earning points, and their score still counts toward the team average.</p>
+                </div>
+              </div>
+
+              <div class="fair-item">
+                <i aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4.2" r="1.9"/><path d="M11.5 7.5v5h5l2.6 5"/><circle cx="10.5" cy="15.5" r="5"/><path d="M2 21.5h20"/></svg>
+                </i>
+                <div>
+                  <b>Wheelchair mode is a setting, not a separate program</b>
+                  <p>Turning it on adds Wheelchair as a workout type. Route, distance and pace track exactly as they do for a run, and count toward distance and active-minutes tasks.</p>
+                </div>
+              </div>
+            </div>
+
+            <p class="fair-fine">HR sees participation and rankings. Weight, assessment answers, lab reports, food logs and mood logs stay with the employee. Vantage Fit operates under HIPAA guidelines and is SOC 2 Type II audited.</p>
+
+            <a class="text-link text-link-light" href="https://www.vantagefit.io/features/security-and-compliance/">Explore security and compliance
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+
+          <!-- Employee-view surface. The mood row is correct here and would be wrong on
+               an admin surface: mood data is never shown to admins or on leaderboards. -->
+          <div class="audit-board" role="img" aria-label="An employee's own score breakdown for week 3 of a Mental health awareness challenge, showing four tasks where over-completion is capped at 100 percent of the daily target. Figures shown are illustrative.">
+            <div class="audit-head" aria-hidden="true">
+              <b>Mental health awareness</b>
+              <span class="audit-live"><i></i> My score breakdown &middot; Week 3</span>
+            </div>
+            <div class="audit-cols" aria-hidden="true">
+              <span>Task</span><span>Logged</span><span>Scored</span><span>Points</span>
+            </div>
+            <div class="sb-row" aria-hidden="true">
+              <span class="sb-task">Mood log</span>
+              <span class="sb-num">7 of 7 days</span>
+              <span class="sb-scored">100%</span>
+              <span class="sb-pts">70</span>
+            </div>
+            <div class="sb-row" aria-hidden="true">
+              <span class="sb-task">Mindfulness</span>
+              <span class="sb-num">12 min of 10</span>
+              <span class="sb-scored">100% <span class="cap-flag">Capped</span></span>
+              <span class="sb-pts">60</span>
+            </div>
+            <div class="sb-row" aria-hidden="true">
+              <span class="sb-task">Content reading</span>
+              <span class="sb-num">2 of 3 articles</span>
+              <span class="sb-scored">67%</span>
+              <span class="sb-pts">40</span>
+            </div>
+            <div class="sb-row" aria-hidden="true">
+              <span class="sb-task">Water log</span>
+              <span class="sb-num">9 of 8 glasses</span>
+              <span class="sb-scored">100% <span class="cap-flag">Capped</span></span>
+              <span class="sb-pts">50</span>
+            </div>
+            <p class="audit-caption" aria-hidden="true">Every task scores as a percentage of its daily target, capped at 100%. Going far over the target does not buy a bigger lead.</p>
+            <span class="mock-tag">Illustrative data</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============= S8 PROOF ============= -->
+    <section class="hub-section proof-hub" id="proof" aria-labelledby="proof-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Customer programs</span>
+          <h2 id="proof-heading">Four programs, four workforces, four measured results.</h2>
+          <p class="lead">Each number is labelled with what it actually counted, and links to the customer story it came from.</p>
+        </div>
+
+        <div class="results-grid">
+          <article class="result-card reveal">
+            <b class="stat">88%</b>
+            <p>engagement rate over 28 days, with 500+ of 660 invited employees active</p>
+            <a class="segment" href="https://www.vantagefit.io/casestudy/ibs-software-case-study/">IBS Software &middot; March to Fitness<br>Mar 1-28, 2024</a>
+          </article>
+          <article class="result-card reveal">
+            <b class="stat">59%</b>
+            <p>engagement rate across plant locations over six months</p>
+            <a class="segment" href="https://www.vantagefit.io/casestudy/tata-motors-case-study/">Tata Motors &middot; Step &amp; Stride Challenge<br>6-month program</a>
+          </article>
+          <article class="result-card reveal">
+            <b class="stat">86%</b>
+            <p>engagement rate over a two-week challenge with 132 active participants</p>
+            <a class="segment" href="https://www.vantagefit.io/casestudy/brazosport-case-study/">Brazosport ISD &middot; Fit Wars<br>May 6-19, 2024</a>
+          </article>
+          <article class="result-card reveal">
+            <b class="stat">97%</b>
+            <p>participation rate in a two-week walkathon of 72+ participants</p>
+            <a class="segment" href="https://www.vantagefit.io/casestudy/posoco-walkathon-challenge/">POSOCO &middot; Walking Miles, Losing Inches<br>Dec 6-19, 2021</a>
+          </article>
+        </div>
+
+        <div class="proof-fine">
+          <small>Results from named customer programs. Engagement and participation are different measures, and each card names the one its program reported. Outcomes vary by workforce and program design.</small>
+          <a class="text-link" href="https://www.vantagefit.io/solutions/workforce-health-insights/">See the reporting behind these numbers
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </a>
+        </div>
+
+        <div class="quote-duo">
+          <div class="quote-band text-only reveal">
+            <div>
+              <blockquote>"We love the Vantage Fit app! The wide variety of wellness options kept our team interested week by week."</blockquote>
+              <span class="quote-who">ISKL</span>
+            </div>
+          </div>
+          <div class="quote-band text-only reveal">
+            <div>
+              <blockquote>"It is engaging and has features that keep everyone motivated. From tracking activity levels to earning rewards, the app has made wellness accessible and fun for all our employees."</blockquote>
+              <span class="quote-who">Tara Shore, Niche Technology</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============= S9 FAQ ============= -->
+    <section class="hub-section faq-screen" id="faq" aria-labelledby="faq-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Before you launch</span>
+          <h2 id="faq-heading">Questions HR asks before the first challenge.</h2>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item" open>
+            <summary><h3>What is an employee wellness challenge?</h3></summary>
+            <p>An employee wellness challenge is a time-bound program in which a company sets one or more healthy targets, tracks progress automatically from phones and wearables, and ranks or recognizes the people taking part. In Vantage Fit, HR picks a format, sets a target audience, and every matching employee is enrolled without signing up. Progress appears on individual and team leaderboards, and taking part can earn points, badges and a certificate.</p>
+          </details>
+          <details class="faq-item">
+            <summary><h3>Do employees have to sign up?</h3></summary>
+            <p>No. There is no browse-and-join flow. HR sets a target audience using filters such as department, location, age range or language, and everyone who matches is enrolled. You can enroll everyone immediately, or choose Enroll When Active so new hires and late installers are picked up as they open the app. Late joiners score from their join date forward, with no retroactive credit and no penalty.</p>
+          </details>
+          <details class="faq-item">
+            <summary><h3>Do we have to design the program ourselves?</h3></summary>
+            <p>No. Start from a template in the dashboard, which arrives with a format, tasks, targets, balanced scoring and suggested weekly themes, then set your own dates, audience and branding. Level, Marathon Event, Weight Burn and training plans are set up with your Vantage Fit account manager instead. A custom Journey map with your own artwork is a design project with a 2 to 3 week lead time, for annual clients.</p>
+          </details>
+          <details class="faq-item">
+            <summary><h3>Does everyone need a wearable?</h3></summary>
+            <p>No. Steps come from the phone through Apple Health and Google Fit. Employees who own a Fitbit or Garmin can connect one primary device instead, and the app uses that device's data exclusively so nothing is double counted. Everything that is not a step, including water, sleep, meals, yoga and mood, is logged in the app, across 65+ activity types.</p>
+          </details>
+          <details class="faq-item">
+            <summary><h3>Can we run more than one challenge at once?</h3></summary>
+            <p>Yes, with no limit. Each challenge has its own leaderboard, point pool and completion criteria, and a single walk contributes to every challenge whose tasks it matches. A common pattern is an always-on streak underneath a shorter seasonal race.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============= S10 RELATED ============= -->
+    <section class="related-screen challenges-related" id="related" aria-labelledby="related-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Keep exploring</span>
+          <h2 id="related-heading">Go deeper on one format</h2>
+        </div>
+        <div class="related-grid">
+          <a class="related-row reveal" href="https://www.vantagefit.io/solutions/step-challenges/">
+            <span class="related-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="7.5" cy="8" rx="3.2" ry="4.6"/><ellipse cx="16.5" cy="15" rx="3.2" ry="4.6"/><path d="M4.6 13.5c.4 2 1.6 3 2.9 3s2.5-1 2.9-3M13.6 20.5c.4 1.4 1.4 2 2.9 2"/></svg>
+            </span>
+            <span>
+              <h3>Step challenges
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </h3>
+              <p>Company-wide step goals that get everyone moving.</p>
+            </span>
+          </a>
+          <a class="related-row reveal" href="https://www.vantagefit.io/solutions/multi-activity-challenges/">
+            <span class="related-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 5.5h13M4 10.5h16M4 15.5h9M4 20.5h12"/></svg>
+            </span>
+            <span>
+              <h3>Multi-activity challenges
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </h3>
+              <p>Any activity, solo or in teams, over themed weeks.</p>
+            </span>
+          </a>
+          <a class="related-row reveal" href="https://www.vantagefit.io/solutions/remote-team-wellness/">
+            <span class="related-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7.5" r="3"/><circle cx="17" cy="7.5" r="3"/><path d="M2.5 19c.4-3.2 2.2-5 4.5-5s4.1 1.8 4.5 5M12.5 19c.4-3.2 2.2-5 4.5-5s4.1 1.8 4.5 5"/><path d="M10 7.5h4"/></svg>
+            </span>
+            <span>
+              <h3>Remote and hybrid team challenges
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </h3>
+              <p>Wellness that works away from the office.</p>
+            </span>
+          </a>
+          <a class="related-row reveal" href="https://www.vantagefit.io/solutions/virtual-marathon/">
+            <span class="related-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19c5-9 11-9 18-2"/><path d="M18 20V4"/><path d="M18 5h4l-1.6 2.6L22 10h-4"/></svg>
+            </span>
+            <span>
+              <h3>Virtual marathon
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </h3>
+              <p>Distance events powered by steps.</p>
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============= S11 CLOSER ============= -->
+    <section class="final" id="demo" aria-labelledby="demo-heading">
+      <div class="shell">
+        <h2 id="demo-heading">See the library on your own headcount.</h2>
+        <p>In a 30-minute demo we will pick a starting program for your workforce, walk the employee app, and show the participation reporting your leadership will see.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+          <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">See pricing</a>
+        </div>
+        <div class="final-checks">
+          <span>Set up in 5 to 10 minutes</span>
+          <span>No wearable required</span>
+          <span>No obligation</span>
+        </div>
+        <div class="final-note">Start with one program. Add the next one when it lands.</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="#top">
+            <img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37" style="height:28px;width:auto;display:block">
+          </a>
+          <p class="footer-about">Inclusive wellness that turns participation into measurable progress. A Vantage Circle product.</p>
+        </div>
+
+        <div>
+          <div class="footer-title">Solutions</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/solutions/wellness-platform/">Wellness platform</a>
+            <a href="#top" aria-current="page" style="color:#fff;font-weight:700">Wellness challenges</a>
+            <a href="https://www.vantagefit.io/solutions/step-challenges/">Step challenges</a>
+            <a href="https://www.vantagefit.io/solutions/multi-activity-challenges/">Multi-activity challenges</a>
+            <a href="https://www.vantagefit.io/solutions/remote-team-wellness/">Remote &amp; hybrid team challenges</a>
+            <a href="https://www.vantagefit.io/solutions/virtual-marathon/">Virtual marathon</a>
+            <a href="https://www.vantagefit.io/solutions/health-risk-assessment/">Health Risk Assessment</a>
+            <a href="https://www.vantagefit.io/solutions/workforce-health-insights/">Workforce health insights</a>
+            <a href="https://www.vantagefit.io/solutions/wellness-rewards-program/">Wellness rewards program</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-title">Features</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/features/activity-tracking/">Activity &amp; health tracking</a>
+            <a href="https://www.vantagefit.io/features/admin-dashboard/">Participation analytics &amp; insights</a>
+            <a href="https://www.vantagefit.io/features/incentivization-and-rewards/">Incentives &amp; rewards</a>
+            <a href="https://www.vantagefit.io/features/engagement-tools/">Engagement tools &amp; community</a>
+            <a href="https://www.vantagefit.io/features/integrations/">Integrations</a>
+            <a href="https://www.vantagefit.io/features/security-and-compliance/">Security &amp; compliance</a>
+            <a href="https://www.vantagefit.io/features/accessibility/">Accessibility</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-title">Resources</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/en/blog/">Blog</a>
+            <a href="https://www.vantagefit.io/casestudy/">Customer stories</a>
+            <a href="https://www.vantagefit.io/compare/">Comparisons</a>
+            <a href="https://www.vantagefit.io/guides/">Reports &amp; research</a>
+            <a href="https://www.vantagefit.io/tools-and-templates/">Tools &amp; templates</a>
+            <a href="https://www.vantagefit.io/trust-center/">Trust Center</a>
+            <a href="https://www.vantagefit.io/en/help/">Help Center</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-title">Company</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/about-us/">About us</a>
+            <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+            <a href="https://www.vantagefit.io/casestudy/">Case studies</a>
+            <a href="https://www.vantagefit.io/request-demo/">Contact sales</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Claims gate: "operates under HIPAA guidelines", never "HIPAA compliant".
+           SOC 2 Type II is fine. Do not add ISO or GDPR marks to this line. -->
+      <div class="footer-bottom">
+        <span>&copy; 2026 Vantage Circle. All rights reserved.</span>
+        <span>HIPAA guidelines &middot; SOC 2 Type II</span>
+        <span>Wellness built for participation.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ---------- Mobile nav ----------
+    const menuButton = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation');
+      navLinks.classList.toggle('open', !open);
+    });
+
+    // ---------- Mega-menu behaviour (desktop hover, mobile accordion) ----------
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const navTriggers = [...document.querySelectorAll('.nav-trigger')];
+    const desktopNav = window.matchMedia('(min-width: 861px)');
+    let desktopCloseTimer;
+
+    // The mega opens on hover AND on focus-within, so aria-expanded has to
+    // follow both paths, not only the mobile accordion.
+    const setExpanded = (item, open) => {
+      item.querySelector('.nav-trigger')?.setAttribute('aria-expanded', String(open));
+    };
+
+    const closeDesktopMenus = (except = null) => {
+      navItems.forEach((item) => {
+        if (item !== except) {
+          item.classList.remove('desktop-open');
+          if (!item.contains(document.activeElement)) setExpanded(item, false);
+        }
+      });
+    };
+
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => {
+        if (!desktopNav.matches) return;
+        window.clearTimeout(desktopCloseTimer);
+        closeDesktopMenus(item);
+        item.classList.add('desktop-open');
+        setExpanded(item, true);
+        const focusedTrigger = document.activeElement?.closest?.('.nav-trigger');
+        if (focusedTrigger && !item.contains(focusedTrigger)) focusedTrigger.blur();
+      });
+
+      item.addEventListener('pointerleave', () => {
+        if (!desktopNav.matches) return;
+        desktopCloseTimer = window.setTimeout(() => {
+          if (!item.matches(':hover') && !item.contains(document.activeElement)) {
+            item.classList.remove('desktop-open');
+            setExpanded(item, false);
+          }
+        }, 120);
+      });
+
+      item.addEventListener('focusin', () => {
+        if (desktopNav.matches) setExpanded(item, true);
+      });
+
+      item.addEventListener('focusout', () => {
+        if (!desktopNav.matches) return;
+        window.setTimeout(() => {
+          if (!item.contains(document.activeElement) && !item.matches(':hover')) setExpanded(item, false);
+        }, 0);
+      });
+    });
+
+    // Escape dismisses an open mega and returns focus to its trigger. WCAG 1.4.13.
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      const active = document.activeElement?.closest?.('.nav-item')
+        || document.querySelector('.nav-item.desktop-open');
+      if (!active) return;
+      active.classList.remove('desktop-open');
+      active.classList.remove('open');
+      active.classList.add('esc-closed');
+      setExpanded(active, false);
+      active.querySelector('.nav-trigger')?.focus();
+    });
+
+    // The panel becomes available again as soon as the user leaves or reopens it.
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => item.classList.remove('esc-closed'));
+      item.addEventListener('focusout', () => {
+        window.setTimeout(() => {
+          if (!item.contains(document.activeElement)) item.classList.remove('esc-closed');
+        }, 0);
+      });
+      item.querySelector('.nav-trigger')?.addEventListener('click', () => item.classList.remove('esc-closed'));
+    });
+
+    document.querySelectorAll('.nav-links > a').forEach((link) => {
+      link.addEventListener('pointerenter', () => {
+        if (desktopNav.matches) closeDesktopMenus();
+      });
+    });
+
+    navTriggers.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (window.matchMedia('(max-width: 860px)').matches) {
+          const item = btn.closest('.nav-item');
+          const isOpen = item.classList.contains('open');
+          document.querySelectorAll('.nav-item').forEach((n) => {
+            n.classList.remove('open');
+            n.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        }
+      });
+    });
+
+    // ---------- S3 Library filters: focus, and how it runs ----------
+    // Two independent groups. "Solo" matches individual and both; "Teams" matches
+    // team and both. Pills are real buttons, so keyboard support is free.
+    (function () {
+      const grid = document.getElementById('lib-grid');
+      const status = document.getElementById('lib-status');
+      if (!grid || !status) return;
+
+      const cards = [...grid.querySelectorAll('.lib-card')];
+      const total = cards.length;
+      const state = { cat: 'all', runs: 'all' };
+
+      const matches = (card) => {
+        const catOk = state.cat === 'all' || card.dataset.cat === state.cat;
+        const runs = card.dataset.runs;
+        const runsOk = state.runs === 'all'
+          || (state.runs === 'solo' && (runs === 'individual' || runs === 'both'))
+          || (state.runs === 'teams' && (runs === 'team' || runs === 'both'));
+        return catOk && runsOk;
+      };
+
+      const apply = () => {
+        let shown = 0;
+        cards.forEach((card) => {
+          const ok = matches(card);
+          card.hidden = !ok;
+          if (ok) {
+            shown += 1;
+            // A card first revealed by a filter never met the observer, so light it here.
+            card.classList.add('on');
+          }
+        });
+        status.textContent = shown
+          ? 'Showing ' + shown + ' of ' + total + ' challenges'
+          : 'No challenges match that combination. Clear a filter to see more.';
+      };
+
+      document.querySelectorAll('.lib-pill').forEach((pill) => {
+        pill.addEventListener('click', () => {
+          const group = pill.closest('.lib-filters');
+          if (!group) return;
+          group.querySelectorAll('.lib-pill').forEach((p) => {
+            p.setAttribute('aria-pressed', String(p === pill));
+          });
+          state[group.dataset.filter] = pill.dataset.value;
+          apply();
+        });
+      });
+    })();
+
+    // ---------- Nav CTA: ghost over the hero, filled after ----------
+    (function () {
+      const nav = document.querySelector('nav.nav');
+      const hero = document.querySelector('.hero');
+      if (!nav || !hero) return;
+      const state = () => nav.classList.toggle('lit', window.scrollY > hero.offsetHeight - 90);
+      window.addEventListener('scroll', state, { passive: true });
+      state();
+    })();
+
+    // ---------- Subtle scroll reveal (.reveal -> .reveal.on) ----------
+    (function () {
+      const nodes = document.querySelectorAll('.reveal');
+      if (!nodes.length) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+        nodes.forEach((n) => n.classList.add('on'));
+        return;
+      }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('on');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+      nodes.forEach((n) => io.observe(n));
+    })();
+
+    // ---------- Grayscale preview mode for accessibility review: append ?gray ----------
+    if (new URLSearchParams(location.search).has('gray')) {
+      document.documentElement.style.filter = 'grayscale(1)';
+    }
+  </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Vantage Fit redesign comparison — homepage and Run a Challenge solutions pages across four AI models.">
+  <meta name="description" content="Vantage Fit redesign comparison — Solutions mega-menu pages across four AI models.">
   <meta name="theme-color" content="#18262b">
   <title>Vantage Fit Redesign — AI Comparison</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -62,7 +62,7 @@
     }
     .section-label + .list { margin-top: 0; }
 
-    /* ── New batch (Run a Challenge) ── */
+    /* ── New batch ── */
     .section-label.new {
       color: #0b6e63;
       display: flex;
@@ -150,70 +150,6 @@
     }
     .btn-main:hover { background: #24353b; border-color: #24353b; }
 
-    /* ── Prompt ── */
-    .prompt-block {
-      background: var(--paper);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      overflow: hidden;
-    }
-    .prompt-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--line);
-    }
-    .prompt-head h2 {
-      font-size: .88rem;
-      font-weight: 750;
-      letter-spacing: -.01em;
-    }
-    .prompt-actions { display: flex; gap: 8px; align-items: center; }
-    .btn-copy {
-      background: var(--coral);
-      color: #fff;
-      border-color: var(--coral);
-      cursor: pointer;
-      font-family: inherit;
-    }
-    .btn-copy:hover { background: #d94e58; border-color: #d94e58; }
-    .btn-copy.copied { background: var(--mint); border-color: var(--mint); color: var(--dark); }
-    .btn-toggle {
-      cursor: pointer;
-      font-family: inherit;
-      color: var(--muted);
-    }
-    .btn-toggle:hover { color: var(--ink); }
-
-    .prompt-preview {
-      padding: 14px 16px 16px;
-      font-size: .84rem;
-      color: var(--muted);
-      line-height: 1.55;
-    }
-    .prompt-preview strong { color: var(--ink); font-weight: 650; }
-
-    .prompt-full {
-      display: none;
-      margin: 0;
-      padding: 16px;
-      max-height: 420px;
-      overflow: auto;
-      background: #0f171a;
-      color: #c8d4d8;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: .78rem;
-      line-height: 1.55;
-      white-space: pre-wrap;
-      word-break: break-word;
-      border: none;
-    }
-    .prompt-block.open .prompt-full { display: block; }
-    .prompt-block.open .prompt-preview { display: none; }
-    .prompt-block.open .btn-toggle { color: var(--ink); }
-
     .note {
       margin-top: 16px;
       font-size: .8rem;
@@ -243,7 +179,7 @@
   <header>
     <div class="shell">
       <h1>Vantage Fit redesign comparison</h1>
-      <p>Same prompts · 4 models · homepage + Run a Challenge solutions pages</p>
+      <p>Solutions mega-menu pages · multi-model bake-off · consolidated best-of</p>
       <p style="margin-top:10px">
         <a href="https://github.com/anjanpathakofficial/vfit-website-design" style="color:rgba(255,255,255,.75);font-size:.84rem;font-weight:600;text-decoration:underline;text-underline-offset:3px">github.com/anjanpathakofficial/vfit-website-design</a>
       </p>
@@ -252,8 +188,8 @@
 
   <main class="shell">
 
-    <p class="section-label new">Solutions menu — final structure <span class="badge">New</span></p>
-    <div class="list new">
+    <p class="section-label">Solutions menu — final structure</p>
+    <div class="list">
       <div class="row">
         <div>
           <div class="name">Solutions mega-menu preview</div>
@@ -266,8 +202,230 @@
       </div>
     </div>
 
-    <p class="section-label new">Team Challenge — solutions page <span class="badge">New</span></p>
+    <p class="section-label new">Wellness challenges (library) <span class="badge">New</span></p>
     <div class="list new">
+      <div class="row">
+        <div>
+          <div class="name">Claude</div>
+          <div class="dir">claude-fable · wellness challenges library v1</div>
+        </div>
+        <div class="time">v1</div>
+        <div class="links">
+          <a class="btn btn-main" href="claude-fable/vantage-fit-wellness-challenges-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="claude-fable/WELLNESS-CHALLENGES-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="name">GPT Sol</div>
+          <div class="dir">gpt-sol · wellness challenges library v1</div>
+        </div>
+        <div class="time">v1</div>
+        <div class="links">
+          <a class="btn btn-main" href="gpt-sol/vantage-fit-wellness-challenges-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="gpt-sol/WELLNESS-CHALLENGES-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="name">Grok</div>
+          <div class="dir">grok · wellness challenges library v1</div>
+        </div>
+        <div class="time">v1</div>
+        <div class="links">
+          <a class="btn btn-main" href="grok/vantage-fit-wellness-challenges-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="grok/WELLNESS-CHALLENGES-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-label new">Health Risk Assessment <span class="badge">New</span></p>
+    <div class="list new">
+      <div class="row">
+        <div>
+          <div class="name">Claude</div>
+          <div class="dir">claude-fable · HRA data-in v1</div>
+        </div>
+        <div class="time">v1</div>
+        <div class="links">
+          <a class="btn btn-main" href="claude-fable/vantage-fit-health-risk-assessment-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="claude-fable/HEALTH-RISK-ASSESSMENT-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="name">GPT Sol</div>
+          <div class="dir">gpt-sol · HRA data-in v1</div>
+        </div>
+        <div class="time">v1</div>
+        <div class="links">
+          <a class="btn btn-main" href="gpt-sol/vantage-fit-health-risk-assessment-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="gpt-sol/HEALTH-RISK-ASSESSMENT-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="name">Grok</div>
+          <div class="dir">grok · HRA data-in v1</div>
+        </div>
+        <div class="time">v1</div>
+        <div class="links">
+          <a class="btn btn-main" href="grok/vantage-fit-health-risk-assessment-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="grok/HEALTH-RISK-ASSESSMENT-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-label new">Workforce health insights <span class="badge">New</span></p>
+    <div class="list new">
+      <div class="row">
+        <div>
+          <div class="name">Claude</div>
+          <div class="dir">claude-fable · data-out insights v1</div>
+        </div>
+        <div class="time">v1</div>
+        <div class="links">
+          <a class="btn btn-main" href="claude-fable/vantage-fit-workforce-health-insights-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="claude-fable/WORKFORCE-HEALTH-INSIGHTS-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="name">GPT Sol</div>
+          <div class="dir">gpt-sol · data-out insights v1</div>
+        </div>
+        <div class="time">v1</div>
+        <div class="links">
+          <a class="btn btn-main" href="gpt-sol/vantage-fit-workforce-health-insights-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="gpt-sol/WORKFORCE-HEALTH-INSIGHTS-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="name">Grok</div>
+          <div class="dir">grok · data-out insights v1</div>
+        </div>
+        <div class="time">v1</div>
+        <div class="links">
+          <a class="btn btn-main" href="grok/vantage-fit-workforce-health-insights-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="grok/WORKFORCE-HEALTH-INSIGHTS-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-label new">Wellness rewards program <span class="badge">New</span></p>
+    <div class="list new">
+      <div class="row">
+        <div>
+          <div class="name">Claude</div>
+          <div class="dir">claude-fable · rewards action v1</div>
+        </div>
+        <div class="time">v1</div>
+        <div class="links">
+          <a class="btn btn-main" href="claude-fable/vantage-fit-wellness-rewards-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="claude-fable/WELLNESS-REWARDS-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="name">GPT Sol</div>
+          <div class="dir">gpt-sol · rewards action v1</div>
+        </div>
+        <div class="time">v1</div>
+        <div class="links">
+          <a class="btn btn-main" href="gpt-sol/vantage-fit-wellness-rewards-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="gpt-sol/WELLNESS-REWARDS-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="name">Grok</div>
+          <div class="dir">grok · rewards action v1</div>
+        </div>
+        <div class="time">v1</div>
+        <div class="links">
+          <a class="btn btn-main" href="grok/vantage-fit-wellness-rewards-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="grok/WELLNESS-REWARDS-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-label new">Wellness platform <span class="badge">New</span></p>
+    <div class="list new">
+      <div class="row">
+        <div>
+          <div class="name">Claude</div>
+          <div class="dir">claude-fable · platform v1</div>
+        </div>
+        <div class="time">v1</div>
+        <div class="links">
+          <a class="btn btn-main" href="claude-fable/vantage-fit-wellness-platform-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="claude-fable/WELLNESS-PLATFORM-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="name">GPT Sol</div>
+          <div class="dir">gpt-sol · platform v1</div>
+        </div>
+        <div class="time">v1</div>
+        <div class="links">
+          <a class="btn btn-main" href="gpt-sol/vantage-fit-wellness-platform-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="gpt-sol/WELLNESS-PLATFORM-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="name">Grok</div>
+          <div class="dir">grok · platform v1</div>
+        </div>
+        <div class="time">v1</div>
+        <div class="links">
+          <a class="btn btn-main" href="grok/vantage-fit-wellness-platform-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="grok/WELLNESS-PLATFORM-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-label new">Solutions hub <span class="badge">New</span></p>
+    <div class="list new">
+      <div class="row">
+        <div>
+          <div class="name">Claude</div>
+          <div class="dir">claude-fable · solutions hub v1</div>
+        </div>
+        <div class="time">v1</div>
+        <div class="links">
+          <a class="btn btn-main" href="claude-fable/vantage-fit-solutions-hub-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="claude-fable/SOLUTIONS-HUB-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="name">GPT Sol</div>
+          <div class="dir">gpt-sol · solutions hub v1</div>
+        </div>
+        <div class="time">v1</div>
+        <div class="links">
+          <a class="btn btn-main" href="gpt-sol/vantage-fit-solutions-hub-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="gpt-sol/SOLUTIONS-HUB-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="name">Grok</div>
+          <div class="dir">grok · solutions hub v1</div>
+        </div>
+        <div class="time">v1</div>
+        <div class="links">
+          <a class="btn btn-main" href="grok/vantage-fit-solutions-hub-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="grok/SOLUTIONS-HUB-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-label">Remote &amp; hybrid team challenges</p>
+    <div class="list">
       <div class="row">
         <div>
           <div class="name">Claude</div>
@@ -314,7 +472,7 @@
       </div>
     </div>
 
-    <p class="section-label">Team Challenge — consolidated (best-of)</p>
+    <p class="section-label">Remote &amp; hybrid team challenges — consolidated (best-of)</p>
     <div class="list">
       <div class="row">
         <div>
@@ -329,8 +487,8 @@
       </div>
     </div>
 
-    <p class="section-label new">Multi-activity Challenge — solutions page <span class="badge">New</span></p>
-    <div class="list new">
+    <p class="section-label">Multi-activity challenges</p>
+    <div class="list">
       <div class="row">
         <div>
           <div class="name">Claude</div>
@@ -377,7 +535,7 @@
       </div>
     </div>
 
-    <p class="section-label">Multi-activity (Custom) Challenge — consolidated (best-of)</p>
+    <p class="section-label">Multi-activity challenges — consolidated (best-of)</p>
     <div class="list">
       <div class="row">
         <div>
@@ -392,7 +550,7 @@
       </div>
     </div>
 
-    <p class="section-label">Steps Challenge — solutions page</p>
+    <p class="section-label">Step challenges</p>
     <div class="list">
       <div class="row">
         <div>
@@ -440,7 +598,7 @@
       </div>
     </div>
 
-    <p class="section-label">Steps Challenge — consolidated (best-of)</p>
+    <p class="section-label">Step challenges — consolidated (best-of)</p>
     <div class="list">
       <div class="row">
         <div>
@@ -455,208 +613,58 @@
       </div>
     </div>
 
-    <p class="section-label">Homepage — working versions</p>
-    <div class="list">
-      <div class="row">
-        <div>
-          <div class="name">Styled Homepage</div>
-          <div class="dir">styled-homepage · from vantagefit.pages.dev/enterprise</div>
-        </div>
-        <div class="time">live</div>
-        <div class="links">
-          <a class="btn btn-main" href="styled-homepage/index.html" target="_blank" rel="noopener noreferrer">Homepage</a>
-        </div>
-      </div>
-    </div>
-
-    <p class="section-label">Homepage — consolidated and copy edited</p>
+    <p class="section-label">Virtual marathon</p>
     <div class="list">
       <div class="row">
         <div>
           <div class="name">Claude</div>
-          <div class="dir">claude-fable · v3</div>
+          <div class="dir">claude-fable · virtual marathon v1</div>
         </div>
-        <div class="time">v3</div>
+        <div class="time">v1</div>
         <div class="links">
-          <a class="btn btn-main" href="claude-fable/vantage-fit-homepage-v3.html" target="_blank" rel="noopener noreferrer">Homepage</a>
-        </div>
-      </div>
-      <div class="row">
-        <div>
-          <div class="name">GPT Sol</div>
-          <div class="dir">gpt-sol · v3</div>
-        </div>
-        <div class="time">v3</div>
-        <div class="links">
-          <a class="btn btn-main" href="gpt-sol/vantage-fit-homepage-v3.html" target="_blank" rel="noopener noreferrer">Homepage</a>
-        </div>
-      </div>
-    </div>
-
-    <p class="section-label">Homepage — original model outputs</p>
-    <div class="list">
-      <div class="row">
-        <div>
-          <div class="name">Claude</div>
-          <div class="dir">claude-fable</div>
-        </div>
-        <div class="time">40 min</div>
-        <div class="links">
-          <a class="btn btn-main" href="claude-fable/vantage-fit-homepage-v2.html" target="_blank" rel="noopener noreferrer">Homepage</a>
-          <a class="btn" href="claude-fable/REDESIGN-BRIEF.html" target="_blank" rel="noopener noreferrer">Brief</a>
+          <a class="btn btn-main" href="claude-fable/vantage-fit-virtual-marathon-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="claude-fable/VIRTUAL-MARATHON-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
         </div>
       </div>
       <div class="row">
         <div>
           <div class="name">Kimi K3</div>
-          <div class="dir">kimi-k3</div>
+          <div class="dir">kimi-k3 · virtual marathon v1</div>
         </div>
-        <div class="time">40 min</div>
+        <div class="time">v1</div>
         <div class="links">
-          <a class="btn btn-main" href="kimi-k3/vantage-fit-homepage-v2.html" target="_blank" rel="noopener noreferrer">Homepage</a>
-          <a class="btn" href="kimi-k3/homepage-redesign-strategy.html" target="_blank" rel="noopener noreferrer">Brief</a>
+          <a class="btn btn-main" href="kimi-k3/vantage-fit-virtual-marathon-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="kimi-k3/VIRTUAL-MARATHON-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
         </div>
       </div>
       <div class="row">
         <div>
           <div class="name">GPT Sol</div>
-          <div class="dir">gpt-sol</div>
+          <div class="dir">gpt-sol · virtual marathon v1</div>
         </div>
-        <div class="time">20 min</div>
+        <div class="time">v1</div>
         <div class="links">
-          <a class="btn btn-main" href="gpt-sol/vantage-fit-homepage-v2.html" target="_blank" rel="noopener noreferrer">Homepage</a>
-          <a class="btn" href="gpt-sol/vantage-fit-homepage-strategy.html" target="_blank" rel="noopener noreferrer">Brief</a>
+          <a class="btn btn-main" href="gpt-sol/vantage-fit-virtual-marathon-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="gpt-sol/VIRTUAL-MARATHON-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
         </div>
       </div>
       <div class="row">
         <div>
           <div class="name">Grok</div>
-          <div class="dir">grok</div>
+          <div class="dir">grok · virtual marathon v1</div>
         </div>
-        <div class="time">5 min</div>
+        <div class="time">v1</div>
         <div class="links">
-          <a class="btn btn-main" href="grok/vantage-fit-homepage-v2.html" target="_blank" rel="noopener noreferrer">Homepage</a>
-          <a class="btn" href="grok/vantage-fit-homepage-redesign-brief.html" target="_blank" rel="noopener noreferrer">Brief</a>
+          <a class="btn btn-main" href="grok/vantage-fit-virtual-marathon-v1.html" target="_blank" rel="noopener noreferrer">Page</a>
+          <a class="btn" href="grok/VIRTUAL-MARATHON-BRIEF.md" target="_blank" rel="noopener noreferrer">Brief</a>
         </div>
       </div>
-    </div>
-
-    <div class="prompt-block" id="promptBlock">
-      <div class="prompt-head">
-        <h2>Shared prompt</h2>
-        <div class="prompt-actions">
-          <button type="button" class="btn btn-copy" id="copyBtn">Copy</button>
-          <button type="button" class="btn btn-toggle" id="toggleBtn">Show full</button>
-        </div>
-      </div>
-      <div class="prompt-preview" id="promptPreview">
-        <strong>Role:</strong> Expert VP Product Marketing (enterprise B2B HR tech) + UI/UX / IA.<br>
-        Redesign <strong>vantagefit.io</strong> homepage for US enterprise HR buyers.
-        North star: <strong>employee participation</strong>. ~5 full-screen sections.
-        Add testimonial videos + enterprise security. Audit first, then ship brief + homepage.
-      </div>
-      <pre class="prompt-full" id="promptFull"></pre>
     </div>
 
     <p class="note">
-      Run a Challenge pages live in each model folder (shared prompt in <code>RUN-A-CHALLENGE-PROMPT.md</code>; Steps used <code>SOLUTIONS-PAGE-PROMPT.md</code>). Consolidated best-of pages come later — only Steps is consolidated so far. For homepages, each folder’s <code>v1</code> is the shared sample (ignore); compare <code>v2</code> model outputs, then consolidated <code>v3</code> versions.
+      Index mirrors the Solutions mega-menu. New batch (Claude, GPT Sol, Grok): wellness challenges library, HRA, workforce health insights, wellness rewards, wellness platform, solutions hub — prompt in <code>REMAINING-SOLUTIONS-PROMPT.md</code>. Earlier challenge pages: step, multi-activity, remote &amp; hybrid team, virtual marathon. Kimi K3 pending for the new batch.
     </p>
   </main>
 
-  <script>
-    const PROMPT = `Work like an expert VP of Product Marketing with 20 years of experience in enterprise B2B SaaS, specializing in conversion-focused websites for HR technology. You also have deep expertise in UI/UX design, information architecture, messaging, and modern AI-first website experiences.
-
-I want your help redesigning the website of http://www.vantagefit.io. The current website was built in the pre-AI era, and we believe it's time to completely rethink the homepage using AI-assisted design and modern product marketing principles.
-
-Our primary target audience is Senior HR leaders, CHROs, Benefits leaders, and Wellbeing leaders in the US enterprise market.
-
-We have already shortlisted a design direction. The sample homepage in the provided directory is a good starting point. Our north star metric is employee participation, and we like how prominently the sample showcases it in the hero section.
-
-However, a few important things are missing:
-
-Customer Testimonial Video – Add a section showcasing customer testimonial videos. You can reuse the content and assets from the current website.
-Enterprise Security & Compliance – Since we're an India-based company selling to US enterprises, trust is critical. Add a section similar to the current website's "Your data is safe with us" section to communicate our security, privacy, and compliance credentials.
-The sample homepage is too long. We want the homepage to be condensed into approximately five full-screen scroll sections while preserving a clear storytelling flow.
-
-Existing codebases
-1. Current marketing website Location: /Users/vc/anjan/work/vantagefit-astro
-
-Use this primarily to understand:
-
-Product positioning and messaging
-Features
-Customer stories
-Security and trust content
-Resources
-Help section (important because it explains the product in detail)
-The new marketing website does not need to include everything from the current site. Simplify where appropriate and focus on what best supports enterprise buyers.
-
-2. Dashboard design Location: /Users/vc/anjan/work/vc-dashboard-design
-
-This represents the HR admin experience. Use it to understand how HR leaders consume analytics so the homepage clearly connects product capabilities with measurable business outcomes.
-
-Navigation
-Create a modern navigation structure. The top-level menu can remain similar to the current website:
-
-Solutions (or Use Cases)
-Features
-Resources
-Pricing
-The linked pages do not need to be designed. However, propose what the submenu items under Solutions and Features should be so the information architecture is logical and scalable.
-
-Before designing
-First, audit the current homepage and identify:
-
-Messaging weaknesses
-UX/UI issues
-Conversion opportunities
-Content that should be retained
-Content that should be removed or consolidated
-Use these findings to justify your redesign decisions.
-
-Deliverables
-Produce:
-
-Homepage audit and recommendations.
-Information architecture for the new homepage.
-Proposed navigation and submenu structure.
-Wireframe for a homepage with approximately five full-screen sections.
-Complete homepage copy, including headlines, supporting copy, CTAs, and section content.
-UX/UI rationale explaining why each section exists and how it supports enterprise HR buyers.
-If information is missing, make reasonable assumptions based on best practices for enterprise HR SaaS websites. Only ask questions if a missing detail would materially affect the homepage strategy or messaging.
-
-Ask me question if you need clearifications`;
-
-    const block = document.getElementById('promptBlock');
-    const full = document.getElementById('promptFull');
-    const toggleBtn = document.getElementById('toggleBtn');
-    const copyBtn = document.getElementById('copyBtn');
-
-    full.textContent = PROMPT;
-
-    toggleBtn.addEventListener('click', () => {
-      const open = block.classList.toggle('open');
-      toggleBtn.textContent = open ? 'Hide' : 'Show full';
-    });
-
-    copyBtn.addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(PROMPT);
-      } catch {
-        const ta = document.createElement('textarea');
-        ta.value = PROMPT;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        ta.remove();
-      }
-      copyBtn.textContent = 'Copied';
-      copyBtn.classList.add('copied');
-      setTimeout(() => {
-        copyBtn.textContent = 'Copy';
-        copyBtn.classList.remove('copied');
-      }, 1600);
-    });
-  </script>
 </body>
 </html>

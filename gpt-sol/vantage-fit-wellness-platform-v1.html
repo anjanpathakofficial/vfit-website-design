@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Run inclusive employee wellness programs in one platform. Help people join challenges, build healthy habits, earn rewards, and give HR clear participation insights.">
+  <meta name="theme-color" content="#1d2228">
+  <title>Employee wellness platform for participation | Vantage Fit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/enterprise.css">
+  <style>
+    .platform-page {
+      --platform-dark: #1d2228;
+      --platform-dark-2: #26343a;
+      --platform-mint: #41d8b4;
+      --platform-coral: #f15162;
+      --platform-ink: #29294c;
+      --platform-muted: #6b6b8a;
+      --platform-line: rgba(41, 41, 76, .12);
+      overflow: hidden;
+      background: #f8f8f9;
+    }
+    .platform-page .shell { width: min(1180px, calc(100% - 48px)); }
+    .platform-page a:focus-visible,
+    .platform-page button:focus-visible,
+    .platform-page summary:focus-visible {
+      outline: 3px solid rgba(241, 81, 98, .38);
+      outline-offset: 4px;
+      border-radius: 8px;
+    }
+    .skip-link {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 100;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: #fff;
+      color: var(--platform-ink);
+      font-weight: 800;
+      transform: translateY(-160%);
+      transition: transform .2s ease;
+    }
+    .skip-link:focus { transform: none; }
+
+    /* Shared enterprise chrome */
+    .platform-nav {
+      position: sticky;
+      z-index: 50;
+      top: 0;
+      border-bottom: 1px solid var(--platform-line);
+      background: rgba(248, 248, 249, .92);
+      backdrop-filter: blur(18px);
+    }
+    .platform-nav__inner {
+      display: flex;
+      min-height: 68px;
+      align-items: center;
+      gap: 24px;
+    }
+    .platform-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--platform-ink);
+      font-size: 1.04rem;
+      font-weight: 800;
+      letter-spacing: -.03em;
+    }
+    .platform-brand__mark {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--platform-coral);
+      box-shadow: 0 8px 18px rgba(241,81,98,.24);
+    }
+    .platform-brand__mark svg { width: 19px; }
+    .platform-nav__links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: auto;
+    }
+    .platform-nav__links a {
+      padding: 9px 11px;
+      border-radius: 9px;
+      color: #536067;
+      font-size: .84rem;
+      font-weight: 700;
+    }
+    .platform-nav__links a:hover,
+    .platform-nav__links a[aria-current="page"] { background: #f1f1f6; color: var(--platform-ink); }
+    .platform-nav__links .platform-nav__cta {
+      margin-left: 7px;
+      padding: 10px 17px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      background: linear-gradient(125deg, var(--platform-coral), #b62e40);
+      color: #fff;
+    }
+    .platform-nav__links .platform-nav__cta:hover { background: linear-gradient(125deg, #f46272, #b62e40); color: #fff; }
+    .platform-nav__menu { display: none; }
+
+    /* Hero */
+    .platform-hero {
+      position: relative;
+      padding: clamp(76px, 10vw, 132px) 0 92px;
+      background:
+        radial-gradient(circle at 88% 10%, rgba(65,216,180,.13), transparent 28%),
+        radial-gradient(circle at 4% 86%, rgba(241,81,98,.08), transparent 30%),
+        #f8f8f9;
+    }
+    .platform-hero::after {
+      position: absolute;
+      right: -120px;
+      bottom: -160px;
+      width: 420px;
+      height: 420px;
+      border: 1px solid rgba(41,41,76,.08);
+      border-radius: 50%;
+      content: "";
+    }
+    .platform-hero__grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(480px, 1.1fr);
+      align-items: center;
+      gap: clamp(48px, 7vw, 96px);
+    }
+    .platform-hero h1 { max-width: 760px; font-size: clamp(3rem, 5.5vw, 5rem); }
+    .platform-hero h1 span { color: var(--platform-coral); }
+    .platform-hero .lead { max-width: 610px; font-size: clamp(1.05rem, 1.45vw, 1.24rem); }
+    .platform-hero__note {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      max-width: 540px;
+      margin-top: 24px;
+      color: var(--platform-muted);
+      font-size: .78rem;
+      line-height: 1.5;
+    }
+    .platform-hero__note svg { width: 17px; flex: 0 0 17px; margin-top: 2px; color: #169d7e; }
+
+    .system-map {
+      position: relative;
+      min-height: 520px;
+      padding: 34px;
+      border: 1px solid rgba(41,41,76,.12);
+      border-radius: 34px;
+      background: rgba(255,255,255,.82);
+      box-shadow: 0 34px 90px rgba(41,41,76,.14);
+      isolation: isolate;
+    }
+    .system-map::before {
+      position: absolute;
+      inset: 17px;
+      z-index: -1;
+      border: 1px dashed rgba(41,41,76,.12);
+      border-radius: 24px;
+      content: "";
+    }
+    .system-map__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+    .system-map__head strong { font-size: .88rem; letter-spacing: -.01em; }
+    .system-map__status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #157e68;
+      font-size: .69rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .system-map__status i { width: 7px; height: 7px; border-radius: 50%; background: var(--platform-mint); }
+    .system-card {
+      position: relative;
+      border: 1px solid rgba(41,41,76,.11);
+      border-radius: 19px;
+      background: #fff;
+      box-shadow: 0 14px 34px rgba(41,41,76,.09);
+    }
+    .system-card--admin { width: 72%; padding: 20px; }
+    .system-card--employee {
+      width: 72%;
+      margin: 34px 0 0 auto;
+      padding: 20px;
+      background: var(--platform-dark);
+      color: #fff;
+    }
+    .system-card__top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .system-card__label { color: var(--platform-muted); font-size: .65rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .system-card--employee .system-card__label { color: #aebbc0; }
+    .system-card__tag { padding: 5px 8px; border-radius: 999px; background: rgba(65,216,180,.14); color: #157e68; font-size: .62rem; font-weight: 800; }
+    .system-card--employee .system-card__tag { color: var(--platform-mint); }
+    .system-card h2 { margin-top: 18px; font-size: 1.22rem; }
+    .system-card p { margin-top: 7px; color: var(--platform-muted); font-size: .76rem; line-height: 1.5; }
+    .system-card--employee p { color: #b9c5ca; }
+    .system-card__meta { display: flex; gap: 8px; margin-top: 18px; }
+    .system-card__meta span { padding: 6px 9px; border-radius: 8px; background: #f1f1f6; font-size: .66rem; font-weight: 700; }
+    .system-card--employee .system-card__meta span { background: rgba(255,255,255,.09); }
+    .system-path {
+      position: absolute;
+      top: 190px;
+      right: 23%;
+      width: 33%;
+      height: 118px;
+      border-right: 2px solid rgba(65,216,180,.52);
+      border-bottom: 2px solid rgba(65,216,180,.52);
+      border-radius: 0 0 28px 0;
+    }
+    .system-path::after {
+      position: absolute;
+      right: -5px;
+      bottom: -5px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--platform-mint);
+      box-shadow: 0 0 0 8px rgba(65,216,180,.13);
+      content: "";
+      animation: platform-pulse 2.8s ease-in-out infinite;
+    }
+    .signal-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-top: 32px; }
+    .signal-row span {
+      padding: 9px 7px;
+      border: 1px solid rgba(41,41,76,.1);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--platform-muted);
+      font-size: .58rem;
+      font-weight: 750;
+      text-align: center;
+    }
+    .signal-caption { margin-top: 9px; color: var(--platform-muted); font-size: .61rem; text-align: center; }
+    @keyframes platform-pulse { 50% { box-shadow: 0 0 0 15px rgba(65,216,180,0); } }
+
+    /* Definition */
+    .definition-band { padding: 0 0 84px; }
+    .definition-band__inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(240px, .8fr);
+      align-items: center;
+      gap: 48px;
+      padding: 32px 38px;
+      border: 1px solid var(--platform-line);
+      border-left: 5px solid var(--platform-coral);
+      border-radius: 0 20px 20px 0;
+      background: #fff;
+      box-shadow: 0 12px 36px rgba(41,41,76,.06);
+    }
+    .definition-band h2 { font-size: clamp(1.45rem, 2.6vw, 2.25rem); line-height: 1.14; }
+    .definition-band p { color: var(--platform-muted); font-size: .96rem; }
+
+    /* Dual product surfaces */
+    .dual-section { padding: 110px 0; background: #fff; }
+    .dual-section__head { display: flex; align-items: end; justify-content: space-between; gap: 40px; margin-bottom: 50px; }
+    .dual-section__head .lead { max-width: 510px; }
+    .dual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    .surface {
+      position: relative;
+      min-height: 650px;
+      padding: clamp(28px, 4vw, 48px);
+      border-radius: 28px;
+      overflow: hidden;
+    }
+    .surface--employee { background: #f1f7f5; }
+    .surface--admin { background: #f3f1f8; }
+    .surface__audience {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--platform-muted);
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .surface__audience::before { width: 8px; height: 8px; border-radius: 50%; background: var(--platform-mint); content: ""; }
+    .surface--admin .surface__audience::before { background: var(--platform-coral); }
+    .surface h3 { margin-top: 18px; font-size: clamp(1.55rem, 2.3vw, 2.15rem); }
+    .surface > p { max-width: 500px; margin-top: 13px; color: var(--platform-muted); }
+    .action-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 30px; padding: 0; list-style: none; }
+    .action-list li { padding: 8px 10px; border: 1px solid rgba(41,41,76,.09); border-radius: 999px; background: rgba(255,255,255,.68); font-size: .72rem; font-weight: 700; }
+    .phone-ui {
+      width: min(340px, 88%);
+      margin: 0 auto -130px;
+      padding: 15px;
+      border: 8px solid var(--platform-dark);
+      border-radius: 38px;
+      background: #fff;
+      box-shadow: 0 28px 60px rgba(41,41,76,.22);
+    }
+    .phone-ui__bar { width: 70px; height: 5px; margin: 0 auto 18px; border-radius: 99px; background: #d8d9df; }
+    .phone-ui__greeting { color: var(--platform-muted); font-size: .66rem; }
+    .phone-ui__title { margin-top: 4px; font-size: 1.02rem; font-weight: 800; }
+    .ring-card { display: grid; grid-template-columns: 80px 1fr; align-items: center; gap: 14px; margin-top: 16px; padding: 14px; border-radius: 16px; background: #f1f7f5; }
+    .ring-card__ring { display: grid; width: 76px; height: 76px; place-items: center; border-radius: 50%; background: conic-gradient(var(--platform-mint) 0 68%, #dfe9e6 68% 100%); }
+    .ring-card__ring::before { width: 56px; height: 56px; border-radius: 50%; background: #fff; content: ""; }
+    .ring-card strong { font-size: .78rem; }
+    .ring-card p { margin-top: 4px; color: var(--platform-muted); font-size: .63rem; }
+    .challenge-mini { margin-top: 12px; padding: 16px; border-radius: 16px; background: var(--platform-dark); color: #fff; }
+    .challenge-mini small { color: var(--platform-mint); font-size: .6rem; font-weight: 800; text-transform: uppercase; }
+    .challenge-mini b { display: block; margin-top: 8px; font-size: .84rem; }
+    .challenge-mini__activities { display: flex; gap: 6px; margin-top: 13px; }
+    .challenge-mini__activities span { padding: 5px 7px; border-radius: 7px; background: rgba(255,255,255,.1); font-size: .57rem; }
+    .admin-ui {
+      margin: 20px -20px -20px 28px;
+      padding: 18px;
+      border: 1px solid rgba(41,41,76,.1);
+      border-radius: 19px 0 0 0;
+      background: #fff;
+      box-shadow: 0 24px 54px rgba(41,41,76,.14);
+    }
+    .admin-ui__top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--platform-line); }
+    .admin-ui__dots { display: flex; gap: 5px; }
+    .admin-ui__dots i { width: 7px; height: 7px; border-radius: 50%; background: #d9dbe2; }
+    .admin-ui__top span { font-size: .65rem; font-weight: 800; }
+    .admin-ui__main { display: grid; grid-template-columns: 86px 1fr; min-height: 300px; }
+    .admin-ui__side { padding-top: 15px; border-right: 1px solid var(--platform-line); }
+    .admin-ui__side i { display: block; width: 56px; height: 7px; margin: 0 0 12px; border-radius: 9px; background: #e8e8ee; }
+    .admin-ui__side i:nth-child(2) { background: rgba(241,81,98,.27); }
+    .admin-ui__content { padding: 19px 0 0 18px; }
+    .admin-ui__content h4 { margin: 0; font-size: .82rem; }
+    .admin-signals { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 14px; }
+    .admin-signal { min-height: 82px; padding: 11px; border: 1px solid var(--platform-line); border-radius: 11px; }
+    .admin-signal small { display: block; color: var(--platform-muted); font-size: .54rem; font-weight: 700; }
+    .admin-signal b { display: block; margin-top: 8px; font-size: .7rem; }
+    .admin-signal svg { width: 100%; height: 25px; margin-top: 5px; }
+
+    /* Loop */
+    .loop-section { padding: 116px 0; background: var(--platform-dark); color: #fff; }
+    .loop-section .eyebrow { color: var(--platform-mint); }
+    .loop-section__head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, .7fr); align-items: end; gap: 60px; }
+    .loop-section__head .lead { color: #b4c0c4; }
+    .loop-grid { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 62px; }
+    .loop-grid::before { position: absolute; top: 29px; right: 10%; left: 10%; height: 1px; background: rgba(65,216,180,.34); content: ""; }
+    .loop-step { position: relative; z-index: 1; padding-top: 0; }
+    .loop-step__mark {
+      display: grid;
+      width: 58px;
+      height: 58px;
+      place-items: center;
+      border: 1px solid rgba(65,216,180,.45);
+      border-radius: 18px;
+      background: var(--platform-dark);
+      color: var(--platform-mint);
+      font-size: .74rem;
+      font-weight: 800;
+    }
+    .loop-step h3 { margin-top: 23px; color: #fff; font-size: 1.15rem; line-height: 1.18; }
+    .loop-step p { margin-top: 10px; color: #aebbc0; font-size: .82rem; line-height: 1.6; }
+    .loop-note { margin-top: 50px; padding: 18px 22px; border: 1px solid rgba(255,255,255,.11); border-radius: 14px; background: rgba(255,255,255,.04); color: #bac4c8; font-size: .78rem; }
+    .loop-note strong { color: #fff; }
+
+    /* Privacy */
+    .privacy-section { padding: 110px 0; background: #eef7f4; }
+    .privacy-grid { display: grid; grid-template-columns: .78fr 1.22fr; align-items: center; gap: 78px; }
+    .privacy-copy .lead { max-width: 460px; }
+    .privacy-note { margin-top: 22px; color: var(--platform-muted); font-size: .73rem; }
+    .boundary-card { position: relative; display: grid; grid-template-columns: 1fr 1fr; border: 1px solid rgba(41,41,76,.12); border-radius: 24px; background: #fff; box-shadow: 0 24px 64px rgba(41,41,76,.1); overflow: hidden; }
+    .boundary-side { padding: 34px; }
+    .boundary-side + .boundary-side { border-left: 1px solid var(--platform-line); }
+    .boundary-side__icon { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 12px; background: #eef7f4; color: #147964; }
+    .boundary-side__icon svg { width: 21px; }
+    .boundary-side h3 { margin-top: 22px; font-size: 1.12rem; }
+    .boundary-side p { margin-top: 10px; color: var(--platform-muted); font-size: .84rem; }
+    .boundary-chip { display: inline-flex; margin-top: 22px; padding: 7px 9px; border-radius: 8px; background: #f1f1f6; color: var(--platform-muted); font-size: .64rem; font-weight: 800; }
+
+    /* Routes */
+    .route-section { padding: 112px 0; background: #fff; }
+    .route-section__head { display: flex; align-items: end; justify-content: space-between; gap: 40px; margin-bottom: 44px; }
+    .route-section__head p { max-width: 460px; color: var(--platform-muted); }
+    .route-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .route-card { display: flex; min-height: 288px; flex-direction: column; padding: 25px; border: 1px solid var(--platform-line); border-radius: 18px; background: #fff; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+    .route-card:hover { transform: translateY(-4px); border-color: rgba(241,81,98,.32); box-shadow: 0 18px 44px rgba(41,41,76,.1); }
+    .route-card__icon { display: grid; width: 40px; height: 40px; place-items: center; border-radius: 12px; background: #fdf0f2; color: var(--platform-coral); }
+    .route-card__icon svg { width: 20px; }
+    .route-card:nth-child(2) .route-card__icon,
+    .route-card:nth-child(3) .route-card__icon { background: #eef7f4; color: #16866d; }
+    .route-card h3 { margin-top: 24px; font-size: 1.16rem; line-height: 1.18; }
+    .route-card p { margin-top: 10px; color: var(--platform-muted); font-size: .8rem; }
+    .route-card .text-link { margin-top: auto; padding-top: 28px; }
+
+    /* FAQ and close */
+    .faq-section { padding: 104px 0; background: #f8f8f9; }
+    .faq-grid { display: grid; grid-template-columns: .72fr 1.28fr; gap: 80px; }
+    .faq-list { border-top: 1px solid var(--platform-line); }
+    .faq-list details { border-bottom: 1px solid var(--platform-line); }
+    .faq-list summary { position: relative; padding: 24px 42px 24px 0; cursor: pointer; font-weight: 800; list-style: none; }
+    .faq-list summary::-webkit-details-marker { display: none; }
+    .faq-list summary::after { position: absolute; top: 23px; right: 5px; color: var(--platform-coral); content: "+"; font-size: 1.25rem; font-weight: 500; }
+    .faq-list details[open] summary::after { content: "-"; }
+    .faq-list details p { max-width: 720px; padding: 0 42px 24px 0; color: var(--platform-muted); font-size: .9rem; }
+    .platform-close { padding: 90px 0; background: linear-gradient(135deg, #29294c, #1d2228); color: #fff; }
+    .platform-close__inner { display: flex; align-items: center; justify-content: space-between; gap: 54px; }
+    .platform-close h2 { max-width: 670px; }
+    .platform-close p { max-width: 620px; margin-top: 14px; color: #bdc4cf; }
+    .platform-close .btn-row { flex: 0 0 auto; }
+
+    .platform-footer { padding: 48px 0 28px; background: #171b20; color: #aeb5bd; }
+    .platform-footer__grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 50px; }
+    .platform-footer .platform-brand { color: #fff; }
+    .platform-footer__about { max-width: 330px; margin-top: 15px; font-size: .78rem; }
+    .platform-footer h2 { margin-bottom: 14px; color: #fff; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; }
+    .platform-footer__links { display: grid; gap: 8px; font-size: .78rem; }
+    .platform-footer__links a:hover { color: #fff; }
+    .platform-footer__bottom { display: flex; justify-content: space-between; gap: 20px; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.1); font-size: .7rem; }
+
+    @media (max-width: 980px) {
+      .platform-hero__grid { grid-template-columns: 1fr; }
+      .system-map { max-width: 680px; }
+      .dual-grid { grid-template-columns: 1fr; }
+      .surface { min-height: 620px; }
+      .loop-grid { grid-template-columns: 1fr 1fr; gap: 42px 24px; }
+      .loop-grid::before { display: none; }
+      .privacy-grid { grid-template-columns: 1fr; gap: 46px; }
+      .route-grid { grid-template-columns: 1fr 1fr; }
+      .faq-grid { grid-template-columns: 1fr; gap: 38px; }
+      .platform-close__inner { display: block; }
+    }
+    @media (max-width: 760px) {
+      .platform-page .shell { width: min(100% - 32px, 1180px); }
+      .platform-nav__links { display: none; }
+      .platform-nav__menu { display: inline-flex; margin-left: auto; padding: 8px 10px; border: 1px solid var(--platform-line); border-radius: 8px; background: #fff; color: var(--platform-ink); font-size: .78rem; font-weight: 800; }
+      .platform-hero { padding-top: 62px; }
+      .system-map { min-height: 500px; padding: 26px; }
+      .system-card--admin, .system-card--employee { width: 86%; }
+      .system-path { right: 14%; }
+      .definition-band__inner { grid-template-columns: 1fr; gap: 15px; padding: 28px; }
+      .dual-section__head, .route-section__head { display: block; }
+      .surface { min-height: 580px; padding: 28px; }
+      .admin-ui { margin-left: 0; }
+      .loop-section__head { grid-template-columns: 1fr; gap: 8px; }
+      .boundary-card { grid-template-columns: 1fr; }
+      .boundary-side + .boundary-side { border-top: 1px solid var(--platform-line); border-left: 0; }
+      .route-grid { grid-template-columns: 1fr; }
+      .route-card { min-height: 240px; }
+      .platform-footer__grid { grid-template-columns: 1fr 1fr; }
+      .platform-footer__brand { grid-column: 1 / -1; }
+    }
+    @media (max-width: 540px) {
+      .platform-hero h1 { font-size: 2.65rem; }
+      .system-map { min-height: 480px; padding: 22px; }
+      .system-card--admin, .system-card--employee { width: 94%; }
+      .signal-row { grid-template-columns: 1fr 1fr; }
+      .system-path { top: 190px; height: 110px; }
+      .loop-grid { grid-template-columns: 1fr; }
+      .surface { min-height: 560px; }
+      .phone-ui { width: 96%; }
+      .platform-close .btn-row { display: grid; }
+      .platform-footer__grid { grid-template-columns: 1fr; }
+      .platform-footer__brand { grid-column: auto; }
+      .platform-footer__bottom { display: grid; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .platform-page *, .platform-page *::before, .platform-page *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body class="platform-page">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <nav class="platform-nav" aria-label="Primary navigation">
+    <div class="shell platform-nav__inner">
+      <a class="platform-brand" href="../styled-homepage/index.html" aria-label="Vantage Fit home">
+        <span class="platform-brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 20s-7-4.4-7-9.3A3.7 3.7 0 0 1 12 8a3.7 3.7 0 0 1 7 2.7C19 15.6 12 20 12 20z" fill="#fff"/></svg>
+        </span>
+        Vantage Fit
+      </a>
+      <div class="platform-nav__links">
+        <a href="vantage-fit-solutions-hub-v1.html">Solutions</a>
+        <a href="vantage-fit-wellness-platform-v1.html" aria-current="page">Platform</a>
+        <a href="https://www.vantagefit.io/resources/">Resources</a>
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a href="https://www.vantagefit.io/login/">Log in</a>
+        <a class="platform-nav__cta" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+      </div>
+      <a class="platform-nav__menu" href="vantage-fit-solutions-hub-v1.html">View solutions</a>
+    </div>
+  </nav>
+
+  <main id="main-content">
+    <header class="platform-hero">
+      <div class="shell platform-hero__grid">
+        <div>
+          <span class="eyebrow">Employee wellness platform</span>
+          <h1>The employee wellness platform built for <span>participation</span></h1>
+          <p class="lead">Launch inclusive programs employees can join, track and return to. Vantage Fit connects everyday activity, wellness challenges, rewards and clear HR insights in one operating system.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+            <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">See pricing</a>
+          </div>
+          <p class="platform-hero__note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            For HR, benefits and wellbeing teams running programs across locations and work styles.
+          </p>
+        </div>
+
+        <div class="system-map" role="group" aria-label="Vantage Fit connects HR program controls, the employee experience, and separate participation signals">
+          <div class="system-map__head">
+            <strong>Participation loop</strong>
+            <span class="system-map__status"><i></i> Program active</span>
+          </div>
+          <div class="system-card system-card--admin">
+            <div class="system-card__top">
+              <span class="system-card__label">HR launches</span>
+              <span class="system-card__tag">Scheduled</span>
+            </div>
+            <h2>Spring movement challenge</h2>
+            <p>A shared program with audience, activity and reward settings.</p>
+            <div class="system-card__meta"><span>Teams on</span><span>Points on</span><span>All locations</span></div>
+          </div>
+          <div class="system-path" aria-hidden="true"></div>
+          <div class="system-card system-card--employee">
+            <div class="system-card__top">
+              <span class="system-card__label">Employee joins</span>
+              <span class="system-card__tag">In progress</span>
+            </div>
+            <h2>Move your way</h2>
+            <p>Walking, cycling and logged workouts can contribute.</p>
+            <div class="system-card__meta"><span>3 activities</span><span>Team progress</span></div>
+          </div>
+          <div class="signal-row" role="group" aria-label="Separate program signals">
+            <span>Participation</span><span>Challenge</span><span>Activity</span><span>Health risk</span>
+          </div>
+          <p class="signal-caption">Separate signals inform the next program. They are not blended into one score.</p>
+        </div>
+      </div>
+    </header>
+
+    <section class="definition-band" aria-labelledby="definition-title">
+      <div class="shell">
+        <div class="definition-band__inner">
+          <h2 id="definition-title">One employee experience. One HR operating view. One measurable participation loop.</h2>
+          <p>Vantage Fit brings the program, the daily experience and the evidence together, so wellbeing does not stop at enrollment.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="dual-section" aria-labelledby="two-sides-title">
+      <div class="shell">
+        <div class="dual-section__head">
+          <div>
+            <span class="eyebrow">Two sides, one program</span>
+            <h2 id="two-sides-title">Easy to join. Practical to run.</h2>
+          </div>
+          <p class="lead">Employees get a clear next action. HR gets a clear operating view. Both work from the same program.</p>
+        </div>
+        <div class="dual-grid">
+          <article class="surface surface--employee">
+            <span class="surface__audience">The employee experience</span>
+            <h3>Make wellbeing part of the day</h3>
+            <p>People can connect a supported activity source, choose relevant programs, see progress and earn points for real participation.</p>
+            <ul class="action-list" aria-label="Employee actions">
+              <li>Connect activity</li><li>Join a challenge</li><li>Track progress</li><li>Earn and redeem points</li>
+            </ul>
+            <div class="phone-ui" role="img" aria-label="Illustrative employee app interface">
+              <div class="phone-ui__bar"></div>
+              <span class="phone-ui__greeting">Your day</span>
+              <div class="phone-ui__title">Good morning, Jordan</div>
+              <div class="ring-card">
+                <span class="ring-card__ring" aria-hidden="true"></span>
+                <div><strong>Daily activity</strong><p>Synced from your connected source</p></div>
+              </div>
+              <div class="challenge-mini">
+                <small>Challenge in progress</small>
+                <b>Move your way</b>
+                <div class="challenge-mini__activities"><span>Walk</span><span>Cycle</span><span>Workout</span></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="surface surface--admin">
+            <span class="surface__audience">The HR operating view</span>
+            <h3>Run the program from one place</h3>
+            <p>Program leaders can target an audience, schedule challenges, follow participation and export the records they need.</p>
+            <ul class="action-list" aria-label="HR actions">
+              <li>Plan and target</li><li>Launch and manage</li><li>Read program signals</li><li>Export reports</li>
+            </ul>
+            <div class="admin-ui" role="img" aria-label="Illustrative HR admin interface">
+              <div class="admin-ui__top"><div class="admin-ui__dots"><i></i><i></i><i></i></div><span>Wellness overview</span></div>
+              <div class="admin-ui__main">
+                <aside class="admin-ui__side" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></aside>
+                <div class="admin-ui__content">
+                  <h4>Independent program signals</h4>
+                  <div class="admin-signals">
+                    <div class="admin-signal"><small>Participation</small><b>Who is joining?</b><svg viewBox="0 0 120 26" fill="none" aria-hidden="true"><path d="M2 21c18-3 23-12 39-10s21 7 34 2 22-1 43-9" stroke="#f15162" stroke-width="2"/></svg></div>
+                    <div class="admin-signal"><small>Challenge</small><b>What held attention?</b><svg viewBox="0 0 120 26" fill="none" aria-hidden="true"><path d="M2 22h18V12h18v6h18V7h18v9h18V4h26" stroke="#41d8b4" stroke-width="2"/></svg></div>
+                    <div class="admin-signal"><small>Activity</small><b>How are habits moving?</b><svg viewBox="0 0 120 26" fill="none" aria-hidden="true"><path d="M2 17c18 2 27-8 43-5s21 8 35 4 23-12 38-9" stroke="#7965ba" stroke-width="2"/></svg></div>
+                    <div class="admin-signal"><small>Aggregate health risk</small><b>Where is support needed?</b><svg viewBox="0 0 120 26" fill="none" aria-hidden="true"><path d="M2 21h28V9h28v6h28V5h32" stroke="#f6b93b" stroke-width="2"/></svg></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="loop-section" aria-labelledby="loop-title">
+      <div class="shell">
+        <div class="loop-section__head">
+          <div>
+            <span class="eyebrow">The participation loop</span>
+            <h2 id="loop-title">Run the next program with evidence from the last one</h2>
+          </div>
+          <p class="lead">The platform connects four jobs that are often split across tools.</p>
+        </div>
+        <div class="loop-grid">
+          <article class="loop-step">
+            <span class="loop-step__mark">Start</span>
+            <h3>Launch a relevant program</h3>
+            <p>Use challenge formats, tasks and audience controls that fit the workforce and the behavior you want to support.</p>
+          </article>
+          <article class="loop-step">
+            <span class="loop-step__mark">Join</span>
+            <h3>Make the daily action easy</h3>
+            <p>Let employees use supported devices and familiar activities, then make progress visible through challenges, teams and milestones.</p>
+          </article>
+          <article class="loop-step">
+            <span class="loop-step__mark">Read</span>
+            <h3>Understand the response</h3>
+            <p>Review participation, challenge performance, activity trends and aggregate health-risk signals in their proper context.</p>
+          </article>
+          <article class="loop-step">
+            <span class="loop-step__mark">Act</span>
+            <h3>Reward real effort</h3>
+            <p>Tie points to completed challenge tasks or admin-awarded achievements, with a wallet and redemption path employees can see.</p>
+          </article>
+        </div>
+        <p class="loop-note"><strong>A better operating question:</strong> Which program earned participation, what behavior followed, and what should we change next?</p>
+      </div>
+    </section>
+
+    <section class="privacy-section" aria-labelledby="privacy-title">
+      <div class="shell privacy-grid">
+        <div class="privacy-copy">
+          <span class="eyebrow">A clear data boundary</span>
+          <h2 id="privacy-title">Personal health stays personal</h2>
+          <p class="lead">Employees can use personal health tools without turning the platform into employer surveillance.</p>
+          <p class="privacy-note">Availability can vary by plan and configuration. A Vantage Fit specialist can map the right setup for your workforce.</p>
+        </div>
+        <div class="boundary-card">
+          <article class="boundary-side">
+            <span class="boundary-side__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 22a8 8 0 0 1 16 0"/></svg></span>
+            <h3>Employees see their detail</h3>
+            <p>Employees can see their own health profile, assessment results and personal health information.</p>
+            <span class="boundary-chip">Personal view</span>
+          </article>
+          <article class="boundary-side">
+            <span class="boundary-side__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10m6 10V4m6 16v-7m4 7H2"/></svg></span>
+            <h3>HR sees aggregate signals</h3>
+            <p>HR sees program participation and aggregate health metrics, not an employee's individual HRA answers, lab results or personal health profile.</p>
+            <span class="boundary-chip">Workforce view</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="route-section" aria-labelledby="route-title">
+      <div class="shell">
+        <div class="route-section__head">
+          <div><span class="eyebrow">Choose a solution</span><h2 id="route-title">Start with the job you need to solve</h2></div>
+          <p>Browse the whole program library or go straight to assessment, insight or rewards.</p>
+        </div>
+        <div class="route-grid">
+          <a class="route-card" href="vantage-fit-wellness-challenges-v1.html">
+            <span class="route-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h13"/><circle cx="18" cy="12" r="2"/></svg></span>
+            <h3>Wellness challenges</h3><p>Browse ready-to-run ways to engage different interests and ability levels.</p><span class="text-link">Explore wellness challenges <span aria-hidden="true">→</span></span>
+          </a>
+          <a class="route-card" href="vantage-fit-health-risk-assessment-v1.html">
+            <span class="route-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l2 2 4-4"/><path d="M5 3h14v18H5z"/></svg></span>
+            <h3>Health Risk Assessment</h3><p>Establish a voluntary workforce baseline while protecting individual answers.</p><span class="text-link">See Health Risk Assessment <span aria-hidden="true">→</span></span>
+          </a>
+          <a class="route-card" href="vantage-fit-workforce-health-insights-v1.html">
+            <span class="route-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3"/></svg></span>
+            <h3>Workforce health insights</h3><p>Understand participation, challenge, activity and aggregate health-risk signals.</p><span class="text-link">Explore workforce insights <span aria-hidden="true">→</span></span>
+          </a>
+          <a class="route-card" href="vantage-fit-wellness-rewards-v1.html">
+            <span class="route-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="15" rx="2"/><path d="M12 6v15M3 11h18M8 6c-2 0-3-1-3-2s1-2 2.5-2C10 2 12 6 12 6m4-4c1.5 0 2.5 1 2.5 2S17.5 6 15.5 6H12s2-4 4-4z"/></svg></span>
+            <h3>Wellness rewards program</h3><p>Connect points and gift cards to real wellness effort.</p><span class="text-link">See wellness rewards <span aria-hidden="true">→</span></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-section" aria-labelledby="faq-title">
+      <div class="shell faq-grid">
+        <div><span class="eyebrow">Platform questions</span><h2 id="faq-title">What buyers ask before a demo</h2></div>
+        <div class="faq-list">
+          <details>
+            <summary>What is an employee wellness platform?</summary>
+            <p>It is the system an organization uses to deliver, manage and measure employee wellbeing programs. Vantage Fit combines the employee participation experience with HR program controls and reporting.</p>
+          </details>
+          <details>
+            <summary>Do employees need a specific wearable?</summary>
+            <p>No. Vantage Fit supports phone-based activity sources and connected services including Apple Health, Google Fit, Fitbit and Garmin. Sync behavior depends on the source and device settings.</p>
+          </details>
+          <details>
+            <summary>Can HR see an employee's personal health information?</summary>
+            <p>HR can see program activity and aggregate health metrics. Individual HRA answers, lab results and personal health profiles remain visible to the employee rather than the employer.</p>
+          </details>
+          <details>
+            <summary>What can HR report on?</summary>
+            <p>Available reporting includes enrollment and participation, challenge leaderboards, activity transactions, points and redemptions, plus configured workforce-health views. Reports can be filtered and exported as CSV.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="platform-close" aria-labelledby="close-title">
+      <div class="shell platform-close__inner">
+        <div><h2 id="close-title">Build a wellness program people can take part in</h2><p>See how Vantage Fit can connect participation, program operations and useful workforce signals for your organization.</p></div>
+        <div class="btn-row"><a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a><a class="btn btn-light" href="https://www.vantagefit.io/pricing/">See pricing</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="platform-footer">
+    <div class="shell">
+      <div class="platform-footer__grid">
+        <div class="platform-footer__brand">
+          <a class="platform-brand" href="../styled-homepage/index.html"><span class="platform-brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 20s-7-4.4-7-9.3A3.7 3.7 0 0 1 12 8a3.7 3.7 0 0 1 7 2.7C19 15.6 12 20 12 20z" fill="#fff"/></svg></span>Vantage Fit</a>
+          <p class="platform-footer__about">Employee wellness built around participation, useful habits and clear program decisions.</p>
+        </div>
+        <div><h2>Explore</h2><div class="platform-footer__links"><a href="vantage-fit-solutions-hub-v1.html">All solutions</a><a href="vantage-fit-wellness-challenges-v1.html">Wellness challenges</a><a href="vantage-fit-health-risk-assessment-v1.html">Health Risk Assessment</a><a href="vantage-fit-workforce-health-insights-v1.html">Workforce health insights</a><a href="vantage-fit-wellness-rewards-v1.html">Wellness rewards program</a></div></div>
+        <div><h2>Plan</h2><div class="platform-footer__links"><a href="https://www.vantagefit.io/pricing/">Pricing</a><a href="https://www.vantagefit.io/request-demo/">Book a demo</a><a href="https://www.vantagefit.io/resources/">Resources</a><a href="https://www.vantagefit.io/login/">Log in</a></div></div>
+      </div>
+      <div class="platform-footer__bottom"><span>© 2026 Vantage Circle. All rights reserved.</span><span>Vantage Fit is a Vantage Circle product.</span></div>
+    </div>
+  </footer>
+</body>
+</html>

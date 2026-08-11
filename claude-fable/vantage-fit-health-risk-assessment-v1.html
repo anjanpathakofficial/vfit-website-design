@@ -1,0 +1,1689 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Required: this is an unshipped preview mock. Do not remove. -->
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <meta name="description" content="Run a baseline health risk assessment employees will answer honestly. Private results for them, aggregate-only reporting for HR. Book a Vantage Fit demo.">
+  <meta name="theme-color" content="#18262b">
+  <title>Corporate Health Risk Assessment | Vantage Fit</title>
+
+  <link rel="canonical" href="https://www.vantagefit.io/solutions/health-risk-assessment/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Corporate Health Risk Assessment | Vantage Fit">
+  <meta property="og:description" content="Nine health factors, a private result for each employee, aggregate-only reporting for HR.">
+  <meta property="og:url" content="https://www.vantagefit.io/solutions/health-risk-assessment/">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- THE ONLY STYLESHEET THIS PAGE LINKS. Path is relative to claude-fable/. -->
+  <link rel="stylesheet" href="../styles/enterprise.css">
+
+  <style>
+    /* ============================================================
+       HEALTH RISK ASSESSMENT solutions page.
+       Tokens, buttons, hero frame, .dash, .phone, .steps, .trust
+       band and .final all come from ../styles/enterprise.css.
+
+       NEW on this page (nothing else in the set uses them):
+         .area-list          the nine health areas and their inputs
+         .hra-form / .hf-*   the questionnaire, a bezel-less screen crop
+         .band-scale/.band-* the 0 to 100 category ladder
+         .firewall / .fw-*   THE PAGE SIGNATURE: the two-sided privacy
+                             firewall with an honest "not built yet" strip
+         .agg-grid           the three aggregate cards
+         .ta-*               the count-only target-audience mock
+         .note-card          the medical-disclaimer card
+         .dash-sub / .dash-asof / .dash-brk*   admin score breakdown
+         .hra-result / .hra-*                  employee result screen
+       Everything here is scoped to this page's section classes or to
+       class names that exist nowhere else in the set.
+       ============================================================ */
+
+    /* --- Nav: Solutions is the current section, HRA the current page --- */
+    .nav-trigger.is-current { background: var(--soft); color: var(--ink); box-shadow: inset 0 -2px 0 var(--coral); border-radius: 9px 9px 0 0; }
+    .mega a.mega-link.is-page { background: var(--soft); box-shadow: inset 3px 0 0 var(--coral); }
+    /* Escape closes a mega even while focus stays on its trigger. */
+    .nav-item.esc-closed .mega { display: none; }
+
+    /* --- Shared section shells (hub vocabulary) --- */
+    .hub-section { padding: 96px 0; }
+    .hub-head { max-width: 720px; }
+    .hub-head .lead { margin-top: 14px; }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s cubic-bezier(.22,.9,.24,1); }
+    .reveal.on { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+    /* --- Skip link: the nav carries three mega menus, so a keyboard user
+       needs a way past roughly 37 stops before the h1. WCAG 2.4.1. --- */
+    .skip-link { position: absolute; left: -9999px; }
+    /* #top is <main tabindex="-1">, so the skip link actually moves focus in
+       Safari and older Chrome. Suppress the ring on the programmatic target. */
+    main:focus { outline: none; }
+    .skip-link:focus {
+      left: 16px; top: 12px; z-index: 60;
+      padding: 10px 16px;
+      border-radius: 10px;
+      background: var(--ink);
+      color: #fff;
+      font-weight: 700;
+      outline: 3px solid var(--coral-dark);
+      outline-offset: 2px;
+    }
+
+    /* --- Contrast lifts on inherited small-text rules. Scoped here because
+       the stylesheet is shared; flag upstream separately. --- */
+    .logos-label { color: rgba(41,41,76,.72); }
+    .logo-word { color: rgba(41,41,76,.78); }
+    .solutions-trust .trust-plaque .trust-support { color: rgba(255,255,255,.62); }
+    /* .eyebrow is --coral-dark, which clears 4.5:1 on white but not on the
+       tinted surfaces this page uses. --coral-deep restores the margin. */
+    .assessment-screen .eyebrow,
+    .privacy-screen .eyebrow,
+    .rollout-screen .eyebrow,
+    .proof-hub .eyebrow,
+    .related-screen .eyebrow { color: var(--coral-deep); }
+
+    /* --- Focus visibility. The inherited ring is a 16%-alpha ink outline,
+       which reads as no ring at all on white. --- */
+    .seg-btn:focus-visible { outline: 3px solid var(--coral-dark); outline-offset: 2px; border-radius: 8px; }
+    a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--coral-dark); outline-offset: 2px; border-radius: 8px; }
+    .trust-screen a:focus-visible, .final a:focus-visible, footer a:focus-visible { outline-color: var(--mint); }
+
+    /* --- The primary CTA gradient starts on flat coral, which is 3.45:1 under
+       a white label. Start it a step darker so the label always clears 4.5:1. --- */
+    .btn-primary { background: linear-gradient(125deg, var(--coral-dark) 0%, var(--coral-deep) 100%); }
+
+    /* --- Gradient-clipped text disappears in forced-colors mode. --- */
+    @media (forced-colors: active) {
+      .hero-copy h1 em { background: none; -webkit-text-fill-color: currentColor; color: CanvasText; }
+      .fw-divider::before, .firewall { forced-color-adjust: none; }
+    }
+
+    /* --- Illustrative-data label, required on every drawn mock --- */
+    .mock-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(41,41,76,.04);
+      /* A required disclosure, so it sits a step darker than --muted. */
+      color: rgba(41,41,76,.75);
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* ============================================================
+       S1 HERO: admin dash (aggregate) behind, employee phone in front
+       ============================================================ */
+    .hra-hero .hero-grid { grid-template-columns: 1.02fr .98fr; }
+    .hra-hero .hero-copy .lead { max-width: 560px; }
+    .hra-hero .hero-visual { min-height: 528px; }
+    .hra-hero .dash { top: 0; box-shadow: 0 30px 74px rgba(41,41,76,.18); }
+    .hra-hero .phone { bottom: 44px; }
+    .hra-hero .visual-caption {
+      position: absolute; left: 0; right: 0; bottom: 0;
+      display: block;
+      color: rgba(41,41,76,.66);
+      font-size: .72rem;
+      line-height: 1.45;
+      text-align: center;
+    }
+
+    /* Admin score-breakdown block inside .dash */
+    .dash-sub {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 10px; padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(65,216,180,.13);
+      color: #0f7a61;
+      font-size: .6rem; font-weight: 800; letter-spacing: .05em;
+    }
+    .dash-sub::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--mint); }
+    .dash-asof { display: block; margin-top: 6px; color: var(--muted); font-size: .58rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+    .dash-brk-head { margin-top: 14px; color: var(--muted); font-size: .58rem; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+    /* The phone overlays the right edge of the dash, so the breakdown values are
+       inset to stay legible, the same trick enterprise.css uses on .metric-inline. */
+    .dash-brk-head, .dash-brk { margin-right: 46px; }
+    .dash-brk { margin-top: 8px; }
+    .dash-brk-row + .dash-brk-row { margin-top: 9px; }
+    .dash-brk-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; font-size: .64rem; }
+    .dash-brk-top b { font-weight: 700; }
+    .dash-brk-val { font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+    .dash-brk-chip { margin-left: 6px; padding: 1px 6px; border-radius: 999px; background: rgba(241,81,98,.1); color: var(--coral-deep); font-size: .5rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+    .dash-rail { height: 3px; margin-top: 5px; border-radius: 999px; background: rgba(41,41,76,.08); overflow: hidden; }
+    .dash-rail i { display: block; height: 100%; border-radius: inherit; }
+
+    /* Employee HRA result screen inside .phone */
+    .hra-result { margin: 0 11px; padding: 13px; border: 1px solid var(--line); border-radius: 17px; background: #fff; }
+    .hra-result small { display: block; color: var(--muted); font-size: .48rem; font-weight: 800; letter-spacing: .09em; }
+    .hra-result > b { display: block; margin-top: 4px; font-size: .72rem; }
+    .hra-pct { display: block; margin-top: 4px; font-size: 2.5rem; font-weight: 800; letter-spacing: -.06em; line-height: 1; font-variant-numeric: tabular-nums; }
+    .hra-band { display: inline-flex; margin-top: 6px; padding: 3px 9px; border-radius: 999px; background: rgba(65,216,180,.16); color: #169d7e; font-size: .55rem; font-weight: 800; letter-spacing: .06em; }
+    .hra-range { display: block; margin-top: 6px; color: var(--muted); font-size: .5rem; line-height: 1.45; }
+    .hra-sug-head { margin: 10px 11px 0; color: var(--muted); font-size: .48rem; font-weight: 800; letter-spacing: .1em; }
+    .hra-sug { margin: 5px 11px 0; display: grid; gap: 5px; }
+    .hra-sug span { display: grid; grid-template-columns: 6px 1fr; gap: 7px; align-items: start; font-size: .5rem; line-height: 1.4; }
+    .hra-sug span::before { content: ""; width: 6px; height: 6px; margin-top: 3px; border-radius: 50%; background: var(--mint); }
+    .hra-fine { margin: 9px 11px 0; color: var(--muted); font-size: .44rem; line-height: 1.4; }
+    .phone .mock-tag { margin: 9px 11px 11px; }
+
+    /* ============================================================
+       S2 THE ASSESSMENT: questionnaire crop + the nine areas
+       ============================================================ */
+    .assessment-screen { background: var(--canvas); }
+    .employee-cols { display: grid; grid-template-columns: 1.04fr .96fr; gap: 56px; align-items: center; margin-top: 40px; }
+    .assessment-media { display: grid; place-items: center; }
+
+    .hra-form {
+      width: min(100%, 320px);
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: #f5f7f4;
+      box-shadow: 0 22px 54px rgba(41,41,76,.12);
+    }
+    .hf-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+    .hf-head b { font-size: .78rem; letter-spacing: -.01em; }
+    .hf-head span { color: var(--muted); font-size: .64rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .hf-progress { height: 4px; margin-top: 9px; border-radius: 999px; background: rgba(41,41,76,.1); overflow: hidden; }
+    .hf-progress i { display: block; width: 44%; height: 100%; border-radius: inherit; background: var(--coral); }
+    .hf-prev { margin-top: 14px; display: grid; gap: 6px; }
+    .hf-prev span {
+      display: grid; grid-template-columns: 13px 1fr auto; gap: 8px; align-items: center;
+      padding: 8px 10px; border-radius: 10px; background: rgba(41,41,76,.04);
+      color: rgba(41,41,76,.55); font-size: .7rem; font-weight: 600;
+    }
+    .hf-prev span::before { content: "\2713"; color: #169d7e; font-weight: 800; font-size: .7rem; }
+    .hf-prev b { font-weight: 700; font-variant-numeric: tabular-nums; }
+    .hf-card { margin-top: 12px; padding: 14px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+    .hf-q { font-size: .92rem; font-weight: 750; letter-spacing: -.02em; }
+    .hf-help { margin-top: 3px; color: var(--muted); font-size: .7rem; }
+    .hf-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .hf-inputs label { display: block; color: var(--muted); font-size: .58rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .hf-box {
+      display: block; margin-top: 5px; padding: 9px 11px;
+      border: 1px solid rgba(41,41,76,.18); border-radius: 10px; background: #fff;
+      font-size: .95rem; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums;
+    }
+    .hf-next { display: block; margin-top: 12px; padding: 11px; border-radius: 10px; background: linear-gradient(125deg, var(--coral-dark) 0%, var(--coral-deep) 100%); color: #fff; text-align: center; font-size: .78rem; font-weight: 800; }
+    .hf-fine { margin-top: 10px; color: var(--muted); font-size: .64rem; text-align: center; }
+    .hra-form .mock-tag { margin-top: 12px; }
+
+    .area-list { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 26px; margin-top: 6px; }
+    .area-list > div { padding: 11px 0; border-bottom: 1px solid var(--line); }
+    .area-list b { display: block; font-size: .95rem; font-weight: 750; letter-spacing: -.015em; }
+    .area-list span { display: block; margin-top: 3px; font-size: .8rem; color: var(--muted); line-height: 1.45; }
+    .assessment-note { margin-top: 22px; color: var(--muted); font-size: .8rem; line-height: 1.55; }
+
+    /* ============================================================
+       S3 THE RESULT: the 0 to 100 category ladder
+       ============================================================ */
+    .result-screen { background: #fff; }
+    .band-scale { margin-top: 40px; }
+    .band-flagrow { position: relative; height: 32px; }
+    .band-flag {
+      position: absolute; bottom: 6px; transform: translateX(-50%);
+      padding: 4px 10px; border-radius: 999px;
+      background: var(--coral-deep); color: #fff;
+      font-size: .68rem; font-weight: 800; letter-spacing: -.01em; white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+    .band-flag::after { content: ""; position: absolute; left: 50%; bottom: -4px; width: 8px; height: 8px; margin-left: -4px; border-radius: 2px; background: var(--coral-deep); transform: rotate(45deg); }
+    .band-track { position: relative; display: flex; height: 54px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+    .band-seg { display: grid; place-items: center; min-width: 0; padding: 0 4px; }
+    .band-seg span { color: var(--ink); font-size: .72rem; font-weight: 800; letter-spacing: -.01em; text-align: center; }
+    .band-critical { background: rgba(241,81,98,.22); }
+    .band-below { background: rgba(246,185,59,.26); }
+    .band-average { background: rgba(246,185,59,.14); }
+    .band-good { background: rgba(65,216,180,.20); }
+    .band-excellent { background: rgba(65,216,180,.38); }
+    .band-pin { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--coral-deep); }
+    .band-ticks { position: relative; height: 20px; margin-top: 7px; }
+    .band-ticks span { position: absolute; color: var(--muted); font-size: .68rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .band-meanings { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 18px; }
+    .band-meaning { padding-top: 14px; border-top: 2px solid var(--line); }
+    .band-meaning b { display: block; font-size: .95rem; font-weight: 750; letter-spacing: -.015em; }
+    .band-range { display: inline-flex; margin-top: 6px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); background: rgba(41,41,76,.04); font-size: .66rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .band-meaning p { margin-top: 8px; color: var(--muted); font-size: .82rem; line-height: 1.5; }
+    .band-scale .mock-tag { margin-top: 20px; }
+
+    .note-card {
+      margin-top: 32px; padding: 22px 26px;
+      border-left: 3px solid var(--coral);
+      border-radius: 0 14px 14px 0;
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+      max-width: 760px;
+    }
+    .note-card p { font-size: .98rem; font-weight: 700; letter-spacing: -.015em; line-height: 1.55; }
+    .note-card small { display: block; margin-top: 10px; color: var(--muted); font-size: .74rem; font-weight: 500; }
+    .result-note { margin-top: 22px; color: var(--muted); font-size: .8rem; line-height: 1.55; }
+
+    /* ============================================================
+       S4 THE PRIVACY FIREWALL: this page's signature section
+       ============================================================ */
+    .privacy-screen { background: var(--canvas); }
+    .firewall-wrap { position: relative; margin-top: 40px; }
+    .firewall-wrap > .mock-tag { position: absolute; top: -30px; right: 0; }
+    .firewall { display: grid; grid-template-columns: 1fr 78px 1fr; align-items: stretch; gap: 0; }
+    .fw-panel {
+      display: flex; flex-direction: column;
+      padding: 26px 28px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+    }
+    .fw-left { border-radius: 18px 0 0 18px; box-shadow: inset 0 3px 0 var(--mint); }
+    .fw-right { border-radius: 0 18px 18px 0; box-shadow: inset 0 3px 0 rgba(41,41,76,.35); }
+    .fw-head { font-size: .68rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; color: var(--ink); }
+    .fw-sub { margin-top: 5px; color: var(--muted); font-size: .78rem; }
+    .fw-surface {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      height: 44px; margin-top: 16px; padding: 0 12px; border-radius: 10px;
+      font-variant-numeric: tabular-nums;
+    }
+    .fw-surface .fw-s-lab { color: var(--muted); font-size: .7rem; font-weight: 700; }
+    .fw-surface .fw-s-num { font-size: 1.05rem; font-weight: 800; letter-spacing: -.03em; margin-left: auto; }
+    .fw-left .fw-surface { background: rgba(65,216,180,.10); border: 1px solid rgba(65,216,180,.28); }
+    .fw-right .fw-surface { background: rgba(41,41,76,.05); border: 1px solid var(--line); }
+    .fw-s-pill { padding: 3px 9px; border-radius: 999px; background: rgba(65,216,180,.2); color: #169d7e; font-size: .6rem; font-weight: 800; letter-spacing: .04em; }
+    .fw-s-note { color: var(--muted); font-size: .66rem; font-weight: 700; }
+
+    .fw-rows { margin-top: 14px; }
+    .fw-row { display: grid; grid-template-columns: 16px 1fr; gap: 10px; padding: 9px 0; font-size: .84rem; line-height: 1.45; border-bottom: 1px solid var(--line); }
+    .fw-row:last-child { border-bottom: 0; }
+    .fw-row::before { font-weight: 800; line-height: 1.45; }
+    /* --mint-dark (#169d7e) is 3.41:1 on --paper, so it fails on this section's
+       real copy. #0f7a61 is the same hue a step darker and clears 4.5:1. The
+       lighter mint stays inside the aria-hidden mock strips only. */
+    .fw-row.ok::before { content: "\2713"; color: #0f7a61; }
+    .fw-row.dot::before { content: "\2022"; color: var(--muted); }
+    .fw-row.no::before { content: "\2715"; color: var(--coral-deep); }
+    .fw-row.no span {
+      /* Struck rows stay visibly de-emphasised but must still clear 4.5:1. */
+      color: rgba(41,41,76,.72);
+      text-decoration: line-through;
+      text-decoration-thickness: 1.5px;
+      text-decoration-color: rgba(182,46,64,.55);
+    }
+    .fw-subhead { margin: 18px 0 6px; font-size: .62rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .fw-subhead.can { color: #0f7a61; }
+    .fw-subhead.cannot { color: var(--coral-deep); }
+    /* margin-top:auto pins both panel footers to the same baseline even though the
+       two sides carry a different number of rows. */
+    .fw-foot { margin-top: auto; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: .74rem; line-height: 1.5; }
+    .fw-panel > .fw-rows:last-of-type { padding-bottom: 14px; }
+
+    .fw-divider { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
+    .fw-divider::before { content: ""; position: absolute; top: 14px; bottom: 14px; left: 50%; border-left: 2px dashed rgba(41,41,76,.22); }
+    .fw-label {
+      position: relative;
+      writing-mode: vertical-rl; transform: rotate(180deg);
+      padding: 10px 0;
+      background: var(--canvas);
+      color: rgba(41,41,76,.68);
+      font-size: .6rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .fw-lock {
+      position: relative; display: grid; place-items: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--paper); border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+      color: var(--coral-deep);
+    }
+    .fw-lock svg { width: 18px; height: 18px; }
+
+    .fw-quote {
+      margin-top: 18px; padding: 22px 26px;
+      border-left: 4px solid var(--coral);
+      border-radius: 0 18px 18px 0;
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+    }
+    .fw-quote blockquote { margin: 0; font-size: .98rem; font-weight: 700; letter-spacing: -.015em; line-height: 1.55; color: var(--ink); }
+    .fw-quote small { display: block; margin-top: 10px; color: var(--muted); font-size: .74rem; font-weight: 500; }
+
+    .fw-scope { margin-top: 18px; padding: 26px 28px; border: 1px solid var(--line); border-radius: 18px; background: var(--paper); }
+    .fw-scope h3 { font-size: 1.08rem; letter-spacing: -.02em; }
+    .fw-scope > p { margin-top: 8px; color: var(--muted); font-size: .85rem; line-height: 1.5; }
+    .fw-scope-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 34px; margin-top: 22px; }
+    .fw-scope-head { font-size: .62rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 4px; }
+    .fw-scope-head.shipped { color: #0f7a61; }
+    .fw-scope-head.absent { color: rgba(41,41,76,.68); }
+    .fw-scope-foot { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); font-size: .8rem; line-height: 1.55; color: var(--muted); }
+    .fw-scope-foot b { color: var(--ink); font-weight: 800; }
+
+    /* ============================================================
+       S5 THE AGGREGATE VIEW: fairband inset + count-only mock
+       ============================================================ */
+    .aggregate-screen { background: #fff; }
+    .fairband {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 48px;
+      align-items: center;
+      margin-top: 40px;
+      padding: 44px 48px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: linear-gradient(135deg, var(--dark), #2c4249);
+      color: #fff;
+    }
+    .fairband .eyebrow { color: var(--lime); margin-bottom: 12px; }
+    .fairband h3 { font-size: clamp(1.6rem, 2.8vw, 2.3rem); letter-spacing: -.03em; line-height: 1.06; max-width: 460px; }
+    .fairband .lead { margin-top: 14px; color: rgba(255,255,255,.68); font-size: .95rem; max-width: 480px; }
+    .fair-list { display: grid; gap: 14px; margin-top: 26px; }
+    .fair-item { display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: start; }
+    .fair-item i {
+      display: grid; width: 36px; height: 36px; place-items: center;
+      border: 1px solid var(--line-dark); border-radius: 10px;
+      background: rgba(255,255,255,.06); color: var(--mint); font-style: normal;
+    }
+    .fair-item i svg { width: 17px; height: 17px; }
+    .fair-item b { display: block; font-size: .95rem; letter-spacing: -.015em; }
+    .fair-item p { margin-top: 3px; color: rgba(255,255,255,.6); font-size: .82rem; line-height: 1.5; }
+    .fair-fine { margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--line-dark); color: rgba(255,255,255,.6); font-size: .72rem; line-height: 1.5; }
+
+    .audit-board {
+      justify-self: end;
+      width: min(100%, 380px);
+      padding: 20px 22px;
+      border: 1px solid rgba(41,41,76,.1);
+      border-radius: 18px;
+      background: #f9faf8;
+      color: var(--ink);
+      box-shadow: 0 26px 60px rgba(0,0,0,.32);
+    }
+    .audit-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+    .audit-head b { font-size: .8rem; letter-spacing: -.01em; }
+    .ta-step { flex: none; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--line); background: #fff; color: var(--muted); font-size: .56rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+    .ta-rows { margin-top: 4px; }
+    .ta-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 6px; border-bottom: 1px solid var(--line); font-size: .8rem; }
+    .ta-row > span:first-child { color: var(--muted); font-size: .72rem; font-weight: 700; }
+    .ta-row b { font-weight: 750; }
+    .ta-row.is-set { margin: 4px -8px; padding: 11px 14px; border: 1px solid rgba(241,81,98,.22); border-radius: 12px; background: rgba(241,81,98,.06); }
+    .ta-row.is-set b { color: var(--coral-deep); }
+    .ta-count { margin-top: 14px; padding: 14px 16px; border-radius: 12px; background: #e8f7f1; }
+    .ta-num { display: block; font-size: 1.9rem; font-weight: 800; letter-spacing: -.05em; line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
+    .ta-lab { display: block; margin-top: 4px; color: var(--muted); font-size: .72rem; font-weight: 700; }
+    .ta-disclaimer { display: grid; grid-template-columns: 14px 1fr; gap: 8px; align-items: start; margin-top: 12px; color: var(--muted); font-size: .7rem; font-style: italic; line-height: 1.45; }
+    .ta-disclaimer svg { width: 14px; height: 14px; margin-top: 2px; color: var(--coral-deep); }
+    .ta-chip { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; padding: 4px 10px; border-radius: 999px; background: rgba(41,41,76,.06); color: var(--ink); font-size: .66rem; font-weight: 800; }
+    .ta-chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--coral); }
+    .audit-caption { margin-top: 12px; color: var(--muted); font-size: .68rem; line-height: 1.5; }
+    .audit-board .mock-tag { margin-top: 10px; }
+
+    .agg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 26px; }
+    .agg-grid article { padding: 22px 24px; border: 1px solid var(--line); border-radius: 18px; background: var(--paper); }
+    .agg-grid h3 { font-size: 1.02rem; letter-spacing: -.02em; }
+    .agg-grid p { margin-top: 8px; font-size: .85rem; color: var(--muted); line-height: 1.5; }
+    .agg-note { margin-top: 22px; color: var(--muted); font-size: .8rem; line-height: 1.55; }
+
+    /* ============================================================
+       S6 ROLLOUT
+       ============================================================ */
+    .rollout-screen { background: var(--canvas); }
+    .rollout-screen .steps { margin-top: 40px; margin-bottom: 0; }
+    .rollout-note { margin-top: 22px; color: var(--muted); font-size: .8rem; line-height: 1.55; }
+
+    /* ============================================================
+       S7 EVALUATION
+       ============================================================ */
+    .proof-hub { background: #f6f7f4; }
+    .quote-band {
+      display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 18px;
+      margin-top: 32px; padding: 22px 26px;
+      border-left: 4px solid var(--coral); border-radius: 0 18px 18px 0;
+      background: var(--paper); box-shadow: var(--shadow-soft);
+    }
+    .quote-band.text-only { grid-template-columns: 1fr; align-content: center; }
+    .quote-band blockquote { margin: 0; font-size: .95rem; font-weight: 700; letter-spacing: -.015em; line-height: 1.5; }
+    .quote-band .quote-who { display: block; margin-top: 6px; color: var(--muted); font-size: .74rem; font-weight: 500; }
+    .proof-fine { margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; }
+    .proof-fine small { color: var(--muted); font-size: .68rem; }
+    .proof-fine .text-link { margin-top: 0; font-size: .82rem; }
+
+    /* ============================================================
+       S8 TRUST BAND
+       ============================================================ */
+    .solutions-trust .trust-grid { grid-template-columns: 1fr 1fr; margin-top: 0; }
+    .solutions-trust .trust-card { min-height: 0; }
+    .solutions-trust .trust-cols { align-items: start; gap: 48px; }
+    .solutions-trust .trust-plaque { margin-top: 28px; padding: 32px 34px 22px; }
+
+    /* The baseline plaque raster carries certification marks that no source in
+       the knowledge base supports, so it is replaced with a typeset strip that
+       carries only the three approved compliance strings. */
+    .mark-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+    .mark {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 12px 16px;
+      border: 1px solid rgba(255,255,255,.16); border-radius: 14px;
+      background: rgba(255,255,255,.06);
+      color: #fff; font-size: .82rem; font-weight: 700; letter-spacing: -.015em; text-align: left;
+    }
+    .mark svg { flex: none; width: 20px; height: 20px; color: var(--mint); }
+
+    /* ============================================================
+       S9 FAQ. Native <details>, zero JS.
+       ============================================================ */
+    .faq-screen { background: #fff; }
+    .faq-list { max-width: 840px; margin-top: 34px; border-top: 1px solid var(--line); }
+    .faq-item { border-bottom: 1px solid var(--line); padding: 18px 0; }
+    .faq-item summary { display: flex; align-items: center; justify-content: space-between; gap: 18px; cursor: pointer; list-style: none; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary h3 { font-size: 1.02rem; font-weight: 700; letter-spacing: -.02em; }
+    .faq-item summary::after { content: ""; flex: none; width: 9px; height: 9px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); transition: transform .2s ease; }
+    .faq-item[open] summary::after { transform: rotate(-135deg); }
+    .faq-item p { margin-top: 12px; max-width: 720px; color: var(--muted); font-size: .9rem; line-height: 1.6; }
+
+    /* ============================================================
+       S10 RELATED
+       ============================================================ */
+    .related-screen { padding: 72px 0; background: var(--canvas); }
+    .related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; }
+    .related-row {
+      display: grid; grid-template-columns: 38px 1fr; align-items: start; gap: 14px;
+      padding: 20px 22px; border: 1px solid var(--line); border-radius: 16px; background: var(--paper);
+      transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+    }
+    .related-row:hover { transform: translateY(-2px); border-color: rgba(241,81,98,.35); box-shadow: var(--shadow-soft); }
+    .related-icon { display: grid; width: 38px; height: 38px; place-items: center; border-radius: 11px; background: rgba(41,41,76,.06); color: var(--ink); }
+    .related-icon svg { width: 18px; height: 18px; }
+    .related-row h3 { display: flex; align-items: center; gap: 8px; font-size: .98rem; letter-spacing: -.015em; }
+    .related-row h3 svg { width: 14px; color: var(--coral-dark); }
+    .related-row p { margin-top: 4px; color: var(--muted); font-size: .82rem; line-height: 1.45; }
+
+    /* --- Footer: five columns (brand + Solutions + Features + Resources + Company) --- */
+    .footer-grid { grid-template-columns: 1.5fr repeat(4, 1fr); gap: 32px; }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 1100px) {
+      .hra-hero .hero-grid { grid-template-columns: 1fr; }
+      .employee-cols { grid-template-columns: 1fr; gap: 36px; }
+      .assessment-media { order: -1; }
+      .fairband { grid-template-columns: 1fr; gap: 32px; padding: 34px; }
+      .audit-board { justify-self: start; }
+      .agg-grid { grid-template-columns: 1fr 1fr; }
+      .footer-grid { grid-template-columns: 1.4fr repeat(2, 1fr); gap: 32px 28px; }
+    }
+    @media (max-width: 960px) {
+      .band-meanings { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .firewall { grid-template-columns: 1fr; }
+      .fw-left { border-radius: 18px 18px 0 0; }
+      .fw-right { border-radius: 0 0 18px 18px; }
+      /* The panels stack, so the dashed rule stays VERTICAL and simply runs on
+         between them. The label flips to horizontal text and both it and the lock
+         keep a canvas ground, so they mask the dashes they sit on. */
+      .fw-divider { padding: 20px 0; gap: 10px; }
+      .fw-label { writing-mode: horizontal-tb; transform: none; padding: 6px 12px; white-space: normal; text-align: center; }
+      .firewall-wrap > .mock-tag { position: static; display: inline-flex; margin-bottom: 12px; }
+      .fw-scope-cols { grid-template-columns: 1fr; gap: 26px; }
+    }
+    @media (max-width: 860px) {
+      .hub-section { padding: 64px 0; }
+      /* Below 860 the inherited absolute composition puts the phone straight over
+         the dash's score values. Stack instead: nothing meaningful is occluded. */
+      .hra-hero .hero-visual { min-height: 0; margin-right: 0; }
+      .hra-hero .dash { position: static; width: 100%; transform: none; box-shadow: 0 22px 54px rgba(41,41,76,.14); }
+      .hra-hero .phone { position: static; width: 190px; margin: -22px 0 0 auto; transform: rotate(-2deg); }
+      .dash-brk-head, .dash-brk { margin-right: 0; }
+      .hra-hero .visual-caption { position: static; margin-top: 22px; text-align: left; }
+      .band-seg span { display: none; }
+      .band-track { height: 40px; }
+      .band-meanings { grid-template-columns: 1fr; gap: 0; }
+      .band-meaning { padding: 14px 0; border-top: 1px solid var(--line); }
+      .band-meaning:first-child { border-top: 2px solid var(--line); }
+      .agg-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+      .solutions-trust .trust-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 760px) {
+      .fw-scope-cols { grid-template-columns: 1fr; gap: 26px; }
+    }
+    @media (max-width: 640px) {
+      .area-list { grid-template-columns: 1fr; }
+      .related-grid { grid-template-columns: 1fr; }
+      .quote-band { grid-template-columns: 1fr; }
+      .fairband { padding: 26px 22px; }
+      .fw-panel { padding: 22px 20px; }
+      .fw-scope { padding: 22px 20px; }
+      .fw-surface { height: auto; flex-wrap: wrap; padding: 10px 12px; row-gap: 4px; }
+      .fw-surface .fw-s-num { margin-left: 0; }
+      .solutions-trust .trust-grid { grid-template-columns: 1fr; }
+      .note-card { padding: 20px 22px; }
+      .band-flag { font-size: .64rem; }
+    }
+    @media (max-width: 420px) {
+      .hf-inputs { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#top">Skip to main content</a>
+
+  <!-- ===================== TOP NAV ===================== -->
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="https://www.vantagefit.io/" aria-label="Vantage Fit home">
+        <img src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37" style="height:32px;width:auto;display:block">
+      </a>
+
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+
+      <div class="nav-links" id="nav-links">
+
+        <!-- ---------- SOLUTIONS: current section ---------- -->
+        <div class="nav-item">
+          <button class="nav-trigger is-current" type="button" aria-expanded="false">
+            Solutions
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Solutions menu">
+            <div class="mega-body">
+              <div class="mega-grid cols-2">
+                <div>
+                  <div class="mega-col-title">Wellness challenges: what you want to run</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/wellness-challenges/">Wellness challenges<span>The full library of ready-to-run challenges</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/step-challenges/">Step challenges<span>Company-wide step goals that get everyone moving</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/multi-activity-challenges/">Multi-activity challenges<span>Any activity, solo or in teams, over themed weeks</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/remote-team-wellness/">Remote &amp; hybrid team challenges<span>Wellness that works away from the office</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/virtual-marathon/">Virtual marathon<span>Distance events powered by steps</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Workforce health &amp; rewards: measure and motivate</div>
+                  <!-- CURRENT PAGE -->
+                  <a class="mega-link is-page" aria-current="page" href="#top">Health Risk Assessment<span>Baseline health screening with aggregate insights</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/workforce-health-insights/">Workforce health insights<span>Participation, challenge and activity analytics your board can read</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/wellness-rewards-program/">Wellness rewards program<span>Points and gift cards tied to real effort</span></a>
+                </div>
+              </div>
+            </div>
+            <div class="mega-foot">
+              <span>The whole product on one page: <strong>Wellness platform</strong></span>
+              <a class="text-link" style="margin-top:0;font-size:.8rem" href="https://www.vantagefit.io/solutions/wellness-platform/">See the platform
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </a>
+            </div>
+            <a class="mega-banner" href="https://www.vantagefit.io/solutions/">
+              See every program on one page: the Solutions overview
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- ---------- FEATURES ---------- -->
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Features
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">For employees</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/activity-tracking/">Activity &amp; health tracking<span>Steps, workouts, sleep and more, auto-synced</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/nutrition-and-hydration/">Nutrition &amp; hydration<span>Everyday habits, gently tracked</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/mental-health-and-mindfulness/">Mental wellbeing &amp; mindfulness<span>Sessions, streaks and mood check-ins</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/personalized-programs/">Personalized programs<span>Plans tuned to each employee's goals</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">For HR teams</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/admin-dashboard/">Participation analytics &amp; insights<span>Trends, AI insights and board-ready exports in one console</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/incentivization-and-rewards/">Incentives &amp; rewards<span>Points, badges and a global gift-card catalogue</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/engagement-tools/">Engagement tools &amp; community<span>Group chats, campaigns, streaks and certificates that keep people coming back</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/wellness-leagues/">Wellness leagues<span>Segment by activity level, lift every tier</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Platform</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/integrations/">Integrations<span>Wearables, HRIS, SSO and more</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/security-and-compliance/">Security &amp; compliance<span>Aggregate-only reporting, regional hosting, SOC 2 Type II</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/accessibility/">Accessibility<span>Inclusive across devices, locations and abilities</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/health-data-upload/">Health data upload<span>Turn existing health data into insight</span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---------- RESOURCES ---------- -->
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Resources
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Resources menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">Learn</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/">Blog<span>Ideas and research for healthier workplaces</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/guides/">Reports &amp; research<span>Playbooks and the annual industry report</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/tools-and-templates/">Tools &amp; templates<span>ROI calculator and DIY challenge templates</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/podcasts/">Podcasts<span>Conversations with HR and wellbeing leaders</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Evaluate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/casestudy/">Customer stories<span>Results from real customer programs</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/compare/">Comparisons<span>Vantage Fit vs the alternatives</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/trust-center/">Trust Center<span>Security and privacy documentation in one place</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/">Help Center<span>Product docs and setup guides</span></a>
+                </div>
+                <a class="mega-feature" href="https://www.vantagefit.io/solutions/wellness-challenges/">
+                  <span>
+                    <small>Featured</small>
+                    <b>Wellness Challenges Library</b>
+                    <p>Browse ready-to-run challenges your teams can start this month.</p>
+                  </span>
+                  <span class="go">Explore the library
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top" tabindex="-1">
+
+    <!-- ========================= S1 HERO ========================= -->
+    <header class="hero hra-hero" id="hero" aria-labelledby="hero-heading">
+      <div class="shell hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Baseline health screening</span>
+          <h1 id="hero-heading">Every employee gets a private health baseline. HR gets the <em>aggregate</em></h1>
+          <p class="lead">The Health Risk Assessment is a self-reported questionnaire in the Vantage Fit app. Nine health factors, a private result for the employee, aggregate-only reporting for HR.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+            <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">See pricing</a>
+          </div>
+          <div class="hero-note">
+            <span>Full Mode feature, enabled for your company by your account manager</span>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <!-- Admin aggregate view, behind and to the left -->
+          <div class="dash" role="img" aria-label="Admin dashboard showing an organization wellness score of 68 out of 100 with its four component contributions, labelled aggregated insights only. Figures shown are illustrative.">
+            <div class="dash-top" aria-hidden="true">
+              <span class="dash-dot"></span><span class="dash-dot"></span><span class="dash-dot"></span>
+              <span class="dash-url"></span>
+            </div>
+            <div class="dash-body">
+              <div class="dash-title">
+                <div>
+                  <small>Admin &middot; Workforce Health</small>
+                  <strong>Org Wellness Score</strong>
+                </div>
+                <span class="mock-tag">Illustrative data</span>
+              </div>
+
+              <span class="dash-sub" aria-hidden="true">Aggregated insights only</span>
+
+              <div class="metric-card metric-main" aria-hidden="true">
+                <div class="metric-lab">Org Wellness Score</div>
+                <div class="metric-value" style="font-variant-numeric:tabular-nums">68</div>
+                <span class="dash-asof">As of yesterday</span>
+              </div>
+
+              <div class="dash-brk-head" aria-hidden="true">Score breakdown</div>
+              <div class="dash-brk" aria-hidden="true">
+                <div class="dash-brk-row">
+                  <div class="dash-brk-top">
+                    <span><b>Health Baselines (20%)</b><span class="dash-brk-chip">from HRA</span></span>
+                    <span class="dash-brk-val">13 / 20</span>
+                  </div>
+                  <div class="dash-rail"><i style="width:65%;background:#9BAFC8"></i></div>
+                </div>
+                <div class="dash-brk-row">
+                  <div class="dash-brk-top">
+                    <span><b>Participation (30%)</b></span>
+                    <span class="dash-brk-val">22 / 30</span>
+                  </div>
+                  <div class="dash-rail"><i style="width:73%;background:#21B8A6"></i></div>
+                </div>
+                <div class="dash-brk-row">
+                  <div class="dash-brk-top">
+                    <span><b>Activity Levels (30%)</b></span>
+                    <span class="dash-brk-val">19 / 30</span>
+                  </div>
+                  <div class="dash-rail"><i style="width:63%;background:#7A56E4"></i></div>
+                </div>
+                <div class="dash-brk-row">
+                  <div class="dash-brk-top">
+                    <span><b>Program Adherence (20%)</b></span>
+                    <span class="dash-brk-val">14 / 20</span>
+                  </div>
+                  <div class="dash-rail"><i style="width:70%;background:#F59E0B"></i></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Employee result, in front and to the right -->
+          <div class="phone" role="img" aria-label="Employee app showing a completed health risk assessment result of 78 percent in the Good category, with personalized suggestions and a note that the assessment is not a medical diagnosis. Figures shown are illustrative.">
+            <div class="phone-screen">
+              <div class="phone-head" aria-hidden="true">
+                Vantage Fit
+                <span class="avatar"></span>
+              </div>
+              <div class="hra-result" aria-hidden="true">
+                <small>PROFILE &middot; HEALTH RISK ASSESSMENT</small>
+                <b>Your result</b>
+                <span class="hra-pct">78%</span>
+                <span class="hra-band">Good</span>
+                <span class="hra-range">70% to 84% &middot; Moderate health with room for improvement</span>
+              </div>
+              <div class="hra-sug-head" aria-hidden="true">YOUR SUGGESTIONS</div>
+              <div class="hra-sug" aria-hidden="true">
+                <span>Add two more active days a week</span>
+                <span>Recheck blood pressure and cholesterol at your next visit</span>
+              </div>
+              <p class="hra-fine" aria-hidden="true">The HRA is an informational tool, not a medical diagnosis.</p>
+              <span class="mock-tag">Illustrative data</span>
+            </div>
+          </div>
+
+          <span class="visual-caption">The same assessment, two views. No individual answers appear on any admin screen.</span>
+        </div>
+      </div>
+
+      <div class="logo-band">
+        <div class="shell logos" role="group" aria-label="Selected customers">
+          <span class="logos-label">Trusted by 100+ organizations worldwide</span>
+          <span class="logo-word">TATA MOTORS</span>
+          <span class="logo-word">WIPRO</span>
+          <span class="logo-word">TEVA</span>
+          <span class="logo-word">GODREJ</span>
+          <span class="logo-word">TEXAS INSTRUMENTS</span>
+          <span class="logo-word">HEIDRICK &amp; STRUGGLES</span>
+          <span class="logo-word">BRAZOSPORT ISD</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ================= S2 WHAT THE ASSESSMENT ASKS ================= -->
+    <section class="hub-section assessment-screen" id="assessment" aria-labelledby="assessment-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">The assessment</span>
+          <h2 id="assessment-heading">Nine health areas, answered by the employee</h2>
+          <p class="lead">It lives in the mobile app under Profile. Completion is voluntary, and employees can retake it whenever their situation changes.</p>
+        </div>
+
+        <div class="employee-cols">
+          <div class="assessment-media reveal">
+            <div class="hra-form" role="img" aria-label="The health risk assessment questionnaire in the Vantage Fit mobile app, showing health area 4 of 9, blood pressure entered as systolic and diastolic values, with a progress bar. Figures shown are illustrative.">
+              <div class="hf-head" aria-hidden="true">
+                <b>Health Risk Assessment</b>
+                <span>Area 4 of 9</span>
+              </div>
+              <div class="hf-progress" aria-hidden="true"><i></i></div>
+
+              <div class="hf-prev" aria-hidden="true">
+                <span>Waist size <b>86 cm</b></span>
+                <span>Blood group <b>O+</b></span>
+              </div>
+
+              <div class="hf-card" aria-hidden="true">
+                <div class="hf-q">Blood pressure</div>
+                <p class="hf-help">Enter your most recent reading</p>
+                <div class="hf-inputs">
+                  <div>
+                    <label>Systolic</label>
+                    <span class="hf-box">120</span>
+                  </div>
+                  <div>
+                    <label>Diastolic</label>
+                    <span class="hf-box">80</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hf-next" aria-hidden="true">Next</div>
+              <p class="hf-fine" aria-hidden="true">Answer honestly. Only you can see this.</p>
+              <span class="mock-tag">Illustrative data</span>
+            </div>
+          </div>
+
+          <div class="assessment-copy">
+            <div class="area-list">
+              <div><b>Blood group</b><span>Select from A+, B+, AB+, O+, A-, B-, AB-, O-</span></div>
+              <div><b>Waist size</b><span>Entered in centimetres</span></div>
+              <div><b>Blood pressure</b><span>Systolic and diastolic, entered as 120/80</span></div>
+              <div><b>Cholesterol level</b><span>A single number from a recent reading</span></div>
+              <div><b>Diabetes status</b><span>Yes or no</span></div>
+              <div><b>Smoking habits</b><span>Never, occasionally or frequently</span></div>
+              <div><b>Alcohol consumption</b><span>Never, occasionally or frequently</span></div>
+              <div><b>Exercise frequency</b><span>Never, occasionally or frequently</span></div>
+              <div><b>Age and BMI</b><span>Pulled from the health profile, not asked again</span></div>
+            </div>
+            <p class="assessment-note">Scored across the nine components, to a maximum of 95 points. The assessment does not ask for family medical history and does not ask for genetic information.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== S3 WHAT THE EMPLOYEE GETS BACK ============== -->
+    <section class="hub-section result-screen" id="result" aria-labelledby="result-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">The employee's result</span>
+          <h2 id="result-heading">A score they can act on, and nobody else can read</h2>
+          <p class="lead">On submit the app returns a fitness percentage from 0 to 100%, a category, and personalized suggestions built from their own answers.</p>
+        </div>
+
+        <div class="band-scale reveal">
+          <!-- Only the track carries an illustrative number (the 78% marker), so only
+               the track is the role="img". The five categories below it are sourced
+               product content and stay readable to assistive technology. -->
+          <div class="band-figure" role="img" aria-label="Health risk assessment category scale from 0 to 100 percent: Critical below 35, Below Average 35 to 49, Average 50 to 69, Good 70 to 84, Excellent 85 and above, with an example result marked at 78 percent. Figures shown are illustrative.">
+          <div class="band-flagrow" aria-hidden="true">
+            <span class="band-flag" style="left:78%">78% &middot; Good</span>
+          </div>
+          <div class="band-track" aria-hidden="true">
+            <span class="band-seg band-critical" style="width:35%"><span>Critical</span></span>
+            <span class="band-seg band-below" style="width:15%"><span>Below Average</span></span>
+            <span class="band-seg band-average" style="width:20%"><span>Average</span></span>
+            <span class="band-seg band-good" style="width:15%"><span>Good</span></span>
+            <span class="band-seg band-excellent" style="width:15%"><span>Excellent</span></span>
+            <span class="band-pin" style="left:78%"></span>
+          </div>
+          <div class="band-ticks" aria-hidden="true">
+            <span style="left:0">0</span>
+            <span style="left:35%;transform:translateX(-50%)">35</span>
+            <span style="left:50%;transform:translateX(-50%)">50</span>
+            <span style="left:70%;transform:translateX(-50%)">70</span>
+            <span style="left:85%;transform:translateX(-50%)">85</span>
+            <span style="left:100%;transform:translateX(-100%)">100</span>
+          </div>
+          </div>
+
+          <div class="band-meanings">
+            <div class="band-meaning">
+              <b>Excellent</b>
+              <span class="band-range">85% and above</span>
+              <p>Low health risk, strong fitness indicators</p>
+            </div>
+            <div class="band-meaning">
+              <b>Good</b>
+              <span class="band-range">70% to 84%</span>
+              <p>Moderate health with room for improvement</p>
+            </div>
+            <div class="band-meaning">
+              <b>Average</b>
+              <span class="band-range">50% to 69%</span>
+              <p>Some risk factors present</p>
+            </div>
+            <div class="band-meaning">
+              <b>Below Average</b>
+              <span class="band-range">35% to 49%</span>
+              <p>Multiple risk factors, attention needed</p>
+            </div>
+            <div class="band-meaning">
+              <b>Critical</b>
+              <span class="band-range">Below 35%</span>
+              <p>High risk, consult a healthcare professional</p>
+            </div>
+          </div>
+          <span class="mock-tag">Illustrative data</span>
+        </div>
+
+        <div class="note-card">
+          <p>"The HRA is an informational tool, not a medical diagnosis. For any health concerns, always consult your doctor."</p>
+          <small>Shown to every employee with their result.</small>
+        </div>
+
+        <p class="result-note">Employees can retake the assessment at any time. There is no enforced cadence and no penalty for skipping it.</p>
+      </div>
+    </section>
+
+    <!-- ============ S4 THE PRIVACY FIREWALL (page signature) ============ -->
+    <section class="hub-section privacy-screen" id="privacy" aria-labelledby="privacy-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">The privacy firewall</span>
+          <h2 id="privacy-heading">What the employee sees, and what HR can ever see</h2>
+          <p class="lead">No admin screen and no export shows one person's assessment answers or risk category. That is how the product is built, not a promise in a contract.</p>
+        </div>
+
+        <div class="firewall-wrap reveal">
+          <span class="mock-tag">Illustrative data</span>
+
+          <div class="firewall">
+            <!-- LEFT: the employee -->
+            <div class="fw-panel fw-left">
+              <h3 class="fw-head">The employee sees</h3>
+              <p class="fw-sub">In the app, on their own phone</p>
+
+              <div class="fw-surface" aria-hidden="true">
+                <span class="fw-s-lab">Health Risk Assessment</span>
+                <span class="fw-s-num">78%</span>
+                <span class="fw-s-pill">Good</span>
+              </div>
+
+              <div class="fw-rows">
+                <div class="fw-row ok"><span>Their fitness percentage, 0 to 100%</span></div>
+                <div class="fw-row ok"><span>Their category: Excellent, Good, Average, Below Average or Critical</span></div>
+                <div class="fw-row ok"><span>The component breakdown behind the score</span></div>
+                <div class="fw-row ok"><span>Personalized suggestions built from their own risk factors</span></div>
+                <div class="fw-row ok"><span>Their weight graph, BMI and ideal weight range in My Health</span></div>
+                <div class="fw-row ok"><span>Their own lab report biomarkers, where lab reports are enabled</span></div>
+                <div class="fw-row ok"><span>A delete button on their own lab reports, and on their own account</span></div>
+              </div>
+
+              <p class="fw-foot">Account deletion runs from Profile &gt; Delete Account with an emailed one-time code. Admins cannot delete an employee's account for them.</p>
+            </div>
+
+            <!-- CENTRE: the divider -->
+            <div class="fw-divider">
+              <span class="fw-label">Nothing individual crosses this line</span>
+              <span class="fw-lock" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/><path d="M12 14.4v2.4"/></svg>
+              </span>
+            </div>
+
+            <!-- RIGHT: HR -->
+            <div class="fw-panel fw-right">
+              <h3 class="fw-head">HR ever sees</h3>
+              <p class="fw-sub">In the admin dashboard</p>
+
+              <div class="fw-surface" aria-hidden="true">
+                <span class="fw-s-lab">Org Wellness Score</span>
+                <span class="fw-s-num">68</span>
+                <span class="fw-s-note">Health Baselines 13/20</span>
+              </div>
+
+              <h4 class="fw-subhead can">Can see</h4>
+              <div class="fw-rows">
+                <div class="fw-row dot"><span>Aggregate metrics: enrollment rates, active user percentages, wellness scores</span></div>
+                <div class="fw-row dot"><span>A derived Baseline sub-score in the Wellness Score report, never the answers behind it</span></div>
+                <div class="fw-row dot"><span>A count when targeting a health risk cohort, never the names in it</span></div>
+              </div>
+
+              <h4 class="fw-subhead cannot">Cannot see</h4>
+              <div class="fw-rows">
+                <div class="fw-row no"><span>Health Risk Assessment details: individual answers and risk categories</span></div>
+                <div class="fw-row no"><span>Lab report results: biomarker values and health indicators</span></div>
+                <div class="fw-row no"><span>Individual health data: weight, BMI, body measurements</span></div>
+                <div class="fw-row no"><span>Personal tracking data: mood logs, food diary, sleep patterns</span></div>
+              </div>
+
+              <p class="fw-foot">The employee report an admin can pull shows registration status, last active date and device type. Those are participation reports, not health reports.</p>
+            </div>
+          </div>
+
+          <div class="fw-quote">
+            <blockquote>"Your HR team sees whether you are participating and your challenge rankings, but we cannot see your weight, health assessment results, lab reports, or personal health data."</blockquote>
+            <small>The sentence the Vantage Fit admin guide gives HR to share with employees.</small>
+          </div>
+
+          <div class="fw-scope">
+            <h3>What is shipped, and what is not</h3>
+            <p>Privacy controls are where wellness vendors over-claim. Here is the line.</p>
+
+            <div class="fw-scope-cols">
+              <div>
+                <h4 class="fw-scope-head shipped">Shipped today</h4>
+                <div class="fw-rows">
+                  <div class="fw-row ok"><span>Aggregate-only health reporting, with no individual assessment or lab view in the admin dashboard</span></div>
+                  <div class="fw-row ok"><span>Count-only cohort targeting, with the privacy disclaimer printed on screen</span></div>
+                  <div class="fw-row ok"><span>Four isolated data regions: India, US, EU and UAE, chosen at signup and permanent</span></div>
+                  <div class="fw-row ok"><span>Employee-initiated account deletion with a one-time code, after which the identity is anonymized</span></div>
+                  <div class="fw-row ok"><span>Custom terms and conditions added to employee onboarding, in the languages you supply</span></div>
+                </div>
+              </div>
+              <div>
+                <h4 class="fw-scope-head absent">Not built yet</h4>
+                <div class="fw-rows">
+                  <div class="fw-row no"><span>A minimum cohort size that suppresses small groups inside breakdowns</span></div>
+                  <div class="fw-row no"><span>Versioned consent with a re-acceptance register</span></div>
+                  <div class="fw-row no"><span>A self-service erasure workflow with a published turnaround</span></div>
+                </div>
+              </div>
+            </div>
+
+            <p class="fw-scope-foot">If any of those three are procurement requirements, raise them on the first call. <b>We would rather lose the deal than tell you they exist.</b></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================== S5 WHAT HR GETS ================== -->
+    <section class="hub-section aggregate-screen" id="aggregate" aria-labelledby="aggregate-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">The aggregate view</span>
+          <h2 id="aggregate-heading">HR gets a number, a trend, and a cohort count</h2>
+          <p class="lead">The assessment feeds the Baseline component of the Org Wellness Score, and it powers health risk targeting. Neither surface exposes one person's answers.</p>
+        </div>
+
+        <div class="fairband reveal">
+          <div>
+            <span class="eyebrow">Count-only targeting</span>
+            <h3>Act on a health risk without ever seeing who is in it</h3>
+            <p class="lead">Once the assessment is enabled, Health Risk Code becomes one of the challenge audience filters. It behaves differently from the others.</p>
+
+            <div class="fair-list">
+              <div class="fair-item">
+                <i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.4"/><path d="M12 1.8v3M12 19.2v3M1.8 12h3M19.2 12h3"/></svg></i>
+                <div>
+                  <b>Target by Health Risk Code</b>
+                  <p>One of seven audience filters, available once the assessment is enabled for your company.</p>
+                </div>
+              </div>
+              <div class="fair-item">
+                <i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18V9M9.3 18V5M14.7 18v-6M20 18v-9"/><path d="M2.5 21h19"/></svg></i>
+                <div>
+                  <b>The system returns a count</b>
+                  <p>You see how many employees match. You never see which ones.</p>
+                </div>
+              </div>
+              <div class="fair-item">
+                <i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5c1.5 0 2.9.4 4.1 1"/><path d="M21.5 12S18 18.5 12 18.5c-1.6 0-3-.4-4.3-1.1"/><path d="m3.5 3.5 17 17"/></svg></i>
+                <div>
+                  <b>The challenge goes Private on its own</b>
+                  <p>Any audience filter marks the challenge Private, so non-matching employees never see it exists.</p>
+                </div>
+              </div>
+              <div class="fair-item">
+                <i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5h11M4 12h11M4 17.5h7"/><path d="m16.5 17 2 2 4-4.5"/></svg></i>
+                <div>
+                  <b>Enrollment happens by rule</b>
+                  <p>Matching employees are enrolled automatically, immediately or when they next become active.</p>
+                </div>
+              </div>
+            </div>
+
+            <p class="fair-fine">Risk-targeted challenges are a live capability. Ask your account manager about enabling it for your organization.</p>
+          </div>
+
+          <div class="audit-board" role="img" aria-label="Challenge creation panel with a health risk code audience filter selected, showing that 412 employees match and that the list of users is not displayed to protect individual privacy. Figures shown are illustrative.">
+            <div class="audit-head" aria-hidden="true">
+              <b>Create challenge &middot; Target audience</b>
+              <span class="ta-step">Step 5 of 7</span>
+            </div>
+            <div class="ta-rows" aria-hidden="true">
+              <div class="ta-row"><span>Country</span><b>All</b></div>
+              <div class="ta-row"><span>Department</span><b>All</b></div>
+              <div class="ta-row is-set"><span>Health Risk Code</span><b>At risk for diabetes</b></div>
+            </div>
+            <div class="ta-count" aria-hidden="true">
+              <span class="ta-num">412</span>
+              <span class="ta-lab">employees match</span>
+            </div>
+            <p class="ta-disclaimer" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+              <span>"The list of users is not displayed to protect individual privacy."</span>
+            </p>
+            <span class="ta-chip" aria-hidden="true">Challenge marked Private</span>
+            <p class="audit-caption" aria-hidden="true">Enrollment runs by rule. Non-matching employees never see the challenge.</p>
+            <span class="mock-tag">Illustrative data</span>
+          </div>
+        </div>
+
+        <div class="agg-grid">
+          <article class="reveal">
+            <h3>Baseline, 20% of the score</h3>
+            <p>The assessment sets the Baseline component of each employee's wellness score. Without an assessment, the baseline sits at a default of 50.</p>
+          </article>
+          <article class="reveal">
+            <h3>One organizational number, 0 to 100</h3>
+            <p>Baseline, Participation, Activity and Adherence, weighted into a single Org Wellness Score on the Workforce Health page.</p>
+          </article>
+          <article class="reveal">
+            <h3>A trend worth reviewing monthly</h3>
+            <p>Component breakdown and trend over time. Allow 2 to 4 weeks of data collection before the first baseline is reliable.</p>
+          </article>
+        </div>
+
+        <p class="agg-note">Org Wellness Score is provisioned by your account manager for annual clients. It is not a self-serve toggle, and it needs your employee data indexed before it will report.</p>
+      </div>
+    </section>
+
+    <!-- ============= S6 HOW A SCREENING CAMPAIGN RUNS ============= -->
+    <section class="hub-section rollout-screen" id="rollout" aria-labelledby="rollout-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Rollout</span>
+          <h2 id="rollout-heading">Four steps, and none of them is a project</h2>
+          <p class="lead">The assessment is always available in the employee app. HR drives completion by running a Custom Challenge that carries it as a task.</p>
+        </div>
+
+        <div class="steps">
+          <article class="step reveal">
+            <span class="step-no" aria-hidden="true">1</span>
+            <h3>Turn the assessment on</h3>
+            <p>Your account manager enables the Health Risk Assessment for your company. It needs Full Mode.</p>
+            <span class="step-tag" aria-hidden="true">01</span>
+          </article>
+          <article class="step reveal">
+            <span class="step-no" aria-hidden="true">2</span>
+            <h3>Build the screening campaign</h3>
+            <p>A Custom Challenge with the Health Vitals (HRA) task, a one-time task designed for baseline profiling at launch.</p>
+            <span class="step-tag" aria-hidden="true">02</span>
+          </article>
+          <article class="step reveal">
+            <span class="step-no" aria-hidden="true">3</span>
+            <h3>Set the audience, let enrollment run</h3>
+            <p>Filter by country, city, department, gender, age range or language. Matching employees are enrolled automatically.</p>
+            <span class="step-tag" aria-hidden="true">03</span>
+          </article>
+          <article class="step reveal">
+            <span class="step-no" aria-hidden="true">4</span>
+            <h3>Nudge, then read the aggregate</h3>
+            <p>Push notifications go out to a chosen audience, with a preview before you send. Branded custom emails and social-feed announcements run alongside them.</p>
+            <span class="step-tag" aria-hidden="true">04</span>
+          </article>
+        </div>
+
+        <p class="rollout-note">For a fuller screening program, pair the assessment with the Lab Report Upload and Doctor Visit tasks. Lab report upload is a premium capability, enabled per company by your account manager.</p>
+      </div>
+    </section>
+
+    <!-- ==================== S7 EVALUATION ==================== -->
+    <section class="hub-section proof-hub" id="proof" aria-labelledby="proof-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Evaluation</span>
+          <h2 id="proof-heading">Bring your privacy requirements to the first call</h2>
+          <p class="lead">Data residency, consent language and what your admins can see are configuration questions. They get answered before rollout, not after it.</p>
+        </div>
+
+        <div class="quote-band text-only reveal">
+          <div>
+            <blockquote>"From the first call, the team was extremely transparent, collaborative and considerate of all our corporate requirements."</blockquote>
+            <span class="quote-who">Teva Pharmaceuticals</span>
+          </div>
+        </div>
+
+        <div class="proof-fine">
+          <small>Approved customer testimonial, October 2025.</small>
+          <a class="text-link" href="https://www.vantagefit.io/casestudy/">Read customer stories
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== S8 TRUST BAND ==================== -->
+    <section class="screen trust-screen solutions-trust" id="security" aria-labelledby="security-heading">
+      <div class="shell">
+        <div class="trust-cols">
+          <div class="trust-copy">
+            <span class="eyebrow">Enterprise security &amp; compliance</span>
+            <h2 id="security-heading">Health data lands in one region and stays there</h2>
+            <p class="lead">Your organization picks a region at signup. It is permanent, isolated from the others, and nothing crosses between them.</p>
+            <div class="trust-actions">
+              <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+              <a class="text-link text-link-light" href="https://www.vantagefit.io/features/security-and-compliance/">Explore security &amp; compliance &rarr;</a>
+            </div>
+          </div>
+          <div class="trust-grid">
+            <div class="trust-card">
+              <span class="trust-icon" aria-hidden="true">&#9673;</span>
+              <h3>Aggregate only, by design</h3>
+              <p>No admin screen and no CSV export shows an individual's assessment answers, risk category or biomarker values.</p>
+            </div>
+            <div class="trust-card">
+              <span class="trust-icon" aria-hidden="true">&#9737;</span>
+              <h3>Four separate regions</h3>
+              <p>India, US, EU and UAE. The region is chosen at signup and stays fixed, with no cross-region sharing.</p>
+            </div>
+            <div class="trust-card">
+              <span class="trust-icon" aria-hidden="true">&#8644;</span>
+              <h3>Your consent language</h3>
+              <p>Custom terms and conditions can be added to employee onboarding, in each language you supply.</p>
+            </div>
+            <div class="trust-card">
+              <span class="trust-icon" aria-hidden="true">&#10003;</span>
+              <h3>Or no health data at all</h3>
+              <p>Lite Mode runs steps only. The assessment, Wellness Score, Lab Reports and My Health are all switched off.</p>
+            </div>
+          </div>
+        </div>
+        <div class="trust-plaque">
+          <div class="mark-strip" role="list">
+            <span class="mark" role="listitem">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4.5 6v5c0 4.6 3.1 8.3 7.5 10 4.4-1.7 7.5-5.4 7.5-10V6L12 3Z"/><path d="m9 12 2.2 2.2L15.5 9.7"/></svg>
+              Follows HIPAA guidelines
+            </span>
+            <span class="mark" role="listitem">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 3.5H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9l-5.5-5.5Z"/><path d="M13.5 3.5V9H19"/><path d="m8.8 15 1.9 1.9 3.9-4.1"/></svg>
+              SOC 2 Type II
+            </span>
+            <span class="mark" role="listitem">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.2 2.4 3.3 5.2 3.3 8.5S14.2 18.1 12 20.5c-2.2-2.4-3.3-5.2-3.3-8.5S9.8 5.9 12 3.5Z"/></svg>
+              Secured regional data hosting
+            </span>
+          </div>
+          <p class="trust-support">Security documentation is available during evaluation.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== S9 FAQ ==================== -->
+    <section class="hub-section faq-screen" id="faq" aria-labelledby="faq-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Questions HR asks</span>
+          <h2 id="faq-heading">Before you take this to legal</h2>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item" open>
+            <summary><h3>What is a corporate health risk assessment?</h3></summary>
+            <p>A corporate health risk assessment is a short self-reported questionnaire that gives each employee a baseline picture of their own health. In Vantage Fit it covers nine areas, including blood pressure, cholesterol, diabetes status, waist size, smoking, alcohol and exercise frequency, and returns a fitness percentage from 0 to 100% with a category and personalized suggestions. The employer receives aggregate results only.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary><h3>Can our HR team see an employee's answers or risk category?</h3></summary>
+            <p>No. Admins cannot see Health Risk Assessment details, meaning individual answers and risk categories, and they cannot see lab report results, individual weight or BMI, or personal tracking data such as mood logs, food diary and sleep patterns. There is one thing to be precise about: if your organization has the Org Wellness Score enabled, admins can see each employee's composite score and its four component sub-scores, one of which is derived from the assessment. That is a number, not the answers behind it, and the product documentation states plainly that individual wellness scores are for program design, not for HR decisions about specific employees.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary><h3>Is completion mandatory, and can results affect benefits or employment?</h3></summary>
+            <p>Completion is voluntary and employees can skip it entirely. There is no mechanism in Vantage Fit to gate a benefit on completing the assessment, and no mechanism to tier an incentive by a health outcome. The only lever an administrator has is a challenge task that awards points for completing the assessment. The questionnaire does not ask for family medical history and does not ask for genetic information. Your legal team should still run their own review, and we will supply the full question set and the data flows for it.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary><h3>Is this a medical assessment?</h3></summary>
+            <p>No. In the employee's own words on screen: "The HRA is an informational tool, not a medical diagnosis. For any health concerns, always consult your doctor." The suggestions it generates are general wellness guidance. Nothing in Vantage Fit is a clinical service, and no result is reviewed by a clinician.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary><h3>What happens if only some of our employees complete it?</h3></summary>
+            <p>The program still works. Where an employee has not completed the assessment, the Baseline component of their wellness score uses a default value of 50 and the other three components carry on as normal. Completion rises when the assessment is packaged as a task inside a challenge with automatic enrollment and targeted reminders, rather than left as something employees have to go looking for in their profile.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ S10 RELATED: data in, data out, action ============ -->
+    <section class="related-screen" id="related" aria-labelledby="related-heading">
+      <div class="shell">
+        <div class="hub-head">
+          <span class="eyebrow">Data in, data out, action</span>
+          <h2 id="related-heading">Where the baseline goes next</h2>
+          <p class="lead">The assessment is the first link. Insights prove what changed, and rewards keep people coming back to change it.</p>
+        </div>
+
+        <div class="related-grid">
+          <a class="related-row reveal" href="https://www.vantagefit.io/solutions/workforce-health-insights/">
+            <span class="related-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18V10M9.3 18V5.5M14.7 18v-7M20 18v-4"/><path d="M2.5 21h19"/></svg>
+            </span>
+            <span>
+              <h3>Workforce health insights
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </h3>
+              <p>Participation, challenge and activity analytics your board can read.</p>
+            </span>
+          </a>
+
+          <a class="related-row reveal" href="https://www.vantagefit.io/solutions/wellness-rewards-program/">
+            <span class="related-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="11.5" rx="2"/><path d="M2 9h20M12 9v11.5"/><path d="M12 9S10.5 3.5 8 3.5A2.2 2.2 0 0 0 8 9M12 9s1.5-5.5 4-5.5A2.2 2.2 0 0 1 16 9"/></svg>
+            </span>
+            <span>
+              <h3>Wellness rewards program
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </h3>
+              <p>Points and gift cards tied to real effort.</p>
+            </span>
+          </a>
+
+          <a class="related-row reveal" href="https://www.vantagefit.io/solutions/wellness-challenges/">
+            <span class="related-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.8"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.8"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.8"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.8"/></svg>
+            </span>
+            <span>
+              <h3>Wellness challenges
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </h3>
+              <p>The full library of ready-to-run challenges, including the one that carries the assessment task.</p>
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== S11 CLOSER ==================== -->
+    <section class="final" id="demo" aria-labelledby="demo-heading">
+      <div class="shell">
+        <h2 id="demo-heading">See what your workforce baseline would look like</h2>
+        <p>In a 30-minute demo we will walk the assessment on a phone, show the aggregate view your admins actually get, and answer your residency and consent questions.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+          <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">See pricing</a>
+        </div>
+        <div class="final-checks">
+          <span>Aggregate-only reporting</span>
+          <span>Four data regions</span>
+          <span>No obligation</span>
+        </div>
+        <div class="final-note">Measure first. Then improve.</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="#top">
+            <img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37" style="height:28px;width:auto;display:block">
+          </a>
+          <p class="footer-about">Inclusive wellness that turns participation into measurable progress. A Vantage Circle product.</p>
+        </div>
+
+        <div>
+          <div class="footer-title">Solutions</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/solutions/wellness-platform/">Wellness platform</a>
+            <a href="https://www.vantagefit.io/solutions/wellness-challenges/">Wellness challenges</a>
+            <a href="https://www.vantagefit.io/solutions/step-challenges/">Step challenges</a>
+            <a href="https://www.vantagefit.io/solutions/multi-activity-challenges/">Multi-activity challenges</a>
+            <a href="https://www.vantagefit.io/solutions/remote-team-wellness/">Remote &amp; hybrid team challenges</a>
+            <a href="https://www.vantagefit.io/solutions/virtual-marathon/">Virtual marathon</a>
+            <a href="https://www.vantagefit.io/solutions/health-risk-assessment/" aria-current="page" style="color:#fff;font-weight:700">Health Risk Assessment</a>
+            <a href="https://www.vantagefit.io/solutions/workforce-health-insights/">Workforce health insights</a>
+            <a href="https://www.vantagefit.io/solutions/wellness-rewards-program/">Wellness rewards program</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-title">Features</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/features/activity-tracking/">Activity &amp; health tracking</a>
+            <a href="https://www.vantagefit.io/features/admin-dashboard/">Participation analytics &amp; insights</a>
+            <a href="https://www.vantagefit.io/features/incentivization-and-rewards/">Incentives &amp; rewards</a>
+            <a href="https://www.vantagefit.io/features/engagement-tools/">Engagement tools &amp; community</a>
+            <a href="https://www.vantagefit.io/features/integrations/">Integrations</a>
+            <a href="https://www.vantagefit.io/features/security-and-compliance/">Security &amp; compliance</a>
+            <a href="https://www.vantagefit.io/features/accessibility/">Accessibility</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-title">Resources</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/en/blog/">Blog</a>
+            <a href="https://www.vantagefit.io/casestudy/">Customer stories</a>
+            <a href="https://www.vantagefit.io/compare/">Comparisons</a>
+            <a href="https://www.vantagefit.io/guides/">Reports &amp; research</a>
+            <a href="https://www.vantagefit.io/tools-and-templates/">Tools &amp; templates</a>
+            <a href="https://www.vantagefit.io/trust-center/">Trust Center</a>
+            <a href="https://www.vantagefit.io/en/help/">Help Center</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-title">Company</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/about-us/">About us</a>
+            <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+            <a href="https://www.vantagefit.io/casestudy/">Case studies</a>
+            <a href="https://www.vantagefit.io/request-demo/">Contact sales</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Claims gate: this line carries only the two approved compliance strings,
+           in the approved wording. Do not add certification marks, and do not
+           upgrade the compliance verb. -->
+      <div class="footer-bottom">
+        <span>&copy; 2026 Vantage Circle. All rights reserved.</span>
+        <span>HIPAA guidelines &middot; SOC 2 Type II</span>
+        <span>Wellness built for participation.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a corporate health risk assessment?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A corporate health risk assessment is a short self-reported questionnaire that gives each employee a baseline picture of their own health. In Vantage Fit it covers nine areas, including blood pressure, cholesterol, diabetes status, waist size, smoking, alcohol and exercise frequency, and returns a fitness percentage from 0 to 100% with a category and personalized suggestions. The employer receives aggregate results only."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can our HR team see an employee's answers or risk category?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Admins cannot see Health Risk Assessment details, meaning individual answers and risk categories, and they cannot see lab report results, individual weight or BMI, or personal tracking data such as mood logs, food diary and sleep patterns. There is one thing to be precise about: if your organization has the Org Wellness Score enabled, admins can see each employee's composite score and its four component sub-scores, one of which is derived from the assessment. That is a number, not the answers behind it, and the product documentation states plainly that individual wellness scores are for program design, not for HR decisions about specific employees."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is completion mandatory, and can results affect benefits or employment?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Completion is voluntary and employees can skip it entirely. There is no mechanism in Vantage Fit to gate a benefit on completing the assessment, and no mechanism to tier an incentive by a health outcome. The only lever an administrator has is a challenge task that awards points for completing the assessment. The questionnaire does not ask for family medical history and does not ask for genetic information. Your legal team should still run their own review, and we will supply the full question set and the data flows for it."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this a medical assessment?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. In the employee's own words on screen: \"The HRA is an informational tool, not a medical diagnosis. For any health concerns, always consult your doctor.\" The suggestions it generates are general wellness guidance. Nothing in Vantage Fit is a clinical service, and no result is reviewed by a clinician."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What happens if only some of our employees complete it?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The program still works. Where an employee has not completed the assessment, the Baseline component of their wellness score uses a default value of 50 and the other three components carry on as normal. Completion rises when the assessment is packaged as a task inside a challenge with automatic enrollment and targeted reminders, rather than left as something employees have to go looking for in their profile."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Vantage Fit",
+    "applicationCategory": "Corporate Wellness",
+    "operatingSystem": "iOS, Android, Web",
+    "url": "https://www.vantagefit.io/",
+    "publisher": { "@type": "Organization", "name": "Vantage Circle" }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.vantagefit.io/" },
+      { "@type": "ListItem", "position": 2, "name": "Solutions", "item": "https://www.vantagefit.io/solutions/" },
+      { "@type": "ListItem", "position": 3, "name": "Health Risk Assessment", "item": "https://www.vantagefit.io/solutions/health-risk-assessment/" }
+    ]
+  }
+  </script>
+
+  <script>
+    // ---------- Mobile nav ----------
+    const menuButton = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation');
+      navLinks.classList.toggle('open', !open);
+    });
+
+    // ---------- Mega-menu behaviour (desktop hover, mobile accordion) ----------
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const navTriggers = [...document.querySelectorAll('.nav-trigger')];
+    const desktopNav = window.matchMedia('(min-width: 861px)');
+    let desktopCloseTimer;
+
+    // The mega opens on hover AND on focus-within, so aria-expanded has to
+    // follow both paths, not only the mobile accordion.
+    const setExpanded = (item, open) => {
+      item.querySelector('.nav-trigger')?.setAttribute('aria-expanded', String(open));
+    };
+
+    const closeDesktopMenus = (except = null) => {
+      navItems.forEach((item) => {
+        if (item !== except) {
+          item.classList.remove('desktop-open');
+          if (!item.contains(document.activeElement)) setExpanded(item, false);
+        }
+      });
+    };
+
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => {
+        if (!desktopNav.matches) return;
+        window.clearTimeout(desktopCloseTimer);
+        closeDesktopMenus(item);
+        item.classList.add('desktop-open');
+        setExpanded(item, true);
+        const focusedTrigger = document.activeElement?.closest?.('.nav-trigger');
+        if (focusedTrigger && !item.contains(focusedTrigger)) focusedTrigger.blur();
+      });
+
+      item.addEventListener('pointerleave', () => {
+        if (!desktopNav.matches) return;
+        desktopCloseTimer = window.setTimeout(() => {
+          if (!item.matches(':hover') && !item.contains(document.activeElement)) {
+            item.classList.remove('desktop-open');
+            setExpanded(item, false);
+          }
+        }, 120);
+      });
+
+      item.addEventListener('focusin', () => {
+        if (desktopNav.matches) setExpanded(item, true);
+      });
+
+      item.addEventListener('focusout', () => {
+        if (!desktopNav.matches) return;
+        window.setTimeout(() => {
+          if (!item.contains(document.activeElement) && !item.matches(':hover')) setExpanded(item, false);
+        }, 0);
+      });
+    });
+
+    // Escape dismisses an open mega and returns focus to its trigger.
+    // WCAG 1.4.13 Dismissible.
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      const active = document.activeElement?.closest?.('.nav-item')
+        || document.querySelector('.nav-item.desktop-open');
+      if (!active) return;
+      active.classList.remove('desktop-open');
+      active.classList.remove('open');
+      active.classList.add('esc-closed');
+      setExpanded(active, false);
+      active.querySelector('.nav-trigger')?.focus();
+    });
+
+    // The panel becomes available again as soon as the user leaves or reopens it.
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => item.classList.remove('esc-closed'));
+      item.addEventListener('focusout', () => {
+        window.setTimeout(() => {
+          if (!item.contains(document.activeElement)) item.classList.remove('esc-closed');
+        }, 0);
+      });
+      item.querySelector('.nav-trigger')?.addEventListener('click', () => item.classList.remove('esc-closed'));
+    });
+
+    document.querySelectorAll('.nav-links > a').forEach((link) => {
+      link.addEventListener('pointerenter', () => {
+        if (desktopNav.matches) closeDesktopMenus();
+      });
+    });
+
+    navTriggers.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (window.matchMedia('(max-width: 860px)').matches) {
+          const item = btn.closest('.nav-item');
+          const isOpen = item.classList.contains('open');
+          document.querySelectorAll('.nav-item').forEach((n) => {
+            n.classList.remove('open');
+            n.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        }
+      });
+    });
+
+    // ---------- Nav CTA: ghost over the hero, filled after ----------
+    (function () {
+      const nav = document.querySelector('nav.nav');
+      const hero = document.querySelector('.hero');
+      if (!nav || !hero) return;
+      const state = () => nav.classList.toggle('lit', window.scrollY > hero.offsetHeight - 90);
+      window.addEventListener('scroll', state, { passive: true });
+      state();
+    })();
+
+    // ---------- Subtle scroll reveal (.reveal -> .reveal.on) ----------
+    (function () {
+      const nodes = document.querySelectorAll('.reveal');
+      if (!nodes.length) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+        nodes.forEach((n) => n.classList.add('on'));
+        return;
+      }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('on');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+      nodes.forEach((n) => io.observe(n));
+    })();
+
+    // ---------- Grayscale preview mode for accessibility review: append ?gray ----------
+    if (new URLSearchParams(location.search).has('gray')) {
+      document.documentElement.style.filter = 'grayscale(1)';
+    }
+  </script>
+</body>
+</html>
