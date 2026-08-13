@@ -103,6 +103,47 @@
       border-color: rgba(15, 118, 110, .35);
     }
 
+    /* ── Features / For HR ── */
+    .section-label.features {
+      color: #b62e40;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .section-label.features .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #ef5d67;
+      color: #fff;
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .list.features {
+      background: linear-gradient(180deg, #fff1f2 0%, #fff 56px);
+      border-color: rgba(239, 93, 103, .38);
+      box-shadow: 0 1px 0 rgba(239, 93, 103, .12);
+    }
+    .list.features .row { border-bottom-color: rgba(239, 93, 103, .16); }
+    .list.features .row:hover { background: #fff6f7; }
+    .list.features .btn-main {
+      background: #d13c4d;
+      border-color: #d13c4d;
+    }
+    .list.features .btn-main:hover { background: #b62e40; border-color: #b62e40; }
+    .list.features .btn:not(.btn-main) {
+      border-color: rgba(182, 46, 64, .22);
+      color: #8f2434;
+    }
+    .list.features .btn:not(.btn-main):hover {
+      background: #fdecee;
+      border-color: rgba(182, 46, 64, .38);
+    }
+
     /* ── Versions ── */
     .list {
       background: var(--paper);
@@ -188,8 +229,8 @@
 
   <main class="shell">
 
-    <p class="section-label new">Admin dashboard &amp; analytics <span class="badge">New</span></p>
-    <div class="list new">
+    <p class="section-label features">Admin dashboard &amp; analytics <span class="badge">Features</span></p>
+    <div class="list features">
       <div class="row">
         <div>
           <div class="name">Claude</div>
