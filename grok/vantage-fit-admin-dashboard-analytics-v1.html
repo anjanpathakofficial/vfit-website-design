@@ -1,0 +1,1034 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/enterprise.css">
+  <meta name="description" content="See participation rate, enrolled and active users, and rewards spend on one employee wellness analytics dashboard. Aggregate only. Book a walkthrough.">
+  <meta name="theme-color" content="#18262b">
+  <title>Corporate wellness dashboard and analytics | Vantage Fit</title>
+  <style>
+    .nav-item.is-current .nav-trigger { color: var(--ink); background: var(--soft); }
+    .mega a.mega-link[aria-current="page"] { background: var(--soft); }
+    .mega a.mega-link[aria-current="page"] span { color: var(--coral-dark); }
+
+    .ad-hero {
+      position: relative;
+      overflow: hidden;
+      min-height: min(calc(100svh - var(--nav-h)), 780px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px 0 48px;
+      background:
+        radial-gradient(880px 520px at 86% 8%, rgba(241, 81, 98, .09), transparent 62%),
+        radial-gradient(720px 480px at 4% 96%, rgba(65, 216, 180, .1), transparent 60%),
+        linear-gradient(180deg, #fff 0%, #fdf7f7 100%);
+    }
+    .ad-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.02fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .ad-hero h1 { max-width: 640px; }
+    .ad-hero h1 em {
+      font-style: normal;
+      background: linear-gradient(125deg, var(--coral) 20%, var(--coral-deep) 90%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+    .ad-hero .lead { max-width: 520px; margin-top: 18px; }
+    .ad-hero .btn-row { margin-top: 26px; }
+    .ad-visual { position: relative; min-height: 460px; }
+    .ad-photo {
+      margin: 0;
+      overflow: hidden;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      aspect-ratio: 5 / 4;
+      background: var(--soft);
+    }
+    .ad-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 62% 28%;
+    }
+    .ad-rate {
+      position: absolute;
+      left: -14px;
+      bottom: 28px;
+      z-index: 2;
+      width: min(236px, 58%);
+      padding: 16px 16px 14px;
+      border: 1px solid rgba(255,255,255,.82);
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(255,255,255,.94), rgba(255,255,255,.78));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.95), 4px 18px 42px rgba(41,41,76,.17);
+      backdrop-filter: blur(18px) saturate(1.4);
+    }
+    .ad-rate p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .ad-rate strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 2.15rem;
+      letter-spacing: -.05em;
+      line-height: 1;
+      color: var(--coral);
+    }
+    .ad-rate .trend {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 8px;
+      color: var(--mint-dark);
+      font-size: .68rem;
+      font-weight: 800;
+    }
+    .ad-rate .cap {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: .62rem;
+      font-weight: 600;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .ad-rate svg { width: 100%; height: 36px; margin-top: 8px; }
+    .ad-chip {
+      position: absolute;
+      right: -8px;
+      top: 18px;
+      z-index: 2;
+      display: grid;
+      gap: 8px;
+      width: 168px;
+    }
+    .ad-chip b {
+      display: block;
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,.82);
+      border-radius: 14px;
+      background: rgba(255,255,255,.88);
+      box-shadow: var(--shadow-soft);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: -.02em;
+    }
+    .ad-chip b span {
+      display: block;
+      color: var(--muted);
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+    }
+
+    .ad-section { padding: 88px 0; }
+    .ad-section.tight { padding: 72px 0; }
+    .ad-section h2 { max-width: 780px; }
+    .ad-section .lead { margin-top: 14px; }
+    .ad-kpis {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 32px;
+    }
+    .ad-kpi {
+      padding: 18px 18px 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+    }
+    .ad-kpi.is-hero {
+      border-color: rgba(241, 81, 98, .28);
+      box-shadow: 0 12px 32px rgba(241, 81, 98, .08);
+    }
+    .ad-kpi small {
+      display: block;
+      color: var(--muted);
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .ad-kpi strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 1.7rem;
+      letter-spacing: -.04em;
+    }
+    .ad-kpi.is-hero strong { color: var(--coral); }
+    .ad-kpi em {
+      display: inline-block;
+      margin-top: 6px;
+      color: var(--mint-dark);
+      font-style: normal;
+      font-size: .72rem;
+      font-weight: 800;
+    }
+    .ad-kpi p {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: .82rem;
+      line-height: 1.4;
+    }
+    .ad-kpi svg { width: 100%; height: 28px; margin-top: 10px; }
+    .ad-figcap {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: .72rem;
+    }
+
+    .ad-shot-wrap { margin-top: 36px; }
+    .ad-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .ad-filters span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--ink);
+      font-size: .74rem;
+      font-weight: 700;
+    }
+    .ad-filters span.is-on {
+      border-color: transparent;
+      background: var(--ink);
+      color: #fff;
+    }
+    .ad-shot {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+    .ad-shot img { width: 100%; height: auto; }
+
+    .ad-alt { background: #fff; }
+    .ad-split {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 22px;
+      margin-top: 32px;
+    }
+    .ad-panel {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+    .ad-panel h3 { font-size: 1.05rem; }
+    .ad-panel .tag {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--ink);
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .ad-panel p { margin-top: 8px; color: var(--muted); font-size: .9rem; }
+    .ad-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .ad-cols h4 {
+      margin: 0 0 8px;
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .ad-cols li {
+      margin: 0 0 8px;
+      color: var(--ink);
+      font-size: .84rem;
+      line-height: 1.4;
+    }
+    .ad-actions { list-style: none; padding: 0; margin: 16px 0 0; }
+    .ad-actions li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-top: 1px solid var(--line);
+      font-size: .86rem;
+      font-weight: 700;
+    }
+    .ad-actions i {
+      display: grid;
+      width: 22px;
+      height: 22px;
+      flex: none;
+      place-items: center;
+      border-radius: 7px;
+      background: var(--soft);
+      color: var(--muted);
+      font-style: normal;
+      font-size: .68rem;
+      font-weight: 800;
+    }
+    .ad-actions span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: .74rem;
+      font-weight: 500;
+    }
+
+    .ad-glance {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .ad-glance article {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--canvas);
+    }
+    .ad-glance small {
+      display: block;
+      color: var(--muted);
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .ad-glance strong { display: block; margin-top: 6px; font-size: 1.25rem; letter-spacing: -.03em; }
+    .ad-glance strong span { color: var(--muted); font-size: .72rem; font-weight: 700; letter-spacing: 0; }
+    .ad-glance em {
+      color: var(--mint-dark);
+      font-style: normal;
+      font-size: .7rem;
+      font-weight: 800;
+    }
+    .ad-glance svg { width: 100%; height: 22px; margin-top: 8px; }
+
+    .ad-report-grid {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 36px;
+      align-items: start;
+      margin-top: 32px;
+    }
+    .ad-report-photo {
+      margin: 0;
+      overflow: hidden;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+    }
+    .ad-report-photo img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 5; }
+    .ad-list { display: grid; gap: 10px; }
+    .ad-list li {
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      gap: 10px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+      font-size: .9rem;
+    }
+    .ad-list li::before {
+      width: 8px;
+      height: 8px;
+      margin-top: 6px;
+      border-radius: 50%;
+      background: var(--mint);
+      content: "";
+    }
+    .ad-list b { display: block; font-size: .92rem; }
+    .ad-list span { color: var(--muted); font-size: .8rem; }
+
+    .ad-locks {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .ad-lock {
+      position: relative;
+      overflow: hidden;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: repeating-linear-gradient(-45deg, #f3f3f6, #f3f3f6 8px, #ececf1 8px, #ececf1 16px);
+      color: #5c5c72;
+    }
+    .ad-lock strong { display: block; font-size: .92rem; color: var(--ink); }
+    .ad-lock p { margin-top: 6px; font-size: .78rem; line-height: 1.4; }
+    .ad-lock .cta {
+      display: inline-flex;
+      margin-top: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--ink);
+      color: #fff;
+      font-size: .72rem;
+      font-weight: 700;
+    }
+
+    .ad-privacy {
+      background:
+        radial-gradient(700px 380px at 8% 20%, rgba(65, 216, 180, .12), transparent 62%),
+        #fff;
+    }
+    .ad-privacy-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .ad-do, .ad-dont { display: grid; gap: 8px; margin-top: 18px; }
+    .ad-do span, .ad-dont span {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: .9rem;
+    }
+    .ad-do i, .ad-dont i {
+      width: 8px;
+      height: 8px;
+      flex: none;
+      margin-top: 7px;
+      border-radius: 50%;
+    }
+    .ad-do i { background: var(--mint); }
+    .ad-dont i { background: var(--coral); }
+
+    .ad-faq { background: var(--canvas); }
+    .ad-faq details {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .ad-faq summary {
+      cursor: pointer;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      list-style: none;
+    }
+    .ad-faq summary::-webkit-details-marker { display: none; }
+    .ad-faq details p { margin-top: 8px; color: var(--muted); max-width: 720px; }
+
+    .ad-sibs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .ad-sibs a {
+      display: block;
+      padding: 16px 16px 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+    }
+    .ad-sibs a:hover { box-shadow: var(--shadow-soft); }
+    .ad-sibs small {
+      display: block;
+      color: var(--coral-dark);
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .ad-sibs b { display: block; margin-top: 6px; font-size: .95rem; }
+
+    .final { min-height: auto; padding: 88px 0; }
+    .skip {
+      position: absolute;
+      left: 12px;
+      top: 8px;
+      z-index: 80;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      font-size: .82rem;
+      font-weight: 700;
+      transform: translateY(-120%);
+    }
+    .skip:focus { transform: none; outline: 2px solid var(--coral); outline-offset: 2px; }
+    :focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
+
+    @media (max-width: 1100px) {
+      .ad-hero-grid, .ad-split, .ad-report-grid, .ad-privacy-grid { grid-template-columns: 1fr; }
+      .ad-kpis, .ad-glance, .ad-sibs, .ad-locks { grid-template-columns: 1fr 1fr; }
+      .ad-visual { min-height: 0; }
+      .ad-chip { right: 8px; }
+      .ad-rate { left: 12px; }
+      .ad-report-photo img { aspect-ratio: 16 / 10; }
+    }
+    @media (max-width: 700px) {
+      .ad-hero { min-height: auto; padding: 36px 0 40px; }
+      .ad-section, .ad-section.tight { padding: 56px 0; }
+      .ad-kpis, .ad-glance, .ad-sibs, .ad-locks, .ad-cols { grid-template-columns: 1fr; }
+      .ad-chip { display: none; }
+      .ad-rate { width: min(210px, 72%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .btn:hover { transform: none; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Can I see who is inactive without seeing their health?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The Employee Report shows enrollment status and last active date. It is a participation report, not a health file."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is locked, and what is gone?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Wellness Leagues are annual. Health Insights is whitelist-gated, not every annual plan. Both show Contact Account Manager. Org Wellness Score is retired. It is not a locked teaser."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I still export a Score Report?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Use Employee, Leaderboard, Transaction, and Redemption CSVs. League CSV if Leagues are enabled."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="../styled-homepage/index.html" aria-label="Vantage Fit home">
+        <img src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37" style="height:32px;width:auto;display:block">
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="nav-links" id="nav-links">
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Solutions
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Solutions menu">
+            <div class="mega-body">
+              <div class="mega-grid cols-2">
+                <div>
+                  <div class="mega-col-title">By program</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/steps-challenge/">Step challenges<span>Company-wide step goals that get everyone moving</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/multi-activity-challenges/">Multi-activity challenges<span>Custom challenges across any mix of activities</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/team-challenges/">Team challenges<span>Departments and squads, competing together</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/virtual-marathon/">Virtual marathons<span>One-day events that unite a global workforce</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/mental-health-and-wellbeing-challenges/">Mental health &amp; wellbeing<span>Mindfulness, mood and stress support at work</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/holistic-wellness-program/">Year-round wellness program<span>An always-on calendar of challenges and events</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">By need</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/global-employee-engagement/">Engage a global workforce<span>One program across countries, languages, time zones</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/remote-team-wellness/">Support remote &amp; hybrid teams<span>Wellness that works away from the office</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/wellness-rewards-program/">Reward healthy habits<span>Points and gift cards tied to real effort</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/health-fitness-analytics/">Measure program impact<span>Participation analytics your board can read</span></a>
+                </div>
+              </div>
+            </div>
+            <a class="mega-banner" href="https://www.vantagefit.io/employee-wellness-software/">
+              See Vantage Fit as your all-in-one employee wellness platform
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item is-current">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Features
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">For employees</div>
+                  <a class="mega-link" href="/features/activity-tracking/">Activity tracking<span>Steps, workouts, sleep, and everyday logs</span></a>
+                  <a class="mega-link" href="/features/fitness-exercise/">Fitness &amp; exercise<span>Workouts that count toward the same score</span></a>
+                  <a class="mega-link" href="/features/nutrition-hydration/">Nutrition &amp; hydration<span>Meals and water, logged in the same app</span></a>
+                  <a class="mega-link" href="/features/health-metrics/">Health metrics<span>Personal vitals the admin never opens</span></a>
+                  <a class="mega-link" href="/features/mental-wellbeing/">Mental wellbeing<span>Mindfulness minutes that still count</span></a>
+                  <a class="mega-link" href="/features/wellness-leagues/">Wellness leagues<span>Gold, Silver, Bronze on a rolling average</span></a>
+                  <a class="mega-link" href="/features/personalized-programs/">Personalized programs<span>Plans and journeys inside the same program</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">For HR teams</div>
+                  <a class="mega-link" href="vantage-fit-admin-dashboard-analytics-v1.html" aria-current="page">Admin dashboard &amp; analytics<span>The participation number, without the spreadsheet</span></a>
+                  <a class="mega-link" href="/features/program-builder/">Program builder &amp; templates<span>Five formats, live before lunch</span></a>
+                  <a class="mega-link" href="/features/audience-targeting/">Audience targeting<span>Country, department, age, gender, health-risk counts</span></a>
+                  <a class="mega-link" href="/features/communications-nudges/">Communications &amp; nudges<span>Lifecycle email, push, and inactive-user shortcuts</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Enterprise</div>
+                  <a class="mega-link" href="/features/integrations-sso/">Integrations &amp; SSO<span>HRIS, SSO, and device sources</span></a>
+                  <a class="mega-link" href="/features/security-compliance/">Security &amp; compliance<span>Residency, access, and data boundaries</span></a>
+                  <a class="mega-link" href="/features/health-data-upload/">Health data upload<span>Lab reports on the enterprise track</span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Resources
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Resources menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">Learn</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/">Blog<span>Ideas and research for healthier workplaces</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/guides/">Guides &amp; eBooks<span>Playbooks for launching and scaling wellness</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/podcasts/">Podcasts<span>Conversations with HR and wellbeing leaders</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/2026-global-workplace-well-being-industry-report/">2026 Industry Report<span>The state of global workplace wellbeing</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Evaluate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/casestudy/">Customer stories<span>Results from real customer programs</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/compare/">Compare platforms<span>Vantage Fit vs the alternatives</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/">Help Center<span>Product docs and setup guides</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/tools-and-templates/step-challenge-diy-template/">Step Challenge Template<span>DIY template to plan and launch a step challenge</span></a>
+                </div>
+                <a class="mega-feature" href="https://www.vantagefit.io/wellness-challenges/">
+                  <span>
+                    <small>Featured</small>
+                    <b>Wellness Challenges Library</b>
+                    <p>Browse ready-to-run challenges your teams can start this month.</p>
+                  </span>
+                  <span class="go">Explore the library
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <header class="ad-hero" id="top">
+      <div class="shell ad-hero-grid">
+        <div>
+          <p class="eyebrow">Features · For HR teams</p>
+          <h1>The participation number, <em>without the spreadsheet.</em></h1>
+          <p class="lead">Vantage Fit’s corporate wellness dashboard turns every employee log into four KPI cards. The one you take upstairs is participation rate.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+            <a class="btn btn-outline" href="#overview">See the dashboard</a>
+          </div>
+          <p class="hero-note">
+            <span>100+ organizations</span>
+            <span>Aggregate health only</span>
+            <span>Date, country, department, age, gender</span>
+          </p>
+        </div>
+        <div class="ad-visual">
+          <figure class="ad-photo">
+            <img src="../styled-homepage/card-measure-generic.jpg" alt="HR lead reviewing workplace analytics on a laptop" width="1200" height="900">
+          </figure>
+          <div class="ad-rate" aria-label="Illustrative participation rate card">
+            <p>Participation rate</p>
+            <strong>64%</strong>
+            <span class="trend">+5 pts vs prior period</span>
+            <svg viewBox="0 0 200 36" aria-hidden="true">
+              <path d="M0 28 C20 27 28 22 46 20 C64 18 72 16 90 14 C110 12 118 10 136 8 C154 6 168 7 200 3" fill="none" stroke="#169d7e" stroke-width="2.6" stroke-linecap="round"/>
+            </svg>
+            <span class="cap">Illustrative Overview card. Not a customer result.</span>
+          </div>
+          <div class="ad-chip" aria-hidden="true">
+            <b><span>Enrolled</span>12,480</b>
+            <b><span>Active</span>8,210</b>
+            <b><span>Incentivization</span>$24,180</b>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="ad-section" id="overview">
+      <div class="shell">
+        <h2>Four numbers. One participation rate.</h2>
+        <p class="lead">Overview opens on Enrolled Users, Active Users, Incentivization, and Participation Rate. Each card has a delta and a sparkline. Filters apply to the whole view.</p>
+        <div class="ad-kpis">
+          <article class="ad-kpi">
+            <small>Enrolled users</small>
+            <strong>12,480</strong>
+            <em>+4%</em>
+            <svg viewBox="0 0 140 28" aria-hidden="true"><path d="M0 20 C18 19 28 16 46 15 C66 14 78 12 96 10 C114 8 126 8 140 6" fill="none" stroke="#29294c" stroke-width="2"/></svg>
+            <p>Everyone on the program, across countries.</p>
+          </article>
+          <article class="ad-kpi">
+            <small>Active users</small>
+            <strong>8,210</strong>
+            <em>+6%</em>
+            <svg viewBox="0 0 140 28" aria-hidden="true"><path d="M0 22 C16 21 30 18 48 16 C68 14 80 15 98 11 C116 8 128 9 140 7" fill="none" stroke="#29294c" stroke-width="2"/></svg>
+            <p>Who used the app in the selected period.</p>
+          </article>
+          <article class="ad-kpi">
+            <small>Incentivization</small>
+            <strong>$24,180</strong>
+            <em>+2%</em>
+            <svg viewBox="0 0 140 28" aria-hidden="true"><path d="M0 18 C20 18 32 16 50 16 C70 16 84 14 102 13 C120 12 130 12 140 11" fill="none" stroke="#29294c" stroke-width="2"/></svg>
+            <p>Rewards spend, SOLI-converted to your currency.</p>
+          </article>
+          <article class="ad-kpi is-hero">
+            <small>Participation rate</small>
+            <strong>64%</strong>
+            <em>+5 pts</em>
+            <svg viewBox="0 0 140 28" aria-hidden="true"><path d="M0 22 C18 21 28 17 48 15 C68 13 80 12 98 8 C116 5 128 6 140 4" fill="none" stroke="#F15162" stroke-width="2.4"/></svg>
+            <p>The number you take upstairs.</p>
+          </article>
+        </div>
+        <p class="ad-figcap">KPI figures above are illustrative. Incentivization is a spend view, not a claim that monetary rewards are on for every plan.</p>
+
+        <div class="ad-shot-wrap">
+          <p class="ad-figcap" style="margin:0 0 10px">Filters on Overview</p>
+          <div class="ad-filters" aria-label="Overview filters">
+            <span>7 days</span>
+            <span class="is-on">30 days</span>
+            <span>Quarter</span>
+            <span>Year</span>
+            <span>Custom</span>
+            <span>Country</span>
+            <span>Department</span>
+            <span>Age group</span>
+            <span>Gender</span>
+          </div>
+          <figure class="ad-shot">
+            <img
+              src="https://cdn.vantagecircle.com/image/upload/f_auto,q_auto,w_820/v1771579792/product-images-hub/v-fit/vfit-analytics-dashboard-desktop.png"
+              alt="Vantage Fit admin analytics dashboard with activity insights and participation by department, gender, and location"
+              width="820"
+              height="668">
+          </figure>
+          <p class="ad-figcap">The live Overview console. Steps, sessions, meals, and sleep logs roll up here as participation.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="ad-section ad-alt tight" id="insights">
+      <div class="shell">
+        <h2>Insights read the buckets. Actions stay links.</h2>
+        <p class="lead">Leadership Insights are AI observations from aggregated signal buckets. No names, no lab values, no mood. Read-only. They do not change your config.</p>
+        <div class="ad-split">
+          <article class="ad-panel">
+            <span class="tag">AI · aggregated</span>
+            <h3>Leadership Insights</h3>
+            <p>Two columns from an internal ML API. Only aggregated buckets leave the dashboard. Not predictive. Not auto-configuring.</p>
+            <div class="ad-cols">
+              <div>
+                <h4>Key insights</h4>
+                <ul>
+                  <li>Participation rose in Operations this quarter.</li>
+                  <li>Active users dipped after the last challenge ended.</li>
+                </ul>
+              </div>
+              <div>
+                <h4>Focus areas</h4>
+                <ul>
+                  <li>Inactive count is concentrated in two departments.</li>
+                  <li>Sleep is the weakest At a Glance trend this month.</li>
+                </ul>
+              </div>
+            </div>
+            <p class="ad-figcap">Sample observations, illustrative.</p>
+          </article>
+          <article class="ad-panel">
+            <span class="tag">Rule-based · max 5</span>
+            <h3>Recommended Actions</h3>
+            <p>Priority-ordered shortcuts. Links, not automations. Not AI.</p>
+            <ol class="ad-actions">
+              <li><i>1</i><div>View Inactive Employees<span>92 users inactive 30+ days. Illustrative count.</span></div></li>
+              <li><i>2</i><div>Nudge Inactive Users<span>Opens the relevant admin screen. Not a one-click send.</span></div></li>
+              <li><i>3</i><div>Check Health Insights<span>Opens only if that surface is enabled.</span></div></li>
+            </ol>
+          </article>
+        </div>
+
+        <h3 style="margin-top:36px;font-size:1.15rem">At a Glance this month</h3>
+        <div class="ad-glance">
+          <article>
+            <small>Avg steps</small>
+            <strong>7,240<span> / day</span></strong>
+            <em>+3%</em>
+            <svg viewBox="0 0 120 22" aria-hidden="true"><path d="M0 16 C16 15 28 12 46 11 C66 10 80 8 98 6 C110 5 120 5 120 4" fill="none" stroke="#169d7e" stroke-width="2"/></svg>
+          </article>
+          <article>
+            <small>Active minutes</small>
+            <strong>38<span> / day</span></strong>
+            <em>+2%</em>
+            <svg viewBox="0 0 120 22" aria-hidden="true"><path d="M0 14 C18 14 30 12 48 12 C68 11 82 10 100 8 C112 7 120 7 120 6" fill="none" stroke="#169d7e" stroke-width="2"/></svg>
+          </article>
+          <article>
+            <small>Mindful minutes</small>
+            <strong>12<span> / day</span></strong>
+            <em>+6%</em>
+            <svg viewBox="0 0 120 22" aria-hidden="true"><path d="M0 18 C16 17 30 14 48 12 C66 10 80 8 98 5 C110 4 120 4 120 3" fill="none" stroke="#169d7e" stroke-width="2"/></svg>
+          </article>
+          <article>
+            <small>Avg sleep</small>
+            <strong>6.8<span> hrs</span></strong>
+            <em>−1%</em>
+            <svg viewBox="0 0 120 22" aria-hidden="true"><path d="M0 8 C18 8 30 10 48 11 C68 12 82 14 100 16 C112 17 120 17 120 18" fill="none" stroke="#d63d4e" stroke-width="2"/></svg>
+          </article>
+        </div>
+        <p class="ad-figcap">Each live card also carries a sparkline and trend. Figures here are illustrative.</p>
+      </div>
+    </section>
+
+    <section class="ad-section" id="reports">
+      <div class="shell">
+        <h2>Export the CSV. Skip the score report.</h2>
+        <p class="lead">Reports sit on this same surface. There is no Score Report. Org Wellness Score is retired.</p>
+        <div class="ad-report-grid">
+          <figure class="ad-report-photo">
+            <img src="../styled-homepage/card-invite.jpg" alt="Employees gathered around a table during a workplace program" width="800" height="1000">
+          </figure>
+          <div>
+            <ul class="ad-list">
+              <li><div><b>Employee Report</b><span>Active, inactive, dormant. Search and filter. CSV.</span></div></li>
+              <li><div><b>Leaderboard</b><span>Per-challenge rankings. CSV.</span></div></li>
+              <li><div><b>Transaction Report</b><span>Points and rewards, SOLI-converted, date and category filters. CSV.</span></div></li>
+              <li><div><b>Redemption Report</b><span>What was claimed. CSV.</span></div></li>
+              <li><div><b>League Report</b><span>Annual-gated CSV. Shown locked until Leagues are enabled.</span></div></li>
+              <li><div><b>Certificates</b><span>Automated per-campaign PDF.</span></div></li>
+            </ul>
+            <div class="ad-locks">
+              <div class="ad-lock">
+                <strong>Wellness Leagues</strong>
+                <p>Annual. Account manager enables it. Not a self-serve toggle.</p>
+                <a class="cta" href="https://www.vantagefit.io/request-demo/">Contact Account Manager</a>
+              </div>
+              <div class="ad-lock">
+                <strong>Health Insights</strong>
+                <p>Whitelist-gated. Narrower than a plain annual plan.</p>
+                <a class="cta" href="https://www.vantagefit.io/request-demo/">Contact Account Manager</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ad-section ad-privacy tight" id="privacy">
+      <div class="shell ad-privacy-grid">
+        <div>
+          <h2>Admins see the crowd, not the person.</h2>
+          <p class="lead">You get company and department aggregates. You never open an individual health profile. HIPAA-guideline aligned on this point.</p>
+          <div class="ad-do">
+            <span><i></i>Enrollment, active users, participation rate, department rollups</span>
+            <span><i></i>Challenge standings and last-active dates</span>
+          </div>
+          <div class="ad-dont">
+            <span><i></i>Weight, BMI, HRA answers, mood, or lab values</span>
+            <span><i></i>A named health-risk list. Targeting returns a count only.</span>
+          </div>
+        </div>
+        <figure class="ad-shot" style="margin:0">
+          <img src="../styled-homepage/card-participate.jpg" alt="Employee walking outdoors with a water bottle during the workday" width="820" height="547">
+        </figure>
+      </div>
+    </section>
+
+    <section class="ad-section ad-faq tight" id="faq">
+      <div class="shell">
+        <h2>Before you roll it out</h2>
+        <details>
+          <summary>Can I see who is inactive without seeing their health?</summary>
+          <p>Yes. The Employee Report shows enrollment status and last active date. It is a participation report, not a health file.</p>
+        </details>
+        <details>
+          <summary>What is locked, and what is gone?</summary>
+          <p>Wellness Leagues are annual. Health Insights is whitelist-gated, not every annual plan. Both show Contact Account Manager. Org Wellness Score is retired. It is not a locked teaser.</p>
+        </details>
+        <details>
+          <summary>Do I still export a Score Report?</summary>
+          <p>No. Use Employee, Leaderboard, Transaction, and Redemption CSVs. League CSV if Leagues are enabled.</p>
+        </details>
+        <div class="ad-sibs" aria-label="Other For HR feature pages">
+          <a href="/features/program-builder/"><small>Next</small><b>Program builder &amp; templates</b></a>
+          <a href="/features/audience-targeting/"><small>Aim it</small><b>Audience targeting</b></a>
+          <a href="/features/communications-nudges/"><small>Nudge</small><b>Communications &amp; nudges</b></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="final" id="demo">
+      <div class="shell">
+        <h2>See the number you would take upstairs.</h2>
+        <p>Walk through Overview, filters, insights, and exports on a console that already looks like this.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+          <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">Compare the tiers</a>
+        </div>
+        <div class="final-checks">
+          <span>Four KPI cards</span>
+          <span>Participation rate</span>
+          <span>CSV exports</span>
+          <span>Aggregate only</span>
+        </div>
+        <p class="final-note">Trusted by 100+ organizations.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../styled-homepage/index.html">
+            <img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37" style="height:28px;width:auto;display:block">
+          </a>
+          <p class="footer-about">Inclusive wellness that turns participation into measurable progress.</p>
+        </div>
+        <div>
+          <div class="footer-title">Product</div>
+          <div class="footer-links">
+            <a href="/features/">All features</a>
+            <a href="vantage-fit-admin-dashboard-analytics-v1.html">Admin dashboard</a>
+            <a href="/features/program-builder/">Program builder</a>
+            <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Solutions</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/steps-challenge/">Challenges</a>
+            <a href="https://www.vantagefit.io/wellness-rewards-program/">Rewards</a>
+            <a href="https://www.vantagefit.io/remote-team-wellness/">Remote teams</a>
+            <a href="https://www.vantagefit.io/global-employee-engagement/">Global engagement</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Company</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/about-us/">About</a>
+            <a href="https://www.vantagefit.io/casestudy/">Case studies</a>
+            <a href="https://www.vantagefit.io/request-demo/">Contact sales</a>
+            <a href="https://www.vantagefit.io/en/help/">Help Center</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Vantage Circle. All rights reserved.</span>
+        <span>Wellness built for participation.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuButton = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation');
+      navLinks.classList.toggle('open', !open);
+    });
+
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const navTriggers = [...document.querySelectorAll('.nav-trigger')];
+    const desktopNav = window.matchMedia('(min-width: 861px)');
+    let desktopCloseTimer;
+
+    const closeDesktopMenus = (except = null) => {
+      navItems.forEach((item) => {
+        if (item !== except) item.classList.remove('desktop-open');
+      });
+    };
+
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => {
+        if (!desktopNav.matches) return;
+        window.clearTimeout(desktopCloseTimer);
+        closeDesktopMenus(item);
+        item.classList.add('desktop-open');
+      });
+      item.addEventListener('pointerleave', () => {
+        if (!desktopNav.matches) return;
+        desktopCloseTimer = window.setTimeout(() => {
+          if (!item.matches(':hover') && !item.contains(document.activeElement)) {
+            item.classList.remove('desktop-open');
+          }
+        }, 120);
+      });
+    });
+
+    document.querySelectorAll('.nav-links > a').forEach((link) => {
+      link.addEventListener('pointerenter', () => {
+        if (desktopNav.matches) closeDesktopMenus();
+      });
+    });
+
+    navTriggers.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        if (window.matchMedia('(max-width: 860px)').matches) {
+          e.preventDefault();
+          const item = btn.closest('.nav-item');
+          const isOpen = item.classList.contains('open');
+          document.querySelectorAll('.nav-item').forEach((n) => {
+            n.classList.remove('open');
+            n.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

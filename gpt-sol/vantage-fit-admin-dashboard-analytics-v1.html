@@ -1,0 +1,1058 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="See participation, trends, aggregate insights, and exportable reports in the Vantage Fit corporate wellness dashboard.">
+  <meta name="theme-color" content="#29294c">
+  <title>Corporate wellness dashboard and analytics | Vantage Fit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/enterprise.css">
+  <style>
+    :focus-visible {
+      outline: 3px solid var(--mint);
+      outline-offset: 3px;
+    }
+
+    .nav-current {
+      background: var(--soft);
+      color: var(--coral-text) !important;
+    }
+
+    .nav-current span::after {
+      content: "Current";
+      display: inline-block;
+      margin-left: 7px;
+      color: var(--coral-text);
+      font-size: .62rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .feature-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 78px 0 82px;
+      background:
+        radial-gradient(680px 420px at 91% 8%, rgba(241, 81, 98, .1), transparent 68%),
+        radial-gradient(580px 380px at 8% 92%, rgba(65, 216, 180, .11), transparent 70%),
+        var(--paper);
+    }
+
+    .feature-hero::after {
+      position: absolute;
+      right: -120px;
+      bottom: -250px;
+      width: 520px;
+      height: 520px;
+      border: 1px solid rgba(241, 81, 98, .12);
+      border-radius: 50%;
+      box-shadow: 0 0 0 70px rgba(241, 81, 98, .025), 0 0 0 140px rgba(65, 216, 180, .025);
+      content: "";
+    }
+
+    .hero-layout {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      align-items: center;
+      gap: 58px;
+    }
+
+    .hero-copy h1 {
+      max-width: 630px;
+      font-size: clamp(2.75rem, 4.5vw, 4rem);
+      line-height: .98;
+    }
+
+    .hero-copy h1 span {
+      background: linear-gradient(125deg, var(--coral) 15%, var(--coral-deep) 90%);
+      background-clip: text;
+      color: transparent;
+      white-space: nowrap;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-copy .lead {
+      max-width: 540px;
+      font-size: 1.08rem;
+    }
+
+    .hero-notes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px 16px;
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: .76rem;
+      font-weight: 650;
+    }
+
+    .hero-notes span {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .hero-notes span::before {
+      width: 6px;
+      height: 6px;
+      flex: none;
+      border-radius: 50%;
+      background: var(--mint);
+      box-shadow: 0 0 0 3px rgba(65, 216, 180, .13);
+      content: "";
+    }
+
+    .dashboard-stage {
+      position: relative;
+      min-width: 0;
+      padding: 24px 0 22px;
+    }
+
+    .dashboard-frame {
+      position: relative;
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid rgba(41, 41, 76, .13);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 35px 90px rgba(41, 41, 76, .2);
+      transform: rotate(.7deg);
+    }
+
+    .window-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 42px;
+      padding: 0 15px;
+      border-bottom: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--muted);
+      font-size: .68rem;
+      font-weight: 700;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 5px;
+    }
+
+    .window-dots i {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--soft);
+    }
+
+    .window-dots i:first-child { background: var(--coral); }
+    .window-dots i:nth-child(2) { background: var(--amber); }
+    .window-dots i:last-child { background: var(--mint); }
+
+    .dashboard-frame img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 820 / 667;
+      object-fit: cover;
+    }
+
+    .participation-pin {
+      position: absolute;
+      right: -22px;
+      bottom: -8px;
+      display: grid;
+      grid-template-columns: 66px 1fr;
+      align-items: center;
+      gap: 14px;
+      width: min(290px, 58%);
+      padding: 16px;
+      border: 1px solid rgba(41, 41, 76, .11);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .94);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .participation-ring {
+      display: grid;
+      width: 66px;
+      height: 66px;
+      place-items: center;
+      border-radius: 50%;
+      background: conic-gradient(var(--coral) 0 68%, var(--soft) 68% 100%);
+    }
+
+    .participation-ring::after {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--paper);
+      color: var(--ink);
+      font-size: .64rem;
+      font-weight: 800;
+      content: "Rate";
+    }
+
+    .participation-pin small {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--coral-text);
+      font-size: .63rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .participation-pin strong {
+      display: block;
+      font-size: .91rem;
+      line-height: 1.25;
+    }
+
+    .participation-pin span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: .68rem;
+      line-height: 1.35;
+    }
+
+    .section {
+      padding: 92px 0;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 1fr .8fr;
+      align-items: end;
+      gap: 48px;
+      margin-bottom: 38px;
+    }
+
+    .section-head .lead {
+      margin-top: 0;
+    }
+
+    .overview-panel {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .overview-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .preset-row,
+    .dimension-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .preset,
+    .dimension {
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--muted);
+      font-size: .7rem;
+      font-weight: 700;
+    }
+
+    .preset[aria-pressed="true"] {
+      border-color: var(--coral);
+      background: rgba(241, 81, 98, .08);
+      color: var(--coral-text);
+    }
+
+    .dimension::after {
+      margin-left: 6px;
+      content: "⌄";
+    }
+
+    .illustrative-label {
+      padding: 9px 20px;
+      border-bottom: 1px solid var(--line);
+      background: var(--canvas);
+      color: var(--muted);
+      font-size: .68rem;
+      font-weight: 700;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      padding: 20px;
+    }
+
+    .kpi-card {
+      min-width: 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+    }
+
+    .kpi-card.featured {
+      border-color: rgba(241, 81, 98, .28);
+      background: linear-gradient(145deg, rgba(241, 81, 98, .06), rgba(65, 216, 180, .04));
+    }
+
+    .kpi-label {
+      color: var(--muted);
+      font-size: .69rem;
+      font-weight: 750;
+    }
+
+    .kpi-value {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .kpi-value strong {
+      font-size: clamp(1.4rem, 2.4vw, 2rem);
+      letter-spacing: -.04em;
+    }
+
+    .delta {
+      color: var(--mint-dark);
+      font-size: .65rem;
+      font-weight: 800;
+    }
+
+    .spark {
+      width: 100%;
+      height: 34px;
+      margin-top: 14px;
+    }
+
+    .spark path {
+      fill: none;
+      stroke: var(--mint-dark);
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2.4;
+    }
+
+    .featured .spark path { stroke: var(--coral); }
+
+    .metric-ribbon {
+      display: grid;
+      grid-template-columns: 1.25fr repeat(4, 1fr);
+      align-items: center;
+      gap: 8px;
+      padding: 17px 20px;
+      border-top: 1px solid var(--line);
+      background: var(--canvas);
+    }
+
+    .metric-ribbon strong {
+      font-size: .78rem;
+    }
+
+    .mini-metric {
+      color: var(--muted);
+      font-size: .67rem;
+      line-height: 1.3;
+    }
+
+    .mini-metric b {
+      display: block;
+      color: var(--ink);
+      font-size: .77rem;
+    }
+
+    .insight-section {
+      background: var(--paper);
+    }
+
+    .insight-layout {
+      display: grid;
+      grid-template-columns: .8fr 1.2fr;
+      gap: 58px;
+      align-items: stretch;
+    }
+
+    .photo-panel {
+      position: relative;
+      min-height: 590px;
+      margin: 0;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: var(--dark);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .photo-panel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .photo-panel::after {
+      position: absolute;
+      inset: 45% 0 0;
+      background: linear-gradient(transparent, rgba(29, 34, 40, .88));
+      content: "";
+    }
+
+    .photo-caption {
+      position: absolute;
+      z-index: 1;
+      right: 24px;
+      bottom: 24px;
+      left: 24px;
+      color: var(--paper);
+    }
+
+    .photo-caption small {
+      color: var(--mint);
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .photo-caption strong {
+      display: block;
+      max-width: 330px;
+      margin-top: 6px;
+      font-size: 1.35rem;
+      line-height: 1.2;
+      letter-spacing: -.025em;
+    }
+
+    .insight-copy {
+      align-self: center;
+    }
+
+    .insight-copy .lead {
+      max-width: 600px;
+    }
+
+    .insight-stack {
+      display: grid;
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .insight-card {
+      position: relative;
+      padding: 22px 22px 22px 68px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--canvas);
+    }
+
+    .insight-icon {
+      position: absolute;
+      top: 21px;
+      left: 20px;
+      display: grid;
+      width: 32px;
+      height: 32px;
+      place-items: center;
+      border-radius: 10px;
+      background: rgba(241, 81, 98, .1);
+      color: var(--coral-text);
+      font-size: .82rem;
+      font-weight: 800;
+    }
+
+    .insight-card:nth-child(2) .insight-icon {
+      background: rgba(65, 216, 180, .14);
+      color: var(--mint-dark);
+    }
+
+    .insight-card h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tag {
+      display: inline-flex;
+      min-height: 22px;
+      align-items: center;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--muted);
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .insight-card p {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: .88rem;
+      line-height: 1.55;
+    }
+
+    .privacy-rule {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-left: 3px solid var(--mint);
+      border-radius: 0 12px 12px 0;
+      background: rgba(65, 216, 180, .08);
+      color: var(--ink);
+      font-size: .82rem;
+      font-weight: 650;
+    }
+
+    .privacy-rule svg {
+      width: 18px;
+      flex: none;
+      margin-top: 1px;
+      color: var(--mint-dark);
+    }
+
+    .reports-section {
+      background: var(--dark);
+      color: var(--paper);
+    }
+
+    .reports-layout {
+      display: grid;
+      grid-template-columns: .7fr 1.3fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .reports-section .eyebrow { color: var(--mint); }
+    .reports-section .lead { color: rgba(255, 255, 255, .64); }
+
+    .report-board {
+      overflow: hidden;
+      border: 1px solid var(--line-dark);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .055);
+    }
+
+    .report-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      align-items: center;
+      gap: 14px;
+      min-height: 64px;
+      padding: 0 20px;
+      border-bottom: 1px solid var(--line-dark);
+    }
+
+    .report-row:last-child { border-bottom: 0; }
+
+    .report-row strong {
+      font-size: .86rem;
+    }
+
+    .report-row span {
+      color: rgba(255, 255, 255, .52);
+      font-size: .7rem;
+    }
+
+    .file-pill {
+      display: inline-flex;
+      min-width: 42px;
+      min-height: 25px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(65, 216, 180, .32);
+      border-radius: 999px;
+      color: var(--mint) !important;
+      font-size: .59rem !important;
+      font-weight: 800;
+      letter-spacing: .07em;
+    }
+
+    .report-row.locked {
+      background: rgba(255, 255, 255, .025);
+      filter: grayscale(1);
+    }
+
+    .report-row.locked .file-pill {
+      border-color: rgba(255, 255, 255, .22);
+      color: rgba(255, 255, 255, .6) !important;
+    }
+
+    .tier-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .tier-card {
+      padding: 20px;
+      border: 1px solid var(--line-dark);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .045);
+    }
+
+    .tier-card.locked {
+      position: relative;
+      background: rgba(255, 255, 255, .025);
+    }
+
+    .tier-card small {
+      color: var(--mint);
+      font-size: .62rem;
+      font-weight: 800;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .tier-card.locked small { color: rgba(255, 255, 255, .5); }
+
+    .tier-card strong {
+      display: block;
+      margin-top: 6px;
+      font-size: .9rem;
+    }
+
+    .tier-card p {
+      margin-top: 6px;
+      color: rgba(255, 255, 255, .55);
+      font-size: .72rem;
+      line-height: 1.45;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      margin-top: 12px;
+      color: var(--paper);
+      font-size: .7rem;
+      font-weight: 800;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .final-section {
+      position: relative;
+      overflow: hidden;
+      padding: 90px 0;
+      background: linear-gradient(135deg, rgba(241, 81, 98, .09), rgba(65, 216, 180, .09)), var(--paper);
+    }
+
+    .final-box {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 40px;
+      padding: 50px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .final-box h2 { max-width: 760px; }
+    .final-box .lead { max-width: 660px; }
+
+    @media (max-width: 1050px) {
+      .hero-layout,
+      .insight-layout,
+      .reports-layout { grid-template-columns: 1fr; }
+      .hero-copy { max-width: 760px; }
+      .dashboard-stage { width: min(100%, 820px); margin-inline: auto; }
+      .photo-panel { min-height: 520px; }
+      .insight-layout { gap: 42px; }
+      .photo-panel { max-width: 700px; }
+      .reports-layout { gap: 40px; }
+    }
+
+    @media (max-width: 860px) {
+      .feature-hero { padding: 56px 0 68px; }
+      .section { padding: 72px 0; }
+      .section-head { grid-template-columns: 1fr; gap: 15px; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      .metric-ribbon { grid-template-columns: 1fr 1fr; }
+      .metric-ribbon > strong { grid-column: 1 / -1; }
+      .overview-toolbar { align-items: flex-start; flex-direction: column; }
+      .final-box { grid-template-columns: 1fr; padding: 36px; }
+      .final-box .btn-row { margin-top: 0; }
+    }
+
+    @media (max-width: 580px) {
+      .feature-hero { padding-top: 44px; }
+      .hero-layout { gap: 34px; }
+      .hero-copy h1 { font-size: clamp(2.35rem, 12vw, 3.35rem); }
+      .hero-copy h1 span { white-space: normal; }
+      .dashboard-stage { padding-bottom: 58px; }
+      .dashboard-frame { transform: none; }
+      .participation-pin {
+        right: 10px;
+        bottom: 0;
+        width: calc(100% - 20px);
+      }
+      .kpi-grid { grid-template-columns: 1fr; }
+      .metric-ribbon { grid-template-columns: 1fr 1fr; }
+      .photo-panel { min-height: 450px; }
+      .insight-card { padding: 62px 18px 18px; }
+      .insight-icon { top: 17px; left: 17px; }
+      .insight-card h3 { align-items: flex-start; flex-direction: column; }
+      .report-row { grid-template-columns: 1fr auto; padding: 12px 16px; }
+      .report-row > span:not(.file-pill) { grid-column: 1 / -1; grid-row: 2; }
+      .tier-strip { grid-template-columns: 1fr; }
+      .final-box { padding: 28px 22px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .dashboard-frame { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="#top" aria-label="Vantage Fit home">
+        <img src="../styled-homepage/logo.png" alt="Vantage Fit" width="440" height="94" style="height:32px;width:auto">
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="nav-links" id="nav-links">
+        <a href="https://www.vantagefit.io/solutions/">Solutions</a>
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Features
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">For employees</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/activity-tracking/">Activity and health tracking<span>Steps, workouts, sleep and everyday habits</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/nutrition-and-hydration/">Nutrition and hydration<span>Food and water logging in the employee app</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/mental-health-and-mindfulness/">Mental wellbeing and mindfulness<span>Sessions, streaks and private mood check-ins</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/engagement-tools/">Teams, leaderboards and community<span>Shared progress that keeps participation visible</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">For HR teams</div>
+                  <a class="mega-link nav-current" href="./vantage-fit-admin-dashboard-analytics-v1.html" aria-current="page">Admin dashboard and analytics<span>Participation, trends and aggregate insights</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/program-builder/">Program builder and templates<span>Configure challenges and program calendars</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/audience-targeting/">Audience targeting<span>Aim programs by role, location and profile</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/communications-nudges/">Communications and nudges<span>Send the right program message at the right time</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Enterprise platform</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/integrations/">Integrations and SSO<span>Connect identity and wellness ecosystems</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/security-and-compliance/">Security, privacy and residency<span>Review controls and deployment options</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/accessibility/">Global access and localization<span>Support distributed workforces</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/health-data-upload/">Health data upload<span>Explore enterprise health data workflows</span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a href="https://www.vantagefit.io/en/resources/">Resources</a>
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <header class="feature-hero">
+      <div class="shell hero-layout">
+        <div class="hero-copy">
+          <span class="eyebrow">Admin dashboard and analytics</span>
+          <h1>Participation. <span>No spreadsheet.</span></h1>
+          <p class="lead">See what employees logged, where participation moved, and what deserves attention in one corporate wellness dashboard.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+            <a class="btn btn-outline" href="#overview">See the dashboard</a>
+          </div>
+          <div class="hero-notes" aria-label="Dashboard principles">
+            <span>Aggregate HR view</span>
+            <span>100+ organizations</span>
+            <span>CSV and PDF outputs</span>
+          </div>
+        </div>
+
+        <div class="dashboard-stage">
+          <figure class="dashboard-frame">
+            <figcaption class="window-bar">
+              <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span>Vantage Fit analytics</span>
+              <span>Admin view</span>
+            </figcaption>
+            <img src="https://cdn.vantagecircle.com/image/upload/f_auto,q_auto,w_820/v1771579792/product-images-hub/v-fit/vfit-analytics-dashboard-desktop.png" alt="Vantage Fit admin analytics dashboard showing activity insights and aggregate participation by department, gender, age, and location" width="820" height="667" fetchpriority="high">
+          </figure>
+          <div class="participation-pin" aria-label="Participation rate is the leadership number">
+            <span class="participation-ring" aria-hidden="true"></span>
+            <span>
+              <small>The number</small>
+              <strong>Participation rate</strong>
+              <span>Every employee log rolls into one leadership view.</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="section" id="overview">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Overview</span>
+            <h2>Four numbers. One participation rate.</h2>
+          </div>
+          <p class="lead">Track reach, active use, rewards spend converted from SOLI to your admin currency, and participation. Steps, workouts, nutrition, hydration, mindfulness, and other employee logs feed the same participation surface. Use preset or custom dates, then filter by country, department, age group, or gender.</p>
+        </div>
+
+        <div class="overview-panel">
+          <div class="overview-toolbar" aria-label="Illustrative dashboard filters">
+            <div class="preset-row" aria-label="Date presets">
+              <button class="preset" type="button" aria-pressed="false">7d</button>
+              <button class="preset" type="button" aria-pressed="true">30d</button>
+              <button class="preset" type="button" aria-pressed="false">Quarter</button>
+              <button class="preset" type="button" aria-pressed="false">Year</button>
+              <button class="preset" type="button" aria-pressed="false">Custom</button>
+            </div>
+            <div class="dimension-row" aria-label="Cohort filters">
+              <button class="dimension" type="button">Country</button>
+              <button class="dimension" type="button">Department</button>
+              <button class="dimension" type="button">Age group</button>
+              <button class="dimension" type="button">Gender</button>
+            </div>
+          </div>
+          <div class="illustrative-label">Illustrative KPI preview. Figures show interface behavior, not customer results.</div>
+          <div class="kpi-grid">
+            <article class="kpi-card">
+              <div class="kpi-label">Enrolled users</div>
+              <div class="kpi-value"><strong>2,140</strong><span class="delta">+2.8%</span></div>
+              <svg class="spark" viewBox="0 0 120 34" role="img" aria-label="Enrolled users trend rising"><path d="M2 28 C18 27 24 22 39 23 S61 14 76 17 S97 8 118 6"/></svg>
+            </article>
+            <article class="kpi-card">
+              <div class="kpi-label">Active users</div>
+              <div class="kpi-value"><strong>1,455</strong><span class="delta">+4.1%</span></div>
+              <svg class="spark" viewBox="0 0 120 34" role="img" aria-label="Active users trend rising"><path d="M2 29 C19 28 23 19 40 21 S57 25 72 15 S98 14 118 5"/></svg>
+            </article>
+            <article class="kpi-card">
+              <div class="kpi-label">Incentivization</div>
+              <div class="kpi-value"><strong>$38.2K</strong><span class="delta">+1.6%</span></div>
+              <svg class="spark" viewBox="0 0 120 34" role="img" aria-label="Incentivization trend rising"><path d="M2 27 C14 25 27 27 40 19 S62 22 77 14 S101 12 118 8"/></svg>
+            </article>
+            <article class="kpi-card featured">
+              <div class="kpi-label">Participation rate</div>
+              <div class="kpi-value"><strong>68%</strong><span class="delta">+3.2%</span></div>
+              <svg class="spark" viewBox="0 0 120 34" role="img" aria-label="Participation rate trend rising"><path d="M2 30 C17 25 27 27 41 20 S61 22 76 14 S96 16 118 4"/></svg>
+            </article>
+          </div>
+          <div class="metric-ribbon">
+            <strong>At a glance, this month</strong>
+            <span class="mini-metric"><b>Avg steps</b>Trend by period</span>
+            <span class="mini-metric"><b>Active minutes</b>Trend by period</span>
+            <span class="mini-metric"><b>Mindful minutes</b>Trend by period</span>
+            <span class="mini-metric"><b>Avg sleep</b>Trend by period</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section insight-section">
+      <div class="shell insight-layout">
+        <figure class="photo-panel">
+          <img src="../styled-homepage/card-measure-generic.jpg" alt="HR leader reviewing aggregate workplace analytics on a desktop monitor" width="666" height="1000" decoding="async">
+          <figcaption class="photo-caption">
+            <small>Built for the review</small>
+            <strong>Read the signal before the leadership meeting.</strong>
+          </figcaption>
+        </figure>
+
+        <div class="insight-copy">
+          <span class="eyebrow">Insights and actions</span>
+          <h2>Know what changed. Know where to look next.</h2>
+          <p class="lead">The employee wellness analytics dashboard separates interpretation from action, so every recommendation stays honest about what the product does. The result is a reviewable signal, not an automatic verdict.</p>
+          <div class="insight-stack">
+            <article class="insight-card">
+              <span class="insight-icon" aria-hidden="true">AI</span>
+              <h3>Leadership Insights <span class="tag">Read only</span></h3>
+              <p>AI summarizes aggregated buckets into Key Insights and Focus Areas. No PII is sent, and the observations do not predict outcomes or change program settings.</p>
+            </article>
+            <article class="insight-card">
+              <span class="insight-icon" aria-hidden="true">→</span>
+              <h3>Recommended Actions <span class="tag">Rule based</span></h3>
+              <p>Up to five priority-ordered shortcuts point admins to relevant work, such as viewing inactive employees or opening a nudge. They are links, not automations.</p>
+            </article>
+          </div>
+          <p class="privacy-rule">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+            <span>HR sees aggregate participation, never an individual health profile.</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reports-section" id="reports">
+      <div class="shell reports-layout">
+        <div>
+          <span class="eyebrow">Reports and access</span>
+          <h2>Export the detail when the meeting needs it.</h2>
+          <p class="lead">Move from the overview to filtered CSV files, challenge results, reward records, or a per-campaign certificate PDF. Keep the selected detail for finance, recognition, and program follow-up.</p>
+          <div class="btn-row">
+            <a class="btn btn-light" href="https://www.vantagefit.io/request-demo/">Compare the tiers</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="report-board" aria-label="Available reports">
+            <div class="report-row"><strong>Employee report</strong><span>Active, inactive and dormant, with search and filters</span><span class="file-pill">CSV</span></div>
+            <div class="report-row"><strong>Leaderboard</strong><span>Per-challenge rankings and results</span><span class="file-pill">CSV</span></div>
+            <div class="report-row"><strong>Transaction report</strong><span>Points and rewards with date and category filters</span><span class="file-pill">CSV</span></div>
+            <div class="report-row"><strong>Redemption report</strong><span>Reward redemptions and categories</span><span class="file-pill">CSV</span></div>
+            <div class="report-row locked"><strong>League report</strong><span>Annual-gated, contact your account manager</span><span class="file-pill">CSV</span></div>
+            <div class="report-row"><strong>Campaign certificates</strong><span>Automated generation and download per campaign</span><span class="file-pill">PDF</span></div>
+          </div>
+
+          <div class="tier-strip">
+            <article class="tier-card">
+              <small>Standard surfaces</small>
+              <strong>Overview, filters, actions and core reports</strong>
+              <p>KPI cards, Recommended Actions, Employee, Transaction and Redemption reports, plus certificates.</p>
+            </article>
+            <article class="tier-card locked">
+              <small>Account-managed access</small>
+              <strong>Wellness Leagues and Health Insights</strong>
+              <p>Annual access is account-managed. Health Insights also requires narrower whitelist approval.</p>
+              <a class="contact-link" href="https://www.vantagefit.io/request-demo/">Contact Account Manager</a>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-section">
+      <div class="shell">
+        <div class="final-box">
+          <div>
+            <span class="eyebrow">See it in context</span>
+            <h2>Take the participation number upstairs.</h2>
+            <p class="lead">Walk through the overview, filters, aggregate insights, and reports with your own HR questions in mind, instead of starting with a spreadsheet.</p>
+          </div>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="#top" aria-label="Vantage Fit home">
+            <img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="440" height="94" style="height:28px;width:auto">
+          </a>
+          <p class="footer-about">Inclusive employee wellness that turns everyday activity into measurable participation.</p>
+        </div>
+        <div>
+          <div class="footer-title">Product</div>
+          <div class="footer-links">
+            <a href="#overview">Dashboard overview</a>
+            <a href="#reports">Reports and exports</a>
+            <a href="https://www.vantagefit.io/features/program-builder/">Program builder</a>
+            <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Features</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/features/activity-tracking/">Activity tracking</a>
+            <a href="https://www.vantagefit.io/features/audience-targeting/">Audience targeting</a>
+            <a href="https://www.vantagefit.io/features/communications-nudges/">Communications</a>
+            <a href="https://www.vantagefit.io/features/integrations/">Integrations</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Company</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/about-us/">About</a>
+            <a href="https://www.vantagefit.io/casestudy/">Customer stories</a>
+            <a href="https://www.vantagefit.io/en/help/">Help center</a>
+            <a href="https://www.vantagefit.io/request-demo/">Contact sales</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Vantage Circle. All rights reserved.</span>
+        <span>Admin analytics for measurable participation.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuButton = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const navTriggers = [...document.querySelectorAll('.nav-trigger')];
+    const desktopNav = window.matchMedia('(min-width: 861px)');
+
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation');
+      navLinks.classList.toggle('open', !open);
+    });
+
+    navTriggers.forEach((trigger) => {
+      trigger.addEventListener('click', () => {
+        const item = trigger.closest('.nav-item');
+        const open = trigger.getAttribute('aria-expanded') === 'true';
+        navItems.forEach((other) => {
+          other.classList.remove('open', 'desktop-open');
+          other.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+        });
+        if (!open) {
+          item.classList.add(desktopNav.matches ? 'desktop-open' : 'open');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    document.addEventListener('click', (event) => {
+      if (event.target.closest('.nav-item')) return;
+      navItems.forEach((item) => item.classList.remove('open', 'desktop-open'));
+      navTriggers.forEach((trigger) => trigger.setAttribute('aria-expanded', 'false'));
+    });
+
+    document.querySelectorAll('.preset').forEach((button) => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.preset').forEach((item) => item.setAttribute('aria-pressed', 'false'));
+        button.setAttribute('aria-pressed', 'true');
+      });
+    });
+  </script>
+</body>
+</html>
