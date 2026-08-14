@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/enterprise.css">
+  <meta name="description" content="Connect Apple Health, Google Fit, Fitbit, Garmin, and supported devices, then plan SAML 2.0 SSO and HRIS provisioning with Vantage Fit.">
+  <meta name="theme-color" content="#29294c">
+  <title>Employee wellness platform integrations and SSO | Vantage Fit</title>
+  <style>
+    .nav-item.is-current .nav-trigger { color: var(--ink); background: var(--soft); }
+    .mega a.mega-link[aria-current="page"] { background: var(--soft); }
+    .mega a.mega-link[aria-current="page"] span { color: var(--coral-dark); }
+
+    .ix-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 76px 0 68px;
+      background:
+        radial-gradient(720px 420px at 6% 10%, rgba(65,216,180,.13), transparent 65%),
+        radial-gradient(680px 440px at 96% 82%, rgba(241,81,98,.09), transparent 62%),
+        #fff;
+    }
+    .ix-hero-grid { display: grid; grid-template-columns: .92fr 1.08fr; gap: 54px; align-items: center; }
+    .ix-hero h1 { max-width: 620px; }
+    .ix-hero h1 em { color: var(--coral-dark); font-style: normal; }
+    .ix-hero .lead { max-width: 560px; }
+    .ix-route {
+      display: grid;
+      grid-template-columns: 1fr 48px 1fr;
+      align-items: center;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.88);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+    .ix-route-card { min-height: 270px; padding: 22px; border-radius: 18px; background: var(--soft); }
+    .ix-route-card:last-child { background: var(--ink); color: #fff; }
+    .ix-route-card small { color: var(--coral-dark); font-size: .68rem; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+    .ix-route-card:last-child small { color: var(--mint); }
+    .ix-route-card h3 { margin-top: 44px; font-size: 1.35rem; }
+    .ix-route-card p { margin-top: 10px; color: var(--muted); font-size: .86rem; }
+    .ix-route-card:last-child p { color: rgba(255,255,255,.68); }
+    .ix-route-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 24px; }
+    .ix-route-tags span { padding: 6px 9px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-size: .68rem; font-weight: 700; }
+    .ix-route-card:last-child .ix-route-tags span { border-color: var(--line-dark); background: rgba(255,255,255,.06); }
+    .ix-arrow { display: grid; place-items: center; }
+    .ix-arrow span { display: grid; width: 38px; height: 38px; place-items: center; border-radius: 50%; background: var(--coral); color: #fff; font-size: 1.1rem; font-weight: 800; }
+
+    .ix-module { padding: 92px 0; }
+    .ix-module.alt { background: #fff; }
+    .ix-head { display: grid; grid-template-columns: 1fr .72fr; gap: 48px; align-items: end; }
+    .ix-head .lead { margin: 0; }
+    .ix-kicker { color: var(--muted); font-size: .72rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .ix-kicker b { color: var(--coral-dark); }
+    .ix-proof { display: grid; grid-template-columns: 1.1fr .9fr; gap: 24px; margin-top: 36px; align-items: stretch; }
+    .ix-shot { overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: #eef8f5; box-shadow: var(--shadow); }
+    .ix-shot img { width: 100%; height: 100%; object-fit: cover; }
+    .ix-source-panel { display: grid; gap: 10px; }
+    .ix-source { padding: 17px 18px; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); }
+    .ix-source-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .ix-source h3 { font-size: 1rem; }
+    .ix-source mark { padding: 4px 8px; border-radius: 999px; background: rgba(65,216,180,.15); color: var(--mint-dark); font-size: .63rem; font-weight: 800; }
+    .ix-source mark.is-paced { background: rgba(241,81,98,.1); color: var(--coral-dark); }
+    .ix-source p { margin-top: 7px; color: var(--muted); font-size: .79rem; line-height: 1.45; }
+    .ix-device-grid { display: grid; grid-template-columns: .72fr 1.28fr; gap: 24px; margin-top: 24px; }
+    .ix-photo { overflow: hidden; min-height: 310px; border-radius: var(--radius); box-shadow: var(--shadow-soft); }
+    .ix-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 35%; }
+    .ix-rules { padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); }
+    .ix-rules h3 { max-width: 540px; font-size: 1.25rem; }
+    .ix-rule-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+    .ix-rule { padding: 14px; border-radius: 14px; background: var(--soft); }
+    .ix-rule small { color: var(--coral-dark); font-size: .64rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .ix-rule b { display: block; margin-top: 5px; font-size: .88rem; }
+    .ix-rule p { margin-top: 5px; color: var(--muted); font-size: .74rem; line-height: 1.45; }
+
+    .ix-break { padding: 34px 0; background: var(--ink); color: #fff; }
+    .ix-break-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 24px; align-items: center; }
+    .ix-break-side { display: flex; align-items: center; gap: 13px; }
+    .ix-break-side:last-child { justify-content: flex-end; text-align: right; }
+    .ix-break-icon { display: grid; width: 42px; height: 42px; flex: 0 0 auto; place-items: center; border: 1px solid var(--line-dark); border-radius: 14px; color: var(--mint); }
+    .ix-break small { color: rgba(255,255,255,.58); font-size: .65rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .ix-break b { display: block; margin-top: 2px; font-size: .95rem; }
+    .ix-break-line { width: 96px; height: 1px; background: linear-gradient(90deg, var(--mint), var(--coral)); }
+
+    .ix-console { display: grid; grid-template-columns: .8fr 1.2fr; gap: 26px; margin-top: 36px; }
+    .ix-sso { padding: 28px; border-radius: var(--radius); background: var(--ink); color: #fff; box-shadow: var(--shadow); }
+    .ix-sso-top { display: flex; justify-content: space-between; gap: 10px; }
+    .ix-sso .status { color: var(--mint); font-size: .67rem; font-weight: 800; text-transform: uppercase; }
+    .ix-sso h3 { margin-top: 54px; font-size: 1.45rem; }
+    .ix-sso p { margin-top: 10px; color: rgba(255,255,255,.66); font-size: .86rem; }
+    .ix-idps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+    .ix-idps span { padding: 7px 10px; border: 1px solid var(--line-dark); border-radius: 999px; font-size: .7rem; font-weight: 700; }
+    .ix-steps { display: grid; gap: 10px; }
+    .ix-step { display: grid; grid-template-columns: 42px 1fr auto; gap: 14px; align-items: center; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); }
+    .ix-step-num { display: grid; width: 38px; height: 38px; place-items: center; border-radius: 12px; background: var(--soft); color: var(--coral-dark); font-size: .76rem; font-weight: 800; }
+    .ix-step h3 { font-size: .94rem; }
+    .ix-step p { margin-top: 3px; color: var(--muted); font-size: .75rem; }
+    .ix-step-tag { color: var(--muted); font-size: .65rem; font-weight: 800; text-transform: uppercase; }
+    .ix-hris { margin-top: 24px; padding: 22px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); }
+    .ix-hris-head { display: flex; justify-content: space-between; gap: 22px; align-items: start; }
+    .ix-hris-head p { max-width: 520px; color: var(--muted); font-size: .82rem; }
+    .ix-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .ix-pills span { padding: 7px 11px; border: 1px solid var(--line); border-radius: 999px; background: var(--canvas); font-size: .72rem; font-weight: 700; }
+    .ix-global { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 24px; }
+    .ix-global article { padding: 18px; border-radius: 16px; background: var(--soft); }
+    .ix-global strong { display: block; color: var(--coral-dark); font-size: 1.35rem; }
+    .ix-global h3 { margin-top: 5px; font-size: .9rem; }
+    .ix-global p { margin-top: 6px; color: var(--muted); font-size: .75rem; }
+    .ix-next { padding: 72px 0; background: #fff; }
+    .ix-next-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 26px; }
+    .ix-next a { padding: 20px; border: 1px solid var(--line); border-radius: 18px; background: var(--canvas); transition: transform .2s ease, box-shadow .2s ease; }
+    .ix-next a:hover { transform: translateY(-2px); box-shadow: var(--shadow-soft); }
+    .ix-next small { color: var(--coral-dark); font-size: .66rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .ix-next b { display: block; margin-top: 5px; }
+
+    @media (max-width: 900px) {
+      .ix-hero-grid, .ix-head, .ix-proof, .ix-device-grid, .ix-console { grid-template-columns: 1fr; }
+      .ix-head .lead { margin-top: 14px; }
+      .ix-shot img { height: auto; }
+    }
+    @media (max-width: 700px) {
+      .ix-hero { padding: 56px 0; }
+      .ix-route { grid-template-columns: 1fr; }
+      .ix-arrow { padding: 8px 0; transform: rotate(90deg); }
+      .ix-route-card { min-height: 220px; }
+      .ix-route-card h3 { margin-top: 28px; }
+      .ix-module { padding: 68px 0; }
+      .ix-rule-grid, .ix-global, .ix-next-grid { grid-template-columns: 1fr; }
+      .ix-break-grid { grid-template-columns: 1fr; }
+      .ix-break-side:last-child { justify-content: flex-start; text-align: left; }
+      .ix-break-line { width: 100%; }
+      .ix-hris-head { display: block; }
+      .ix-hris-head p { margin-top: 8px; }
+      .ix-step { grid-template-columns: 42px 1fr; }
+      .ix-step-tag { grid-column: 2; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="../styled-homepage/index.html" aria-label="Vantage Fit home"><img src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37" style="height:32px;width:auto;display:block"></a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      <div class="nav-links" id="nav-links">
+        <a href="https://www.vantagefit.io/employee-wellness-software/">Solutions</a>
+        <div class="nav-item is-current">
+          <button class="nav-trigger" type="button" aria-expanded="false">Features <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg></button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu"><div class="mega-body"><div class="mega-grid">
+            <div><div class="mega-col-title">For employees</div>
+              <a class="mega-link" href="/features/activity-tracking/">Activity tracking<span>Steps, workouts, sleep, and everyday logs</span></a>
+              <a class="mega-link" href="/features/fitness-exercise/">Fitness &amp; exercise<span>Workouts that count toward the same score</span></a>
+              <a class="mega-link" href="/features/nutrition-hydration/">Nutrition &amp; hydration<span>Meals and water in the same app</span></a>
+              <a class="mega-link" href="/features/health-metrics/">Health metrics<span>Personal vitals the admin never opens</span></a>
+              <a class="mega-link" href="/features/mental-wellbeing/">Mental wellbeing &amp; mindfulness<span>Private logs and mindful minutes</span></a>
+              <a class="mega-link" href="/features/wellness-leagues/">Wellness leagues<span>Rolling team competition</span></a>
+              <a class="mega-link" href="/features/personalized-programs/">Personalized programs<span>Plans inside the same program</span></a>
+            </div>
+            <div><div class="mega-col-title">For HR teams</div>
+              <a class="mega-link" href="/features/admin-dashboard-analytics/">Admin dashboard &amp; analytics<span>Participation at a glance</span></a>
+              <a class="mega-link" href="/features/program-builder/">Program builder &amp; templates<span>Five formats, live before lunch</span></a>
+              <a class="mega-link" href="/features/audience-targeting/">Audience targeting<span>Aim a private challenge by rule</span></a>
+              <a class="mega-link" href="/features/communications-nudges/">Communications &amp; nudges<span>Email, push, and inactive-user prompts</span></a>
+            </div>
+            <div><div class="mega-col-title">Enterprise</div>
+              <a class="mega-link" href="/features/integrations-sso/" aria-current="page">Integrations &amp; SSO<span>HRIS, SSO, and device sources</span></a>
+              <a class="mega-link" href="/features/security-compliance/">Security &amp; compliance<span>Residency, access, and data boundaries</span></a>
+              <a class="mega-link" href="/features/health-data-upload/">Health data upload<span>Lab reports on the enterprise track</span></a>
+            </div>
+          </div></div></div>
+        </div>
+        <a href="https://www.vantagefit.io/en/blog/">Resources</a><a href="https://www.vantagefit.io/pricing/">Pricing</a><a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <header class="ix-hero">
+      <div class="shell ix-hero-grid">
+        <div>
+          <p class="eyebrow">Features · Enterprise</p>
+          <h1>What employees wear. <em>What IT already runs.</em></h1>
+          <p class="lead">Bring phone and wearable activity into the same participation number, then use your identity and workforce systems to put the right employees on it.</p>
+          <div class="btn-row"><a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a><a class="btn btn-outline" href="#wearables">Review implementation paths</a></div>
+        </div>
+        <div class="ix-route" aria-label="Two enterprise integration modules">
+          <article class="ix-route-card"><small>Module A · Employee</small><h3>Activity sources</h3><p>Phone sensors, direct wearable connections, and supported apps deliver trusted logs.</p><div class="ix-route-tags"><span>Apple Health</span><span>Google Fit</span><span>Fitbit</span><span>Garmin</span></div></article>
+          <div class="ix-arrow" aria-hidden="true"><span>→</span></div>
+          <article class="ix-route-card"><small>Module B · IT</small><h3>Identity and roster</h3><p>SAML 2.0 and workforce provisioning bring eligible employees onto the same surface.</p><div class="ix-route-tags"><span>SSO</span><span>HRIS</span><span>CSV</span><span>SFTP</span></div></article>
+        </div>
+      </div>
+    </header>
+
+    <section class="ix-module" id="wearables">
+      <div class="shell">
+        <div class="ix-head"><div><p class="ix-kicker"><b>Module A</b> · Wearables and device sync</p><h2>Device activity, without a device mandate.</h2></div><p class="lead">A phone is enough for steps. Optional connections add richer activity while one primary source and trusted-source filtering keep the participation number coherent.</p></div>
+        <div class="ix-proof">
+          <figure class="ix-shot"><img src="https://cdn.vantagecircle.com/image/upload/f_auto,q_auto,w_820/v1772104740/product-images-hub/v-fit/vantage-fit-connected-devices-sync-mobile.png" alt="Vantage Fit mobile screens for connecting supported activity devices" width="820" height="620"></figure>
+          <div class="ix-source-panel">
+            <article class="ix-source"><div class="ix-source-top"><h3>Phone first</h3><mark>Self-serve</mark></div><p>Apple Health on iPhone and Google Fit on Android provide steps. Apple Health also brings workouts, weight, calories, sleep, heart rate, and distance. Apple Watch follows its paired iPhone automatically.</p></article>
+            <article class="ix-source"><div class="ix-source-top"><h3>Fitbit</h3><mark class="is-paced">Not real-time</mark></div><p>OAuth sync covers steps, workouts, heart-rate zones, sleep stages, and up to 30 days of history. Refresh happens on app open or on demand.</p></article>
+            <article class="ix-source"><div class="ix-source-top"><h3>Garmin</h3><mark>Real-time webhook</mark></div><p>The three-step OAuth 1.0a flow is the only real-time device connection. It supports daily and activity summaries, GPS routes, historical backfill, and payloads up to 50 MB. Tokens expire after 60 days.</p></article>
+            <article class="ix-source"><div class="ix-source-top"><h3>More supported paths</h3><mark>Optional</mark></div><p>Samsung Watch is an Android device option. More than 70 trusted third-party apps can write through Apple Health, including Zepp, Mi Band, Huawei, Nike Run Club, and Strava.</p></article>
+          </div>
+        </div>
+        <div class="ix-device-grid">
+          <figure class="ix-photo"><img src="../styled-homepage/card-participate.jpg" alt="Colleagues moving together during a workplace wellness activity" width="1200" height="900" loading="lazy"></figure>
+          <aside class="ix-rules"><h3>One source reaches one participation surface.</h3><div class="ix-rule-grid">
+            <article class="ix-rule"><small>Source rule</small><b>One primary device</b><p>Fitbit or Garmin replaces the phone source to avoid double-counting.</p></article>
+            <article class="ix-rule"><small>Trust rule</small><b>Filter the source</b><p>Trusted step-source filtering is active. No active daily cap is claimed.</p></article>
+            <article class="ix-rule"><small>Outcome</small><b>Count the same way</b><p>A phone-only day or Garmin run can land in the same challenges and participation number.</p></article>
+          </div></aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="ix-break" aria-label="Hard break between device and IT modules">
+      <div class="shell ix-break-grid">
+        <div class="ix-break-side"><div class="ix-break-icon" aria-hidden="true">⌁</div><div><small>Employee signal boundary</small><b>Activity enters from a selected source</b></div></div>
+        <div class="ix-break-line" aria-hidden="true"></div>
+        <div class="ix-break-side"><div><small>IT identity boundary</small><b>Access starts with an eligible account</b></div><div class="ix-break-icon" aria-hidden="true">◎</div></div>
+      </div>
+    </section>
+
+    <section class="ix-module alt" id="identity">
+      <div class="shell">
+        <div class="ix-head"><div><p class="ix-kicker"><b>Module B</b> · SSO, HRIS, and provisioning</p><h2>Identity and workforce access, set up with your IT team.</h2></div><p class="lead">SAML and roster connections are implementation work, not self-serve switches. Plan metadata, employee provisioning, region, and sign-in policy together.</p></div>
+        <div class="ix-console">
+          <article class="ix-sso"><div class="ix-sso-top"><small>SAML 2.0</small><span class="status">Integration-led</span></div><h3>Use the employer’s identity provider.</h3><p>Exchange IdP metadata with the Vantage Fit integration team. The employer’s IdP page keeps its branding; the Vantage Fit sign-in screen keeps Vantage Fit branding.</p><div class="ix-idps"><span>Okta</span><span>Azure AD</span><span>OneLogin</span><span>Ping Identity</span></div></article>
+          <div class="ix-steps">
+            <article class="ix-step"><span class="ix-step-num">01</span><div><h3>Choose the access path</h3><p>Password, SAML 2.0, Google Sign-In for GSuite domains, or email OTP. OTP is 4 digits on mobile, 6 on web, and valid for 10 minutes.</p></div><span class="ix-step-tag">Policy</span></article>
+            <article class="ix-step"><span class="ix-step-num">02</span><div><h3>Provision the roster</h3><p>Use HR Admin CSV, scheduled SFTP, HRIS, or work-domain self-registration.</p></div><span class="ix-step-tag">Roster</span></article>
+            <article class="ix-step"><span class="ix-step-num">03</span><div><h3>Confirm gated methods</h3><p>Employee-ID login and SMS OTP are available only for selected company configurations.</p></div><span class="ix-step-tag">Whitelist</span></article>
+            <article class="ix-step"><span class="ix-step-num">04</span><div><h3>Enter the shared ecosystem</h3><p>Shared user, company, and authentication context lets enabled R&amp;R users reach Vantage Fit without a separate account.</p></div><span class="ix-step-tag">Access</span></article>
+          </div>
+        </div>
+        <div class="ix-hris"><div class="ix-hris-head"><div><small class="ix-kicker">HRIS roster</small><h3>Confirm readiness before committing.</h3></div><p>Most connections are client-specific. Scope the implementation and lead time with the integration team.</p></div><div class="ix-pills"><span>Workday</span><span>DarwinBox</span><span>ADP</span><span>Zoho People</span><span>SAP</span><span>Infor ION</span><span>Synergita</span><span>Adrenalin</span><span>Workline</span><span>Knit</span></div></div>
+        <p class="lead">Work-domain self-registration is on by default. Selected enterprise domains can be blocked from this path.</p>
+        <div class="ix-global">
+          <article><strong>4</strong><h3>Regional instances</h3><p>Choose India, US, EU, or UAE at onboarding. A later move requires migration.</p></article>
+          <article><strong>13+</strong><h3>Languages</h3><p>Support a workforce across available app and system languages.</p></article>
+          <article><strong>15+</strong><h3>Feature flags</h3><p>FitnessConfig controls the enabled Vantage Fit experience by company.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="ix-next"><div class="shell"><p class="eyebrow">Continue the enterprise review</p><h2>Take identity into the data boundary.</h2><div class="ix-next-grid"><a href="/features/security-compliance/"><small>Next enterprise feature</small><b>Review security &amp; compliance</b></a><a href="/features/health-data-upload/"><small>Selected annual partners</small><b>Review health data upload</b></a></div></div></section>
+    <section class="final"><div class="shell center"><p class="eyebrow">Plan both modules</p><h2>Map device sources and workforce access in one review.</h2><p>See employee connections, SAML setup, provisioning paths, regions, and availability boundaries in context.</p><div class="btn-row"><a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a><a class="btn btn-outline" href="/features/">See all features</a></div><div class="final-checks"><span>No wearable required</span><span>SAML 2.0</span><span>Four regions</span><span>Integration-led setup</span></div></div></section>
+  </main>
+
+  <footer><div class="shell"><div class="footer-grid">
+    <div class="footer-brand"><a class="brand" href="../styled-homepage/index.html"><img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37" style="height:28px;width:auto;display:block"></a><p class="footer-about">Inclusive wellness that turns participation into measurable progress.</p></div>
+    <div><div class="footer-title">Product</div><div class="footer-links"><a href="/features/">All features</a><a href="/features/integrations-sso/">Integrations &amp; SSO</a><a href="/features/security-compliance/">Security &amp; compliance</a><a href="/features/health-data-upload/">Health data upload</a></div></div>
+    <div><div class="footer-title">Solutions</div><div class="footer-links"><a href="https://www.vantagefit.io/steps-challenge/">Challenges</a><a href="https://www.vantagefit.io/wellness-rewards-program/">Rewards</a><a href="https://www.vantagefit.io/remote-team-wellness/">Remote teams</a><a href="https://www.vantagefit.io/global-employee-engagement/">Global engagement</a></div></div>
+    <div><div class="footer-title">Company</div><div class="footer-links"><a href="https://www.vantagefit.io/about-us/">About</a><a href="https://www.vantagefit.io/casestudy/">Case studies</a><a href="https://www.vantagefit.io/request-demo/">Contact sales</a><a href="https://www.vantagefit.io/en/help/">Help Center</a></div></div>
+  </div><div class="footer-bottom"><span>© 2026 Vantage Circle. All rights reserved.</span><span>Wellness built for participation.</span></div></div></footer>
+
+  <script>
+    const menuButton = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => { const open = menuButton.getAttribute('aria-expanded') === 'true'; menuButton.setAttribute('aria-expanded', String(!open)); menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation'); navLinks.classList.toggle('open', !open); });
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const desktopNav = window.matchMedia('(min-width: 861px)');
+    let closeTimer;
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => { if (desktopNav.matches) { clearTimeout(closeTimer); item.classList.add('desktop-open'); } });
+      item.addEventListener('pointerleave', () => { if (desktopNav.matches) closeTimer = setTimeout(() => item.classList.remove('desktop-open'), 120); });
+      const trigger = item.querySelector('.nav-trigger');
+      trigger?.addEventListener('click', () => { if (!desktopNav.matches) { const isOpen = item.classList.toggle('open'); trigger.setAttribute('aria-expanded', String(isOpen)); } });
+    });
+  </script>
+</body>
+</html>

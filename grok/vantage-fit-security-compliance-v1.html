@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/enterprise.css">
+  <meta name="description" content="Four regional instances, company-scoped isolation, and aggregate-only health views. Review auth lockout, OTP, and BAA scope. Book a walkthrough.">
+  <meta name="theme-color" content="#18262b">
+  <title>Employee wellness platform data privacy | Vantage Fit</title>
+  <style>
+    .nav-item.is-current .nav-trigger { color: var(--ink); background: var(--soft); }
+    .mega a.mega-link[aria-current="page"] { background: var(--soft); }
+    .mega a.mega-link[aria-current="page"] span { color: var(--coral-dark); }
+
+    .sc-hero {
+      position: relative;
+      overflow: hidden;
+      min-height: min(calc(100svh - var(--nav-h)), 780px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px 0 48px;
+      background:
+        radial-gradient(880px 520px at 90% 0%, rgba(65, 216, 180, .08), transparent 58%),
+        linear-gradient(180deg, #eef1f4 0%, #f8f8f9 100%);
+    }
+    .sc-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.02fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .sc-hero h1 { max-width: 640px; }
+    .sc-hero h1 em {
+      font-style: normal;
+      background: linear-gradient(125deg, var(--coral) 20%, var(--coral-deep) 90%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+    .sc-hero .lead { max-width: 540px; margin-top: 18px; }
+    .sc-hero .btn-row { margin-top: 26px; }
+    .sc-visual { position: relative; min-height: 460px; }
+    .sc-photo {
+      margin: 0;
+      overflow: hidden;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      aspect-ratio: 5 / 4;
+      background: var(--soft);
+    }
+    .sc-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 40%;
+    }
+    .sc-chip {
+      position: absolute;
+      left: -12px;
+      bottom: 22px;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      width: min(280px, 72%);
+    }
+    .sc-chip b {
+      display: block;
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,.82);
+      border-radius: 14px;
+      background: rgba(255,255,255,.9);
+      box-shadow: var(--shadow-soft);
+      font-size: .82rem;
+      font-weight: 800;
+    }
+    .sc-chip b span {
+      display: block;
+      color: var(--muted);
+      font-size: .58rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .sc-section { padding: 88px 0; }
+    .sc-section.tight { padding: 72px 0; }
+    .sc-section h2 { max-width: 780px; }
+    .sc-section .lead { margin-top: 14px; }
+    .sc-figcap { margin-top: 10px; color: var(--muted); font-size: .72rem; }
+    .sc-alt { background: #fff; }
+
+    .sc-regions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .sc-regions article {
+      padding: 18px 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+    }
+    .sc-regions strong { display: block; font-size: 1.2rem; letter-spacing: -.03em; }
+    .sc-regions p { margin-top: 6px; color: var(--muted); font-size: .78rem; }
+
+    .sc-facts {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .sc-fact {
+      padding: 18px 18px 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+    }
+    .sc-fact.is-ink {
+      background: var(--ink);
+      color: #fff;
+      border-color: transparent;
+    }
+    .sc-fact small {
+      display: block;
+      color: var(--muted);
+      font-size: .62rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .sc-fact.is-ink small { color: rgba(255,255,255,.62); }
+    .sc-fact strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 1.65rem;
+      letter-spacing: -.04em;
+    }
+    .sc-fact p { margin-top: 8px; color: var(--muted); font-size: .82rem; line-height: 1.4; }
+    .sc-fact.is-ink p { color: rgba(255,255,255,.78); }
+
+    .sc-split {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 28px;
+      align-items: start;
+      margin-top: 32px;
+    }
+    .sc-shot {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+    .sc-shot img { width: 100%; height: auto; }
+    .sc-do, .sc-dont { display: grid; gap: 8px; margin-top: 16px; }
+    .sc-do span, .sc-dont span {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: .9rem;
+    }
+    .sc-do i, .sc-dont i {
+      width: 8px;
+      height: 8px;
+      flex: none;
+      margin-top: 7px;
+      border-radius: 50%;
+    }
+    .sc-do i { background: var(--mint); }
+    .sc-dont i { background: var(--coral); }
+    .sc-quote {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-left: 3px solid var(--ink);
+      background: var(--canvas);
+      font-size: .86rem;
+      font-weight: 600;
+    }
+
+    .sc-three {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 28px;
+    }
+    .sc-three article {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+    .sc-three .tag {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: var(--soft);
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .sc-three h3 { font-size: 1.02rem; }
+    .sc-three p { margin-top: 8px; color: var(--muted); font-size: .88rem; }
+
+    .sc-faq details {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .sc-faq summary {
+      cursor: pointer;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      list-style: none;
+    }
+    .sc-faq summary::-webkit-details-marker { display: none; }
+    .sc-faq details p { margin-top: 8px; color: var(--muted); max-width: 720px; }
+
+    .sc-sibs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .sc-sibs a {
+      display: block;
+      padding: 16px 16px 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+    }
+    .sc-sibs a:hover { box-shadow: var(--shadow-soft); }
+    .sc-sibs small {
+      display: block;
+      color: var(--coral-dark);
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .sc-sibs b { display: block; margin-top: 6px; font-size: .95rem; }
+
+    .final { min-height: auto; padding: 88px 0; }
+    .skip {
+      position: absolute;
+      left: 12px;
+      top: 8px;
+      z-index: 80;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      font-size: .82rem;
+      font-weight: 700;
+      transform: translateY(-120%);
+    }
+    .skip:focus { transform: none; outline: 2px solid var(--coral); outline-offset: 2px; }
+    :focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
+
+    @media (max-width: 1100px) {
+      .sc-hero-grid, .sc-split { grid-template-columns: 1fr; }
+      .sc-regions, .sc-facts, .sc-three, .sc-sibs { grid-template-columns: 1fr 1fr; }
+      .sc-visual { min-height: 0; }
+      .sc-chip { left: 12px; }
+    }
+    @media (max-width: 700px) {
+      .sc-hero { min-height: auto; padding: 36px 0 40px; }
+      .sc-section, .sc-section.tight { padding: 56px 0; }
+      .sc-regions, .sc-facts, .sc-three, .sc-sibs { grid-template-columns: 1fr; }
+      .sc-chip { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .btn:hover { transform: none; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Can HR open an individual's labs or HRA?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Admins see company and department aggregates. Health-risk targeting returns a count only. The list of users is not displayed to protect individual privacy."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Vantage Fit a HIPAA-compliant platform?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. There are BAA provisions for HIPAA compliance on the lab-report pipeline. The platform is HIPAA-guideline aligned on what HR can see. That is not a blanket HIPAA-compliant platform claim."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can we change region after go-live?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Not without a migration. Region is India, US, EU, or UAE, chosen at onboarding."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="../styled-homepage/index.html" aria-label="Vantage Fit home">
+        <img src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37" style="height:32px;width:auto;display:block">
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="nav-links" id="nav-links">
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Solutions
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Solutions menu">
+            <div class="mega-body">
+              <div class="mega-grid cols-2">
+                <div>
+                  <div class="mega-col-title">By program</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/steps-challenge/">Step challenges<span>Company-wide step goals that get everyone moving</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/multi-activity-challenges/">Multi-activity challenges<span>Custom challenges across any mix of activities</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/team-challenges/">Team challenges<span>Departments and squads, competing together</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/virtual-marathon/">Virtual marathons<span>One-day events that unite a global workforce</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/mental-health-and-wellbeing-challenges/">Mental health &amp; wellbeing<span>Mindfulness, mood and stress support at work</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/holistic-wellness-program/">Year-round wellness program<span>An always-on calendar of challenges and events</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">By need</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/global-employee-engagement/">Engage a global workforce<span>One program across countries, languages, time zones</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/remote-team-wellness/">Support remote &amp; hybrid teams<span>Wellness that works away from the office</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/wellness-rewards-program/">Reward healthy habits<span>Points and gift cards tied to real effort</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/health-fitness-analytics/">Measure program impact<span>Participation analytics your board can read</span></a>
+                </div>
+              </div>
+            </div>
+            <a class="mega-banner" href="https://www.vantagefit.io/employee-wellness-software/">
+              See Vantage Fit as your all-in-one employee wellness platform
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item is-current">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Features
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">For employees</div>
+                  <a class="mega-link" href="/features/activity-tracking/">Activity tracking<span>Steps, workouts, sleep, and everyday logs</span></a>
+                  <a class="mega-link" href="/features/fitness-exercise/">Fitness &amp; exercise<span>Workouts that count toward the same score</span></a>
+                  <a class="mega-link" href="/features/nutrition-hydration/">Nutrition &amp; hydration<span>Meals and water, logged in the same app</span></a>
+                  <a class="mega-link" href="/features/health-metrics/">Health metrics<span>Personal vitals the admin never opens</span></a>
+                  <a class="mega-link" href="/features/mental-wellbeing/">Mental wellbeing<span>Mindfulness minutes that still count</span></a>
+                  <a class="mega-link" href="/features/wellness-leagues/">Wellness leagues<span>Gold, Silver, Bronze on a rolling average</span></a>
+                  <a class="mega-link" href="/features/personalized-programs/">Personalized programs<span>Plans and journeys inside the same program</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">For HR teams</div>
+                  <a class="mega-link" href="vantage-fit-admin-dashboard-analytics-v1.html">Admin dashboard &amp; analytics<span>The participation number, without the spreadsheet</span></a>
+                  <a class="mega-link" href="/features/program-builder/">Program builder &amp; templates<span>Five formats, live before lunch</span></a>
+                  <a class="mega-link" href="/features/audience-targeting/">Audience targeting<span>Country, department, age, gender, health-risk counts</span></a>
+                  <a class="mega-link" href="/features/communications-nudges/">Communications &amp; nudges<span>Lifecycle email, push, and inactive-user shortcuts</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Enterprise</div>
+                  <a class="mega-link" href="vantage-fit-integrations-sso-v1.html">Integrations &amp; SSO<span>What they wear, and what IT already runs</span></a>
+                  <a class="mega-link" href="vantage-fit-security-compliance-v1.html" aria-current="page">Security &amp; compliance<span>Residency, access, and data boundaries</span></a>
+                  <a class="mega-link" href="vantage-fit-health-data-upload-v1.html">Health data upload<span>Lab reports on the annual track</span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Resources
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Resources menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">Learn</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/">Blog<span>Ideas and research for healthier workplaces</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/guides/">Guides &amp; eBooks<span>Playbooks for launching and scaling wellness</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/podcasts/">Podcasts<span>Conversations with HR and wellbeing leaders</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/2026-global-workplace-well-being-industry-report/">2026 Industry Report<span>The state of global workplace wellbeing</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Evaluate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/casestudy/">Customer stories<span>Results from real customer programs</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/compare/">Compare platforms<span>Vantage Fit vs the alternatives</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/">Help Center<span>Product docs and setup guides</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/tools-and-templates/step-challenge-diy-template/">Step Challenge Template<span>DIY template to plan and launch a step challenge</span></a>
+                </div>
+                <a class="mega-feature" href="https://www.vantagefit.io/wellness-challenges/">
+                  <span>
+                    <small>Featured</small>
+                    <b>Wellness Challenges Library</b>
+                    <p>Browse ready-to-run challenges your teams can start this month.</p>
+                  </span>
+                  <span class="go">Explore the library
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <header class="sc-hero" id="top">
+      <div class="shell sc-hero-grid">
+        <div>
+          <p class="eyebrow">Features · Enterprise</p>
+          <h1>Data your security team <em>can sign off.</em></h1>
+          <p class="lead">Employee wellness platform data privacy starts with four regional instances and isolation scoped to the company. HR sees a crowd, never a name list. That is how the participation number stays usable upstairs.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+            <a class="btn btn-outline" href="https://www.vantagefit.io/request-demo/">Talk to security</a>
+          </div>
+          <p class="hero-note">
+            <span>India, US, EU, UAE</span>
+            <span>Aggregate only</span>
+            <span>100+ organizations</span>
+          </p>
+        </div>
+        <div class="sc-visual">
+          <figure class="sc-photo">
+            <img src="photo-security-review.jpg" alt="Security and HR colleagues reviewing a laptop together in a glass-walled office" width="1200" height="900">
+          </figure>
+          <div class="sc-chip" aria-hidden="true">
+            <b><span>Instances</span>Four regions</b>
+            <b><span>Tenancy</span>Per company</b>
+            <b><span>Health view</span>Count only</b>
+            <b><span>SSO</span>SAML 2.0</b>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="sc-section" id="regions">
+      <div class="shell">
+        <h2>Four regions. No later move.</h2>
+        <p class="lead">You choose India, US, EU, or UAE at onboarding. Employee data stays in that regional instance. In-region endpoints handle requests. Changing region later is a migration, not a setting.</p>
+        <div class="sc-regions">
+          <article><strong>India</strong><p>Regional instance</p></article>
+          <article><strong>US</strong><p>Regional instance</p></article>
+          <article><strong>EU</strong><p>Regional instance</p></article>
+          <article><strong>UAE</strong><p>Regional instance</p></article>
+        </div>
+        <p class="sc-figcap">EU residency is available. Residency is not a compliance badge. This is not a dedicated data center in your city.</p>
+      </div>
+    </section>
+
+    <section class="sc-section sc-alt tight" id="facts">
+      <div class="shell">
+        <h2>The numbers a reviewer will ask for.</h2>
+        <p class="lead">Corporate wellness platform security at the auth layer is specific. SAML 2.0 is set up by the integration team. The rest is on every password and OTP path.</p>
+        <div class="sc-facts" aria-label="Authentication facts">
+          <article class="sc-fact is-ink">
+            <small>Lockout</small>
+            <strong>5</strong>
+            <p>Failed password attempts lock the account. Unlock starts a reset.</p>
+          </article>
+          <article class="sc-fact">
+            <small>Reset link</small>
+            <strong>1 hr</strong>
+            <p>Single-use. New password on reset must be at least 8 characters.</p>
+          </article>
+          <article class="sc-fact">
+            <small>In-app change</small>
+            <strong>6</strong>
+            <p>A different flow. In-app change password minimum is 6 characters.</p>
+          </article>
+          <article class="sc-fact">
+            <small>OTP</small>
+            <strong>10 min</strong>
+            <p>Valid for 10 minutes. Configurable per country.</p>
+          </article>
+          <article class="sc-fact">
+            <small>Mobile</small>
+            <strong>TrustKit</strong>
+            <p>SSL pinning on iOS and Android.</p>
+          </article>
+          <article class="sc-fact">
+            <small>Web / admin</small>
+            <strong>Captcha</strong>
+            <p>On non-mobile web and the admin console.</p>
+          </article>
+        </div>
+        <p class="sc-figcap">IdP names and roster systems live on Integrations. This page stops at the auth facts.</p>
+      </div>
+    </section>
+
+    <section class="sc-section" id="crowd">
+      <div class="shell">
+        <h2>Count only. Never a name list.</h2>
+        <p class="lead">Admins see company and department aggregates. They cannot open an individual health profile, HRA, lab values, or mood. Health-risk targeting returns a count.</p>
+        <div class="sc-split">
+          <figure class="sc-shot">
+            <img
+              src="https://cdn.vantagecircle.com/image/upload/f_auto,q_auto,w_820/v1771579792/product-images-hub/v-fit/vfit-analytics-dashboard-desktop.png"
+              alt="Vantage Fit admin analytics dashboard showing aggregate participation, not individual health files"
+              width="820"
+              height="668">
+          </figure>
+          <div>
+            <div class="sc-do">
+              <span><i></i>Enrollment, active users, participation rate</span>
+              <span><i></i>Challenge standings and last-active dates</span>
+              <span><i></i>Org-level prevalence if Health Data Upload is on</span>
+            </div>
+            <div class="sc-dont">
+              <span><i></i>Weight, BMI, HRA answers, mood, or labs</span>
+              <span><i></i>A named health-risk roster</span>
+            </div>
+            <p class="sc-quote">The list of users is not displayed to protect individual privacy.</p>
+            <p class="sc-figcap">Dashboard figures are a product view, not a client result. HIPAA-guideline aligned on this point.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sc-section sc-alt tight" id="insights">
+      <div class="shell">
+        <h2>Insights without names. A BAA on the lab pipe.</h2>
+        <p class="lead">Leadership Insights are AI observations from aggregated buckets. No PII. Read-only. They do not change your config.</p>
+        <div class="sc-three">
+          <article>
+            <span class="tag">AI · no PII</span>
+            <h3>Leadership Insights</h3>
+            <p>Internal ML API. Aggregated signal buckets only. Not predictive. Not a person-level feed.</p>
+          </article>
+          <article>
+            <span class="tag">Configurable</span>
+            <h3>Account deletion</h3>
+            <p>Name and email are hashed. Tokens are cleared. Historical activity and transaction records stay for reporting.</p>
+          </article>
+          <article>
+            <span class="tag">Lab pipeline</span>
+            <h3>BAA provisions</h3>
+            <p>BAA provisions for HIPAA compliance apply to the lab-report pipeline. Not a HIPAA-compliant platform claim.</p>
+          </article>
+        </div>
+        <p class="sc-figcap">Health Data Upload owns the extraction flow. This page owns the boundary.</p>
+      </div>
+    </section>
+
+    <section class="sc-section sc-faq tight" id="faq">
+      <div class="shell">
+        <h2>Before you send it to legal</h2>
+        <details>
+          <summary>Can HR open an individual’s labs or HRA?</summary>
+          <p>No. Admins see company and department aggregates. Health-risk targeting returns a count only. The list of users is not displayed to protect individual privacy.</p>
+        </details>
+        <details>
+          <summary>Is Vantage Fit a HIPAA-compliant platform?</summary>
+          <p>No. There are BAA provisions for HIPAA compliance on the lab-report pipeline. The platform is HIPAA-guideline aligned on what HR can see. That is not a blanket HIPAA-compliant platform claim.</p>
+        </details>
+        <details>
+          <summary>Can we change region after go-live?</summary>
+          <p>Not without a migration. Region is India, US, EU, or UAE, chosen at onboarding.</p>
+        </details>
+        <div class="sc-sibs" aria-label="Other Enterprise feature pages">
+          <a href="vantage-fit-integrations-sso-v1.html"><small>Identity</small><b>Integrations &amp; SSO</b></a>
+          <a href="vantage-fit-health-data-upload-v1.html"><small>Labs</small><b>Health data upload</b></a>
+          <a href="/features/"><small>Hub</small><b>All features</b></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="final" id="demo">
+      <div class="shell">
+        <h2>Review the facts. Then book the room.</h2>
+        <p>Walk through residency, lockout rules, and the aggregate-only health view with your security reviewer in the call.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+          <a class="btn btn-outline" href="https://www.vantagefit.io/request-demo/">Request a security packet</a>
+        </div>
+        <div class="final-checks">
+          <span>Four regions</span>
+          <span>Company-scoped</span>
+          <span>Count only</span>
+          <span>BAA on labs</span>
+        </div>
+        <p class="final-note">Trusted by 100+ organizations. Packet contents are shared in the review, not invented here.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../styled-homepage/index.html">
+            <img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37" style="height:28px;width:auto;display:block">
+          </a>
+          <p class="footer-about">Inclusive wellness that turns participation into measurable progress.</p>
+        </div>
+        <div>
+          <div class="footer-title">Product</div>
+          <div class="footer-links">
+            <a href="/features/">All features</a>
+            <a href="vantage-fit-integrations-sso-v1.html">Integrations &amp; SSO</a>
+            <a href="vantage-fit-security-compliance-v1.html">Security &amp; compliance</a>
+            <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Solutions</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/steps-challenge/">Challenges</a>
+            <a href="https://www.vantagefit.io/wellness-rewards-program/">Rewards</a>
+            <a href="https://www.vantagefit.io/remote-team-wellness/">Remote teams</a>
+            <a href="https://www.vantagefit.io/global-employee-engagement/">Global engagement</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Company</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/about-us/">About</a>
+            <a href="https://www.vantagefit.io/casestudy/">Case studies</a>
+            <a href="https://www.vantagefit.io/request-demo/">Contact sales</a>
+            <a href="https://www.vantagefit.io/en/help/">Help Center</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Vantage Circle. All rights reserved.</span>
+        <span>Wellness built for participation.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuButton = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation');
+      navLinks.classList.toggle('open', !open);
+    });
+
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const navTriggers = [...document.querySelectorAll('.nav-trigger')];
+    const desktopNav = window.matchMedia('(min-width: 861px)');
+    let desktopCloseTimer;
+
+    const closeDesktopMenus = (except = null) => {
+      navItems.forEach((item) => {
+        if (item !== except) item.classList.remove('desktop-open');
+      });
+    };
+
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => {
+        if (!desktopNav.matches) return;
+        window.clearTimeout(desktopCloseTimer);
+        closeDesktopMenus(item);
+        item.classList.add('desktop-open');
+      });
+      item.addEventListener('pointerleave', () => {
+        if (!desktopNav.matches) return;
+        desktopCloseTimer = window.setTimeout(() => {
+          if (!item.matches(':hover') && !item.contains(document.activeElement)) {
+            item.classList.remove('desktop-open');
+          }
+        }, 120);
+      });
+    });
+
+    document.querySelectorAll('.nav-links > a').forEach((link) => {
+      link.addEventListener('pointerenter', () => {
+        if (desktopNav.matches) closeDesktopMenus();
+      });
+    });
+
+    navTriggers.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        if (window.matchMedia('(max-width: 860px)').matches) {
+          e.preventDefault();
+          const item = btn.closest('.nav-item');
+          const isOpen = item.classList.contains('open');
+          document.querySelectorAll('.nav-item').forEach((n) => {
+            n.classList.remove('open');
+            n.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
