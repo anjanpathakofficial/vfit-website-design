@@ -1,0 +1,745 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/enterprise.css">
+  <meta name="description" content="All 14 Vantage Fit features in one grid: employee logging, HR tools, and enterprise plumbing. Everything logged counts toward one participation surface. Trusted by 100+ organizations.">
+  <meta name="theme-color" content="#18262b">
+  <title>Employee wellness platform features | Vantage Fit</title>
+  <style>
+    /* Page-specific styles only. Tokens, type, buttons, nav, and chrome come from ../styles/enterprise.css */
+
+    .nav-item.is-current .nav-trigger { color: var(--ink); background: var(--soft); }
+    .mega a.mega-link[aria-current="page"] { background: var(--soft); }
+    .mega a.mega-link[aria-current="page"] span { color: var(--coral-dark); }
+
+    /* Hero visual: photo + mobile product shot + chips */
+    .hub-visual { position: relative; min-height: 470px; }
+    .hub-photo {
+      position: absolute;
+      top: 6px;
+      left: 0;
+      width: 74%;
+      aspect-ratio: 4 / 3.2;
+      overflow: hidden;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      background: var(--soft);
+    }
+    .hub-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .hub-device {
+      position: absolute;
+      right: -8px;
+      bottom: 0;
+      width: 44%;
+      filter: drop-shadow(0 26px 48px rgba(41, 41, 76, .3));
+    }
+    .hub-device img { width: 100%; height: auto; }
+
+    /* Through-line flow */
+    .surface-band { padding: 64px 0; background: var(--canvas); }
+    .surface-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: center; }
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+    }
+    .flow-node {
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--soft);
+      font-size: .78rem;
+      font-weight: 700;
+    }
+    .flow-arrow { color: var(--coral-dark); font-weight: 800; }
+    .flow-end {
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: linear-gradient(125deg, var(--coral) 5%, var(--coral-deep) 125%);
+      color: #fff;
+      font-size: .8rem;
+      font-weight: 800;
+    }
+
+    /* Availability legend */
+    .legend-band { padding: 72px 0; background: var(--paper); border-block: 1px solid var(--line); }
+    .legend-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 28px; }
+    .legend-item {
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--canvas);
+    }
+    .legend-item p { margin-top: 10px; color: var(--muted); font-size: .8rem; line-height: 1.5; }
+
+    /* Tier pills */
+    .tier {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: .6rem;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .tier::before { width: 6px; height: 6px; border-radius: 50%; background: currentColor; content: ""; }
+    .tier-self { background: rgba(65, 216, 180, .18); color: var(--mint-dark); }
+    .tier-annual { background: rgba(246, 185, 59, .22); color: #9a6a10; }
+    .tier-partner { background: var(--ink); color: #fff; }
+    .tier-lite { background: var(--soft); color: var(--muted); }
+
+    /* Feature grid */
+    .grid-band { padding: 72px 0; background: var(--canvas); }
+    .feat-group + .feat-group { margin-top: 52px; }
+    .group-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 8px 24px; margin-bottom: 20px; }
+    .group-head h2 { font-size: clamp(1.5rem, 2.4vw, 2rem); }
+    .group-head p { max-width: 460px; color: var(--muted); font-size: .88rem; line-height: 1.5; }
+    .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .feat-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .feat-card:hover { transform: translateY(-3px); border-color: rgba(241, 81, 98, .32); box-shadow: var(--shadow-soft); }
+    .feat-card h3 { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; font-size: 1.02rem; }
+    .feat-num { flex: none; color: rgba(41, 41, 76, .3); font-size: .68rem; font-weight: 800; letter-spacing: .06em; }
+    .feat-desc { flex: 1; color: var(--muted); font-size: .85rem; line-height: 1.5; }
+    .feat-badges { display: flex; flex-wrap: wrap; gap: 6px; }
+    .feat-go {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--coral-dark);
+      font-size: .78rem;
+      font-weight: 800;
+    }
+    .feat-go svg { width: 14px; transition: transform .2s ease; }
+    .feat-card:hover .feat-go svg { transform: translateX(3px); }
+
+    /* Platform strip */
+    .plat-band { padding: 72px 0; background: var(--paper); border-block: 1px solid var(--line); }
+    .plat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 28px; }
+    .plat { padding: 18px 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--canvas); }
+    .plat b { display: block; font-size: .95rem; letter-spacing: -.015em; }
+    .plat p { margin-top: 6px; color: var(--muted); font-size: .82rem; line-height: 1.5; }
+
+    /* FAQ */
+    .faq-band { padding: 72px 0; background: var(--canvas); }
+    .faq-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 28px; }
+    .faq { padding: 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); }
+    .faq h3 { font-size: .95rem; line-height: 1.35; }
+    .faq p { margin-top: 8px; color: var(--muted); font-size: .83rem; line-height: 1.55; }
+
+    @media (max-width: 1000px) {
+      .feat-grid, .legend-grid, .plat-grid, .faq-grid { grid-template-columns: 1fr 1fr; }
+      .surface-grid { grid-template-columns: 1fr; gap: 28px; }
+    }
+    @media (max-width: 640px) {
+      .feat-grid, .legend-grid, .plat-grid, .faq-grid { grid-template-columns: 1fr; }
+      .hub-visual { min-height: 420px; }
+      .hub-photo { width: 86%; }
+      .hub-device { width: 52%; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://www.vantagefit.io/features/#webpage",
+        "url": "https://www.vantagefit.io/features/",
+        "name": "Employee wellness platform features | Vantage Fit",
+        "description": "All 14 Vantage Fit features in one grid: employee logging, HR tools, and enterprise plumbing. Everything logged counts toward one participation surface.",
+        "isPartOf": { "@type": "WebSite", "name": "Vantage Fit", "url": "https://www.vantagefit.io/" },
+        "about": { "@id": "https://www.vantagefit.io/#software" },
+        "breadcrumb": { "@id": "https://www.vantagefit.io/features/#breadcrumb" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://www.vantagefit.io/features/#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.vantagefit.io/" },
+          { "@type": "ListItem", "position": 2, "name": "Features", "item": "https://www.vantagefit.io/features/" }
+        ]
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://www.vantagefit.io/#software",
+        "name": "Vantage Fit",
+        "url": "https://www.vantagefit.io/",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "iOS, Android, Web",
+        "description": "Employee wellness platform where every logged activity counts toward the same challenges and one participation surface. Used by 100+ organizations.",
+        "featureList": "Activity tracking, Fitness and exercise, Nutrition and hydration, Health metrics, Mental wellbeing, Wellness leagues, Personalized programs, Admin dashboard and analytics, Program builder and templates, Audience targeting, Communications and nudges, Integrations and SSO, Security and compliance, Health data upload",
+        "provider": { "@type": "Organization", "name": "Vantage Circle", "url": "https://www.vantagecircle.com/" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Do employees need the mobile app, or does the web version work?",
+            "acceptedAnswer": { "@type": "Answer", "text": "iOS and Android carry the full experience: tracking, logging, challenges, and rewards. Web covers steps, limited manual logging, and the admin dashboard. Lab-report upload is the one web exception, for clients with Health Data Upload enabled." }
+          },
+          {
+            "@type": "Question",
+            "name": "What is Lite Mode?",
+            "acceptedAnswer": { "@type": "Answer", "text": "A steps-only mode. The logging surface collapses to step counts and race-style challenges, and every card flagged Not in Lite Mode stays hidden until you move to Full Mode." }
+          },
+          {
+            "@type": "Question",
+            "name": "Who can use Health Data Upload, and who sees the reports?",
+            "acceptedAnswer": { "@type": "Answer", "text": "It is an annual, whitelist-enabled pipeline. AI extracts lab values from uploaded PDFs, and HR sees cohort prevalence, never an individual employee's report." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <nav class="nav lit" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="../styled-homepage/index.html" aria-label="Vantage Fit home">
+        <img src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37" style="height:32px;width:auto;display:block">
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="nav-links" id="nav-links">
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Solutions
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Solutions menu">
+            <div class="mega-body">
+              <div class="mega-grid cols-2">
+                <div>
+                  <div class="mega-col-title">By program</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/steps-challenge/">Step challenges<span>Company-wide step goals that get everyone moving</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/multi-activity-challenges/">Multi-activity challenges<span>Custom challenges across any mix of activities</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/team-challenges/">Team challenges<span>Departments and squads, competing together</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/virtual-marathon/">Virtual marathons<span>One-day events that unite a global workforce</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/mental-health-and-wellbeing-challenges/">Mental health &amp; wellbeing<span>Mindfulness, mood and stress support at work</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/holistic-wellness-program/">Year-round wellness program<span>An always-on calendar of challenges and events</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">By need</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/global-employee-engagement/">Engage a global workforce<span>One program across countries, languages, time zones</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/remote-team-wellness/">Support remote &amp; hybrid teams<span>Wellness that works away from the office</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/wellness-rewards-program/">Reward healthy habits<span>Points and gift cards tied to real effort</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/health-fitness-analytics/">Measure program impact<span>Participation analytics your board can read</span></a>
+                </div>
+              </div>
+            </div>
+            <a class="mega-banner" href="https://www.vantagefit.io/employee-wellness-software/">
+              See Vantage Fit as your all-in-one employee wellness platform
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item is-current">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Features
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">For employees</div>
+                  <a class="mega-link" href="vantage-fit-activity-tracking-v1.html">Activity tracking<span>65 activity types, no wearable required</span></a>
+                  <a class="mega-link" href="vantage-fit-fitness-exercise-v1.html">Fitness &amp; exercise<span>GPS, squat tracker, Fitbit and Garmin</span></a>
+                  <a class="mega-link" href="vantage-fit-nutrition-hydration-v1.html">Nutrition &amp; hydration<span>Meal targets and one-tap water logging</span></a>
+                  <a class="mega-link" href="vantage-fit-health-metrics-v1.html">Health metrics<span>Sleep, heart rate, weight, optional HRA</span></a>
+                  <a class="mega-link" href="vantage-fit-mental-wellbeing-v1.html">Mental wellbeing<span>Guided sessions that count as participation</span></a>
+                  <a class="mega-link" href="vantage-fit-wellness-leagues-v1.html">Wellness leagues<span>Always-on tiers, annual and ops-configured</span></a>
+                  <a class="mega-link" href="vantage-fit-personalized-programs-v1.html">Personalized programs<span>Training plans plus a content library</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">For HR teams</div>
+                  <a class="mega-link" href="vantage-fit-admin-dashboard-analytics-v1.html">Admin dashboard &amp; analytics<span>Four KPI cards, participation first</span></a>
+                  <a class="mega-link" href="vantage-fit-program-builder-v1.html">Program builder &amp; templates<span>Five formats, 27 task types</span></a>
+                  <a class="mega-link" href="vantage-fit-audience-targeting-v1.html">Audience targeting<span>Reach cohorts without seeing names</span></a>
+                  <a class="mega-link" href="vantage-fit-communications-nudges-v1.html">Communications &amp; nudges<span>29 email templates, 34+ push types</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Enterprise</div>
+                  <a class="mega-link" href="vantage-fit-integrations-sso-v1.html">Integrations &amp; SSO<span>Wearables, SAML, and HRIS</span></a>
+                  <a class="mega-link" href="vantage-fit-security-compliance-v1.html">Security &amp; compliance<span>Four regions, aggregate-only reporting</span></a>
+                  <a class="mega-link" href="vantage-fit-health-data-upload-v1.html">Health data upload<span>Lab PDFs in, cohort prevalence out</span></a>
+                </div>
+              </div>
+            </div>
+            <a class="mega-banner" href="#top" aria-current="page">
+              All features, one participation surface (this page)
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Resources
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Resources menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">Learn</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/">Blog<span>Ideas and research for healthier workplaces</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/guides/">Guides &amp; eBooks<span>Playbooks for launching and scaling wellness</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/podcasts/">Podcasts<span>Conversations with HR and wellbeing leaders</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/2026-global-workplace-well-being-industry-report/">2026 Industry Report<span>The state of global workplace wellbeing</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Evaluate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/casestudy/">Customer stories<span>Results from real customer programs</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/compare/">Compare platforms<span>Vantage Fit vs the alternatives</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/">Help Center<span>Product docs and setup guides</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/tools-and-templates/step-challenge-diy-template/">Step Challenge Template<span>DIY template to plan and launch a step challenge</span></a>
+                </div>
+                <a class="mega-feature" href="https://www.vantagefit.io/wellness-challenges/">
+                  <span>
+                    <small>Featured</small>
+                    <b>Wellness Challenges Library</b>
+                    <p>Browse ready-to-run challenges your teams can start this month.</p>
+                  </span>
+                  <span class="go">Explore the library
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <!-- ========== HERO ========== -->
+    <header class="hero" id="hero">
+      <div class="shell hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Employee wellness platform features</span>
+          <h1>Every feature. <em>One participation surface.</em></h1>
+          <p class="lead">Steps, a GPS run, a logged meal, a glass of water, a mindful minute, a lab report. Everything an employee logs counts toward the same challenges and the same participation number. This is the whole platform, grouped by who uses what.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+            <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">Compare the tiers</a>
+          </div>
+          <div class="hero-note">
+            <span>Trusted by 100+ organizations</span>
+            <span>Full experience on iOS and Android</span>
+            <span>13+ languages</span>
+          </div>
+        </div>
+
+        <div class="hero-visual hub-visual">
+          <div class="hub-photo">
+            <img src="../styled-homepage/card-participate.jpg" alt="An employee mid-stride on an outdoor run, logged with GPS in Vantage Fit" width="800" height="533" fetchpriority="high">
+          </div>
+          <div class="hub-device">
+            <img src="https://cdn.vantagecircle.com/image/upload/f_auto,q_auto,w_820/v1771579791/product-images-hub/v-fit/vfit-overview-mobile.png" alt="Vantage Fit mobile app overview screen showing daily activity and challenge progress" width="820" height="1640">
+          </div>
+          <div class="hero-chip hc1"><span class="hc-dot"></span><span>Everything logged counts<br><b>One number</b></span></div>
+          <div class="hero-chip hc2"><span>Organizations on Vantage Fit<br><b>100+</b></span></div>
+        </div>
+      </div>
+
+      <div class="logo-band">
+        <div class="shell logos" aria-label="Selected customers">
+          <span class="logos-label">Trusted by 100+ organizations in 50+ countries</span>
+          <span class="logo-word">TATA MOTORS</span>
+          <span class="logo-word">WIPRO</span>
+          <span class="logo-word">ACCENTURE</span>
+          <span class="logo-word">DELOITTE</span>
+          <span class="logo-word">IBM</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ========== THROUGH-LINE ========== -->
+    <section class="surface-band" aria-labelledby="surface-heading">
+      <div class="shell surface-grid">
+        <div>
+          <span class="eyebrow">The through-line</span>
+          <h2 id="surface-heading">One log feeds one number</h2>
+          <p class="lead">A step count, a workout, a glass of water, a mindfulness session: each entry lands on the same participation surface. A challenge never cares which feature produced the effort, and HR reads the result as a single participation rate, aggregated, never per person.</p>
+        </div>
+        <div class="flow" aria-label="How logs become one participation number">
+          <span class="flow-node">Steps and workouts</span>
+          <span class="flow-arrow" aria-hidden="true">&rarr;</span>
+          <span class="flow-node">Meals, water, mindfulness</span>
+          <span class="flow-arrow" aria-hidden="true">&rarr;</span>
+          <span class="flow-node">Lab uploads</span>
+          <span class="flow-arrow" aria-hidden="true">&rarr;</span>
+          <span class="flow-end">One participation number</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== AVAILABILITY LEGEND ========== -->
+    <section class="legend-band" id="availability" aria-labelledby="legend-heading">
+      <div class="shell">
+        <span class="eyebrow">Availability</span>
+        <h2 id="legend-heading">Read the badges before the cards</h2>
+        <p class="lead">Not every feature is on for every client, and this page says so. Four states cover the whole grid.</p>
+        <div class="legend-grid">
+          <div class="legend-item">
+            <span class="tier tier-self">Self-serve</span>
+            <p>On for Full-Mode clients. No extra contract toggle.</p>
+          </div>
+          <div class="legend-item">
+            <span class="tier tier-annual">Annual</span>
+            <p>Set up with your account manager on an annual plan.</p>
+          </div>
+          <div class="legend-item">
+            <span class="tier tier-partner">Select-partner</span>
+            <p>Ops-enabled or whitelist. Not day one.</p>
+          </div>
+          <div class="legend-item">
+            <span class="tier tier-lite">Not in Lite Mode</span>
+            <p>Lite Mode collapses logging to steps only.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== THE GRID ========== -->
+    <section class="grid-band" id="grid" aria-labelledby="grid-heading">
+      <div class="shell">
+        <h2 id="grid-heading" class="center" style="max-width:640px;margin-inline:auto;">All 14 features, three groups</h2>
+
+        <div class="feat-group">
+          <div class="group-head">
+            <div>
+              <span class="eyebrow">Group 1 of 3</span>
+              <h2>For employees</h2>
+            </div>
+            <p>What employees log on iOS and Android. Every entry feeds the same participation number.</p>
+          </div>
+          <div class="feat-grid">
+            <a class="feat-card" href="vantage-fit-activity-tracking-v1.html">
+              <h3>Activity tracking <span class="feat-num">01</span></h3>
+              <p class="feat-desc">65 activity types. No wearable required. Honest step math.</p>
+              <span class="feat-badges"><span class="tier tier-self">Self-serve</span></span>
+              <span class="feat-go">Open the feature <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+            </a>
+            <a class="feat-card" href="vantage-fit-fitness-exercise-v1.html">
+              <h3>Fitness &amp; exercise <span class="feat-num">02</span></h3>
+              <p class="feat-desc">GPS runs, a squat tracker, Fitbit and Garmin. One primary device.</p>
+              <span class="feat-badges"><span class="tier tier-self">Self-serve</span><span class="tier tier-lite">Not in Lite Mode</span></span>
+              <span class="feat-go">Open the feature <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+            </a>
+            <a class="feat-card" href="vantage-fit-nutrition-hydration-v1.html">
+              <h3>Nutrition &amp; hydration <span class="feat-num">03</span></h3>
+              <p class="feat-desc">Meal targets from a basic profile. One tap logs 250 ml.</p>
+              <span class="feat-badges"><span class="tier tier-self">Self-serve</span><span class="tier tier-lite">Not in Lite Mode</span></span>
+              <span class="feat-go">Open the feature <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+            </a>
+            <a class="feat-card" href="vantage-fit-health-metrics-v1.html">
+              <h3>Health metrics <span class="feat-num">04</span></h3>
+              <p class="feat-desc">Sleep, heart rate, weight, optional HRA. Next to the step count.</p>
+              <span class="feat-badges"><span class="tier tier-self">Self-serve</span><span class="tier tier-lite">Not in Lite Mode</span></span>
+              <span class="feat-go">Open the feature <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+            </a>
+            <a class="feat-card" href="vantage-fit-mental-wellbeing-v1.html">
+              <h3>Mental wellbeing <span class="feat-num">05</span></h3>
+              <p class="feat-desc">Guided sessions. Minutes count as participation, not mood.</p>
+              <span class="feat-badges"><span class="tier tier-self">Self-serve</span><span class="tier tier-lite">Not in Lite Mode</span></span>
+              <span class="feat-go">Open the feature <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+            </a>
+            <a class="feat-card" href="vantage-fit-wellness-leagues-v1.html">
+              <h3>Wellness leagues <span class="feat-num">06</span></h3>
+              <p class="feat-desc">Always-on Gold, Silver, and Bronze. Ops-configured.</p>
+              <span class="feat-badges"><span class="tier tier-annual">Annual</span><span class="tier tier-lite">Not in Lite Mode</span></span>
+              <span class="feat-go">Open the feature <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+            </a>
+            <a class="feat-card" href="vantage-fit-personalized-programs-v1.html">
+              <h3>Personalized programs <span class="feat-num">07</span></h3>
+              <p class="feat-desc">Two live training plans plus a content library.</p>
+              <span class="feat-badges"><span class="tier tier-partner">Select-partner</span><span class="tier tier-lite">Not in Lite Mode</span></span>
+              <span class="feat-go">Open the feature <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+            </a>
+          </div>
+        </div>
+
+        <div class="feat-group">
+          <div class="group-head">
+            <div>
+              <span class="eyebrow">Group 2 of 3</span>
+              <h2>For HR teams</h2>
+            </div>
+            <p>The console side: build, target, nudge, and read participation without seeing individuals.</p>
+          </div>
+          <div class="feat-grid">
+            <a class="feat-card" href="vantage-fit-admin-dashboard-analytics-v1.html">
+              <h3>Admin dashboard &amp; analytics <span class="feat-num">08</span></h3>
+              <p class="feat-desc">Four KPI cards. The number you take upstairs is participation rate.</p>
+              <span class="feat-badges"><span class="tier tier-self">Self-serve</span></span>
+              <span class="feat-go">Open the feature <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+            </a>
+            <a class="feat-card" href="vantage-fit-program-builder-v1.html">
+              <h3>Program builder &amp; templates <span class="feat-num">09</span></h3>
+              <p class="feat-desc">Five formats. 27 task types. A challenge live before lunch.</p>
+              <span class="feat-badges"><span class="tier tier-self">Self-serve</span></span>
+              <span class="feat-go">Open the feature <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+            </a>
+            <a class="feat-card" href="vantage-fit-audience-targeting-v1.html">
+              <h3>Audience targeting <span class="feat-num">10</span></h3>
+              <p class="feat-desc">Aim a challenge without seeing who is in the cohort.</p>
+              <span class="feat-badges"><span class="tier tier-self">Self-serve</span></span>
+              <span class="feat-go">Open the feature <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+            </a>
+            <a class="feat-card" href="vantage-fit-communications-nudges-v1.html">
+              <h3>Communications &amp; nudges <span class="feat-num">11</span></h3>
+              <p class="feat-desc">29 email templates, 34+ push types. Account manager owns the master switch.</p>
+              <span class="feat-badges"><span class="tier tier-self">Self-serve</span></span>
+              <span class="feat-go">Open the feature <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+            </a>
+          </div>
+        </div>
+
+        <div class="feat-group">
+          <div class="group-head">
+            <div>
+              <span class="eyebrow">Group 3 of 3</span>
+              <h2>Enterprise</h2>
+            </div>
+            <p>The plumbing IT asks about: connections, regions, and the lab pipeline.</p>
+          </div>
+          <div class="feat-grid">
+            <a class="feat-card" href="vantage-fit-integrations-sso-v1.html">
+              <h3>Integrations &amp; SSO <span class="feat-num">12</span></h3>
+              <p class="feat-desc">Wearables employees connect. SAML and HRIS that IT sets up.</p>
+              <span class="feat-badges"><span class="tier tier-self">Self-serve</span></span>
+              <span class="feat-go">Open the feature <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+            </a>
+            <a class="feat-card" href="vantage-fit-security-compliance-v1.html">
+              <h3>Security &amp; compliance <span class="feat-num">13</span></h3>
+              <p class="feat-desc">Four data regions. Aggregate-only reporting for HR.</p>
+              <span class="feat-go">Open the feature <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+            </a>
+            <a class="feat-card" href="vantage-fit-health-data-upload-v1.html">
+              <h3>Health data upload <span class="feat-num">14</span></h3>
+              <p class="feat-desc">Lab PDF in, AI extraction out. Annual whitelist. HR sees prevalence, not people.</p>
+              <span class="feat-badges"><span class="tier tier-partner">Select-partner</span><span class="tier tier-lite">Not in Lite Mode</span></span>
+              <span class="feat-go">Open the feature <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PLATFORM STRIP ========== -->
+    <section class="plat-band" id="platform" aria-labelledby="plat-heading">
+      <div class="shell">
+        <span class="eyebrow">Devices</span>
+        <h2 id="plat-heading">Phone first, web where it counts</h2>
+        <div class="plat-grid">
+          <div class="plat">
+            <b>iOS and Android</b>
+            <p>The full experience: tracking, logging, challenges, and rewards.</p>
+          </div>
+          <div class="plat">
+            <b>Web</b>
+            <p>Steps, limited manual logging, and the admin dashboard.</p>
+          </div>
+          <div class="plat">
+            <b>The web exception</b>
+            <p>Lab-report upload works on web, on Health Data Upload only.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== FAQ ========== -->
+    <section class="faq-band" id="faq" aria-labelledby="faq-heading">
+      <div class="shell">
+        <span class="eyebrow">Quick answers</span>
+        <h2 id="faq-heading">What buyers ask on this page</h2>
+        <div class="faq-grid">
+          <div class="faq">
+            <h3>Do employees need the mobile app, or does the web version work?</h3>
+            <p>iOS and Android carry the full experience. Web covers steps, limited manual logging, and the admin dashboard, plus lab-report upload for clients with Health Data Upload enabled.</p>
+          </div>
+          <div class="faq">
+            <h3>What is Lite Mode?</h3>
+            <p>A steps-only mode. The logging surface collapses to step counts and race-style challenges, and every card flagged Not in Lite Mode stays hidden until you move to Full Mode.</p>
+          </div>
+          <div class="faq">
+            <h3>Who can use Health Data Upload, and who sees the reports?</h3>
+            <p>It is an annual, whitelist-enabled pipeline. AI extracts lab values from uploaded PDFs, and HR sees cohort prevalence, never an individual report.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== FINAL CTA ========== -->
+    <section class="final" id="demo" aria-labelledby="demo-heading">
+      <div class="shell">
+        <h2 id="demo-heading">See the whole platform in one walkthrough.</h2>
+        <p>We will open a program like yours and show how logs, challenges, and the dashboard connect into one participation number.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+          <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">Compare the tiers</a>
+        </div>
+        <div class="final-checks">
+          <span>Trusted by 100+ organizations</span>
+          <span>Aggregate-only analytics</span>
+          <span>13+ languages</span>
+          <span>No obligation</span>
+        </div>
+        <div class="final-note">Turn participation into progress.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../styled-homepage/index.html">
+            <img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37" style="height:28px;width:auto;display:block">
+          </a>
+          <p class="footer-about">Inclusive wellness that turns participation into measurable progress.</p>
+        </div>
+        <div>
+          <div class="footer-title">Product</div>
+          <div class="footer-links">
+            <a href="#grid">All features</a>
+            <a href="vantage-fit-program-builder-v1.html">Program builder</a>
+            <a href="vantage-fit-security-compliance-v1.html">Security</a>
+            <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Solutions</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/steps-challenge/">Challenges</a>
+            <a href="https://www.vantagefit.io/wellness-rewards-program/">Rewards</a>
+            <a href="https://www.vantagefit.io/remote-team-wellness/">Remote teams</a>
+            <a href="https://www.vantagefit.io/global-employee-engagement/">Global engagement</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Company</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/about-us/">About</a>
+            <a href="https://www.vantagefit.io/casestudy/">Case studies</a>
+            <a href="https://www.vantagefit.io/en/help/">Help Center</a>
+            <a href="https://www.vantagefit.io/request-demo/">Contact sales</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Vantage Circle. All rights reserved.</span>
+        <span>Aggregate-only analytics · 13+ languages · EU data residency available</span>
+        <span>Wellness built for participation.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav
+    const menuButton = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation');
+      navLinks.classList.toggle('open', !open);
+    });
+
+    // Mega-menu toggles (desktop hover + mobile tap)
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const navTriggers = [...document.querySelectorAll('.nav-trigger')];
+    const desktopNav = window.matchMedia('(min-width: 861px)');
+    let desktopCloseTimer;
+
+    const closeDesktopMenus = (except = null) => {
+      navItems.forEach((item) => {
+        if (item !== except) item.classList.remove('desktop-open');
+      });
+    };
+
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => {
+        if (!desktopNav.matches) return;
+        window.clearTimeout(desktopCloseTimer);
+        closeDesktopMenus(item);
+        item.classList.add('desktop-open');
+        const focusedTrigger = document.activeElement?.closest?.('.nav-trigger');
+        if (focusedTrigger && !item.contains(focusedTrigger)) focusedTrigger.blur();
+      });
+      item.addEventListener('pointerleave', () => {
+        if (!desktopNav.matches) return;
+        desktopCloseTimer = window.setTimeout(() => {
+          if (!item.matches(':hover') && !item.contains(document.activeElement)) {
+            item.classList.remove('desktop-open');
+          }
+        }, 120);
+      });
+    });
+
+    document.querySelectorAll('.nav-links > a').forEach((link) => {
+      link.addEventListener('pointerenter', () => {
+        if (desktopNav.matches) closeDesktopMenus();
+      });
+    });
+
+    navTriggers.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        if (window.matchMedia('(max-width: 860px)').matches) {
+          e.preventDefault();
+          const item = btn.closest('.nav-item');
+          const isOpen = item.classList.contains('open');
+          document.querySelectorAll('.nav-item').forEach((n) => {
+            n.classList.remove('open');
+            n.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        }
+      });
+    });
+
+    // Grayscale preview mode for accessibility review: append ?gray to the URL
+    if (new URLSearchParams(location.search).has('gray')) {
+      document.documentElement.style.filter = 'grayscale(1)';
+    }
+  </script>
+</body>
+</html>
