@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/enterprise.css">
+  <meta name="description" content="Gold, Silver, and Bronze on a rolling step average. Default thresholds, adjustable. Always on. Not a challenge leaderboard. Annual, ops-configured.">
+  <meta name="theme-color" content="#18262b">
+  <title>Employee wellness league system | Vantage Fit</title>
+  <style>
+    .nav-item.is-current .nav-trigger { color: var(--ink); background: var(--soft); }
+    .mega a.mega-link[aria-current="page"] { background: var(--soft); }
+    .mega a.mega-link[aria-current="page"] span { color: var(--coral-dark); }
+
+    .wl-hero {
+      position: relative;
+      overflow: hidden;
+      min-height: min(calc(100svh - var(--nav-h)), 780px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px 0 48px;
+      background:
+        radial-gradient(880px 520px at 88% 10%, rgba(185, 146, 78, .16), transparent 62%),
+        radial-gradient(720px 480px at 6% 96%, rgba(127, 87, 61, .1), transparent 60%),
+        linear-gradient(180deg, #fff 0%, #f8f5f0 100%);
+    }
+    .wl-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.02fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .wl-hero h1 { max-width: 640px; }
+    .wl-hero h1 em {
+      font-style: normal;
+      background: linear-gradient(125deg, var(--coral) 20%, var(--coral-deep) 90%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+    .wl-hero .lead { max-width: 520px; margin-top: 18px; }
+    .wl-hero .btn-row { margin-top: 26px; }
+    .wl-visual { position: relative; min-height: 460px; }
+    .wl-photo {
+      margin: 0;
+      overflow: hidden;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      aspect-ratio: 5 / 4;
+      background: var(--soft);
+    }
+    .wl-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 40%;
+    }
+
+    .wl-section { padding: 88px 0; }
+    .wl-section.tight { padding: 72px 0; }
+    .wl-section h2 { max-width: 780px; }
+    .wl-section .lead { margin-top: 14px; }
+    .wl-figcap { margin-top: 10px; color: var(--muted); font-size: .72rem; }
+
+    .wl-shields {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 32px;
+    }
+    .wl-tier {
+      padding: 26px 20px 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+      text-align: center;
+    }
+    .wl-shield {
+      width: 86px;
+      height: 98px;
+      margin: 0 auto 14px;
+    }
+    .wl-tier small {
+      display: block;
+      color: var(--muted);
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .wl-tier strong { display: block; margin-top: 6px; font-size: 1.35rem; letter-spacing: -.04em; }
+    .wl-tier p { margin-top: 8px; color: var(--muted); font-size: .84rem; }
+
+    .wl-alt { background: #fff; }
+    .wl-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 32px;
+    }
+    .wl-panel {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+    .wl-panel h3 { font-size: 1.05rem; }
+    .wl-panel .tag {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--ink);
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .wl-panel p { margin-top: 8px; color: var(--muted); font-size: .9rem; }
+    .wl-panel ul { margin: 14px 0 0; padding: 0; list-style: none; }
+    .wl-panel li {
+      padding: 8px 0;
+      border-top: 1px solid var(--line);
+      font-size: .86rem;
+    }
+
+    .wl-split {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 36px;
+      align-items: center;
+      margin-top: 32px;
+    }
+    .wl-list { display: grid; gap: 10px; }
+    .wl-list li {
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      gap: 10px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+      font-size: .9rem;
+    }
+    .wl-list li::before {
+      width: 8px;
+      height: 8px;
+      margin-top: 6px;
+      border-radius: 50%;
+      background: var(--mint);
+      content: "";
+    }
+    .wl-list b { display: block; font-size: .92rem; }
+    .wl-list span { color: var(--muted); font-size: .8rem; }
+    .wl-shot {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #1b3a32;
+      box-shadow: var(--shadow);
+    }
+    .wl-shot img { width: 100%; height: auto; }
+
+    .wl-window {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 28px;
+    }
+    .wl-card {
+      padding: 20px 18px 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+    }
+    .wl-card small {
+      display: block;
+      color: var(--coral-dark);
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .wl-card strong { display: block; margin-top: 8px; font-size: 1.05rem; letter-spacing: -.03em; }
+    .wl-card p { margin-top: 8px; color: var(--muted); font-size: .86rem; line-height: 1.45; }
+
+    .wl-faq { background: var(--canvas); }
+    .wl-faq details {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .wl-faq summary {
+      cursor: pointer;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      list-style: none;
+    }
+    .wl-faq summary::-webkit-details-marker { display: none; }
+    .wl-faq details p { margin-top: 8px; color: var(--muted); max-width: 720px; }
+
+    .wl-sibs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .wl-sibs a {
+      display: block;
+      padding: 16px 16px 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+    }
+    .wl-sibs a:hover { box-shadow: var(--shadow-soft); }
+    .wl-sibs small {
+      display: block;
+      color: var(--coral-dark);
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .wl-sibs b { display: block; margin-top: 6px; font-size: .95rem; }
+
+    .final { min-height: auto; padding: 88px 0; }
+    .skip {
+      position: absolute;
+      left: 12px;
+      top: 8px;
+      z-index: 80;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      font-size: .82rem;
+      font-weight: 700;
+      transform: translateY(-120%);
+    }
+    .skip:focus { transform: none; outline: 2px solid var(--coral); outline-offset: 2px; }
+    :focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
+
+    @media (max-width: 1100px) {
+      .wl-hero-grid, .wl-split, .wl-pair { grid-template-columns: 1fr; }
+      .wl-window, .wl-sibs { grid-template-columns: 1fr 1fr; }
+      .wl-visual { min-height: 0; }
+    }
+    @media (max-width: 700px) {
+      .wl-hero { min-height: auto; padding: 36px 0 40px; }
+      .wl-section, .wl-section.tight { padding: 56px 0; }
+      .wl-shields, .wl-window, .wl-sibs { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .btn:hover { transform: none; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is this a challenge leaderboard?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Leaderboards rank inside a time-bound challenge and reset each campaign. Leagues are persistent Gold, Silver, and Bronze tiers on a rolling step average."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do employees need a wearable?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. A phone pedometer is enough. League steps do not come from Health Connect."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can HR flip leagues on from the dashboard tomorrow?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Enabling leagues, the thresholds, and the rolling window is annual and ops-configured through the account manager. Once enabled, standings, trends, and CSV are self-serve."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="../styled-homepage/index.html" aria-label="Vantage Fit home">
+        <img src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37" style="height:32px;width:auto;display:block">
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="nav-links" id="nav-links">
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Solutions
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Solutions menu">
+            <div class="mega-body">
+              <div class="mega-grid cols-2">
+                <div>
+                  <div class="mega-col-title">By program</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/steps-challenge/">Step challenges<span>Company-wide step goals that get everyone moving</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/multi-activity-challenges/">Multi-activity challenges<span>Custom challenges across any mix of activities</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/team-challenges/">Team challenges<span>Departments and squads, competing together</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/virtual-marathon/">Virtual marathons<span>One-day events that unite a global workforce</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/mental-health-and-wellbeing-challenges/">Mental health &amp; wellbeing<span>Mindfulness, mood and stress support at work</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/holistic-wellness-program/">Year-round wellness program<span>An always-on calendar of challenges and events</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">By need</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/global-employee-engagement/">Engage a global workforce<span>One program across countries, languages, time zones</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/remote-team-wellness/">Support remote &amp; hybrid teams<span>Wellness that works away from the office</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/wellness-rewards-program/">Reward healthy habits<span>Points and gift cards tied to real effort</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/health-fitness-analytics/">Measure program impact<span>Participation analytics your board can read</span></a>
+                </div>
+              </div>
+            </div>
+            <a class="mega-banner" href="https://www.vantagefit.io/employee-wellness-software/">
+              See Vantage Fit as your all-in-one employee wellness platform
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item is-current">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Features
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">For employees</div>
+                  <a class="mega-link" href="vantage-fit-activity-tracking-v1.html">Activity tracking<span>The logging surface everything counts on</span></a>
+                  <a class="mega-link" href="vantage-fit-fitness-exercise-v1.html">Fitness &amp; exercise<span>Workouts that count toward the same score</span></a>
+                  <a class="mega-link" href="vantage-fit-nutrition-hydration-v1.html">Nutrition &amp; hydration<span>Meals and water, logged in the same app</span></a>
+                  <a class="mega-link" href="vantage-fit-health-metrics-v1.html">Health metrics<span>Sleep, heart rate and weight, next to the step count</span></a>
+                  <a class="mega-link" href="vantage-fit-mental-wellbeing-v1.html">Mental wellbeing &amp; mindfulness<span>Mindfulness minutes that still count</span></a>
+                  <a class="mega-link" href="vantage-fit-wellness-leagues-v1.html" aria-current="page">Wellness leagues<span>Gold, Silver, Bronze on a rolling average</span></a>
+                  <a class="mega-link" href="vantage-fit-personalized-programs-v1.html">Personalized programs<span>Plans and journeys inside the same program</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">For HR teams</div>
+                  <a class="mega-link" href="vantage-fit-admin-dashboard-analytics-v1.html">Admin dashboard &amp; analytics<span>The participation number, without the spreadsheet</span></a>
+                  <a class="mega-link" href="/features/program-builder/">Program builder &amp; templates<span>Five formats, live before lunch</span></a>
+                  <a class="mega-link" href="/features/audience-targeting/">Audience targeting<span>Country, department, age, gender, health-risk counts</span></a>
+                  <a class="mega-link" href="/features/communications-nudges/">Communications &amp; nudges<span>Lifecycle email, push, and inactive-user shortcuts</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Enterprise</div>
+                  <a class="mega-link" href="/features/integrations-sso/">Integrations &amp; SSO<span>HRIS, SSO, and device sources</span></a>
+                  <a class="mega-link" href="/features/security-compliance/">Security &amp; compliance<span>Residency, access, and data boundaries</span></a>
+                  <a class="mega-link" href="/features/health-data-upload/">Health data upload<span>Lab reports on the enterprise track</span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Resources
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Resources menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">Learn</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/">Blog<span>Ideas and research for healthier workplaces</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/guides/">Guides &amp; eBooks<span>Playbooks for launching and scaling wellness</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/podcasts/">Podcasts<span>Conversations with HR and wellbeing leaders</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/2026-global-workplace-well-being-industry-report/">2026 Industry Report<span>The state of global workplace wellbeing</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Evaluate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/casestudy/">Customer stories<span>Results from real customer programs</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/compare/">Compare platforms<span>Vantage Fit vs the alternatives</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/">Help Center<span>Product docs and setup guides</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/tools-and-templates/step-challenge-diy-template/">Step Challenge Template<span>DIY template to plan and launch a step challenge</span></a>
+                </div>
+                <a class="mega-feature" href="https://www.vantagefit.io/wellness-challenges/">
+                  <span>
+                    <small>Featured</small>
+                    <b>Wellness Challenges Library</b>
+                    <p>Browse ready-to-run challenges your teams can start this month.</p>
+                  </span>
+                  <span class="go">Explore the library
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <header class="wl-hero" id="top">
+      <div class="shell wl-hero-grid">
+        <div>
+          <p class="eyebrow">Features · For employees</p>
+          <h1>The league <em>outlasts the campaign.</em></h1>
+          <p class="lead">Gold, Silver, and Bronze on a rolling step average. Always on while enabled. The same steps that feed a challenge also rank the league.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+            <a class="btn btn-outline" href="#tiers">See the tiers</a>
+          </div>
+          <p class="hero-note">
+            <span>Default, adjustable</span>
+            <span>7 or 30 days typical</span>
+            <span>Annual / ops-configured</span>
+          </p>
+        </div>
+        <div class="wl-visual">
+          <figure class="wl-photo">
+            <img src="photo-wellness-leagues-stairs.jpg" alt="Two colleagues walking up an office stairwell during the workday" width="1152" height="864">
+          </figure>
+        </div>
+      </div>
+    </header>
+
+    <section class="wl-section" id="tiers">
+      <div class="shell">
+        <h2>Three tiers. Defaults, not dogma.</h2>
+        <p class="lead">These are the shipped defaults. Your HR admin can adjust the numbers. They are not a universal medical cutoff.</p>
+        <div class="wl-shields" aria-label="Default league tiers">
+          <article class="wl-tier">
+            <svg class="wl-shield" viewBox="0 0 86 98" aria-hidden="true">
+              <path d="M43 4 L78 18 V48 C78 72 60 88 43 94 C26 88 8 72 8 48 V18 Z" fill="#B9924E"/>
+              <path d="M43 12 L70 23 V47 C70 67 56 81 43 86 C30 81 16 67 16 47 V23 Z" fill="#d4b36a"/>
+              <text x="43" y="56" text-anchor="middle" fill="#fff" font-size="18" font-weight="800" font-family="Noto Sans, sans-serif">G</text>
+            </svg>
+            <small>Default</small>
+            <strong>Gold</strong>
+            <p>Above 7,000 average daily steps. Adjustable.</p>
+          </article>
+          <article class="wl-tier">
+            <svg class="wl-shield" viewBox="0 0 86 98" aria-hidden="true">
+              <path d="M43 4 L78 18 V48 C78 72 60 88 43 94 C26 88 8 72 8 48 V18 Z" fill="#798C92"/>
+              <path d="M43 12 L70 23 V47 C70 67 56 81 43 86 C30 81 16 67 16 47 V23 Z" fill="#9aadb3"/>
+              <text x="43" y="56" text-anchor="middle" fill="#fff" font-size="18" font-weight="800" font-family="Noto Sans, sans-serif">S</text>
+            </svg>
+            <small>Default</small>
+            <strong>Silver</strong>
+            <p>5,000 to 7,000 average daily steps. Adjustable.</p>
+          </article>
+          <article class="wl-tier">
+            <svg class="wl-shield" viewBox="0 0 86 98" aria-hidden="true">
+              <path d="M43 4 L78 18 V48 C78 72 60 88 43 94 C26 88 8 72 8 48 V18 Z" fill="#7F573D"/>
+              <path d="M43 12 L70 23 V47 C70 67 56 81 43 86 C30 81 16 67 16 47 V23 Z" fill="#a37858"/>
+              <text x="43" y="56" text-anchor="middle" fill="#fff" font-size="18" font-weight="800" font-family="Noto Sans, sans-serif">B</text>
+            </svg>
+            <small>Default</small>
+            <strong>Bronze</strong>
+            <p>Below 5,000 average daily steps. Adjustable.</p>
+          </article>
+        </div>
+        <p class="wl-figcap">Corporate fitness tier ranking, default and adjustable by your HR admin. No Platinum or Diamond tier ships today.</p>
+      </div>
+    </section>
+
+    <section class="wl-section wl-alt tight" id="window">
+      <div class="shell">
+        <h2>A rolling window. Not a fixed 21 days.</h2>
+        <p class="lead">The league is a rolling average of daily steps. The window is configurable. 7 or 30 days is typical.</p>
+        <div class="wl-window">
+          <article class="wl-card">
+            <small>Basis</small>
+            <strong>Daily steps, averaged</strong>
+            <p>The same step pipeline that already feeds challenges. Phone pedometer is enough.</p>
+          </article>
+          <article class="wl-card">
+            <small>Window</small>
+            <strong>7 or 30 days typical</strong>
+            <p>Set with the account manager when leagues are enabled. Not a hardcoded 21-day rule.</p>
+          </article>
+          <article class="wl-card">
+            <small>History</small>
+            <strong>Week by week</strong>
+            <p>Employees page back through prior weeks on the phone. There is no employee web UI.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="wl-section" id="contrast">
+      <div class="shell">
+        <h2>Always on. Challenges still start and end.</h2>
+        <p class="lead">A campaign has a banner and a finish line. The league stays up while it is enabled. That is the whole distinction.</p>
+        <div class="wl-pair">
+          <article class="wl-panel">
+            <span class="tag">Wellness leagues</span>
+            <h3>Persistent. Company-wide.</h3>
+            <p>Recalculates on the rolling window. Gold, Silver, or Bronze for everyone in the program, every day it is on.</p>
+            <ul>
+              <li>Does not replace a challenge.</li>
+              <li>Does not reset when a campaign ends.</li>
+            </ul>
+          </article>
+          <article class="wl-panel">
+            <span class="tag">Challenge leaderboards</span>
+            <h3>Inside one campaign.</h3>
+            <p>A leaderboard ranks people or teams for the length of that challenge. Then it closes.</p>
+            <ul>
+              <li>Start and end dates.</li>
+              <li>Score lives inside the campaign, not as a year-round tier.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="wl-section wl-alt" id="admin">
+      <div class="shell">
+        <h2>HR sees the mix. Employees see a shield.</h2>
+        <p class="lead">Once leagues are on, the dashboard is self-serve. This page is not a second Admin Dashboard.</p>
+        <div class="wl-split">
+          <ul class="wl-list">
+            <li><div><b>Standings and trends</b><span>Weekly, monthly, and yearly views of who sits in each tier.</span></div></li>
+            <li><div><b>Department and country</b><span>Distribution, not a planned wellness-score ranking of departments.</span></div></li>
+            <li><div><b>Paginated reports and CSV</b><span>Export the roster snapshot. Annual-gated with the feature itself.</span></div></li>
+          </ul>
+          <figure class="wl-shot">
+            <img
+              src="https://cdn.vantagecircle.com/image/upload/f_auto,q_auto,w_820/v1772104742/product-images-hub/v-fit/vantage-fit-badges-achievements-mobile.png"
+              alt="Vantage Fit badges and achievements on mobile, a supporting recognition surface, not the league standings screen"
+              width="820"
+              height="541">
+          </figure>
+        </div>
+        <p class="wl-figcap">Badges and achievements are a different surface. They are not the league. There is no dedicated league screenshot in the library, so the tiers above are the product mock.</p>
+      </div>
+    </section>
+
+    <section class="wl-section tight" id="gates">
+      <div class="shell">
+        <h2>Annual. Ops turns it on.</h2>
+        <p class="lead">Enabling leagues, the thresholds, and the rolling window go through the account manager. Not a day-one toggle.</p>
+        <div class="wl-pair">
+          <article class="wl-panel">
+            <span class="tag">Once enabled</span>
+            <h3>Standard reporting</h3>
+            <p>Standings, trends, distribution, and CSV are available after the feature is live.</p>
+            <ul>
+              <li>Employee view: mobile only.</li>
+              <li>Lite Mode: leagues stay off.</li>
+            </ul>
+          </article>
+          <article class="wl-panel">
+            <span class="tag">Not required</span>
+            <h3>No wearable. No Health Connect steps.</h3>
+            <p>Phone sensors are enough. League ranking does not use Health Connect as the step source.</p>
+            <ul>
+              <li>The step log on <a class="text-link" href="vantage-fit-activity-tracking-v1.html" style="margin-top:0">Activity tracking</a> is the same log.</li>
+              <li>No employee league UI on the web app.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="wl-section wl-faq tight" id="faq">
+      <div class="shell">
+        <h2>Before you roll it out</h2>
+        <details>
+          <summary>Is this a challenge leaderboard?</summary>
+          <p>No. Leaderboards rank inside a time-bound challenge and reset each campaign. Leagues are persistent Gold, Silver, and Bronze tiers on a rolling step average.</p>
+        </details>
+        <details>
+          <summary>Do employees need a wearable?</summary>
+          <p>No. A phone pedometer is enough. League steps do not come from Health Connect.</p>
+        </details>
+        <details>
+          <summary>Can HR flip leagues on from the dashboard tomorrow?</summary>
+          <p>No. Enabling leagues, the thresholds, and the rolling window is annual and ops-configured through the account manager. Once enabled, standings, trends, and CSV are self-serve.</p>
+        </details>
+        <div class="wl-sibs" aria-label="Related feature pages">
+          <a href="vantage-fit-mental-wellbeing-v1.html"><small>Previous</small><b>Mental wellbeing &amp; mindfulness</b></a>
+          <a href="vantage-fit-personalized-programs-v1.html"><small>Next</small><b>Personalized programs</b></a>
+          <a href="/features/"><small>All features</small><b>Features hub</b></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="final" id="demo">
+      <div class="shell">
+        <h2>Keep the competition running after the banner comes down.</h2>
+        <p>Walk through Gold, Silver, and Bronze, the rolling window, and the admin CSV on the same step log employees already keep.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+          <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">Compare the tiers</a>
+        </div>
+        <div class="final-checks">
+          <span>Default, adjustable</span>
+          <span>7 or 30 days typical</span>
+          <span>Annual / ops</span>
+          <span>Not a leaderboard</span>
+        </div>
+        <p class="final-note">Trusted by 100+ organizations.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../styled-homepage/index.html">
+            <img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37" style="height:28px;width:auto;display:block">
+          </a>
+          <p class="footer-about">Inclusive wellness that turns participation into measurable progress.</p>
+        </div>
+        <div>
+          <div class="footer-title">Product</div>
+          <div class="footer-links">
+            <a href="/features/">All features</a>
+            <a href="vantage-fit-wellness-leagues-v1.html">Wellness leagues</a>
+            <a href="vantage-fit-activity-tracking-v1.html">Activity tracking</a>
+            <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Solutions</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/steps-challenge/">Challenges</a>
+            <a href="https://www.vantagefit.io/wellness-rewards-program/">Rewards</a>
+            <a href="https://www.vantagefit.io/remote-team-wellness/">Remote teams</a>
+            <a href="https://www.vantagefit.io/global-employee-engagement/">Global engagement</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Company</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/about-us/">About</a>
+            <a href="https://www.vantagefit.io/casestudy/">Case studies</a>
+            <a href="https://www.vantagefit.io/request-demo/">Contact sales</a>
+            <a href="https://www.vantagefit.io/en/help/">Help Center</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Vantage Circle. All rights reserved.</span>
+        <span>Wellness built for participation.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuButton = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation');
+      navLinks.classList.toggle('open', !open);
+    });
+
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const navTriggers = [...document.querySelectorAll('.nav-trigger')];
+    const desktopNav = window.matchMedia('(min-width: 861px)');
+    let desktopCloseTimer;
+
+    const closeDesktopMenus = (except = null) => {
+      navItems.forEach((item) => {
+        if (item !== except) item.classList.remove('desktop-open');
+      });
+    };
+
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => {
+        if (!desktopNav.matches) return;
+        window.clearTimeout(desktopCloseTimer);
+        closeDesktopMenus(item);
+        item.classList.add('desktop-open');
+      });
+      item.addEventListener('pointerleave', () => {
+        if (!desktopNav.matches) return;
+        desktopCloseTimer = window.setTimeout(() => {
+          if (!item.matches(':hover') && !item.contains(document.activeElement)) {
+            item.classList.remove('desktop-open');
+          }
+        }, 120);
+      });
+    });
+
+    document.querySelectorAll('.nav-links > a').forEach((link) => {
+      link.addEventListener('pointerenter', () => {
+        if (desktopNav.matches) closeDesktopMenus();
+      });
+    });
+
+    navTriggers.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        if (window.matchMedia('(max-width: 860px)').matches) {
+          e.preventDefault();
+          const item = btn.closest('.nav-item');
+          const isOpen = item.classList.contains('open');
+          document.querySelectorAll('.nav-item').forEach((n) => {
+            n.classList.remove('open');
+            n.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
