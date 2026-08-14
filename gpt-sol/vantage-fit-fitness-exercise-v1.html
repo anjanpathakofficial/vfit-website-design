@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/enterprise.css">
+  <meta name="description" content="Count strength, sports, GPS workouts, squat tracking, and wearable imports in one employee fitness tracking app built for participation.">
+  <meta name="theme-color" content="#18262b">
+  <title>Employee fitness tracking app and GPS workouts | Vantage Fit</title>
+  <style>
+    .nav-item.is-current .nav-trigger { color: var(--ink); background: var(--soft); }
+    .mega a.mega-link[aria-current="page"] { background: var(--soft); }
+    .mega a.mega-link[aria-current="page"] span { color: var(--coral-dark); }
+    .fit-hero { position: relative; overflow: hidden; min-height: min(calc(100svh - var(--nav-h)), 800px); display: flex; align-items: center; padding: 44px 0 54px; background: radial-gradient(820px 520px at 90% 10%, rgba(65,216,180,.13), transparent 60%), radial-gradient(620px 380px at 0 100%, rgba(241,81,98,.11), transparent 65%), #fff; }
+    .fit-hero-grid { display: grid; grid-template-columns: .94fr 1.06fr; gap: 54px; align-items: center; }
+    .fit-hero h1 { max-width: 650px; }
+    .fit-hero h1 em { color: var(--coral-text); font-style: normal; }
+    .fit-hero .lead { max-width: 565px; }
+    .hero-note { display: flex; flex-wrap: wrap; gap: 10px 18px; margin-top: 20px; color: var(--muted); font-size: .75rem; font-weight: 650; }
+    .hero-note span { display: inline-flex; align-items: center; gap: 7px; }
+    .hero-note span::before { width: 6px; height: 6px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 0 3px rgba(65,216,180,.14); content: ""; }
+    .fit-visual { position: relative; min-height: 520px; }
+    .fit-photo { position: absolute; right: -2%; bottom: 0; width: 74%; height: 94%; }
+    .fit-photo img { width: 100%; height: 100%; object-fit: contain; object-position: right bottom; filter: drop-shadow(0 28px 40px rgba(41,41,76,.17)); }
+    .fit-shot { position: absolute; left: 0; top: 0; width: 54%; z-index: 2; filter: drop-shadow(0 24px 36px rgba(41,41,76,.23)); }
+    .fit-shot img { width: 100%; max-height: 500px; object-fit: contain; }
+    .route-line { position: absolute; left: 13%; right: 7%; bottom: 7%; z-index: 3; height: 82px; pointer-events: none; }
+    .route-line svg { width: 100%; height: 100%; overflow: visible; }
+    .route-chip { position: absolute; right: 4%; top: 16%; z-index: 4; padding: 12px 14px; border: 1px solid rgba(255,255,255,.8); border-radius: 16px; background: rgba(255,255,255,.9); box-shadow: var(--shadow-soft); backdrop-filter: blur(14px); }
+    .route-chip small { display: block; color: var(--muted); font-size: .62rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+    .route-chip b { display: block; margin-top: 3px; font-size: .92rem; }
+
+    .fit-section { padding: 88px 0; }
+    .fit-section.white { background: #fff; }
+    .section-head { max-width: 770px; }
+    .strength-layout { display: grid; grid-template-columns: .8fr 1.2fr; gap: 42px; margin-top: 34px; }
+    .strength-card { padding: 28px; border-radius: var(--radius); background: var(--ink); color: #fff; }
+    .strength-card .mode { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
+    .strength-card .mode span { padding: 7px 10px; border-radius: 999px; background: rgba(255,255,255,.1); font-size: .7rem; font-weight: 800; }
+    .strength-card h3 { font-size: 1.55rem; }
+    .strength-card p { margin-top: 12px; color: rgba(255,255,255,.68); font-size: .86rem; }
+    .lift-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 22px; }
+    .lift-list b { padding: 11px 12px; border: 1px solid rgba(255,255,255,.13); border-radius: 12px; font-size: .76rem; }
+    .sport-cloud { display: flex; flex-wrap: wrap; align-content: flex-start; gap: 9px; }
+    .sport-cloud span { padding: 9px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--ink); font-size: .77rem; font-weight: 700; }
+    .squat-note { display: grid; grid-template-columns: 46px 1fr; gap: 13px; align-items: center; margin-top: 22px; padding: 16px; border: 1px solid rgba(241,81,98,.23); border-radius: 16px; background: #fff7f7; }
+    .squat-note svg { width: 42px; height: 42px; padding: 10px; border-radius: 12px; background: var(--coral); color: #fff; }
+    .squat-note b { display: block; font-size: .85rem; }
+    .squat-note span { display: block; margin-top: 3px; color: var(--muted); font-size: .76rem; }
+
+    .gps-grid { display: grid; grid-template-columns: 1.02fr .98fr; gap: 50px; align-items: center; }
+    .gps-types { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; margin-top: 28px; }
+    .gps-type { padding: 16px 10px; border: 1px solid var(--line); border-radius: 15px; background: var(--paper); text-align: center; }
+    .gps-type b { display: block; font-size: .78rem; }
+    .gps-type span { display: block; width: 8px; height: 8px; margin: 0 auto 11px; border-radius: 50%; background: var(--coral); box-shadow: 0 0 0 4px rgba(241,81,98,.1); }
+    .gps-copy { color: var(--muted); margin-top: 20px; font-size: .9rem; }
+    .integrity-panel { overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; box-shadow: var(--shadow-soft); }
+    .integrity-top { padding: 23px; background: linear-gradient(135deg, var(--ink), #33335d); color: #fff; }
+    .integrity-top p { margin-top: 8px; color: rgba(255,255,255,.68); font-size: .82rem; }
+    .integrity-row { display: grid; grid-template-columns: 92px 1fr; gap: 15px; padding: 16px 20px; border-top: 1px solid var(--line); }
+    .integrity-row b { color: var(--coral-text); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; }
+    .integrity-row p { color: var(--muted); font-size: .82rem; }
+    .integrity-row.is-clear { background: rgba(65,216,180,.08); }
+
+    .import-band { padding: 54px 0; background: var(--ink); color: #fff; }
+    .import-grid { display: grid; grid-template-columns: .8fr 1fr 1fr; gap: 18px; align-items: stretch; }
+    .import-intro .eyebrow { color: var(--mint); }
+    .import-intro p { margin-top: 12px; color: rgba(255,255,255,.66); font-size: .87rem; }
+    .import-card { padding: 20px; border: 1px solid rgba(255,255,255,.14); border-radius: 18px; background: rgba(255,255,255,.06); }
+    .import-card small { color: var(--mint); font-size: .65rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .import-card h3 { margin-top: 8px; font-size: 1rem; }
+    .import-card p { margin-top: 8px; color: rgba(255,255,255,.68); font-size: .8rem; }
+
+    .device-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 52px; align-items: center; }
+    .device-stage { position: relative; min-height: 520px; display: grid; place-items: center; overflow: hidden; border-radius: var(--radius); background: linear-gradient(145deg, #fff, var(--soft)); border: 1px solid var(--line); }
+    .device-stage::before { position: absolute; width: 330px; height: 330px; border: 1px solid rgba(241,81,98,.18); border-radius: 50%; box-shadow: 0 0 0 70px rgba(241,81,98,.04), 0 0 0 140px rgba(65,216,180,.035); content: ""; }
+    .device-stage img { position: relative; z-index: 1; width: min(78%, 440px); max-height: 485px; object-fit: contain; filter: drop-shadow(0 22px 30px rgba(41,41,76,.2)); }
+    .device-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 11px; margin-top: 24px; }
+    .device-item { padding: 15px; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
+    .device-item b { display: block; font-size: .83rem; }
+    .device-item span { display: block; margin-top: 4px; color: var(--muted); font-size: .74rem; }
+    .mode-boundary { margin-top: 22px; padding: 16px 18px; border-left: 3px solid var(--coral); background: #fff7f7; color: var(--muted); font-size: .82rem; }
+
+    .sibling-band { padding: 72px 0; background: #fff; }
+    .sibling-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; }
+    .sibling-grid a { min-height: 140px; padding: 21px; border: 1px solid var(--line); border-radius: 18px; transition: transform .2s, box-shadow .2s; }
+    .sibling-grid a:hover { transform: translateY(-3px); box-shadow: var(--shadow-soft); }
+    .sibling-grid small { color: var(--coral-text); font-size: .66rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .sibling-grid b { display: block; margin-top: 18px; font-size: 1rem; }
+    .sibling-grid span { display: block; margin-top: 7px; color: var(--muted); font-size: .78rem; }
+
+    @media (max-width: 980px) { .fit-hero-grid, .strength-layout, .gps-grid, .device-grid { grid-template-columns: 1fr; } .fit-hero { min-height: auto; } .fit-visual { max-width: 680px; width: 100%; } .import-grid { grid-template-columns: 1fr 1fr; } .import-intro { grid-column: 1 / -1; } }
+    @media (max-width: 680px) { .fit-hero, .fit-section, .sibling-band { padding: 64px 0; } .fit-hero-grid { gap: 30px; } .fit-visual { min-height: 410px; } .fit-photo { width: 82%; } .fit-shot { width: 58%; } .route-chip { display: none; } .gps-types, .device-list, .sibling-grid, .import-grid { grid-template-columns: 1fr; } .import-intro { grid-column: auto; } .integrity-row { grid-template-columns: 1fr; gap: 5px; } .device-stage { min-height: 420px; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .sibling-grid a { transition: none; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="../styled-homepage/index.html" aria-label="Vantage Fit home"><img src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37" style="height:32px;width:auto"></a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      <div class="nav-links" id="nav-links">
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">Solutions <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg></button>
+          <div class="mega mega-wide" role="region" aria-label="Solutions menu"><div class="mega-body"><div class="mega-grid cols-2">
+            <div><div class="mega-col-title">By program</div><a class="mega-link" href="https://www.vantagefit.io/steps-challenge/">Step challenges<span>Company-wide step goals that get everyone moving</span></a><a class="mega-link" href="https://www.vantagefit.io/multi-activity-challenges/">Multi-activity challenges<span>Custom challenges across a mix of activities</span></a><a class="mega-link" href="https://www.vantagefit.io/team-challenges/">Team challenges<span>Departments and squads competing together</span></a></div>
+            <div><div class="mega-col-title">By need</div><a class="mega-link" href="https://www.vantagefit.io/global-employee-engagement/">Engage a global workforce<span>One program across countries and time zones</span></a><a class="mega-link" href="https://www.vantagefit.io/wellness-rewards-program/">Reward healthy habits<span>Points and gift cards tied to real effort</span></a><a class="mega-link" href="https://www.vantagefit.io/health-fitness-analytics/">Measure program impact<span>Participation analytics HR can use</span></a></div>
+          </div></div><a class="mega-banner" href="https://www.vantagefit.io/employee-wellness-software/">See Vantage Fit as an employee wellness platform <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a></div>
+        </div>
+        <div class="nav-item is-current">
+          <button class="nav-trigger" type="button" aria-expanded="false">Features <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg></button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu"><div class="mega-body"><div class="mega-grid">
+            <div><div class="mega-col-title">For employees</div><a class="mega-link" href="/features/activity-tracking/">Activity tracking<span>Steps, activities, rings, and everyday logs</span></a><a class="mega-link" href="/features/fitness-exercise/" aria-current="page">Fitness &amp; exercise<span>Workouts that count beyond steps</span></a><a class="mega-link" href="/features/nutrition-hydration/">Nutrition &amp; hydration<span>Meals and water in the same participation flow</span></a><a class="mega-link" href="/features/health-metrics/">Health metrics<span>Employee health readings and trends</span></a><a class="mega-link" href="/features/mental-wellbeing/">Mental wellbeing &amp; mindfulness<span>Private tools for mindful routines</span></a><a class="mega-link" href="/features/wellness-leagues/">Wellness leagues<span>Rolling participation across cohorts</span></a><a class="mega-link" href="/features/personalized-programs/">Personalized programs<span>Plans and journeys inside one program</span></a></div>
+            <div><div class="mega-col-title">For HR teams</div><a class="mega-link" href="/features/admin-dashboard-analytics/">Admin dashboard &amp; analytics<span>The participation number without a spreadsheet</span></a><a class="mega-link" href="/features/program-builder/">Program builder &amp; templates<span>Configure programs and challenge formats</span></a><a class="mega-link" href="/features/audience-targeting/">Audience targeting<span>Reach relevant employee cohorts</span></a><a class="mega-link" href="/features/communications-nudges/">Communications &amp; nudges<span>Email, push, and participation reminders</span></a></div>
+            <div><div class="mega-col-title">Enterprise</div><a class="mega-link" href="/features/integrations-sso/">Integrations &amp; SSO<span>HRIS, identity, and connected systems</span></a><a class="mega-link" href="/features/security-compliance/">Security &amp; compliance<span>Residency, access, and data boundaries</span></a><a class="mega-link" href="/features/health-data-upload/">Health data upload<span>Lab reports on the enterprise track</span></a></div>
+          </div></div></div>
+        </div>
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">Resources <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg></button>
+          <div class="mega mega-wide" role="region" aria-label="Resources menu"><div class="mega-body"><div class="mega-grid cols-2"><div><div class="mega-col-title">Learn</div><a class="mega-link" href="https://www.vantagefit.io/en/blog/">Blog<span>Ideas and research for healthier workplaces</span></a><a class="mega-link" href="https://www.vantagefit.io/guides/">Guides &amp; eBooks<span>Playbooks for workplace wellness</span></a></div><div><div class="mega-col-title">Evaluate</div><a class="mega-link" href="https://www.vantagefit.io/casestudy/">Customer stories<span>Results from real customer programs</span></a><a class="mega-link" href="https://www.vantagefit.io/en/help/">Help Center<span>Product docs and setup guides</span></a></div></div></div></div>
+        </div>
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a><a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <header class="fit-hero">
+      <div class="shell fit-hero-grid">
+        <div>
+          <p class="eyebrow">Features · For employees</p>
+          <h1>An employee fitness tracking app for workouts <em>beyond steps.</em></h1>
+          <p class="lead">A run, a set of squats, and a game of badminton can all become valid participation. Employees log the workout that happened, with or without a wearable.</p>
+          <div class="btn-row"><a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a><a class="btn btn-outline" href="#workouts">See workout types</a></div>
+          <p class="hero-note"><span>Full Mode</span><span>Four GPS workout types</span><span>One primary device</span></p>
+        </div>
+        <div class="fit-visual">
+          <figure class="fit-photo"><img src="../styled-homepage/hero-man-popout-v2.png" alt="Employee in activewear ready for a workout" width="1000" height="1200"></figure>
+          <figure class="fit-shot"><img src="https://cdn.vantagecircle.com/image/upload/f_auto,q_auto,w_820/v1772194233/product-images-hub/v-fit/vantage-fit-activity-logging-gps-route-mobile.png" alt="Vantage Fit mobile GPS workout route screen" width="820" height="1100"></figure>
+          <div class="route-line" aria-hidden="true"><svg viewBox="0 0 500 90" fill="none"><path d="M4 75C66 74 59 17 129 23s79 58 148 41 77-59 136-40 47 52 83 20" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".72"/><path d="M4 75C66 74 59 17 129 23s79 58 148 41 77-59 136-40 47 52 83 20" stroke="#F15162" stroke-width="4" stroke-linecap="round"/><circle cx="4" cy="75" r="7" fill="#41d8b4"/><circle cx="496" cy="44" r="7" fill="#F15162"/></svg></div>
+          <div class="route-chip"><small>Same surface</small><b>Workout → participation</b></div>
+        </div>
+      </div>
+    </header>
+
+    <section class="fit-section" id="workouts">
+      <div class="shell">
+        <div class="section-head"><p class="eyebrow">Workout logging</p><h2>Strength counts the way it happened.</h2><p class="lead">The employee records completed effort. Vantage Fit does not try to become a workout-programming app.</p></div>
+        <div class="strength-layout">
+          <article class="strength-card">
+            <div class="mode"><span>Reps</span><span>Minutes</span></div>
+            <h3>Choose the unit that fits the lift.</h3>
+            <p>Bench Press, Squats, Deadlifts, Leg Press, and Rowing accept reps or minutes. Weight Training Session captures the broader timed workout.</p>
+            <div class="lift-list"><b>Bench Press</b><b>Squats</b><b>Deadlifts</b><b>Leg Press</b><b>Rowing</b><b>Weight Training</b></div>
+          </article>
+          <div>
+            <div class="sport-cloud" aria-label="Supported sports and cardio examples"><span>Badminton</span><span>Basketball</span><span>Boxing</span><span>Cricket</span><span>Dancing</span><span>Football</span><span>Tennis</span><span>Table Tennis</span><span>Martial Arts</span><span>Golf</span><span>Pickleball</span><span>Bowling</span><span>Kayaking</span><span>Rock Climbing</span><span>Zumba</span><span>Aerobics</span><span>HIIT</span><span>Spinning</span><span>Elliptical</span><span>Plogging</span></div>
+            <div class="squat-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="5" r="2"/><path d="M8 21l2-7-3-3m9 10-2-7 3-3m-9-2 4 3 4-3"/></svg><div><b>Squat Tracker uses camera pose detection</b><span>No equipment. The completed count becomes another workout log.</span></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="fit-section white">
+      <div class="shell gps-grid">
+        <div>
+          <p class="eyebrow">GPS workout tracking</p>
+          <h2>Four workouts get the route.</h2>
+          <div class="gps-types"><div class="gps-type"><span></span><b>Run</b></div><div class="gps-type"><span></span><b>Walk</b></div><div class="gps-type"><span></span><b>Cycle</b></div><div class="gps-type"><span></span><b>Wheelchair</b></div></div>
+          <p class="gps-copy">Mobile GPS shows live distance, pace, duration, calories, per-kilometre or per-mile splits, a route map, and a pace graph. Employees can optionally share a result. On iOS, Live Activity can keep progress visible on the Dynamic Island or Lock Screen.</p>
+        </div>
+        <div class="integrity-panel">
+          <div class="integrity-top"><h3>GPS integrity, stated precisely.</h3><p>Controls differ by platform and activity type.</p></div>
+          <div class="integrity-row"><b>iOS</b><p>Filters GPS points with less than 100 m horizontal accuracy.</p></div>
+          <div class="integrity-row"><b>Android</b><p>Checks speed patterns, location consistency, high-pace percentage, and split behaviour. Points require 10 m distance and a 1 second gap.</p></div>
+          <div class="integrity-row"><b>Run + walk</b><p>The backend rejects averages faster than 3.5 min/km. Every split must clear the same threshold.</p></div>
+          <div class="integrity-row is-clear"><b>Cycle</b><p>No cycling pace limit exists, so none is implied.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="import-band">
+      <div class="shell import-grid">
+        <div class="import-intro"><p class="eyebrow">Workout imports</p><h2>Import by choice. Prevent duplicates.</h2><p>Supported imports land in the same diary and participation record.</p></div>
+        <article class="import-card"><small>iOS</small><h3>Apple Health requires a tap</h3><p>Employees manually choose the workout to import. The import is not automatic.</p></article>
+        <article class="import-card"><small>Android</small><h3>Health Connect handles imports</h3><p>Supported workouts import through Health Connect. Duplicate IDs and matching sessions are blocked.</p></article>
+      </div>
+    </section>
+
+    <section class="fit-section">
+      <div class="shell device-grid">
+        <figure class="device-stage"><img src="https://cdn.vantagecircle.com/image/upload/f_auto,q_auto,w_820/v1772104740/product-images-hub/v-fit/vantage-fit-connected-devices-sync-mobile.png" alt="Vantage Fit mobile connected devices screen" width="820" height="1100" loading="lazy"></figure>
+        <div>
+          <p class="eyebrow">Wearable integration</p>
+          <h2>Connect the device an employee already uses.</h2>
+          <p class="lead">A wearable is optional. When employees bring one, Vantage Fit keeps the source rules clear.</p>
+          <div class="device-list">
+            <div class="device-item"><b>Fitbit</b><span>Direct connection on iOS and Android</span></div>
+            <div class="device-item"><b>Garmin</b><span>Direct on iOS and Android; real-time push; reconnect after 60 days</span></div>
+            <div class="device-item"><b>Apple Watch</b><span>Feeds automatically through Apple Health</span></div>
+            <div class="device-item"><b>Samsung Watch</b><span>Supported as an Android device</span></div>
+            <div class="device-item"><b>70+ apps</b><span>Amazfit or Zepp, Mi Band, Huawei, NRC, Strava, and more via Apple Health</span></div>
+            <div class="device-item"><b>One primary source</b><span>Fitbit or Garmin replaces Apple Health or Google Fit for steps</span></div>
+          </div>
+          <p class="mode-boundary"><strong>Full Mode only.</strong> Fitness tools are unavailable in Lite Mode, which is steps only. Employees connect Fitbit and Garmin themselves. HR sees aggregate connection statistics, not an individual's route. Simultaneous-activity prevention and Lite Mode changes require VC Support.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sibling-band">
+      <div class="shell"><p class="eyebrow">Continue through Group A</p><h2>Keep every log on the same surface.</h2>
+        <div class="sibling-grid"><a href="/features/activity-tracking/"><small>Foundation</small><b>Start with activity tracking</b><span>See sources, step math, rings, and the 65-type library.</span></a><a href="/features/nutrition-hydration/"><small>Next feature</small><b>Add nutrition and hydration</b><span>Count meals and water alongside movement.</span></a><a href="/features/"><small>Features index</small><b>View all features</b><span>Explore employee, HR, and enterprise capabilities.</span></a></div>
+      </div>
+    </section>
+
+    <section class="final"><div class="shell"><h2>See how every workout becomes participation.</h2><p>Walk through strength logs, GPS routes, workout imports, and device connections in the employee app.</p><div class="btn-row"><a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a><a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">Compare the tiers</a></div><div class="final-checks"><span>Strength and sports</span><span>Four GPS types</span><span>Employee-managed devices</span></div></div></section>
+  </main>
+
+  <footer><div class="shell"><div class="footer-grid">
+    <div class="footer-brand"><a class="brand" href="../styled-homepage/index.html"><img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37" style="height:28px;width:auto"></a><p class="footer-about">Inclusive wellness that turns participation into measurable progress.</p></div>
+    <div><div class="footer-title">Product</div><div class="footer-links"><a href="/features/">All features</a><a href="/features/activity-tracking/">Activity tracking</a><a href="/features/nutrition-hydration/">Nutrition &amp; hydration</a><a href="https://www.vantagefit.io/pricing/">Pricing</a></div></div>
+    <div><div class="footer-title">Solutions</div><div class="footer-links"><a href="https://www.vantagefit.io/steps-challenge/">Challenges</a><a href="https://www.vantagefit.io/wellness-rewards-program/">Rewards</a><a href="https://www.vantagefit.io/remote-team-wellness/">Remote teams</a><a href="https://www.vantagefit.io/global-employee-engagement/">Global engagement</a></div></div>
+    <div><div class="footer-title">Company</div><div class="footer-links"><a href="https://www.vantagefit.io/about-us/">About</a><a href="https://www.vantagefit.io/casestudy/">Case studies</a><a href="https://www.vantagefit.io/request-demo/">Contact sales</a><a href="https://www.vantagefit.io/en/help/">Help Center</a></div></div>
+  </div><div class="footer-bottom"><span>© 2026 Vantage Circle. All rights reserved.</span><span>Wellness built for participation.</span></div></div></footer>
+
+  <script>
+    const menuButton = document.querySelector('.menu-btn'); const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => { const open = menuButton.getAttribute('aria-expanded') === 'true'; menuButton.setAttribute('aria-expanded', String(!open)); menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation'); navLinks.classList.toggle('open', !open); });
+    const navItems = [...document.querySelectorAll('.nav-item')]; const desktopNav = window.matchMedia('(min-width: 861px)'); let desktopCloseTimer;
+    const closeDesktopMenus = (except = null) => navItems.forEach(item => { if (item !== except) item.classList.remove('desktop-open'); });
+    navItems.forEach(item => { item.addEventListener('pointerenter', () => { if (!desktopNav.matches) return; clearTimeout(desktopCloseTimer); closeDesktopMenus(item); item.classList.add('desktop-open'); }); item.addEventListener('pointerleave', () => { if (!desktopNav.matches) return; desktopCloseTimer = setTimeout(() => { if (!item.matches(':hover') && !item.contains(document.activeElement)) item.classList.remove('desktop-open'); }, 120); }); });
+    document.querySelectorAll('.nav-trigger').forEach(button => button.addEventListener('click', event => { if (!window.matchMedia('(max-width: 860px)').matches) return; event.preventDefault(); const item = button.closest('.nav-item'); const wasOpen = item.classList.contains('open'); navItems.forEach(entry => { entry.classList.remove('open'); entry.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false'); }); if (!wasOpen) { item.classList.add('open'); button.setAttribute('aria-expanded', 'true'); } }));
+  </script>
+</body>
+</html>

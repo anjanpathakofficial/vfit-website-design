@@ -1,0 +1,1068 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Required: these are unshipped preview mocks. Do not remove. -->
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <meta name="description" content="Strength by reps or by minutes, GPS runs with per-km splits, and workouts imported from Fitbit, Garmin and Apple Watch. Every one counts the way a step does.">
+  <meta name="theme-color" content="#18262b">
+
+  <title>Employee Fitness Tracking App | Vantage Fit</title>
+
+  <link rel="stylesheet" href="../styles/enterprise.css">
+
+  <style>
+    /* ============================================================
+       FITNESS & EXERCISE (/features/fitness-exercise/)
+       page-local styles.
+
+       Tokens, type scale, buttons, nav, .mega, .shell, .eyebrow,
+       .hero, .final closer and the footer all come from
+       ../styles/enterprise.css. Nothing here redefines a token, a
+       font stack or a brand colour.
+
+       Chrome shared with the two sibling logging pages, unchanged:
+         nav current-page marking, .skip-link, focus visibility,
+         forced-colors fallback, .feat-section / .feat-head, .reveal,
+         .chipline, .oneline, .gatebar, .faq-wrap, .sibrow, .proofband,
+         footer grid override.
+
+       NEW ON THIS PAGE (owned here, not repeated on the siblings):
+         .fx-stage / .fx-photo / .fx-shot  the photograph-led hero with
+           the GPS Workout Summary overlapping it. Activity tracking's
+           hero stacks a product shot over a photo row. Same chrome,
+           different hero, on purpose.
+         .gate-panel / .gate-rule  the GPS validation rules. This page
+           owns anti-cheat; Activity owns the step ledger.
+         .honest      the no-cycling-pace-limit card.
+         .duo / .panel  import beside the squat tracker.
+         .devtable    the device catalog as a table, not prose.
+       ============================================================ */
+
+    /* --- Nav: mark this page current inside the Features panel. --- */
+    .nav-trigger.is-current { background: var(--soft); color: var(--ink); box-shadow: inset 0 -2px 0 var(--coral); border-radius: 9px 9px 0 0; }
+    .mega a.mega-link[aria-current="page"] { background: var(--soft); box-shadow: inset 3px 0 0 var(--coral); font-weight: 800; }
+    .nav-item.esc-closed .mega { display: none; }
+    @media (min-width: 861px) {
+      .nav-inner { position: relative; }
+      .nav-item { position: static; }
+      .nav-item::after { display: none; }
+      .nav-trigger { position: relative; }
+      .nav-trigger::after { position: absolute; top: 100%; left: 0; width: 100%; height: 14px; content: ""; }
+      .nav-item .mega { left: auto; right: 0; transform: none; }
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      z-index: 100;
+      padding: 10px 16px;
+      border-radius: 0 0 10px 0;
+      background: var(--ink);
+      color: #fff;
+      font-size: .85rem;
+      font-weight: 700;
+    }
+    .skip-link:focus { left: 0; top: 0; }
+    a:focus-visible, button:focus-visible, summary:focus-visible {
+      outline: 3px solid var(--coral-deep);
+      outline-offset: 2px;
+    }
+
+    @media (forced-colors: active) {
+      .hero-copy h1 em { background: none; -webkit-text-fill-color: currentColor; color: CanvasText; }
+    }
+
+    .verify {
+      display: inline-block;
+      margin-left: 6px;
+      color: var(--muted);
+      font-size: .56rem;
+      font-weight: 800;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
+    .proof-cell b, .gate-rule b { font-variant-numeric: tabular-nums; }
+
+    /* --- Shared section shells --- */
+    .feat-section { padding: 92px 0; }
+    .feat-head { max-width: 720px; }
+    .feat-head .lead { margin-top: 14px; }
+    .alt-screen { background: var(--canvas); }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s cubic-bezier(.22,.9,.24,1); }
+    .reveal.on { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+    /* Block, not flex: these rows carry inline <b> runs, and a flex
+       parent would make each one its own flex item. */
+    .oneline { display: grid; gap: 9px; margin-top: 20px; }
+    .oneline span { position: relative; display: block; padding-left: 27px; color: var(--muted); font-size: .84rem; line-height: 1.55; }
+    .oneline span::before {
+      position: absolute;
+      top: 2px;
+      left: 0;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: rgba(65,216,180,.18);
+      color: #128f72;
+      content: "\2713";
+      font-size: .62rem;
+      font-weight: 800;
+      line-height: 17px;
+      text-align: center;
+    }
+    .oneline b { color: var(--ink); font-weight: 700; }
+
+    .gatebar {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-top: 26px;
+      padding: 16px 18px;
+      border: 1px solid rgba(246,185,59,.45);
+      border-radius: 14px;
+      background: rgba(246,185,59,.09);
+      font-size: .84rem;
+      font-weight: 650;
+      line-height: 1.5;
+    }
+    .gatebar svg { width: 17px; flex: none; margin-top: 2px; color: #8a6212; }
+
+    /* ============================================================
+       S1 HERO
+       Photograph-led. Activity tracking leads with the product shot;
+       this page leads with the photo and lets the GPS summary
+       overlap it from the right.
+       ============================================================ */
+    .feat-hero { min-height: auto; }
+    .feat-hero .hero-grid { grid-template-columns: 1.06fr .94fr; padding: 40px 0 34px; }
+    .feat-hero .hero-copy .lead { max-width: 550px; }
+    .feat-hero .hero-copy h1 { font-size: clamp(2.3rem, 4vw, 3.05rem); max-width: 620px; }
+
+    .fx-stage { display: grid; gap: 14px; }
+    .fx-photo { overflow: hidden; border-radius: var(--radius); box-shadow: var(--shadow); }
+    .fx-photo img { display: block; width: 100%; height: 200px; object-fit: cover; }
+    /* The CDN composite is a single phone centred on a wide white
+       plate, so shown at natural ratio the phone renders tiny. The
+       card holds its own aspect ratio and the image covers it, which
+       trims the empty plate instead of the UI. */
+    .fx-shot {
+      /* Taller than the source's 1.515 ratio, so cover trims the empty
+         plate on the left and right rather than the UI. */
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+      box-shadow: 0 30px 74px rgba(41,41,76,.2);
+    }
+    .fx-shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .fx-note {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .fx-note span {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--muted);
+      font-size: .72rem;
+      font-weight: 700;
+    }
+
+    /* ============================================================
+       S2 BEYOND STEPS
+       ============================================================ */
+    .chipline { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
+    .chipline span {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--ink);
+      font-size: .8rem;
+      font-weight: 650;
+    }
+    .chipline span.more { border-style: dashed; background: transparent; color: var(--muted); font-weight: 750; }
+
+    .lifts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 26px; }
+    .lift {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--paper);
+    }
+    .lift strong { font-size: .88rem; letter-spacing: -.01em; }
+    .lift em {
+      color: var(--muted);
+      font-size: .6rem;
+      font-style: normal;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .not-a {
+      margin-top: 22px;
+      padding: 16px 18px;
+      border-left: 3px solid var(--coral);
+      background: rgba(241,81,98,.05);
+      font-size: .86rem;
+      font-weight: 650;
+      line-height: 1.55;
+    }
+
+    /* ============================================================
+       S3 GPS WORKOUTS
+       ============================================================ */
+    .gps-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 52px; }
+    .live {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .live-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 22px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(41,41,76,.02);
+      color: var(--muted);
+      font-size: .62rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .live-top span:last-child { display: inline-flex; align-items: center; gap: 7px; color: var(--mint-dark); }
+    .live-top span:last-child::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--mint-dark);
+      box-shadow: 0 0 0 4px rgba(65,216,180,.18);
+      content: "";
+    }
+    .live-grid { display: grid; grid-template-columns: 1fr 1fr; }
+    .live-cell { padding: 22px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .live-cell:nth-child(2n) { border-right: 0; }
+    .live-cell i {
+      display: block;
+      color: var(--muted);
+      font-size: .58rem;
+      font-style: normal;
+      font-weight: 800;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .live-cell b { display: block; margin-top: 6px; font-size: 1.55rem; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+    .live-foot { padding: 16px 22px; }
+    .live-foot p { margin-top: 9px; color: var(--muted); font-size: .8rem; line-height: 1.55; }
+    .mock-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(41,41,76,.04);
+      color: rgba(41,41,76,.75);
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .four { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+    .four span {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 15px;
+      border: 1px solid rgba(65,216,180,.5);
+      border-radius: 999px;
+      background: rgba(65,216,180,.1);
+      color: #10705c;
+      font-size: .82rem;
+      font-weight: 750;
+    }
+
+    /* ============================================================
+       S4 THE VALIDATION GATE  (owned by this page)
+       ============================================================ */
+    .gate-panel { display: grid; gap: 10px; margin-top: 36px; }
+    .gate-rule {
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr);
+      align-items: start;
+      gap: 20px;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: var(--paper);
+    }
+    .gate-rule i {
+      color: var(--coral-text);
+      font-size: .6rem;
+      font-style: normal;
+      font-weight: 800;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .gate-rule p { color: var(--muted); font-size: .86rem; line-height: 1.6; }
+    .gate-rule b { color: var(--ink); font-weight: 750; }
+
+    .honest {
+      margin-top: 22px;
+      padding: 22px 24px;
+      border: 1px solid rgba(41,41,76,.16);
+      border-radius: 18px;
+      background: var(--ink);
+      color: rgba(255,255,255,.72);
+    }
+    .honest strong { display: block; color: #fff; font-size: 1rem; letter-spacing: -.01em; }
+    .honest p { margin-top: 8px; font-size: .86rem; line-height: 1.6; max-width: 760px; }
+
+    /* ============================================================
+       S5 IMPORT + CAMERA
+       ============================================================ */
+    .duo { display: grid; grid-template-columns: 1.06fr .94fr; gap: 20px; margin-top: 36px; align-items: stretch; }
+    .panel {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+    }
+    .panel-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .panel-top strong { font-size: .95rem; letter-spacing: -.01em; }
+    .panel-body { flex: 1 1 auto; padding: 18px 20px; }
+    .panel-body .oneline { margin-top: 0; }
+    .panel-foot {
+      padding: 14px 20px;
+      border-top: 1px solid var(--line);
+      background: rgba(41,41,76,.02);
+      color: var(--muted);
+      font-size: .78rem;
+      line-height: 1.55;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .badge-manual { background: rgba(246,185,59,.2); color: #8a6212; }
+    .badge-cam { background: rgba(41,41,76,.07); color: var(--ink); }
+
+    /* ============================================================
+       S6 DEVICES
+       ============================================================ */
+    .dev-grid { display: grid; grid-template-columns: 1.06fr .94fr; align-items: center; gap: 48px; }
+    .devtable { overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: var(--paper); box-shadow: var(--shadow-soft); }
+    .devrow {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 18px;
+      padding: 15px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .devrow:last-child { border-bottom: 0; }
+    .devrow strong { font-size: .88rem; letter-spacing: -.01em; }
+    .devrow p { color: var(--muted); font-size: .82rem; line-height: 1.55; }
+    .devrow p b { color: var(--coral-text); font-weight: 750; }
+    .dev-shot {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .dev-shot img { display: block; width: 100%; height: auto; }
+    .dev-shot figcaption { padding: 13px 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: .78rem; line-height: 1.5; }
+
+    /* ============================================================
+       S7 PROOF
+       ============================================================ */
+    .proofband { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .proof-cell { padding-left: 20px; border-left: 3px solid rgba(241,81,98,.35); }
+    .proof-cell b { display: block; font-size: 1.9rem; font-weight: 800; letter-spacing: -.035em; line-height: 1.05; }
+    .proof-cell p { margin-top: 8px; color: var(--muted); font-size: .82rem; line-height: 1.55; }
+
+    /* ============================================================
+       S8 FAQ + lateral links
+       ============================================================ */
+    .faq-grid { display: grid; grid-template-columns: .78fr 1.22fr; align-items: start; gap: 56px; }
+    .faq-wrap details { border-bottom: 1px solid var(--line); }
+    .faq-wrap details:first-child { border-top: 1px solid var(--line); }
+    .faq-wrap summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 0;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -.01em;
+      cursor: pointer;
+      list-style: none;
+    }
+    .faq-wrap summary::-webkit-details-marker { display: none; }
+    .faq-wrap summary::after { color: var(--coral-dark); content: "+"; font-size: 1.3rem; font-weight: 700; }
+    .faq-wrap details[open] summary::after { content: "\2212"; }
+    .faq-wrap details p { padding-bottom: 20px; max-width: 700px; color: var(--muted); font-size: .9rem; line-height: 1.6; }
+
+    .sibrow {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 18px;
+      margin-top: 56px;
+      padding-top: 26px;
+      border-top: 1px solid var(--line);
+      font-size: .84rem;
+    }
+    .sibrow b { color: var(--muted); font-size: .68rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .sibrow a { font-weight: 700; }
+    .sibrow a:hover { color: var(--coral-dark); }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 1100px) {
+      .gps-grid, .dev-grid, .faq-grid { grid-template-columns: 1fr; gap: 36px; }
+      .feat-hero .hero-grid { grid-template-columns: 1fr; }
+      .duo { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 860px) {
+      .feat-section { padding: 64px 0; }
+      .lifts { grid-template-columns: 1fr 1fr; }
+      .proofband { grid-template-columns: 1fr; }
+      .gate-rule { grid-template-columns: 1fr; gap: 6px; }
+      .devrow { grid-template-columns: 1fr; gap: 4px; }
+      .fx-photo img { height: 180px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 520px) {
+      .lifts { grid-template-columns: 1fr; }
+      .proof-cell b { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="https://www.vantagefit.io/" aria-label="Vantage Fit home">
+        <img src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37" style="height:32px;width:auto;display:block">
+      </a>
+
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+
+      <div class="nav-links" id="nav-links">
+
+        <!-- ---------- SOLUTIONS (signed-off two-section IA) ---------- -->
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Solutions
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Solutions menu">
+            <div class="mega-body">
+              <div class="mega-grid cols-2">
+                <div>
+                  <div class="mega-col-title">Wellness challenges: what you want to run</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/wellness-challenges/">Wellness challenges<span>The full library of ready-to-run challenges</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/step-challenges/">Step challenges<span>Company-wide step goals that get everyone moving</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/multi-activity-challenges/">Multi-activity challenges<span>Any activity, solo or in teams, over themed weeks</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/remote-team-wellness/">Remote &amp; hybrid team challenges<span>Wellness that works away from the office</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/virtual-marathon/">Virtual marathon<span>Distance events powered by steps</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Workforce health &amp; rewards: measure and motivate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/health-risk-assessment/">Health Risk Assessment<span>Baseline health screening with aggregate insights</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/workforce-health-insights/">Workforce health insights<span>Participation, challenge and activity analytics your board can read</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/wellness-rewards-program/">Wellness rewards program<span>Points and gift cards tied to real effort</span></a>
+                </div>
+              </div>
+            </div>
+            <div class="mega-foot">
+              <span>The whole product on one page: <strong>Wellness platform</strong></span>
+              <a class="text-link" style="margin-top:0;font-size:.8rem" href="https://www.vantagefit.io/solutions/wellness-platform/">See the platform
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---------- FEATURES ----------
+             Locked IA, not the live menu: Activity tracking, Fitness &
+             exercise and Nutrition & hydration are three separate
+             pages, Communications & nudges is the fourth HR page,
+             Health data upload sits under Enterprise, and the
+             Enterprise column carries no certification claims. -->
+        <div class="nav-item">
+          <button class="nav-trigger is-current" type="button" aria-expanded="false">
+            Features
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">For employees</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/activity-tracking/">Activity tracking<span>Steps, active minutes and 65 logged activity types</span></a>
+                  <a class="mega-link" href="#top" aria-current="page">Fitness &amp; exercise<span>Strength, GPS workouts and connected devices</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/nutrition-hydration/">Nutrition &amp; hydration<span>Meals against a calorie target, water by the glass</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/health-metrics/">Health metrics<span>Sleep, weight and heart rate in one place</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/mental-wellbeing/">Mental wellbeing<span>Mindfulness sessions and private check-ins</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/wellness-leagues/">Wellness leagues<span>Gold, silver and bronze tiers on a rolling average</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/personalized-programs/">Personalized programs<span>Plans tuned to each employee's goals</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">For HR teams</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/admin-dashboard-analytics/">Admin dashboard &amp; analytics<span>KPI cards, filters, insights and every CSV export</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/program-builder/">Program builder &amp; templates<span>Five self-serve formats and 27 task types</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/audience-targeting/">Audience targeting<span>Country, department, age, gender and health-risk code</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/communications-nudges/">Communications &amp; nudges<span>Lifecycle emails, push and re-engagement</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Enterprise</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/integrations-sso/">Integrations &amp; SSO<span>Wearables, HRIS and single sign-on</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/security-compliance/">Security, privacy &amp; residency<span>Aggregate-only reporting and EU data residency</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/health-data-upload/">Health data upload<span>Lab reports read into aggregate insight</span></a>
+                </div>
+              </div>
+            </div>
+            <a class="mega-banner" href="https://www.vantagefit.io/features/">
+              Every feature on one page: the Features overview
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- ---------- RESOURCES ---------- -->
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Resources
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Resources menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">Learn</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/">Blog<span>Ideas and research for healthier workplaces</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/guides/">Reports &amp; research<span>Playbooks and the annual industry report</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/tools-and-templates/">Tools &amp; templates<span>ROI calculator and DIY challenge templates</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/podcasts/">Podcasts<span>Conversations with HR and wellbeing leaders</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Evaluate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/casestudy/">Customer stories<span>Results from real customer programs</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/compare/">Comparisons<span>Vantage Fit vs the alternatives</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/">Help Center<span>Product docs and setup guides</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/getting-started/do-i-need-a-wearable/">Device support guide<span>Which wearables connect, and how</span></a>
+                </div>
+                <a class="mega-feature" href="https://www.vantagefit.io/request-demo/">
+                  <span>
+                    <small>Featured</small>
+                    <b>Walk a GPS workout</b>
+                    <p>Thirty minutes on outdoor tracking, device connections and the validation rules.</p>
+                  </span>
+                  <span class="go">Book a walkthrough
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- ============================================================
+         S1 HERO
+         ============================================================ -->
+    <header class="hero feat-hero" id="top">
+      <div class="shell hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow">Features · For employees</div>
+          <h1>An employee fitness tracking app <em>that counts more than steps.</em></h1>
+          <p class="lead">Log a bench press by reps or by minutes. Track a run on GPS with per-kilometre splits. Import the ride a Garmin recorded. Each one lands on the same participation surface as a step.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+            <a class="btn btn-outline" href="#validation">See the validation rules</a>
+          </div>
+          <div class="hero-note">
+            <span>Full Mode only</span>
+            <span>One primary device</span>
+            <span>No wearable required</span>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="fx-stage">
+            <figure class="fx-photo">
+              <img src="../styled-homepage/card-participate.jpg" alt="Employee running outdoors on a marked track during the workday" width="1200" height="800" loading="eager">
+            </figure>
+            <div class="fx-shot">
+              <img src="https://cdn.vantagecircle.com/image/upload/f_auto,q_auto,w_820/v1772194233/product-images-hub/v-fit/vantage-fit-activity-logging-gps-route-mobile.png"
+                   alt="Vantage Fit Workout Summary screen showing a mapped outdoor walking route, total distance, average pace and a per-kilometre split table"
+                   width="820" height="541" loading="eager">
+            </div>
+            <div class="fx-note">
+              <span>Route map</span>
+              <span>Per-km splits</span>
+              <span>Pace graph</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============================================================
+         S2 BEYOND STEPS
+         Activity tracking owns the 65-type catalog. This section names
+         the strength and sports set and links across for the rest.
+         ============================================================ -->
+    <section class="feat-section alt-screen reveal" id="breadth" aria-labelledby="breadth-heading">
+      <div class="shell">
+        <div class="feat-head">
+          <div class="eyebrow">Breadth</div>
+          <h2 id="breadth-heading">Strength by reps, or by minutes.</h2>
+          <p class="lead">Corporate workout tracking software usually means cardio. These take a rep count or a duration, whichever the employee counted.</p>
+        </div>
+
+        <div class="lifts">
+          <div class="lift"><strong>Bench press</strong><em>Reps or minutes</em></div>
+          <div class="lift"><strong>Squats</strong><em>Reps or minutes</em></div>
+          <div class="lift"><strong>Deadlifts</strong><em>Reps or minutes</em></div>
+          <div class="lift"><strong>Leg press</strong><em>Reps or minutes</em></div>
+          <div class="lift"><strong>Rowing</strong><em>Reps or minutes</em></div>
+          <div class="lift"><strong>Weight training session</strong><em>Duration</em></div>
+        </div>
+
+        <p class="not-a">This is logging, not programming. No sets, no RPE, no progressive overload plan. The employee records what they did, and it counts.</p>
+
+        <div class="chipline">
+          <span>Badminton</span><span>Basketball</span><span>Boxing</span><span>Cricket</span>
+          <span>Dancing</span><span>Football</span><span>Tennis</span><span>Table tennis</span>
+          <span>Martial arts</span><span>Golf</span><span>Pickleball</span><span>Bowling</span>
+          <span>Kayaking</span><span>Rock climbing</span><span>Zumba</span><span>Aerobics</span>
+          <span>HIIT</span><span>Spinning</span><span>Elliptical</span><span>Plogging</span>
+        </div>
+        <p class="visual-caption" style="margin-top:16px">All 65 types, and how each becomes a number, sit on <a class="text-link" style="display:inline;margin-top:0;font-size:inherit" href="https://www.vantagefit.io/features/activity-tracking/">activity tracking</a>.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         S3 GPS WORKOUTS
+         ============================================================ -->
+    <section class="feat-section reveal" id="gps" aria-labelledby="gps-heading">
+      <div class="shell gps-grid">
+        <div>
+          <div class="eyebrow">Outdoor</div>
+          <h2 id="gps-heading">Run, walk, cycle, wheelchair. Those four.</h2>
+          <p class="lead">GPS workout tracking is scoped on purpose. Live stats while the workout runs, then a route map, a split table and a pace graph when it stops.</p>
+          <div class="four">
+            <span>Run</span><span>Walk</span><span>Cycle</span><span>Wheelchair</span>
+          </div>
+          <div class="oneline">
+            <span>On iPhone, a <b>Live Activity</b> keeps distance and pace in the Dynamic Island and on the lock screen.</span>
+            <span>Sharing to the social feed is optional, one workout at a time.</span>
+          </div>
+        </div>
+
+        <!-- The hero already carries the finished Workout Summary
+             screenshot. This panel is the other half of the story,
+             what the screen shows while the workout is still running,
+             so the page does not print the same image twice. -->
+        <div class="live">
+          <div class="live-top"><span>While it runs</span><span>Updating live</span></div>
+          <div class="live-grid">
+            <div class="live-cell"><i>Distance</i><b>3.70 km</b></div>
+            <div class="live-cell"><i>Pace</i><b>7:18 /km</b></div>
+            <div class="live-cell"><i>Duration</i><b>27:01</b></div>
+            <div class="live-cell"><i>Calories</i><b>241 kcal</b></div>
+          </div>
+          <div class="live-foot">
+            <span class="mock-tag">Illustrative values</span>
+            <p>A split is recorded every kilometre or mile, and the route draws as it goes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         S4 THE VALIDATION GATE
+         This page owns anti-cheat. Activity tracking owns the step
+         ledger. Neither repeats the other.
+         ============================================================ -->
+    <section class="feat-section alt-screen reveal" id="validation" aria-labelledby="validation-heading">
+      <div class="shell">
+        <div class="feat-head">
+          <div class="eyebrow">Anti-cheat</div>
+          <h2 id="validation-heading">What gets a workout thrown out.</h2>
+          <p class="lead">A leaderboard is only worth running if a car ride cannot win it.</p>
+        </div>
+
+        <div class="gate-panel">
+          <div class="gate-rule">
+            <i>On iOS</i>
+            <p>Any location point below <b>100 m horizontal accuracy</b> is discarded before the route is drawn.</p>
+          </div>
+          <div class="gate-rule">
+            <i>On Android</i>
+            <p>A <b>four-method vehicle check</b> reads speed patterns, location consistency, the share of high-pace samples, and split analysis. A point needs <b>10 m</b> and <b>one second</b> of gap to be kept.</p>
+          </div>
+          <div class="gate-rule">
+            <i>On the server</i>
+            <p>A run or walk averaging faster than <b>3.5 min/km</b> is rejected, and every split has to clear the same bar.</p>
+          </div>
+        </div>
+
+        <div class="honest">
+          <strong>There is no pace limit on cycling.</strong>
+          <p>A real cyclist clears the running threshold, so applying it would throw out legitimate rides. Cycling still goes through accuracy filtering and the vehicle check. We would rather print the gap than claim a test we do not run.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         S5 IMPORT AND THE CAMERA
+         ============================================================ -->
+    <section class="feat-section reveal" id="import" aria-labelledby="import-heading">
+      <div class="shell">
+        <div class="feat-head">
+          <div class="eyebrow">Work the phone did not see</div>
+          <h2 id="import-heading">The watch tracked it. Bring it across.</h2>
+        </div>
+
+        <div class="duo">
+          <div class="panel">
+            <div class="panel-top">
+              <strong>Workout import</strong>
+              <span class="badge badge-manual">Manual tap on iOS</span>
+            </div>
+            <div class="panel-body">
+              <div class="oneline">
+                <span>On iPhone, Apple Health surfaces the workout and a notification appears. The employee taps <b>Import</b>. Never automatic.</span>
+                <span>On Android, workout import runs through <b>Health Connect</b>.</span>
+                <span>Running, walking, cycling and wheelchair arrive with distance, duration, calories, route and splits.</span>
+              </div>
+            </div>
+            <div class="panel-foot">Tracked the same session in the app already? The import is blocked, so nothing counts twice.</div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-top">
+              <strong>Squat tracker</strong>
+              <span class="badge badge-cam">Camera pose-detection</span>
+            </div>
+            <div class="panel-body">
+              <div class="oneline">
+                <span>The phone camera counts reps with <b>no equipment</b>, standing to depth and back up.</span>
+                <span>The feed is processed <b>on the device</b> and is never recorded.</span>
+                <span>Only the rep count and the session length are saved.</span>
+              </div>
+            </div>
+            <div class="panel-foot">Squat counts feed challenge tasks the way a logged run does.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         S6 DEVICES
+         ============================================================ -->
+    <section class="feat-section alt-screen reveal" id="devices" aria-labelledby="devices-heading">
+      <div class="shell dev-grid">
+        <div>
+          <div class="eyebrow">Connections</div>
+          <h2 id="devices-heading">One primary device at a time.</h2>
+          <p class="lead">Connecting Fitbit or Garmin overrides Apple Health or Google Fit as the step source, so a wrist and a pocket never both count.</p>
+
+          <div class="devtable">
+            <div class="devrow">
+              <strong>Fitbit</strong>
+              <p>Direct connection, signed in from inside the app, iOS and Android.</p>
+            </div>
+            <div class="devrow">
+              <strong>Garmin</strong>
+              <p>Direct connection with real-time push. <b>Expires after 60 days</b> and has to be renewed.</p>
+            </div>
+            <div class="devrow">
+              <strong>Apple Watch</strong>
+              <p>Flows in through Apple Health once paired, and can be picked as the step device.</p>
+            </div>
+            <div class="devrow">
+              <strong>Samsung Watch</strong>
+              <p>Connected from Device Management as the selected Android device.</p>
+            </div>
+            <div class="devrow">
+              <strong>70+ trusted apps</strong>
+              <p>Amazfit and Zepp, Mi Band, Huawei, Nike Run Club, Strava, feeding through Apple Health.</p>
+            </div>
+          </div>
+
+          <div class="gatebar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 4 6v6c0 4.4 3.4 8.3 8 9 4.6-.7 8-4.6 8-9V6z"/></svg>
+            <span>Employees connect their own devices. Admins see how many connected one, never what a single device recorded.</span>
+          </div>
+        </div>
+
+        <figure class="dev-shot">
+          <img src="https://cdn.vantagecircle.com/image/upload/f_auto,q_auto,w_820/v1772104740/product-images-hub/v-fit/vantage-fit-connected-devices-sync-mobile.png"
+               alt="Devices and Connections screens listing Apple Health, Apple Watch, Garmin and Fitbit with Connect buttons, and a confirmation dialog before an Apple Watch overwrites recent step data"
+               width="820" height="541" loading="lazy">
+          <figcaption>Devices and Connections. Switching the primary device warns first: up to 30 days of steps can be overwritten.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         S7 PROOF
+         Assigned to this page only: Tata 472 GPS workouts and the two
+         Wipro figures. Tata 6,400+ and IBS belong to Activity tracking.
+         ============================================================ -->
+    <section class="feat-section reveal" id="proof" aria-labelledby="proof-heading">
+      <div class="shell">
+        <h2 id="proof-heading" style="position:absolute;left:-9999px">Customer results</h2>
+        <div class="proofband">
+          <div class="proof-cell">
+            <b>472</b>
+            <p>Outdoor GPS workouts tracked across the Tata Motors program.<span class="verify">Verify</span></p>
+          </div>
+          <div class="proof-cell">
+            <b>12,236</b>
+            <p>Squats counted by camera during a Wipro challenge.<span class="verify">Verify</span></p>
+          </div>
+          <div class="proof-cell">
+            <b>163</b>
+            <p>Yoga sessions logged in the same Wipro program.<span class="verify">Verify</span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         S8 TIER GATE + FAQ
+         ============================================================ -->
+    <section class="feat-section alt-screen reveal" id="faq" aria-labelledby="faq-heading">
+      <div class="shell faq-grid">
+        <div class="feat-head">
+          <div class="eyebrow">Rollout questions</div>
+          <h2 id="faq-heading">Three things buyers ask in week one.</h2>
+          <div class="gatebar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            <span>Everything on this page is Full Mode. Lite Mode is steps only, so none of it appears.</span>
+          </div>
+        </div>
+        <div class="faq-wrap">
+          <details>
+            <summary>Does any of this need a wearable?</summary>
+            <p>No. GPS workouts, the squat tracker and strength logging all run on the phone. A wearable adds workout import and better step accuracy.</p>
+          </details>
+          <details>
+            <summary>A Garmin stopped syncing after two months. Why?</summary>
+            <p>Garmin access tokens expire at 60 days. Reconnect from Settings, Device Management, and a manual sync backfills the last seven days.</p>
+          </details>
+          <details>
+            <summary>Can someone import a swim from an Apple Watch?</summary>
+            <p>Not today. Import covers running, walking, cycling and wheelchair. A swim is still loggable by hand as one of the 65 activity types.</p>
+          </details>
+        </div>
+
+        <div class="sibrow">
+          <b>More for employees</b>
+          <a href="https://www.vantagefit.io/features/activity-tracking/">Activity tracking</a>
+          <a href="https://www.vantagefit.io/features/nutrition-hydration/">Nutrition &amp; hydration</a>
+          <a href="https://www.vantagefit.io/features/">All features</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         S9 CLOSER
+         ============================================================ -->
+    <section class="final" id="demo" aria-labelledby="demo-heading">
+      <div class="shell">
+        <h2 id="demo-heading">Watch a run become a leaderboard row.</h2>
+        <p>Thirty minutes on outdoor tracking, device connections and the validation rules, against your own program.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+          <a class="btn btn-outline" href="https://www.vantagefit.io/features/activity-tracking/">See activity tracking</a>
+        </div>
+        <div class="final-checks">
+          <span>Full Mode feature set</span>
+          <span>Four GPS types</span>
+          <span>100+ organizations</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="https://www.vantagefit.io/">
+            <img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37" style="height:28px;width:auto;display:block">
+          </a>
+          <p class="footer-about">Inclusive wellness that turns participation into measurable progress.</p>
+        </div>
+        <div>
+          <div class="footer-title">For employees</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/features/activity-tracking/">Activity tracking</a>
+            <a href="#top">Fitness &amp; exercise</a>
+            <a href="https://www.vantagefit.io/features/nutrition-hydration/">Nutrition &amp; hydration</a>
+            <a href="https://www.vantagefit.io/features/health-metrics/">Health metrics</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">For HR teams</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/features/admin-dashboard-analytics/">Admin dashboard</a>
+            <a href="https://www.vantagefit.io/features/program-builder/">Program builder</a>
+            <a href="https://www.vantagefit.io/features/audience-targeting/">Audience targeting</a>
+            <a href="https://www.vantagefit.io/features/communications-nudges/">Communications &amp; nudges</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Company</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/about-us/">About</a>
+            <a href="https://www.vantagefit.io/casestudy/">Case studies</a>
+            <a href="https://www.vantagefit.io/en/help/">Help Center</a>
+            <a href="https://www.vantagefit.io/request-demo/">Contact sales</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Vantage Circle. All rights reserved.</span>
+        <span>Aggregate reporting for HR admins</span>
+        <span>Wellness built for participation.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav
+    const menuButton = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation');
+      navLinks.classList.toggle('open', !open);
+    });
+
+    // Mega menus: hover on desktop, tap on mobile, Escape closes.
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const desktopNav = window.matchMedia('(min-width: 861px)');
+    let closeTimer;
+
+    const closeAll = (except = null) => {
+      navItems.forEach((item) => { if (item !== except) item.classList.remove('desktop-open'); });
+    };
+
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => {
+        if (!desktopNav.matches) return;
+        window.clearTimeout(closeTimer);
+        closeAll(item);
+        item.classList.remove('esc-closed');
+        item.classList.add('desktop-open');
+      });
+      item.addEventListener('pointerleave', () => {
+        if (!desktopNav.matches) return;
+        closeTimer = window.setTimeout(() => {
+          if (!item.matches(':hover') && !item.contains(document.activeElement)) item.classList.remove('desktop-open');
+        }, 120);
+      });
+      item.querySelector('.nav-trigger')?.addEventListener('click', (e) => {
+        if (desktopNav.matches) return;
+        e.preventDefault();
+        const isOpen = item.classList.contains('open');
+        navItems.forEach((n) => {
+          n.classList.remove('open');
+          n.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          item.classList.add('open');
+          item.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      navItems.forEach((item) => {
+        item.classList.remove('desktop-open', 'open');
+        if (item.contains(document.activeElement)) item.classList.add('esc-closed');
+      });
+    });
+
+    // Section reveal
+    const reveals = [...document.querySelectorAll('.reveal')];
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      reveals.forEach((el) => el.classList.add('on'));
+    } else {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('on');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -12% 0px' });
+      reveals.forEach((el) => io.observe(el));
+    }
+  </script>
+</body>
+</html>

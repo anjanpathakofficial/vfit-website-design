@@ -1,0 +1,916 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Required: these are unshipped preview mocks. Do not remove. -->
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <meta name="description" content="Calorie targets from Mifflin-St Jeor, macros that move with the goal, and a day split 25/35/10/30 across four meals. Water logs one fixed 250 ml glass at a time.">
+  <meta name="theme-color" content="#18262b">
+
+  <title>Employee Nutrition Tracking App | Vantage Fit</title>
+
+  <link rel="stylesheet" href="../styles/enterprise.css">
+
+  <style>
+    /* ============================================================
+       NUTRITION & HYDRATION (/features/nutrition-hydration/)
+       page-local styles.
+
+       Tokens, type scale, buttons, nav, .mega, .shell, .eyebrow,
+       .hero, .final closer and the footer all come from
+       ../styles/enterprise.css. Nothing here redefines a token, a
+       font stack or a brand colour.
+
+       Chrome shared with the two sibling logging pages, unchanged:
+         nav current-page marking, .skip-link, focus visibility,
+         forced-colors fallback, .feat-section / .feat-head, .reveal,
+         .oneline, .gatebar, .faq-wrap, .sibrow, footer grid override.
+
+       NEW ON THIS PAGE (owned here, not repeated on the siblings):
+         .nh-stage / .nh-shot / .nh-photo  the third hero composition
+           in the set. Activity stacks a product shot over a photo row,
+           Fitness leads with a photo banner, this one runs the food
+           screenshot large with a photograph on its corner.
+         .chain / .chain-step  the calorie derivation. Activity owns an
+           addition, Fitness owns a rejection list, this page owns a
+           derivation with a safety floor.
+         .macro / .macro-row   macro ratios by goal.
+         .split / .split-seg   the drawn 25 / 35 / 10 / 30 meal bar,
+           which is the one thing a screenshot cannot label.
+         .glasses              the fixed 250 ml glass row.
+         .limits               the honest database and tier limits.
+         .through              the participation band.
+       ============================================================ */
+
+    /* --- Nav: mark this page current inside the Features panel. --- */
+    .nav-trigger.is-current { background: var(--soft); color: var(--ink); box-shadow: inset 0 -2px 0 var(--coral); border-radius: 9px 9px 0 0; }
+    .mega a.mega-link[aria-current="page"] { background: var(--soft); box-shadow: inset 3px 0 0 var(--coral); font-weight: 800; }
+    .nav-item.esc-closed .mega { display: none; }
+    @media (min-width: 861px) {
+      .nav-inner { position: relative; }
+      .nav-item { position: static; }
+      .nav-item::after { display: none; }
+      .nav-trigger { position: relative; }
+      .nav-trigger::after { position: absolute; top: 100%; left: 0; width: 100%; height: 14px; content: ""; }
+      .nav-item .mega { left: auto; right: 0; transform: none; }
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      z-index: 100;
+      padding: 10px 16px;
+      border-radius: 0 0 10px 0;
+      background: var(--ink);
+      color: #fff;
+      font-size: .85rem;
+      font-weight: 700;
+    }
+    .skip-link:focus { left: 0; top: 0; }
+    a:focus-visible, button:focus-visible, summary:focus-visible {
+      outline: 3px solid var(--coral-deep);
+      outline-offset: 2px;
+    }
+
+    @media (forced-colors: active) {
+      .hero-copy h1 em { background: none; -webkit-text-fill-color: currentColor; color: CanvasText; }
+    }
+
+    .chain-step b, .macro-row span, .split-seg b, .glass-num { font-variant-numeric: tabular-nums; }
+
+    /* --- Shared section shells --- */
+    .feat-section { padding: 92px 0; }
+    .feat-head { max-width: 720px; }
+    .feat-head .lead { margin-top: 14px; }
+    .alt-screen { background: var(--canvas); }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s cubic-bezier(.22,.9,.24,1); }
+    .reveal.on { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+    /* Block, not flex: these rows carry inline <b> runs, and a flex
+       parent would make each one its own flex item. */
+    .oneline { display: grid; gap: 9px; margin-top: 20px; }
+    .oneline span { position: relative; display: block; padding-left: 27px; color: var(--muted); font-size: .84rem; line-height: 1.55; }
+    .oneline span::before {
+      position: absolute;
+      top: 2px;
+      left: 0;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: rgba(65,216,180,.18);
+      color: #128f72;
+      content: "\2713";
+      font-size: .62rem;
+      font-weight: 800;
+      line-height: 17px;
+      text-align: center;
+    }
+    .oneline b { color: var(--ink); font-weight: 700; }
+
+    .gatebar {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-top: 26px;
+      padding: 16px 18px;
+      border: 1px solid rgba(246,185,59,.45);
+      border-radius: 14px;
+      background: rgba(246,185,59,.09);
+      font-size: .84rem;
+      font-weight: 650;
+      line-height: 1.5;
+    }
+    .gatebar svg { width: 17px; flex: none; margin-top: 2px; color: #8a6212; }
+
+    /* ============================================================
+       S1 HERO
+       ============================================================ */
+    .feat-hero { min-height: auto; }
+    .feat-hero .hero-grid { grid-template-columns: 1.02fr .98fr; padding: 40px 0 44px; }
+    .feat-hero .hero-copy .lead { max-width: 560px; }
+    .feat-hero .hero-copy h1 { font-size: clamp(2.3rem, 4vw, 3.05rem); max-width: 620px; }
+
+    .nh-stage { position: relative; margin-bottom: 34px; }
+    /* The CDN composite sits on a wide white plate. A card ratio taller
+       than the source's 1.515 lets object-fit trim the plate, not the
+       UI. Same treatment as the sibling pages. */
+    .nh-shot {
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 30px 74px rgba(41,41,76,.18);
+    }
+    .nh-shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .nh-photo {
+      position: absolute;
+      bottom: -30px;
+      left: -26px;
+      overflow: hidden;
+      width: 172px;
+      height: 172px;
+      border: 5px solid var(--paper);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+    .nh-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+    /* ============================================================
+       S2 THE CALORIE DERIVATION  (owned by this page)
+       ============================================================ */
+    .math-grid { display: grid; grid-template-columns: 1.04fr .96fr; align-items: start; gap: 32px; margin-top: 30px; }
+    .chain { display: grid; gap: 10px; align-content: start; }
+    .chain-step {
+      display: grid;
+      grid-template-columns: 30px minmax(0, 1fr);
+      align-items: start;
+      gap: 15px;
+      padding: 15px 18px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+    }
+    .chain-step i {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border-radius: 9px;
+      background: rgba(41,41,76,.06);
+      color: var(--muted);
+      font-size: .7rem;
+      font-style: normal;
+      font-weight: 800;
+    }
+    .chain-step strong { display: block; font-size: .9rem; letter-spacing: -.01em; }
+    .chain-step p { margin-top: 3px; color: var(--muted); font-size: .82rem; line-height: 1.55; }
+    .chain-step b { color: var(--ink); font-weight: 750; }
+    .chain-step.floor { border-color: rgba(65,216,180,.55); background: #e8f7f1; }
+    .chain-step.floor i { background: rgba(65,216,180,.3); color: #10705c; }
+
+    .macro { overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); }
+    .macro-cap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(41,41,76,.02);
+      color: var(--muted);
+      font-size: .6rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .macro-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+      padding: 11px 18px;
+      border-bottom: 1px solid var(--line);
+      font-size: .85rem;
+    }
+    .macro-row:last-child { border-bottom: 0; }
+    .macro-row strong { font-weight: 700; }
+    .macro-row span { color: var(--muted); font-weight: 750; letter-spacing: .02em; }
+
+    /* ============================================================
+       S3 THE MEAL SPLIT
+       ============================================================ */
+    .split { display: flex; overflow: hidden; margin-top: 30px; border-radius: 16px; box-shadow: var(--shadow-soft); }
+    .split-seg { padding: 22px 18px; color: #fff; }
+    .split-seg b { display: block; font-size: 1.5rem; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+    .split-seg span { display: block; margin-top: 6px; font-size: .74rem; font-weight: 700; opacity: .82; }
+    .seg-b { flex: 0 0 25%; background: #f4707f; }
+    .seg-l { flex: 0 0 35%; background: var(--coral); }
+    .seg-s { flex: 0 0 10%; background: #e05366; }
+    .seg-d { flex: 0 0 30%; background: var(--coral-deep); }
+
+    .flow-grid { display: grid; grid-template-columns: .82fr 1.18fr; align-items: center; gap: 44px; margin-top: 36px; }
+    .food-shot {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    /* Three phones side by side, so this one keeps its native ratio.
+       Cropping a multi-phone composite slices the outer screens. */
+    .food-shot img { display: block; width: 100%; height: auto; }
+    .food-shot figcaption { padding: 14px 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: .8rem; line-height: 1.5; }
+
+    /* ============================================================
+       S4 WATER
+       ============================================================ */
+    .water-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 52px; }
+    .glasses {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+    }
+    .glass {
+      display: grid;
+      flex: 0 0 auto;
+      width: 46px;
+      height: 62px;
+      place-items: center;
+      border: 2px solid rgba(65,216,180,.55);
+      border-radius: 5px 5px 12px 12px;
+      background: linear-gradient(180deg, transparent 34%, rgba(65,216,180,.24) 34%);
+      color: #10705c;
+      font-size: .62rem;
+      font-weight: 800;
+    }
+    .glass-foot { flex: 1 1 100%; margin-top: 6px; color: var(--muted); font-size: .78rem; line-height: 1.5; }
+    .glass-foot b { color: var(--ink); }
+
+    /* ============================================================
+       S5 HONEST LIMITS
+       ============================================================ */
+    .limits { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 34px; }
+    .limit {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+    }
+    .limit strong { display: block; font-size: .9rem; letter-spacing: -.01em; }
+    .limit p { margin-top: 6px; color: var(--muted); font-size: .83rem; line-height: 1.55; }
+    .limit.wide { grid-column: 1 / -1; border-color: rgba(41,41,76,.2); background: rgba(41,41,76,.03); }
+
+    /* ============================================================
+       S6 THROUGH-LINE BAND
+       ============================================================ */
+    .through {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px 34px;
+      padding: 30px 34px;
+      border-radius: var(--radius);
+      background: var(--ink);
+      color: rgba(255,255,255,.72);
+    }
+    .through strong { display: block; color: #fff; font-size: 1.18rem; letter-spacing: -.02em; }
+    .through p { margin-top: 8px; max-width: 620px; font-size: .88rem; line-height: 1.6; }
+    .through-links { display: flex; flex-wrap: wrap; gap: 10px; }
+    .through-links a {
+      display: inline-flex;
+      align-items: center;
+      padding: 9px 16px;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 999px;
+      color: #fff;
+      font-size: .82rem;
+      font-weight: 700;
+    }
+    .through-links a:hover { background: rgba(255,255,255,.12); }
+
+    /* ============================================================
+       S7 FAQ + lateral links
+       ============================================================ */
+    .faq-grid { display: grid; grid-template-columns: .78fr 1.22fr; align-items: start; gap: 56px; }
+    .faq-wrap details { border-bottom: 1px solid var(--line); }
+    .faq-wrap details:first-child { border-top: 1px solid var(--line); }
+    .faq-wrap summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 0;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -.01em;
+      cursor: pointer;
+      list-style: none;
+    }
+    .faq-wrap summary::-webkit-details-marker { display: none; }
+    .faq-wrap summary::after { color: var(--coral-dark); content: "+"; font-size: 1.3rem; font-weight: 700; }
+    .faq-wrap details[open] summary::after { content: "\2212"; }
+    .faq-wrap details p { padding-bottom: 20px; max-width: 700px; color: var(--muted); font-size: .9rem; line-height: 1.6; }
+
+    .sibrow {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 18px;
+      margin-top: 56px;
+      padding-top: 26px;
+      border-top: 1px solid var(--line);
+      font-size: .84rem;
+    }
+    .sibrow b { color: var(--muted); font-size: .68rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .sibrow a { font-weight: 700; }
+    .sibrow a:hover { color: var(--coral-dark); }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 1100px) {
+      .math-grid, .flow-grid, .water-grid, .faq-grid { grid-template-columns: 1fr; gap: 36px; }
+      .feat-hero .hero-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 860px) {
+      .feat-section { padding: 64px 0; }
+      .limits { grid-template-columns: 1fr; }
+      /* The corner overlap needs room the phone width does not have. */
+      .nh-stage { margin-bottom: 0; }
+      .nh-photo { position: static; width: 100%; height: 150px; margin-top: 14px; border-width: 0; border-radius: 16px; }
+      .split { flex-wrap: wrap; }
+      .split-seg { flex: 1 1 50%; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 520px) {
+      .split-seg { flex: 1 1 100%; }
+      .glass { width: 40px; height: 54px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="https://www.vantagefit.io/" aria-label="Vantage Fit home">
+        <img src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37" style="height:32px;width:auto;display:block">
+      </a>
+
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+
+      <div class="nav-links" id="nav-links">
+
+        <!-- ---------- SOLUTIONS (signed-off two-section IA) ---------- -->
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Solutions
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Solutions menu">
+            <div class="mega-body">
+              <div class="mega-grid cols-2">
+                <div>
+                  <div class="mega-col-title">Wellness challenges: what you want to run</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/wellness-challenges/">Wellness challenges<span>The full library of ready-to-run challenges</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/step-challenges/">Step challenges<span>Company-wide step goals that get everyone moving</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/multi-activity-challenges/">Multi-activity challenges<span>Any activity, solo or in teams, over themed weeks</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/remote-team-wellness/">Remote &amp; hybrid team challenges<span>Wellness that works away from the office</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/virtual-marathon/">Virtual marathon<span>Distance events powered by steps</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Workforce health &amp; rewards: measure and motivate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/health-risk-assessment/">Health Risk Assessment<span>Baseline health screening with aggregate insights</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/workforce-health-insights/">Workforce health insights<span>Participation, challenge and activity analytics your board can read</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/wellness-rewards-program/">Wellness rewards program<span>Points and gift cards tied to real effort</span></a>
+                </div>
+              </div>
+            </div>
+            <div class="mega-foot">
+              <span>The whole product on one page: <strong>Wellness platform</strong></span>
+              <a class="text-link" style="margin-top:0;font-size:.8rem" href="https://www.vantagefit.io/solutions/wellness-platform/">See the platform
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---------- FEATURES ----------
+             Locked IA, not the live menu: Activity tracking, Fitness &
+             exercise and Nutrition & hydration are three separate
+             pages, Communications & nudges is the fourth HR page,
+             Health data upload sits under Enterprise, and the
+             Enterprise column carries no certification claims. -->
+        <div class="nav-item">
+          <button class="nav-trigger is-current" type="button" aria-expanded="false">
+            Features
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">For employees</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/activity-tracking/">Activity tracking<span>Steps, active minutes and 65 logged activity types</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/fitness-exercise/">Fitness &amp; exercise<span>Strength, GPS workouts and connected devices</span></a>
+                  <a class="mega-link" href="#top" aria-current="page">Nutrition &amp; hydration<span>Meals against a calorie target, water by the glass</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/health-metrics/">Health metrics<span>Sleep, weight and heart rate in one place</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/mental-wellbeing/">Mental wellbeing<span>Mindfulness sessions and private check-ins</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/wellness-leagues/">Wellness leagues<span>Gold, silver and bronze tiers on a rolling average</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/personalized-programs/">Personalized programs<span>Plans tuned to each employee's goals</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">For HR teams</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/admin-dashboard-analytics/">Admin dashboard &amp; analytics<span>KPI cards, filters, insights and every CSV export</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/program-builder/">Program builder &amp; templates<span>Five self-serve formats and 27 task types</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/audience-targeting/">Audience targeting<span>Country, department, age, gender and health-risk code</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/communications-nudges/">Communications &amp; nudges<span>Lifecycle emails, push and re-engagement</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Enterprise</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/integrations-sso/">Integrations &amp; SSO<span>Wearables, HRIS and single sign-on</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/security-compliance/">Security, privacy &amp; residency<span>Aggregate-only reporting and EU data residency</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/health-data-upload/">Health data upload<span>Lab reports read into aggregate insight</span></a>
+                </div>
+              </div>
+            </div>
+            <a class="mega-banner" href="https://www.vantagefit.io/features/">
+              Every feature on one page: the Features overview
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- ---------- RESOURCES ---------- -->
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Resources
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Resources menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">Learn</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/">Blog<span>Ideas and research for healthier workplaces</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/guides/">Reports &amp; research<span>Playbooks and the annual industry report</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/tools-and-templates/">Tools &amp; templates<span>ROI calculator and DIY challenge templates</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/podcasts/">Podcasts<span>Conversations with HR and wellbeing leaders</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Evaluate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/casestudy/">Customer stories<span>Results from real customer programs</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/compare/">Comparisons<span>Vantage Fit vs the alternatives</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/">Help Center<span>Product docs and setup guides</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/health-tracking/what-are-calorie-targets/">Calorie target guide<span>How a daily target and macro split are set</span></a>
+                </div>
+                <a class="mega-feature" href="https://www.vantagefit.io/request-demo/">
+                  <span>
+                    <small>Featured</small>
+                    <b>Walk the calorie math</b>
+                    <p>Thirty minutes on targets, meal splits and water tasks, with your rollout in mind.</p>
+                  </span>
+                  <span class="go">Book a walkthrough
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- ============================================================
+         S1 HERO
+         ============================================================ -->
+    <header class="hero feat-hero" id="top">
+      <div class="shell hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow">Features · For employees</div>
+          <h1>An employee nutrition tracking app <em>that shows its working.</em></h1>
+          <p class="lead">The daily target is not a round number somebody picked. It comes from Mifflin-St Jeor, an activity multiplier and the goal the employee chose, then splits across four meals. Water logs one fixed 250 ml glass at a time.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+            <a class="btn btn-outline" href="#math">See the calorie math</a>
+          </div>
+          <div class="hero-note">
+            <span>Full Mode only</span>
+            <span>Basic profile, no HRA</span>
+            <span>Mobile app</span>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="nh-stage">
+            <div class="nh-shot">
+              <img src="https://cdn.vantagecircle.com/image/upload/f_auto,q_auto,w_820/v1772194231/product-images-hub/v-fit/vantage-fit-calorie-balance-mobile.png"
+                   alt="Vantage Fit daily view showing steps and calories burned, a calorie target row setting meals against resting and active burn, and cards for nutrition and water intake"
+                   width="820" height="541" loading="eager">
+            </div>
+            <figure class="nh-photo">
+              <img src="../styled-homepage/card-invite.jpg" alt="Colleagues sharing a meal at a workplace table" width="800" height="800" loading="lazy">
+            </figure>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============================================================
+         S2 THE CALORIE DERIVATION
+         Activity tracking owns an addition, Fitness owns a rejection
+         list, this page owns a derivation with a safety floor.
+         ============================================================ -->
+    <section class="feat-section alt-screen reveal" id="math" aria-labelledby="math-heading">
+      <div class="shell">
+        <div class="feat-head">
+          <div class="eyebrow">The math</div>
+          <h2 id="math-heading">Mifflin-St Jeor, then the goal.</h2>
+          <p class="lead">Four steps, and a floor that stops the number going somewhere unsafe.</p>
+        </div>
+
+        <div class="math-grid">
+          <div class="chain">
+            <div class="chain-step">
+              <i>1</i>
+              <div>
+                <strong>Resting burn</strong>
+                <p>Mifflin-St Jeor, from height, weight, date of birth and gender.</p>
+              </div>
+            </div>
+            <div class="chain-step">
+              <i>2</i>
+              <div>
+                <strong>Activity multiplier</strong>
+                <p>Sedentary <b>1.2</b>, light <b>1.375</b>, moderate <b>1.55</b>, heavy <b>1.725</b>, very heavy <b>1.9</b>.</p>
+              </div>
+            </div>
+            <div class="chain-step">
+              <i>3</i>
+              <div>
+                <strong>Goal adjustment</strong>
+                <p>Plus or minus <b>550 calories a day</b>, which is roughly half a kilo a week.</p>
+              </div>
+            </div>
+            <div class="chain-step floor">
+              <i>4</i>
+              <div>
+                <strong>Safety floor</strong>
+                <p>The target never drops below <b>1,800</b> for men or <b>1,200</b> for women.</p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="macro">
+              <div class="macro-cap"><span>Macros by goal</span><span>Protein / carbs / fat</span></div>
+              <div class="macro-row"><strong>Maintain</strong><span>30 / 50 / 20</span></div>
+              <div class="macro-row"><strong>Gain</strong><span>40 / 40 / 20</span></div>
+              <div class="macro-row"><strong>Lose</strong><span>30 / 40 / 30</span></div>
+              <div class="macro-row"><strong>Lose belly fat</strong><span>40 / 30 / 30</span></div>
+            </div>
+
+            <div class="gatebar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+              <span>All of it comes from the basic onboarding profile. The Health Risk Assessment is not required for a calorie or macro target.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         S3 THE MEAL SPLIT
+         ============================================================ -->
+    <section class="feat-section reveal" id="meals" aria-labelledby="meals-heading">
+      <div class="shell">
+        <div class="feat-head">
+          <div class="eyebrow">Food logging</div>
+          <h2 id="meals-heading">Breakfast 25. Lunch 35. Snacks 10. Dinner 30.</h2>
+          <p class="lead">Corporate wellness food logging usually stops at a daily total. A day is lost at lunch, not at midnight, so the target is split before the employee opens the app.</p>
+        </div>
+
+        <div class="split" role="img" aria-label="Daily calorie target split across four meals: breakfast 25 percent, lunch 35 percent, snacks 10 percent, dinner 30 percent">
+          <div class="split-seg seg-b"><b>25%</b><span>Breakfast</span></div>
+          <div class="split-seg seg-l"><b>35%</b><span>Lunch</span></div>
+          <div class="split-seg seg-s"><b>10%</b><span>Snacks</span></div>
+          <div class="split-seg seg-d"><b>30%</b><span>Dinner</span></div>
+        </div>
+
+        <div class="flow-grid">
+          <div>
+            <div class="oneline">
+              <span>Pick the meal, then <b>search</b> the food or tap it from the <b>Quick Tray</b> of things logged often.</span>
+              <span>Set the serving and the quantity. Calories with <b>protein, carbs and fat</b> update as they change.</span>
+              <span>The entry lands against that meal's target, not just the daily one.</span>
+            </div>
+          </div>
+          <figure class="food-shot">
+            <img src="https://cdn.vantagecircle.com/image/upload/f_auto,q_auto,w_820/v1772104741/product-images-hub/v-fit/vantage-fit-food-logging-mobile.png"
+                 alt="Log Meal screens with tabs for breakfast, lunch, snacks and dinner, a selected food showing its macro percentages, and a calorie breakdown of recommended, consumed and remaining"
+                 width="820" height="541" loading="lazy">
+            <figcaption>Log Meal by tab, a food with its macro breakdown, and the calorie summary for that meal.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         S4 WATER
+         ============================================================ -->
+    <section class="feat-section alt-screen reveal" id="water" aria-labelledby="water-heading">
+      <div class="shell water-grid">
+        <div>
+          <div class="eyebrow">Hydration</div>
+          <h2 id="water-heading">One tap is one glass. 250 ml.</h2>
+          <p class="lead">The glass size is fixed, so two employees who logged eight glasses logged the same amount. That is what makes employee hydration tracking comparable across a workforce.</p>
+          <div class="oneline">
+            <span>The default target is <b>8 glasses</b>, which is 2 litres.</span>
+            <span>An exact amount can be typed instead, in litres or fluid ounces.</span>
+            <span>A challenge task can set its own target, for example <b>3.0 litres on four days this week</b>.</span>
+          </div>
+        </div>
+
+        <div class="glasses" role="img" aria-label="Eight glasses making up the default daily water target of two litres">
+          <span class="glass glass-num">250</span>
+          <span class="glass glass-num">250</span>
+          <span class="glass glass-num">250</span>
+          <span class="glass glass-num">250</span>
+          <span class="glass glass-num">250</span>
+          <span class="glass glass-num">250</span>
+          <span class="glass glass-num">250</span>
+          <span class="glass glass-num">250</span>
+          <p class="glass-foot"><b>8 glasses = 2 litres.</b> The default target when no challenge is running.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         S5 HONEST LIMITS
+         ============================================================ -->
+    <section class="feat-section reveal" id="limits" aria-labelledby="limits-heading">
+      <div class="shell">
+        <div class="feat-head">
+          <div class="eyebrow">What it is not</div>
+          <h2 id="limits-heading">A few thousand foods, and a way around it.</h2>
+        </div>
+
+        <div class="limits">
+          <div class="limit">
+            <strong>The database is roughly 3,000 to 4,000 items</strong>
+            <p>It is being expanded. Regional dishes and home cooking are the known gaps, and we would rather name them.</p>
+          </div>
+          <div class="limit">
+            <strong>Manual entry needs no database</strong>
+            <p>A name, a calorie count, and macros if they are known. An estimate that gets logged beats a meal that does not.</p>
+          </div>
+          <div class="limit">
+            <strong>Suggest a food</strong>
+            <p>Employees submit what is missing, and the team reviews it for a later database update.</p>
+          </div>
+          <div class="limit">
+            <strong>None of this is AI</strong>
+            <p>Search is search, and the target is a formula you can check by hand.</p>
+          </div>
+          <div class="limit wide">
+            <strong>Mobile only, and Full Mode only</strong>
+            <p>Food and water logging live in the mobile app, not the web app. Neither exists in Lite Mode, which is steps and Race challenges.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         S6 THROUGH-LINE BAND
+         ============================================================ -->
+    <section class="feat-section alt-screen reveal" id="counts" aria-labelledby="counts-heading">
+      <div class="shell">
+        <div class="through">
+          <div>
+            <strong id="counts-heading">A logged meal counts the way a run does.</strong>
+            <p>Water and nutrition tasks sit in the same challenge builder as steps and workouts, and land in the same participation rate your reports read.</p>
+          </div>
+          <div class="through-links">
+            <a href="https://www.vantagefit.io/features/activity-tracking/">Activity tracking</a>
+            <a href="https://www.vantagefit.io/features/fitness-exercise/">Fitness &amp; exercise</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         S7 FAQ + lateral links
+         ============================================================ -->
+    <section class="feat-section reveal" id="faq" aria-labelledby="faq-heading">
+      <div class="shell faq-grid">
+        <div class="feat-head">
+          <div class="eyebrow">Rollout questions</div>
+          <h2 id="faq-heading">Three things buyers ask in week one.</h2>
+        </div>
+        <div class="faq-wrap">
+          <details>
+            <summary>Does someone have to finish the Health Risk Assessment first?</summary>
+            <p>No. Height, weight, date of birth, gender, goal and activity level from onboarding are enough for a daily target and a macro split.</p>
+          </details>
+          <details>
+            <summary>Can an employee log lunch from a laptop?</summary>
+            <p>No. Food and water logging are in the mobile app. The web app covers challenges and leaderboards.</p>
+          </details>
+          <details>
+            <summary>Does HR see what someone ate?</summary>
+            <p>No. Admins see aggregates. An individual food diary is never open to an admin.</p>
+          </details>
+        </div>
+
+        <div class="sibrow">
+          <b>More for employees</b>
+          <a href="https://www.vantagefit.io/features/activity-tracking/">Activity tracking</a>
+          <a href="https://www.vantagefit.io/features/fitness-exercise/">Fitness &amp; exercise</a>
+          <a href="https://www.vantagefit.io/features/">All features</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         S8 CLOSER
+         ============================================================ -->
+    <section class="final" id="demo" aria-labelledby="demo-heading">
+      <div class="shell">
+        <h2 id="demo-heading">See a lunch land in the participation rate.</h2>
+        <p>Thirty minutes on calorie targets, food and water logging, and the challenge tasks that read them.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+          <a class="btn btn-outline" href="https://www.vantagefit.io/features/activity-tracking/">See activity tracking</a>
+        </div>
+        <div class="final-checks">
+          <span>Full Mode only</span>
+          <span>Mobile app</span>
+          <span>100+ organizations</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="https://www.vantagefit.io/">
+            <img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37" style="height:28px;width:auto;display:block">
+          </a>
+          <p class="footer-about">Inclusive wellness that turns participation into measurable progress.</p>
+        </div>
+        <div>
+          <div class="footer-title">For employees</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/features/activity-tracking/">Activity tracking</a>
+            <a href="https://www.vantagefit.io/features/fitness-exercise/">Fitness &amp; exercise</a>
+            <a href="#top">Nutrition &amp; hydration</a>
+            <a href="https://www.vantagefit.io/features/health-metrics/">Health metrics</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">For HR teams</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/features/admin-dashboard-analytics/">Admin dashboard</a>
+            <a href="https://www.vantagefit.io/features/program-builder/">Program builder</a>
+            <a href="https://www.vantagefit.io/features/audience-targeting/">Audience targeting</a>
+            <a href="https://www.vantagefit.io/features/communications-nudges/">Communications &amp; nudges</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Company</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/about-us/">About</a>
+            <a href="https://www.vantagefit.io/casestudy/">Case studies</a>
+            <a href="https://www.vantagefit.io/en/help/">Help Center</a>
+            <a href="https://www.vantagefit.io/request-demo/">Contact sales</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Vantage Circle. All rights reserved.</span>
+        <span>Aggregate reporting for HR admins</span>
+        <span>Wellness built for participation.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav
+    const menuButton = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation');
+      navLinks.classList.toggle('open', !open);
+    });
+
+    // Mega menus: hover on desktop, tap on mobile, Escape closes.
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const desktopNav = window.matchMedia('(min-width: 861px)');
+    let closeTimer;
+
+    const closeAll = (except = null) => {
+      navItems.forEach((item) => { if (item !== except) item.classList.remove('desktop-open'); });
+    };
+
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => {
+        if (!desktopNav.matches) return;
+        window.clearTimeout(closeTimer);
+        closeAll(item);
+        item.classList.remove('esc-closed');
+        item.classList.add('desktop-open');
+      });
+      item.addEventListener('pointerleave', () => {
+        if (!desktopNav.matches) return;
+        closeTimer = window.setTimeout(() => {
+          if (!item.matches(':hover') && !item.contains(document.activeElement)) item.classList.remove('desktop-open');
+        }, 120);
+      });
+      item.querySelector('.nav-trigger')?.addEventListener('click', (e) => {
+        if (desktopNav.matches) return;
+        e.preventDefault();
+        const isOpen = item.classList.contains('open');
+        navItems.forEach((n) => {
+          n.classList.remove('open');
+          n.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          item.classList.add('open');
+          item.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      navItems.forEach((item) => {
+        item.classList.remove('desktop-open', 'open');
+        if (item.contains(document.activeElement)) item.classList.add('esc-closed');
+      });
+    });
+
+    // Section reveal
+    const reveals = [...document.querySelectorAll('.reveal')];
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      reveals.forEach((el) => el.classList.add('on'));
+    } else {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('on');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -12% 0px' });
+      reveals.forEach((el) => io.observe(el));
+    }
+  </script>
+</body>
+</html>

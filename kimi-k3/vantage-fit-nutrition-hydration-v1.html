@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/enterprise.css">
+  <meta name="description" content="Vantage Fit's employee nutrition tracking app sets calorie and macro targets from Mifflin-St Jeor BMR math and logs meals and water in seconds. Full Mode, mobile.">
+  <meta name="theme-color" content="#18262b">
+  <title>Employee nutrition tracking app | Vantage Fit</title>
+  <style>
+    .nav-item.is-current .nav-trigger { color: var(--ink); background: var(--soft); }
+    .mega a.mega-link[aria-current="page"] { background: var(--soft); }
+    .mega a.mega-link[aria-current="page"] span { color: var(--coral-dark); }
+
+    .nh-hero {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px 0 56px;
+      background:
+        radial-gradient(880px 520px at 86% 8%, rgba(241, 81, 98, .09), transparent 62%),
+        radial-gradient(720px 480px at 4% 96%, rgba(65, 216, 180, .1), transparent 60%),
+        linear-gradient(180deg, #fff 0%, #fdf7f7 100%);
+    }
+    .nh-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.05fr;
+      gap: 52px;
+      align-items: center;
+    }
+    .nh-hero h1 { max-width: 560px; }
+    .nh-hero h1 em {
+      font-style: normal;
+      background: linear-gradient(125deg, var(--coral) 20%, var(--coral-deep) 90%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+    .nh-hero .lead { max-width: 520px; margin-top: 18px; }
+    .nh-hero .btn-row { margin-top: 26px; }
+
+    .nh-visual { position: relative; min-height: 470px; }
+    .nh-shot-main {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 88%;
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+    .nh-shot-main img { width: 100%; height: auto; }
+    .nh-photo {
+      position: absolute;
+      left: -6px;
+      bottom: 24px;
+      z-index: 2;
+      width: 46%;
+      margin: 0;
+      overflow: hidden;
+      border: 5px solid #fff;
+      border-radius: 18px;
+      box-shadow: var(--shadow-soft);
+    }
+    .nh-photo img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 3; }
+    .nh-chip {
+      position: absolute;
+      right: 4px;
+      bottom: 64px;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 13px 16px;
+      border: 1px solid rgba(255,255,255,.82);
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(255,255,255,.74));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.95), 4px 18px 42px rgba(41,41,76,.17);
+      backdrop-filter: blur(18px) saturate(1.4);
+    }
+    .nh-chip i {
+      width: 10px;
+      height: 10px;
+      flex: none;
+      border-radius: 50%;
+      background: var(--mint);
+      box-shadow: 0 0 0 4px rgba(65,216,180,.18);
+    }
+    .nh-chip p { margin: 0; color: var(--muted); font-size: .64rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+    .nh-chip strong { display: block; font-size: .98rem; letter-spacing: -.02em; }
+
+    .nh-section { padding: 88px 0; }
+    .nh-section.tight { padding: 72px 0; }
+    .nh-section h2 { max-width: 760px; }
+    .nh-section .lead { margin-top: 14px; }
+    .nh-alt { background: #fff; }
+
+    .nh-math {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 44px;
+      align-items: center;
+    }
+    .nh-macro {
+      width: 100%;
+      margin-top: 26px;
+      border-collapse: collapse;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+      font-size: .86rem;
+    }
+    .nh-macro th, .nh-macro td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+    }
+    .nh-macro tr:last-child th, .nh-macro tr:last-child td { border-bottom: 0; }
+    .nh-macro thead th {
+      color: var(--muted);
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .nh-macro tbody th { font-weight: 700; }
+    .nh-macro td { color: var(--muted); font-variant-numeric: tabular-nums; }
+    .nh-split {
+      display: grid;
+      grid-template-columns: 25fr 35fr 10fr 30fr;
+      gap: 4px;
+      margin-top: 14px;
+    }
+    .nh-split span {
+      display: block;
+      padding: 10px 8px;
+      border-radius: 10px;
+      background: var(--soft);
+      font-size: .72rem;
+      font-weight: 700;
+      text-align: center;
+    }
+    .nh-split span b { display: block; font-size: .92rem; color: var(--coral); }
+    .nh-split span:nth-child(2) { background: rgba(241,81,98,.1); }
+    .nh-shot {
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+    .nh-shot img { width: 100%; height: auto; }
+    .nh-figcap { margin-top: 10px; color: var(--muted); font-size: .74rem; }
+
+    .nh-log {
+      display: grid;
+      grid-template-columns: .95fr 1.05fr;
+      gap: 44px;
+      align-items: start;
+    }
+    .nh-steps { display: grid; gap: 10px; margin-top: 4px; }
+    .nh-steps li {
+      display: grid;
+      grid-template-columns: 26px 1fr;
+      gap: 12px;
+      padding: 13px 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+      font-size: .9rem;
+      list-style: none;
+    }
+    .nh-steps li i {
+      display: grid;
+      width: 24px;
+      height: 24px;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--soft);
+      color: var(--muted);
+      font-style: normal;
+      font-size: .7rem;
+      font-weight: 800;
+    }
+    .nh-steps b { display: block; font-size: .94rem; }
+    .nh-steps span { color: var(--muted); font-size: .82rem; }
+
+    .nh-water {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 44px;
+      align-items: center;
+    }
+    .nh-glass {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 24px;
+    }
+    .nh-glass span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      font-size: .78rem;
+      font-weight: 700;
+    }
+    .nh-glass span.is-total { border-color: transparent; background: var(--ink); color: #fff; }
+    .nh-water-card {
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+      text-align: center;
+    }
+    .nh-water-card strong {
+      display: block;
+      font-size: 2.6rem;
+      letter-spacing: -.05em;
+      color: var(--coral);
+    }
+    .nh-water-card p { margin-top: 6px; color: var(--muted); font-size: .84rem; }
+    .nh-water-card small {
+      display: block;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .nh-limits {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 26px;
+    }
+    .nh-limit {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+    }
+    .nh-limit strong { display: block; font-size: .95rem; }
+    .nh-limit p { margin-top: 6px; color: var(--muted); font-size: .82rem; line-height: 1.45; }
+
+    .nh-faq details { padding: 16px 0; border-bottom: 1px solid var(--line); }
+    .nh-faq summary { cursor: pointer; font-weight: 800; letter-spacing: -.02em; list-style: none; }
+    .nh-faq summary::-webkit-details-marker { display: none; }
+    .nh-faq details p { margin-top: 8px; color: var(--muted); max-width: 720px; }
+
+    .nh-sibs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .nh-sibs a {
+      display: block;
+      padding: 16px 16px 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+    }
+    .nh-sibs a:hover { box-shadow: var(--shadow-soft); }
+    .nh-sibs small {
+      display: block;
+      color: var(--coral-dark);
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .nh-sibs b { display: block; margin-top: 6px; font-size: .95rem; }
+
+    .final { min-height: auto; padding: 88px 0; }
+    .skip {
+      position: absolute;
+      left: 12px;
+      top: 8px;
+      z-index: 80;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      font-size: .82rem;
+      font-weight: 700;
+      transform: translateY(-120%);
+    }
+    .skip:focus { transform: none; outline: 2px solid var(--coral); outline-offset: 2px; }
+    :focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
+
+    @media (max-width: 1100px) {
+      .nh-hero-grid, .nh-math, .nh-log, .nh-water { grid-template-columns: 1fr; }
+      .nh-limits, .nh-sibs { grid-template-columns: 1fr 1fr; }
+      .nh-visual { min-height: 0; position: relative; padding-bottom: 90px; }
+      .nh-shot-main { position: relative; width: 100%; }
+      .nh-photo { width: 42%; }
+    }
+    @media (max-width: 700px) {
+      .nh-hero { padding: 36px 0 44px; }
+      .nh-section, .nh-section.tight { padding: 56px 0; }
+      .nh-limits, .nh-sibs { grid-template-columns: 1fr; }
+      .nh-visual { padding-bottom: 70px; }
+      .nh-chip { right: 0; bottom: 40px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .btn:hover { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="../styled-homepage/index.html" aria-label="Vantage Fit home">
+        <img src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37" style="height:32px;width:auto;display:block">
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="nav-links" id="nav-links">
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Solutions
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Solutions menu">
+            <div class="mega-body">
+              <div class="mega-grid cols-2">
+                <div>
+                  <div class="mega-col-title">By program</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/steps-challenge/">Step challenges<span>Company-wide step goals that get everyone moving</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/multi-activity-challenges/">Multi-activity challenges<span>Custom challenges across any mix of activities</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/team-challenges/">Team challenges<span>Departments and squads, competing together</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/virtual-marathon/">Virtual marathons<span>One-day events that unite a global workforce</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/mental-health-and-wellbeing-challenges/">Mental health &amp; wellbeing<span>Mindfulness, mood and stress support at work</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/holistic-wellness-program/">Year-round wellness program<span>An always-on calendar of challenges and events</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">By need</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/global-employee-engagement/">Engage a global workforce<span>One program across countries, languages, time zones</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/remote-team-wellness/">Support remote &amp; hybrid teams<span>Wellness that works away from the office</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/wellness-rewards-program/">Reward healthy habits<span>Points and gift cards tied to real effort</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/health-fitness-analytics/">Measure program impact<span>Participation analytics your board can read</span></a>
+                </div>
+              </div>
+            </div>
+            <a class="mega-banner" href="https://www.vantagefit.io/employee-wellness-software/">
+              See Vantage Fit as your all-in-one employee wellness platform
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item is-current">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Features
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">For employees</div>
+                  <a class="mega-link" href="vantage-fit-activity-tracking-v1.html">Activity tracking<span>Steps, workouts, sleep, and everyday logs</span></a>
+                  <a class="mega-link" href="vantage-fit-fitness-exercise-v1.html">Fitness &amp; exercise<span>Workouts that count toward the same score</span></a>
+                  <a class="mega-link" href="vantage-fit-nutrition-hydration-v1.html" aria-current="page">Nutrition &amp; hydration<span>Meals and water, logged in the same app</span></a>
+                  <a class="mega-link" href="/features/health-metrics/">Health metrics<span>Personal vitals the admin never opens</span></a>
+                  <a class="mega-link" href="/features/mental-wellbeing/">Mental wellbeing<span>Mindfulness minutes that still count</span></a>
+                  <a class="mega-link" href="/features/wellness-leagues/">Wellness leagues<span>Gold, Silver, Bronze on a rolling average</span></a>
+                  <a class="mega-link" href="/features/personalized-programs/">Personalized programs<span>Plans and journeys inside the same program</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">For HR teams</div>
+                  <a class="mega-link" href="vantage-fit-admin-dashboard-analytics-v1.html">Admin dashboard &amp; analytics<span>The participation number, without the spreadsheet</span></a>
+                  <a class="mega-link" href="/features/program-builder/">Program builder &amp; templates<span>Five formats, live before lunch</span></a>
+                  <a class="mega-link" href="/features/audience-targeting/">Audience targeting<span>Country, department, age, gender, health-risk counts</span></a>
+                  <a class="mega-link" href="/features/communications-nudges/">Communications &amp; nudges<span>Lifecycle email, push, and inactive-user shortcuts</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Enterprise</div>
+                  <a class="mega-link" href="/features/integrations-sso/">Integrations &amp; SSO<span>HRIS, SSO, and device sources</span></a>
+                  <a class="mega-link" href="/features/security-compliance/">Security &amp; compliance<span>Residency, access, and data boundaries</span></a>
+                  <a class="mega-link" href="/features/health-data-upload/">Health data upload<span>Lab reports on the enterprise track</span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Resources
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Resources menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">Learn</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/">Blog<span>Ideas and research for healthier workplaces</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/guides/">Guides &amp; eBooks<span>Playbooks for launching and scaling wellness</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/podcasts/">Podcasts<span>Conversations with HR and wellbeing leaders</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/2026-global-workplace-well-being-industry-report/">2026 Industry Report<span>The state of global workplace wellbeing</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Evaluate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/casestudy/">Customer stories<span>Results from real customer programs</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/compare/">Compare platforms<span>Vantage Fit vs the alternatives</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/">Help Center<span>Product docs and setup guides</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/tools-and-templates/step-challenge-diy-template/">Step Challenge Template<span>DIY template to plan and launch a step challenge</span></a>
+                </div>
+                <a class="mega-feature" href="https://www.vantagefit.io/wellness-challenges/">
+                  <span>
+                    <small>Featured</small>
+                    <b>Wellness Challenges Library</b>
+                    <p>Browse ready-to-run challenges your teams can start this month.</p>
+                  </span>
+                  <span class="go">Explore the library
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <header class="nh-hero" id="top">
+      <div class="shell nh-hero-grid">
+        <div>
+          <p class="eyebrow">Features · For employees</p>
+          <h1>Meals and water, <em>on the same count as a run.</em></h1>
+          <p class="lead">Vantage Fit’s employee nutrition tracking app sets calorie and macro targets from real BMR math, then makes logging lunch or a glass of water a few seconds of work. It is the habit employees log most.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+            <a class="btn btn-outline" href="#targets">See the target math</a>
+          </div>
+          <p class="hero-note">
+            <span>Mifflin-St Jeor targets</span>
+            <span>Each water tap is 250 ml</span>
+            <span>Full Mode, mobile only</span>
+          </p>
+        </div>
+        <div class="nh-visual">
+          <figure class="nh-shot-main">
+            <img src="https://cdn.vantagecircle.com/image/upload/f_auto,q_auto,w_820/v1772104741/product-images-hub/v-fit/vantage-fit-food-logging-mobile.png" alt="Vantage Fit Log Meal screens showing meal slots, a recommended calorie budget per meal, and a food entry with protein, carbohydrate, and fat breakdown" width="820" height="541">
+          </figure>
+          <figure class="nh-photo">
+            <img src="../styled-homepage/card-invite.jpg" alt="Two colleagues at a worktable with laptops, mugs, and glasses of water" width="800" height="533">
+          </figure>
+          <div class="nh-chip" aria-label="Water logging increment">
+            <i></i>
+            <div>
+              <p>Fixed glass size</p>
+              <strong>1 tap = 250 ml</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="nh-section" id="targets">
+      <div class="shell nh-math">
+        <div>
+          <h2>Targets from BMR, not a template.</h2>
+          <p class="lead">Mifflin-St Jeor estimates the baseline. A Harris-Benedict multiplier adjusts for the employee’s own activity level, from ×1.2 sedentary to ×1.9 very heavy. The goal then shifts the target by at most ±550 calories a day, about half a kilo a week, and floors hold at 1,800 for men and 1,200 for women.</p>
+          <table class="nh-macro" aria-label="Macro ratios by goal, protein, carbs, fat">
+            <thead>
+              <tr><th>Goal</th><th>Protein</th><th>Carbs</th><th>Fat</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>Maintain</th><td>30%</td><td>50%</td><td>20%</td></tr>
+              <tr><th>Gain</th><td>40%</td><td>40%</td><td>20%</td></tr>
+              <tr><th>Lose</th><td>30%</td><td>40%</td><td>30%</td></tr>
+              <tr><th>Lose Belly Fat</th><td>40%</td><td>30%</td><td>30%</td></tr>
+            </tbody>
+          </table>
+          <div class="nh-split" aria-label="Recommended calorie split per meal">
+            <span><b>25%</b>Breakfast</span>
+            <span><b>35%</b>Lunch</span>
+            <span><b>10%</b>Snacks</span>
+            <span><b>30%</b>Dinner</span>
+          </div>
+          <p class="nh-figcap">Every meal gets its own budget, not just the day. Targets come from the basic onboarding profile: height, weight, date of birth, gender, goal, activity level. The full health risk assessment is not required.</p>
+        </div>
+        <div>
+          <figure class="nh-shot">
+            <img src="https://cdn.vantagecircle.com/image/upload/f_auto,q_auto,w_820/v1772194231/product-images-hub/v-fit/vantage-fit-calorie-balance-mobile.png" alt="Vantage Fit daily summary showing a calorie target, meals versus resting and active burn, the resulting deficit, and a water intake card" width="820" height="541">
+          </figure>
+          <p class="nh-figcap">The daily view: target, meals in, resting and active burn, and the deficit or surplus spelled out.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="nh-section nh-alt" id="logging">
+      <div class="shell nh-log">
+        <div>
+          <h2>Log a meal in seconds. Or just type it.</h2>
+          <p class="lead">Pick a mealtime, search, set the serving, and the entry lands with calories, protein, carbs, and fat against the day’s target.</p>
+        </div>
+        <ol class="nh-steps">
+          <li><i>1</i><div><b>Search the database</b><span>A few thousand items today, accuracy being improved. Employees can submit missing foods for inclusion.</span></div></li>
+          <li><i>2</i><div><b>Quick Tray</b><span>Frequent foods re-log with a single tap. Breakfast stops taking effort by week two.</span></div></li>
+          <li><i>3</i><div><b>Manual entry, no dependency</b><span>Name plus calories and macros. If the database misses a regional dish, the log still happens.</span></div></li>
+          <li><i>4</i><div><b>No AI claims here</b><span>AI food logging and barcode scanning are roadmap items, not live features. We do not sell them as either.</span></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="nh-section" id="water">
+      <div class="shell nh-water">
+        <div>
+          <h2>Water is one tap.</h2>
+          <p class="lead">Each tap is one fixed 250 ml glass. Employees can type an exact amount in litres or fluid ounces instead, and the default target is 8 glasses a day.</p>
+          <div class="nh-glass" aria-label="Water logging facts">
+            <span class="is-total">1 glass = 250 ml, fixed</span>
+            <span>Default target: 8 glasses</span>
+            <span>Exact entry in litres or fl oz</span>
+          </div>
+          <p class="nh-figcap" style="margin-top:14px">Challenge tasks can set custom targets, for example Drink 3.0 L, 4 days this week. A glass counts toward participation the same way a run does.</p>
+        </div>
+        <aside class="nh-water-card" aria-label="Water target example">
+          <small>Today’s target</small>
+          <strong>8 glasses</strong>
+          <p>2 litres, one 250 ml tap at a time</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="nh-section nh-alt tight" id="limits">
+      <div class="shell">
+        <h2>Where this lives.</h2>
+        <div class="nh-limits">
+          <article class="nh-limit">
+            <strong>Mobile only</strong>
+            <p>Food and water logging live in the app. The web app does not carry either one.</p>
+          </article>
+          <article class="nh-limit">
+            <strong>Full Mode only</strong>
+            <p>Lite Mode is steps. Nutrition and hydration logging switch on with the full feature set.</p>
+          </article>
+          <article class="nh-limit">
+            <strong>Private by design</strong>
+            <p>Admins see aggregates. No one in HR opens an individual’s food diary or water log.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="nh-section nh-faq tight" id="faq">
+      <div class="shell">
+        <h2>Before rollout</h2>
+        <details>
+          <summary>Is the food database comprehensive?</summary>
+          <p>No, and we say so. It holds a few thousand items with accuracy being improved. Manual entry covers any gap, and employees can submit foods for inclusion.</p>
+        </details>
+        <details>
+          <summary>Is the health risk assessment required for targets?</summary>
+          <p>No. Calorie and macro targets calculate from the basic onboarding profile: height, weight, date of birth, gender, goal, and activity level.</p>
+        </details>
+        <details>
+          <summary>Can HR see what an employee ate?</summary>
+          <p>No. Admins see company and department aggregates, never an individual’s meals or water intake.</p>
+        </details>
+        <div class="nh-sibs" aria-label="Related employee feature pages">
+          <a href="vantage-fit-activity-tracking-v1.html"><small>The surface</small><b>Activity tracking</b></a>
+          <a href="vantage-fit-fitness-exercise-v1.html"><small>Burn side</small><b>Fitness &amp; exercise</b></a>
+          <a href="/features/"><small>Browse</small><b>All features</b></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="final" id="demo">
+      <div class="shell">
+        <h2>Count the habit employees already have.</h2>
+        <p>Walk through target math, meal logging, and water tracking on the same surface that counts steps and workouts.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+          <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">Compare the tiers</a>
+        </div>
+        <div class="final-checks">
+          <span>Mifflin-St Jeor targets</span>
+          <span>Meal-level budgets</span>
+          <span>250 ml water taps</span>
+        </div>
+        <p class="final-note">Trusted by 100+ organizations.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../styled-homepage/index.html">
+            <img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37" style="height:28px;width:auto;display:block">
+          </a>
+          <p class="footer-about">Inclusive wellness that turns participation into measurable progress.</p>
+        </div>
+        <div>
+          <div class="footer-title">Product</div>
+          <div class="footer-links">
+            <a href="/features/">All features</a>
+            <a href="vantage-fit-activity-tracking-v1.html">Activity tracking</a>
+            <a href="vantage-fit-fitness-exercise-v1.html">Fitness &amp; exercise</a>
+            <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Solutions</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/steps-challenge/">Challenges</a>
+            <a href="https://www.vantagefit.io/wellness-rewards-program/">Rewards</a>
+            <a href="https://www.vantagefit.io/remote-team-wellness/">Remote teams</a>
+            <a href="https://www.vantagefit.io/global-employee-engagement/">Global engagement</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Company</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/about-us/">About</a>
+            <a href="https://www.vantagefit.io/casestudy/">Case studies</a>
+            <a href="https://www.vantagefit.io/request-demo/">Contact sales</a>
+            <a href="https://www.vantagefit.io/en/help/">Help Center</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Vantage Circle. All rights reserved.</span>
+        <span>Wellness built for participation.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuButton = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation');
+      navLinks.classList.toggle('open', !open);
+    });
+
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const navTriggers = [...document.querySelectorAll('.nav-trigger')];
+    const desktopNav = window.matchMedia('(min-width: 861px)');
+    let desktopCloseTimer;
+
+    const closeDesktopMenus = (except = null) => {
+      navItems.forEach((item) => {
+        if (item !== except) item.classList.remove('desktop-open');
+      });
+    };
+
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => {
+        if (!desktopNav.matches) return;
+        window.clearTimeout(desktopCloseTimer);
+        closeDesktopMenus(item);
+        item.classList.add('desktop-open');
+      });
+      item.addEventListener('pointerleave', () => {
+        if (!desktopNav.matches) return;
+        desktopCloseTimer = window.setTimeout(() => {
+          if (!item.matches(':hover') && !item.contains(document.activeElement)) {
+            item.classList.remove('desktop-open');
+          }
+        }, 120);
+      });
+    });
+
+    document.querySelectorAll('.nav-links > a').forEach((link) => {
+      link.addEventListener('pointerenter', () => {
+        if (desktopNav.matches) closeDesktopMenus();
+      });
+    });
+
+    navTriggers.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        if (window.matchMedia('(max-width: 860px)').matches) {
+          e.preventDefault();
+          const item = btn.closest('.nav-item');
+          const isOpen = item.classList.contains('open');
+          document.querySelectorAll('.nav-item').forEach((n) => {
+            n.classList.remove('open');
+            n.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
