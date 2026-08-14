@@ -1,0 +1,898 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/enterprise.css">
+  <meta name="description" content="Launch a corporate wellness program with the Vantage Fit wellness challenge builder. Five formats, 27 task types, and 2+ journey templates. Book a walkthrough.">
+  <meta name="theme-color" content="#18262b">
+  <title>Wellness challenge builder and templates | Vantage Fit</title>
+  <style>
+    .nav-item.is-current .nav-trigger { color: var(--ink); background: var(--soft); }
+    .mega a.mega-link[aria-current="page"] { background: var(--soft); }
+    .mega a.mega-link[aria-current="page"] span { color: var(--coral-dark); }
+
+    .pb-hero {
+      position: relative;
+      overflow: hidden;
+      min-height: min(calc(100svh - var(--nav-h)), 780px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px 0 48px;
+      background:
+        radial-gradient(880px 520px at 86% 8%, rgba(241, 81, 98, .09), transparent 62%),
+        radial-gradient(720px 480px at 4% 96%, rgba(65, 216, 180, .1), transparent 60%),
+        linear-gradient(180deg, #fff 0%, #fdf7f7 100%);
+    }
+    .pb-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.02fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .pb-hero h1 { max-width: 640px; }
+    .pb-hero h1 em {
+      font-style: normal;
+      background: linear-gradient(125deg, var(--coral) 20%, var(--coral-deep) 90%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+    .pb-hero .lead { max-width: 520px; margin-top: 18px; }
+    .pb-hero .btn-row { margin-top: 26px; }
+    .pb-visual { position: relative; min-height: 460px; }
+    .pb-photo {
+      margin: 0;
+      overflow: hidden;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      aspect-ratio: 5 / 4;
+      background: var(--soft);
+    }
+    .pb-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 42% 28%;
+    }
+    .pb-picker {
+      position: absolute;
+      left: -16px;
+      bottom: 22px;
+      z-index: 2;
+      width: min(292px, 72%);
+      padding: 14px 14px 12px;
+      border: 1px solid rgba(255,255,255,.82);
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(255,255,255,.96), rgba(255,255,255,.82));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.95), 4px 18px 42px rgba(41,41,76,.17);
+      backdrop-filter: blur(18px) saturate(1.4);
+    }
+    .pb-picker p {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: .62rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .pb-picker button {
+      display: flex;
+      width: 100%;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 0 0 4px;
+      padding: 7px 9px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--ink);
+      text-align: left;
+      cursor: default;
+    }
+    .pb-picker button.is-on {
+      border-color: rgba(241, 81, 98, .28);
+      background: rgba(241, 81, 98, .08);
+    }
+    .pb-picker b { font-size: .8rem; letter-spacing: -.02em; }
+    .pb-picker span {
+      color: var(--muted);
+      font-size: .62rem;
+      font-weight: 600;
+    }
+    .pb-picker .cap {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: .62rem;
+      font-weight: 600;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .pb-section { padding: 88px 0; }
+    .pb-section.tight { padding: 72px 0; }
+    .pb-section h2 { max-width: 780px; }
+    .pb-section .lead { margin-top: 14px; }
+    .pb-figcap {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: .72rem;
+    }
+
+    .pb-formats {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .pb-format {
+      padding: 16px 14px 14px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+    }
+    .pb-format.is-hero {
+      border-color: rgba(241, 81, 98, .28);
+      box-shadow: 0 12px 32px rgba(241, 81, 98, .08);
+    }
+    .pb-format small {
+      display: block;
+      color: var(--muted);
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .pb-format strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 1.05rem;
+      letter-spacing: -.03em;
+    }
+    .pb-format p {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: .8rem;
+      line-height: 1.4;
+    }
+
+    .pb-palette {
+      margin-top: 28px;
+      padding: 18px 18px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+    .pb-palette .bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .pb-palette .bar b { font-size: .92rem; }
+    .pb-palette .bar span {
+      color: var(--muted);
+      font-size: .72rem;
+      font-weight: 700;
+    }
+    .pb-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .pb-chips i {
+      display: inline-flex;
+      min-height: 28px;
+      align-items: center;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--canvas);
+      color: var(--ink);
+      font-style: normal;
+      font-size: .72rem;
+      font-weight: 700;
+    }
+
+    .pb-shot-wrap { margin-top: 36px; }
+    .pb-shot {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+    .pb-shot img { width: 100%; height: auto; }
+
+    .pb-alt { background: #fff; }
+    .pb-journeys {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 32px;
+    }
+    .pb-journey {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+    .pb-journey .tag {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--ink);
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .pb-journey h3 { font-size: 1.15rem; }
+    .pb-journey p { margin-top: 8px; color: var(--muted); font-size: .9rem; }
+    .pb-journey strong {
+      display: block;
+      margin-top: 12px;
+      font-size: 1.7rem;
+      letter-spacing: -.04em;
+      color: var(--coral);
+    }
+    .pb-journey em {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-style: normal;
+      font-size: .74rem;
+      font-weight: 700;
+    }
+
+    .pb-setup {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 22px;
+      margin-top: 28px;
+    }
+    .pb-panel {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--canvas);
+    }
+    .pb-panel h3 { font-size: 1.05rem; }
+    .pb-list { display: grid; gap: 8px; margin-top: 14px; }
+    .pb-list li {
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper);
+      font-size: .86rem;
+    }
+    .pb-list li::before {
+      width: 8px;
+      height: 8px;
+      margin-top: 6px;
+      border-radius: 50%;
+      background: var(--mint);
+      content: "";
+    }
+    .pb-list span { color: var(--muted); font-size: .78rem; }
+
+    .pb-states {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-top: 28px;
+    }
+    .pb-state {
+      padding: 14px 12px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+    }
+    .pb-state small {
+      display: block;
+      color: var(--muted);
+      font-size: .62rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .pb-state b {
+      display: block;
+      margin-top: 6px;
+      font-size: .82rem;
+      letter-spacing: -.02em;
+    }
+
+    .pb-gates {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .pb-gate {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+    }
+    .pb-gate.is-lock {
+      background: repeating-linear-gradient(-45deg, #f3f3f6, #f3f3f6 8px, #ececf1 8px, #ececf1 16px);
+    }
+    .pb-gate small {
+      display: block;
+      color: var(--muted);
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .pb-gate strong { display: block; margin-top: 6px; font-size: .95rem; }
+    .pb-gate p { margin-top: 8px; color: var(--muted); font-size: .8rem; line-height: 1.4; }
+
+    .pb-faq { background: var(--canvas); }
+    .pb-faq details {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .pb-faq summary {
+      cursor: pointer;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      list-style: none;
+    }
+    .pb-faq summary::-webkit-details-marker { display: none; }
+    .pb-faq details p { margin-top: 8px; color: var(--muted); max-width: 720px; }
+
+    .pb-sibs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .pb-sibs a {
+      display: block;
+      padding: 16px 16px 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+    }
+    .pb-sibs a:hover { box-shadow: var(--shadow-soft); }
+    .pb-sibs small {
+      display: block;
+      color: var(--coral-dark);
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .pb-sibs b { display: block; margin-top: 6px; font-size: .95rem; }
+
+    .final { min-height: auto; padding: 88px 0; }
+    .skip {
+      position: absolute;
+      left: 12px;
+      top: 8px;
+      z-index: 80;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      font-size: .82rem;
+      font-weight: 700;
+      transform: translateY(-120%);
+    }
+    .skip:focus { transform: none; outline: 2px solid var(--coral); outline-offset: 2px; }
+    :focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
+
+    @media (max-width: 1100px) {
+      .pb-hero-grid, .pb-setup, .pb-journeys { grid-template-columns: 1fr; }
+      .pb-formats, .pb-states, .pb-gates, .pb-sibs { grid-template-columns: 1fr 1fr; }
+      .pb-visual { min-height: 0; }
+      .pb-picker { left: 12px; }
+    }
+    @media (max-width: 700px) {
+      .pb-hero { min-height: auto; padding: 36px 0 40px; }
+      .pb-section, .pb-section.tight { padding: 56px 0; }
+      .pb-formats, .pb-states, .pb-gates, .pb-sibs { grid-template-columns: 1fr; }
+      .pb-picker { width: min(250px, 84%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .btn:hover { transform: none; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Can employees manage their own teams?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. User-team creation and management is an ops toggle and is off by default."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is a wearable required?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. No format requires a wearable. Phone sensors and manual logs both count toward the same challenge."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are Training Plans in this wizard?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Training Plans, Level, Marathon Event, and Weight Burn are ops-configured. They are not self-serve formats in this builder."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="../styled-homepage/index.html" aria-label="Vantage Fit home">
+        <img src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37" style="height:32px;width:auto;display:block">
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="nav-links" id="nav-links">
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Solutions
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Solutions menu">
+            <div class="mega-body">
+              <div class="mega-grid cols-2">
+                <div>
+                  <div class="mega-col-title">By program</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/steps-challenge/">Step challenges<span>Company-wide step goals that get everyone moving</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/multi-activity-challenges/">Multi-activity challenges<span>Custom challenges across any mix of activities</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/team-challenges/">Team challenges<span>Departments and squads, competing together</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/virtual-marathon/">Virtual marathons<span>One-day events that unite a global workforce</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/mental-health-and-wellbeing-challenges/">Mental health &amp; wellbeing<span>Mindfulness, mood and stress support at work</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/holistic-wellness-program/">Year-round wellness program<span>An always-on calendar of challenges and events</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">By need</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/global-employee-engagement/">Engage a global workforce<span>One program across countries, languages, time zones</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/remote-team-wellness/">Support remote &amp; hybrid teams<span>Wellness that works away from the office</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/wellness-rewards-program/">Reward healthy habits<span>Points and gift cards tied to real effort</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/health-fitness-analytics/">Measure program impact<span>Participation analytics your board can read</span></a>
+                </div>
+              </div>
+            </div>
+            <a class="mega-banner" href="https://www.vantagefit.io/employee-wellness-software/">
+              See Vantage Fit as your all-in-one employee wellness platform
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item is-current">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Features
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">For employees</div>
+                  <a class="mega-link" href="/features/activity-tracking/">Activity tracking<span>Steps, workouts, sleep, and everyday logs</span></a>
+                  <a class="mega-link" href="/features/fitness-exercise/">Fitness &amp; exercise<span>Workouts that count toward the same score</span></a>
+                  <a class="mega-link" href="/features/nutrition-hydration/">Nutrition &amp; hydration<span>Meals and water, logged in the same app</span></a>
+                  <a class="mega-link" href="/features/health-metrics/">Health metrics<span>Personal vitals the admin never opens</span></a>
+                  <a class="mega-link" href="/features/mental-wellbeing/">Mental wellbeing<span>Mindfulness minutes that still count</span></a>
+                  <a class="mega-link" href="/features/wellness-leagues/">Wellness leagues<span>Gold, Silver, Bronze on a rolling average</span></a>
+                  <a class="mega-link" href="/features/personalized-programs/">Personalized programs<span>Plans and journeys inside the same program</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">For HR teams</div>
+                  <a class="mega-link" href="vantage-fit-admin-dashboard-analytics-v1.html">Admin dashboard &amp; analytics<span>The participation number, without the spreadsheet</span></a>
+                  <a class="mega-link" href="vantage-fit-program-builder-v1.html" aria-current="page">Program builder &amp; templates<span>Five formats, live before lunch</span></a>
+                  <a class="mega-link" href="vantage-fit-audience-targeting-v1.html">Audience targeting<span>Country, department, age, gender, health-risk counts</span></a>
+                  <a class="mega-link" href="vantage-fit-communications-nudges-v1.html">Communications &amp; nudges<span>Lifecycle email, push, and inactive-user shortcuts</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Enterprise</div>
+                  <a class="mega-link" href="/features/integrations-sso/">Integrations &amp; SSO<span>HRIS, SSO, and device sources</span></a>
+                  <a class="mega-link" href="/features/security-compliance/">Security &amp; compliance<span>Residency, access, and data boundaries</span></a>
+                  <a class="mega-link" href="/features/health-data-upload/">Health data upload<span>Lab reports on the enterprise track</span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Resources
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Resources menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">Learn</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/">Blog<span>Ideas and research for healthier workplaces</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/guides/">Guides &amp; eBooks<span>Playbooks for launching and scaling wellness</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/podcasts/">Podcasts<span>Conversations with HR and wellbeing leaders</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/2026-global-workplace-well-being-industry-report/">2026 Industry Report<span>The state of global workplace wellbeing</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Evaluate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/casestudy/">Customer stories<span>Results from real customer programs</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/compare/">Compare platforms<span>Vantage Fit vs the alternatives</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/">Help Center<span>Product docs and setup guides</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/tools-and-templates/step-challenge-diy-template/">Step Challenge Template<span>DIY template to plan and launch a step challenge</span></a>
+                </div>
+                <a class="mega-feature" href="https://www.vantagefit.io/wellness-challenges/">
+                  <span>
+                    <small>Featured</small>
+                    <b>Wellness Challenges Library</b>
+                    <p>Browse ready-to-run challenges your teams can start this month.</p>
+                  </span>
+                  <span class="go">Explore the library
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <header class="pb-hero" id="top">
+      <div class="shell pb-hero-grid">
+        <div>
+          <p class="eyebrow">Features · For HR teams</p>
+          <h1>A wellness challenge builder that goes <em>live before lunch.</em></h1>
+          <p class="lead">Pick Custom, Race, Journey, Streak, or E-Marathon. Shared setup covers audience, teams, points, and certificates. This is how HR launches the surface every employee log counts toward.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+            <a class="btn btn-outline" href="#formats">See the formats</a>
+          </div>
+          <p class="hero-note">
+            <span>5 self-serve formats</span>
+            <span>27 task types</span>
+            <span>2+ journey templates</span>
+          </p>
+        </div>
+        <div class="pb-visual">
+          <figure class="pb-photo">
+            <img src="photo-program-builder-office.jpg" alt="HR lead setting up a workplace wellness challenge at a standing desk" width="1200" height="900">
+          </figure>
+          <div class="pb-picker" aria-label="Illustrative create-challenge format picker">
+            <p>Create challenge</p>
+            <button type="button" class="is-on" tabindex="-1"><b>Custom</b><span>Drag-and-drop</span></button>
+            <button type="button" tabindex="-1"><b>Race</b><span>Steps</span></button>
+            <button type="button" tabindex="-1"><b>Journey</b><span>2+ templates</span></button>
+            <button type="button" tabindex="-1"><b>Streak</b><span>Daily target</span></button>
+            <button type="button" tabindex="-1"><b>E-Marathon</b><span>1,000 steps = 1 km</span></button>
+            <span class="cap">Illustrative wizard fragment. Not a live console.</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="pb-section" id="formats">
+      <div class="shell">
+        <h2>Five formats. Twenty-seven tasks.</h2>
+        <p class="lead">Custom is the multi-week corporate wellness program builder. Drag-and-drop task config lives there only. Race, Journey, Streak, and E-Marathon stay simpler. Training Plans, Level, Marathon Event, and Weight Burn stay with ops.</p>
+        <div class="pb-formats">
+          <article class="pb-format is-hero">
+            <small>Self-serve</small>
+            <strong>Custom</strong>
+            <p>Multi-week themes. Drag-and-drop tasks.</p>
+          </article>
+          <article class="pb-format">
+            <small>Self-serve</small>
+            <strong>Race</strong>
+            <p>A simple step competition.</p>
+          </article>
+          <article class="pb-format">
+            <small>Self-serve</small>
+            <strong>Journey</strong>
+            <p>Milestone map. 2+ templates.</p>
+          </article>
+          <article class="pb-format">
+            <small>Self-serve</small>
+            <strong>Streak</strong>
+            <p>Hit a daily target. Keep the streak.</p>
+          </article>
+          <article class="pb-format">
+            <small>Self-serve</small>
+            <strong>E-Marathon</strong>
+            <p>Steps become distance. Default 1,000 steps = 1 km.</p>
+          </article>
+        </div>
+
+        <div class="pb-palette" aria-label="Custom challenge task palette">
+          <div class="bar">
+            <b>Custom · 27 task types</b>
+            <span>Drag-and-drop. Custom only.</span>
+          </div>
+          <div class="pb-chips">
+            <i>Steps</i><i>Distance</i><i>Calories</i><i>Active minutes</i><i>Water</i><i>Mood</i><i>Sleep</i><i>Weight</i><i>Meal log</i><i>Heart rate</i><i>Yoga</i><i>Aerobics</i><i>Strength</i><i>Meditation</i><i>Squats</i><i>Mindfulness</i><i>Video watch</i><i>Content reading</i><i>Book reading</i><i>Smoking cessation</i><i>HRA</i><i>Lab report</i><i>Bite-size content</i><i>Adherence</i><i>Loggable activity</i>
+          </div>
+          <p class="pb-figcap">Mood can be a task. Answers stay private to the employee. Count is the product figure. Do not recompute from the chips.</p>
+        </div>
+
+        <div class="pb-shot-wrap">
+          <figure class="pb-shot">
+            <img
+              src="https://cdn.vantagecircle.com/image/upload/f_auto,q_auto,w_820/v1772104740/product-images-hub/v-fit/vantage-fit-challenge-system-overview-desktop.png"
+              alt="Vantage Fit challenge system overview on desktop, showing how challenges are structured for administrators"
+              width="820"
+              height="520">
+          </figure>
+          <p class="pb-figcap">The live challenge console. Every format launches the same participation surface.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="pb-section pb-alt tight" id="templates">
+      <div class="shell">
+        <h2>Two named journeys. One shared setup.</h2>
+        <p class="lead">Start from a built-in journey template, or fill the same fields on every format. Aiming a cohort is a setup field here. The privacy rules live on <a class="text-link" href="vantage-fit-audience-targeting-v1.html" style="margin-top:0">Audience targeting</a>.</p>
+        <div class="pb-journeys">
+          <article class="pb-journey">
+            <span class="tag">Template</span>
+            <h3>Backpacking through Europe</h3>
+            <p>Nine stations. Cumulative step targets from Budapest to Rome.</p>
+            <strong>70,000</strong>
+            <em>steps. About 50 km of walking. Illustrative distance, not a client result.</em>
+          </article>
+          <article class="pb-journey">
+            <span class="tag">Template</span>
+            <h3>Journey to 7 Wonders</h3>
+            <p>Seven landmarks. Cumulative step targets across the map.</p>
+            <strong>50,000</strong>
+            <em>steps. 2+ built-in journey templates. Custom maps need a designer.</em>
+          </article>
+        </div>
+
+        <div class="pb-setup">
+          <article class="pb-panel">
+            <h3>Shared on every format</h3>
+            <ul class="pb-list">
+              <li><div>Name, description, image, start and end dates</div></li>
+              <li><div>Privacy and target audience</div></li>
+              <li><div>Team config. Score is the average of member scores.</div></li>
+              <li><div>Point rewards, when the account manager has enabled them</div></li>
+              <li><div>Certificates: logo, seal, signature image, signer name, designation, custom description</div></li>
+            </ul>
+          </article>
+          <article class="pb-panel">
+            <h3>Custom journey maps</h3>
+            <p style="margin-top:10px;color:var(--muted);font-size:.9rem">A branded map is not self-serve. It needs an annual contract, sufficient order value, a designer, and a setup call.</p>
+            <p style="margin-top:12px;color:var(--muted);font-size:.9rem">Notify and certificate toggles sit in this wizard. The email catalog lives on <a class="text-link" href="vantage-fit-communications-nudges-v1.html" style="margin-top:0">Communications &amp; nudges</a>.</p>
+          </article>
+        </div>
+
+        <div class="pb-shot-wrap">
+          <figure class="pb-shot">
+            <img
+              src="https://cdn.vantagecircle.com/image/upload/f_auto,q_auto,w_820/v1772194233/product-images-hub/v-fit/vantage-fit-campaign-management-dashboard-desktop.png"
+              alt="Vantage Fit campaign management dashboard on desktop, used to run and adjust live challenges"
+              width="820"
+              height="520">
+          </figure>
+          <p class="pb-figcap">After publish: dates, participants, and override actions. Not a visual calendar.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="pb-section tight" id="lifecycle">
+      <div class="shell">
+        <h2>Six states. Admin override. No calendar.</h2>
+        <p class="lead">Start and end run on the dates you set. Admins can reschedule, force-start today, or end today with no points. There is no scheduling calendar in the product.</p>
+        <div class="pb-states" aria-label="Campaign lifecycle states">
+          <article class="pb-state"><small>0</small><b>Not processed</b></article>
+          <article class="pb-state"><small>1</small><b>Not started</b></article>
+          <article class="pb-state"><small>2</small><b>Started</b></article>
+          <article class="pb-state"><small>3</small><b>Ended</b></article>
+          <article class="pb-state"><small>4</small><b>Manually stopped</b></article>
+          <article class="pb-state"><small>5</small><b>Purged</b></article>
+        </div>
+        <div class="pb-gates">
+          <article class="pb-gate">
+            <small>Lite Mode</small>
+            <strong>Race plus steps</strong>
+            <p>step_count only. Deployable in 1 to 2 days. Built for one-time campaigns and strict data-privacy clients.</p>
+          </article>
+          <article class="pb-gate is-lock">
+            <small>Account manager</small>
+            <strong>Point rewards</strong>
+            <p>Monetary and point rewards are gated. Live for 1 company today. Not freely on.</p>
+          </article>
+          <article class="pb-gate is-lock">
+            <small>Ops only</small>
+            <strong>Four formats stay out</strong>
+            <p>Level, Marathon Event, Weight Burn, and Training Plans are not in this wizard. Custom scoring stays with ops.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="pb-section pb-faq tight" id="faq">
+      <div class="shell">
+        <h2>Before you open the wizard</h2>
+        <details>
+          <summary>Can employees manage their own teams?</summary>
+          <p>No. User-team creation and management is an ops toggle and is off by default. Team score is the average of member scores, not the sum.</p>
+        </details>
+        <details>
+          <summary>Is a wearable required?</summary>
+          <p>No. No format requires a wearable. Phone sensors and manual logs both count toward the same challenge.</p>
+        </details>
+        <details>
+          <summary>Are Training Plans in this wizard?</summary>
+          <p>No. Training Plans, Level, Marathon Event, and Weight Burn are ops-configured. They are not self-serve formats in this builder.</p>
+        </details>
+        <div class="pb-sibs" aria-label="Other For HR feature pages">
+          <a href="vantage-fit-audience-targeting-v1.html"><small>Aim it</small><b>Audience targeting</b></a>
+          <a href="vantage-fit-communications-nudges-v1.html"><small>Nudge</small><b>Communications &amp; nudges</b></a>
+          <a href="vantage-fit-admin-dashboard-analytics-v1.html"><small>Measure</small><b>Admin dashboard &amp; analytics</b></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="final" id="demo">
+      <div class="shell">
+        <h2>Launch the surface everything logs into.</h2>
+        <p>Walk through Custom, a Journey template, and Lite Mode on a console that already looks like this.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+          <a class="btn btn-outline" href="https://www.vantagefit.io/pricing/">Compare the tiers</a>
+        </div>
+        <div class="final-checks">
+          <span>5 formats</span>
+          <span>27 tasks</span>
+          <span>2+ journeys</span>
+          <span>Lite Mode</span>
+        </div>
+        <p class="final-note">Trusted by 100+ organizations.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../styled-homepage/index.html">
+            <img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37" style="height:28px;width:auto;display:block">
+          </a>
+          <p class="footer-about">Inclusive wellness that turns participation into measurable progress.</p>
+        </div>
+        <div>
+          <div class="footer-title">Product</div>
+          <div class="footer-links">
+            <a href="/features/">All features</a>
+            <a href="vantage-fit-program-builder-v1.html">Program builder</a>
+            <a href="vantage-fit-admin-dashboard-analytics-v1.html">Admin dashboard</a>
+            <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Solutions</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/steps-challenge/">Challenges</a>
+            <a href="https://www.vantagefit.io/wellness-rewards-program/">Rewards</a>
+            <a href="https://www.vantagefit.io/remote-team-wellness/">Remote teams</a>
+            <a href="https://www.vantagefit.io/global-employee-engagement/">Global engagement</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Company</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/about-us/">About</a>
+            <a href="https://www.vantagefit.io/casestudy/">Case studies</a>
+            <a href="https://www.vantagefit.io/request-demo/">Contact sales</a>
+            <a href="https://www.vantagefit.io/en/help/">Help Center</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Vantage Circle. All rights reserved.</span>
+        <span>Wellness built for participation.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuButton = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation');
+      navLinks.classList.toggle('open', !open);
+    });
+
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const navTriggers = [...document.querySelectorAll('.nav-trigger')];
+    const desktopNav = window.matchMedia('(min-width: 861px)');
+    let desktopCloseTimer;
+
+    const closeDesktopMenus = (except = null) => {
+      navItems.forEach((item) => {
+        if (item !== except) item.classList.remove('desktop-open');
+      });
+    };
+
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => {
+        if (!desktopNav.matches) return;
+        window.clearTimeout(desktopCloseTimer);
+        closeDesktopMenus(item);
+        item.classList.add('desktop-open');
+      });
+      item.addEventListener('pointerleave', () => {
+        if (!desktopNav.matches) return;
+        desktopCloseTimer = window.setTimeout(() => {
+          if (!item.matches(':hover') && !item.contains(document.activeElement)) {
+            item.classList.remove('desktop-open');
+          }
+        }, 120);
+      });
+    });
+
+    document.querySelectorAll('.nav-links > a').forEach((link) => {
+      link.addEventListener('pointerenter', () => {
+        if (desktopNav.matches) closeDesktopMenus();
+      });
+    });
+
+    navTriggers.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        if (window.matchMedia('(max-width: 860px)').matches) {
+          e.preventDefault();
+          const item = btn.closest('.nav-item');
+          const isOpen = item.classList.contains('open');
+          document.querySelectorAll('.nav-item').forEach((n) => {
+            n.classList.remove('open');
+            n.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

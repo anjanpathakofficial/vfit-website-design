@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Required: these are unshipped preview mocks. Do not remove. -->
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <meta name="description" content="29 branded email templates, 34+ push notification types with deep links, and 13+ languages. See what is self-serve and what your account manager configures.">
+  <meta name="theme-color" content="#18262b">
+
+  <title>Employee wellness engagement notifications | Vantage Fit</title>
+
+  <link rel="stylesheet" href="../styles/enterprise.css">
+
+  <style>
+    /* ============================================================
+       COMMUNICATIONS & NUDGES (/features/communications-nudges/)
+       page-local styles.
+
+       Tokens, type scale, buttons, nav, .mega, .shell, .eyebrow,
+       .hero, .btn, .final closer and the footer all come from
+       ../styles/enterprise.css. Nothing here redefines a token, a
+       font stack or a brand colour.
+
+       Chrome (nav, footer, skip link, mega behaviour, reveal) is
+       shared verbatim with the other For-HR pages in this folder.
+
+       NEW ON THIS PAGE (not on any sibling):
+         .mail / .mail-*   the branded email fragment in the hero.
+           Branding here means company logo, accent colour and the
+           employee's language, so the hero shows an email rather
+           than a console.
+         .counts / .count  the three capability counts in one row.
+         .rail / .moment   the 13 named lifecycle moments as a
+           timeline, with Challenge Reminder marked off by default.
+         .split / .col     self-serve vs account-manager, side by side.
+         .nudge / .rec     Recommended Actions with the VERIFY marker.
+
+       Copied in from the sibling pages, unchanged in shape:
+         .mock-tag, .skip-link, focus visibility, forced-colors
+         fallback, .feat-section / .feat-head shells, .shot / .shot-cap,
+         .sibrow, .reveal, footer grid override.
+       ============================================================ */
+
+    /* --- Nav: mark this page current inside the Features panel. --- */
+    .nav-trigger.is-current { background: var(--soft); color: var(--ink); box-shadow: inset 0 -2px 0 var(--coral); border-radius: 9px 9px 0 0; }
+    .mega a.mega-link[aria-current="page"] { background: var(--soft); box-shadow: inset 3px 0 0 var(--coral); font-weight: 800; }
+    .nav-item.esc-closed .mega { display: none; }
+    @media (min-width: 861px) {
+      .nav-inner { position: relative; }
+      .nav-item { position: static; }
+      .nav-item::after { display: none; }
+      .nav-trigger { position: relative; }
+      .nav-trigger::after { position: absolute; top: 100%; left: 0; width: 100%; height: 14px; content: ""; }
+      .nav-item .mega { left: auto; right: 0; transform: none; }
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      z-index: 100;
+      padding: 10px 16px;
+      border-radius: 0 0 10px 0;
+      background: var(--ink);
+      color: #fff;
+      font-size: .85rem;
+      font-weight: 700;
+    }
+    .skip-link:focus { left: 0; top: 0; }
+    a:focus-visible, button:focus-visible, summary:focus-visible {
+      outline: 3px solid var(--coral-deep);
+      outline-offset: 2px;
+    }
+    @media (forced-colors: active) {
+      .hero-copy h1 em { background: none; -webkit-text-fill-color: currentColor; color: CanvasText; }
+    }
+
+    .mock-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(41,41,76,.04);
+      color: rgba(41,41,76,.75);
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    /* Unresolved-claim marker. Kept visible on the page, not only in
+       the brief: the send path for Nudge Inactive Users is not
+       specified in help or in the spec. */
+    .verify {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border: 1px dashed rgba(214,61,78,.55);
+      border-radius: 6px;
+      color: var(--coral-dark);
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    /* --- Shared section shells --- */
+    .feat-section { padding: 92px 0; }
+    .feat-section.alt { background: var(--canvas); }
+    .feat-section.tight { padding: 74px 0; }
+    .feat-head { max-width: 740px; }
+    .feat-head .lead { margin-top: 14px; }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s cubic-bezier(.22,.9,.24,1); }
+    .reveal.on { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+    .shot {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+    .shot img { width: 100%; height: auto; }
+    .shot-cap { margin-top: 12px; color: var(--muted); font-size: .78rem; max-width: 640px; }
+
+    /* ============================================================
+       S1 HERO: photograph, with the branded email over it.
+       The other two pages open on a console and on a filter panel.
+       This one opens on the artefact the employee actually receives.
+       ============================================================ */
+    .cn-hero { min-height: auto; }
+    .cn-hero .hero-grid { grid-template-columns: 1.02fr .98fr; gap: 46px; padding: 42px 0 38px; align-items: center; }
+    .cn-hero h1 { max-width: 640px; font-size: clamp(2.3rem, 3.6vw, 3.35rem); }
+    .cn-hero .hero-copy .lead { max-width: 545px; }
+    .cn-visual { position: relative; min-height: 0; margin-right: 0; }
+    .cn-photo {
+      margin: 0;
+      overflow: hidden;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      aspect-ratio: 5 / 4;
+      background: var(--soft);
+    }
+    .cn-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+
+    .mail {
+      position: absolute;
+      right: -14px;
+      bottom: 22px;
+      z-index: 2;
+      width: min(320px, 78%);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 4px 20px 46px rgba(41,41,76,.22);
+    }
+    .mail-band {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 13px;
+      background: linear-gradient(125deg, var(--coral) 10%, var(--coral-deep) 120%);
+      color: #fff;
+    }
+    .mail-band i {
+      display: grid;
+      width: 20px;
+      height: 20px;
+      place-items: center;
+      border-radius: 5px;
+      background: rgba(255,255,255,.9);
+      color: var(--coral-deep);
+      font-size: .5rem;
+      font-style: normal;
+      font-weight: 800;
+    }
+    .mail-band b { font-size: .62rem; font-weight: 800; letter-spacing: .04em; }
+    .mail-band span { margin-left: auto; font-size: .52rem; font-weight: 700; opacity: .85; }
+    .mail-body { padding: 13px 14px 14px; }
+    .mail-body small {
+      display: block;
+      color: var(--muted);
+      font-size: .55rem;
+      font-weight: 800;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .mail-body h3 { margin-top: 5px; font-size: .88rem; }
+    .mail-body p { margin-top: 6px; color: var(--muted); font-size: .68rem; line-height: 1.45; }
+    .mail-cta {
+      display: inline-flex;
+      margin-top: 11px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: var(--coral);
+      color: #fff;
+      font-size: .64rem;
+      font-weight: 800;
+    }
+    .mail-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .55rem;
+      font-weight: 650;
+    }
+    .cn-hero .mock-tag { position: absolute; left: 0; bottom: -12px; background: #fff; }
+
+    /* ============================================================
+       S2 CHANNELS
+       ============================================================ */
+    .counts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 34px; }
+    .count {
+      padding: 22px 22px 20px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+    }
+    .count strong { display: block; font-size: 2.2rem; letter-spacing: -.05em; line-height: 1; font-variant-numeric: tabular-nums; }
+    .count.hero-count strong { color: var(--coral); }
+    .count b { display: block; margin-top: 9px; font-size: .95rem; letter-spacing: -.02em; }
+    .count p { margin-top: 7px; color: var(--muted); font-size: .84rem; line-height: 1.5; }
+    .channel-note {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .channel-note div {
+      padding: 17px 19px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: var(--canvas);
+    }
+    .channel-note b { display: block; font-size: .9rem; }
+    .channel-note p { margin-top: 6px; color: var(--muted); font-size: .82rem; line-height: 1.5; }
+
+    /* ============================================================
+       S3 THE 13 MOMENTS
+       ============================================================ */
+    .rail-grid { display: grid; grid-template-columns: 1.28fr .72fr; gap: 42px; align-items: start; margin-top: 34px; }
+    .rail { position: relative; padding-left: 20px; }
+    .rail::before {
+      position: absolute;
+      top: 8px;
+      bottom: 8px;
+      left: 5px;
+      width: 2px;
+      border-radius: 2px;
+      background: linear-gradient(180deg, var(--mint), rgba(65,216,180,.25));
+      content: "";
+    }
+    .moment {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: baseline;
+      padding: 9px 0;
+    }
+    .moment::before {
+      position: absolute;
+      top: 15px;
+      left: -19px;
+      width: 9px;
+      height: 9px;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      background: var(--mint);
+      content: "";
+    }
+    .moment b { font-size: .92rem; letter-spacing: -.02em; }
+    .moment b i {
+      display: inline-flex;
+      margin-left: 8px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(246,185,59,.22);
+      color: #7d5504;
+      font-size: .56rem;
+      font-style: normal;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
+    .moment span { color: var(--muted); font-size: .78rem; text-align: right; }
+    .rail-side { display: grid; gap: 14px; }
+    .side-card {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+    }
+    .side-card b { display: block; font-size: .95rem; letter-spacing: -.02em; }
+    .side-card p { margin-top: 7px; color: var(--muted); font-size: .85rem; line-height: 1.5; }
+    .side-photo { margin: 0; overflow: hidden; border-radius: 18px; box-shadow: var(--shadow-soft); }
+    .side-photo img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 3; }
+
+    /* ============================================================
+       S4 SELF-SERVE VS ACCOUNT MANAGER
+       ============================================================ */
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px; }
+    .col {
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+    .col.now { border-color: rgba(65,216,180,.45); background: rgba(65,216,180,.07); }
+    .col small {
+      display: inline-flex;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--ink);
+      font-size: .6rem;
+      font-weight: 800;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .col.now small { background: rgba(65,216,180,.22); color: #0d7a61; }
+    .col h3 { margin-top: 13px; font-size: 1.08rem; }
+    .col > p { margin-top: 8px; color: var(--muted); font-size: .86rem; line-height: 1.5; }
+    .col ul { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 11px; }
+    .col li { display: grid; grid-template-columns: 15px 1fr; gap: 11px; font-size: .87rem; line-height: 1.45; }
+    .col li::before { width: 7px; height: 7px; margin-top: 7px; border-radius: 50%; background: var(--muted); content: ""; }
+    .col.now li::before { background: var(--mint-dark); }
+    .col li span { display: block; color: var(--muted); font-size: .77rem; }
+
+    /* ============================================================
+       S5 NUDGE
+       ============================================================ */
+    .nudge-grid { display: grid; grid-template-columns: .92fr 1.08fr; gap: 42px; align-items: center; margin-top: 34px; }
+    .rec { display: grid; gap: 10px; }
+    .rec article {
+      display: grid;
+      grid-template-columns: 26px 1fr;
+      gap: 13px;
+      padding: 15px 17px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: var(--paper);
+    }
+    .rec article.lead-rec { border-color: rgba(241,81,98,.3); box-shadow: 0 10px 26px rgba(241,81,98,.07); }
+    .rec i {
+      display: grid;
+      width: 26px;
+      height: 26px;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--soft);
+      color: var(--muted);
+      font-size: .7rem;
+      font-style: normal;
+      font-weight: 800;
+    }
+    .rec article.lead-rec i { background: rgba(241,81,98,.12); color: var(--coral-dark); }
+    .rec b { display: block; font-size: .9rem; letter-spacing: -.02em; }
+    .rec p { margin-top: 4px; color: var(--muted); font-size: .78rem; line-height: 1.45; }
+    .rec .verify { margin-top: 8px; }
+    .notai {
+      margin-top: 14px;
+      padding: 17px 19px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: var(--canvas);
+    }
+    .notai b { display: block; font-size: .9rem; }
+    .notai p { margin-top: 6px; color: var(--muted); font-size: .83rem; line-height: 1.5; }
+
+    .sibrow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 34px; }
+    .sibrow a {
+      display: block;
+      padding: 17px 17px 15px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper);
+    }
+    .sibrow a:hover { box-shadow: var(--shadow-soft); }
+    .sibrow small {
+      display: block;
+      color: var(--coral-dark);
+      font-size: .62rem;
+      font-weight: 800;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .sibrow b { display: block; margin-top: 7px; font-size: .93rem; letter-spacing: -.02em; }
+
+    .final { min-height: auto; padding: 92px 0; }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 1100px) {
+      .cn-hero .hero-grid, .rail-grid, .nudge-grid { grid-template-columns: 1fr; }
+      .counts, .split { grid-template-columns: 1fr; }
+      .sibrow { grid-template-columns: 1fr 1fr; }
+      .mail { right: 12px; }
+      .cn-hero .mock-tag { position: static; margin-top: 12px; }
+      .side-photo img { aspect-ratio: 16 / 9; }
+    }
+    @media (max-width: 700px) {
+      .feat-section, .feat-section.tight { padding: 58px 0; }
+      .channel-note, .sibrow { grid-template-columns: 1fr; }
+      .mail { position: static; width: 100%; margin-top: 14px; }
+      .moment { grid-template-columns: 1fr; gap: 2px; }
+      .moment span { text-align: left; }
+    }
+    @media (max-width: 860px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="https://www.vantagefit.io/" aria-label="Vantage Fit home">
+        <img src="../styled-homepage/logo.png" alt="Vantage Fit" width="173" height="37" style="height:32px;width:auto;display:block">
+      </a>
+
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+
+      <div class="nav-links" id="nav-links">
+
+        <!-- ---------- SOLUTIONS (signed-off two-section IA) ---------- -->
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Solutions
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Solutions menu">
+            <div class="mega-body">
+              <div class="mega-grid cols-2">
+                <div>
+                  <div class="mega-col-title">Wellness challenges: what you want to run</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/wellness-challenges/">Wellness challenges<span>The full library of ready-to-run challenges</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/step-challenges/">Step challenges<span>Company-wide step goals that get everyone moving</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/multi-activity-challenges/">Multi-activity challenges<span>Any activity, solo or in teams, over themed weeks</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/remote-team-wellness/">Remote &amp; hybrid team challenges<span>Wellness that works away from the office</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/virtual-marathon/">Virtual marathon<span>Distance events powered by steps</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Workforce health &amp; rewards: measure and motivate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/health-risk-assessment/">Health Risk Assessment<span>Baseline health screening with aggregate insights</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/workforce-health-insights/">Workforce health insights<span>Participation, challenge and activity analytics your board can read</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/solutions/wellness-rewards-program/">Wellness rewards program<span>Points and gift cards tied to real effort</span></a>
+                </div>
+              </div>
+            </div>
+            <div class="mega-foot">
+              <span>The whole product on one page: <strong>Wellness platform</strong></span>
+              <a class="text-link" style="margin-top:0;font-size:.8rem" href="https://www.vantagefit.io/solutions/wellness-platform/">See the platform
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---------- FEATURES ----------
+             For HR teams follows the locked IA, not the live menu:
+             four pages, no certification badges in the Enterprise
+             column, and Targeting described by its real dimensions. -->
+        <div class="nav-item">
+          <button class="nav-trigger is-current" type="button" aria-expanded="false">
+            Features
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Features menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">For employees</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/activity-tracking/">Activity tracking<span>Steps, distance and active minutes, auto-synced</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/fitness-exercise/">Fitness &amp; exercise<span>Workouts, runs and logged activity</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/nutrition-hydration/">Nutrition &amp; hydration<span>Meals and water, logged in seconds</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/health-metrics/">Health metrics<span>Sleep, weight and heart rate in one place</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/mental-wellbeing/">Mental wellbeing<span>Mindfulness sessions, streaks and private mood check-ins</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/wellness-leagues/">Wellness leagues<span>Gold, silver and bronze tiers on a rolling average</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/personalized-programs/">Personalized programs<span>Plans tuned to each employee's goals</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">For HR teams</div>
+                  <a class="mega-link" href="vantage-fit-admin-dashboard-analytics-v1.html">Admin dashboard &amp; analytics<span>KPI cards, filters, insights and every CSV export</span></a>
+                  <a class="mega-link" href="vantage-fit-program-builder-v1.html">Program builder &amp; templates<span>Five self-serve formats and 27 task types</span></a>
+                  <a class="mega-link" href="vantage-fit-audience-targeting-v1.html">Audience targeting<span>Country, department, age, gender and health-risk code</span></a>
+                  <a class="mega-link" href="#top" aria-current="page">Communications &amp; nudges<span>Lifecycle emails, push and re-engagement</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Enterprise</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/integrations-sso/">Integrations &amp; SSO<span>Wearables, HRIS and single sign-on</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/security-compliance/">Security, privacy &amp; residency<span>Aggregate-only reporting and EU data residency</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/features/health-data-upload/">Health data upload<span>Lab reports read into aggregate insight</span></a>
+                </div>
+              </div>
+            </div>
+            <a class="mega-banner" href="https://www.vantagefit.io/features/">
+              Every feature on one page: the Features overview
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- ---------- RESOURCES ---------- -->
+        <div class="nav-item">
+          <button class="nav-trigger" type="button" aria-expanded="false">
+            Resources
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="mega mega-wide" role="region" aria-label="Resources menu">
+            <div class="mega-body">
+              <div class="mega-grid">
+                <div>
+                  <div class="mega-col-title">Learn</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/">Blog<span>Ideas and research for healthier workplaces</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/guides/">Reports &amp; research<span>Playbooks and the annual industry report</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/tools-and-templates/">Tools &amp; templates<span>ROI calculator and DIY challenge templates</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/blog/podcasts/">Podcasts<span>Conversations with HR and wellbeing leaders</span></a>
+                </div>
+                <div>
+                  <div class="mega-col-title">Evaluate</div>
+                  <a class="mega-link" href="https://www.vantagefit.io/casestudy/">Customer stories<span>Results from real customer programs</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/compare/">Comparisons<span>Vantage Fit vs the alternatives</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/">Help Center<span>Product docs and setup guides</span></a>
+                  <a class="mega-link" href="https://www.vantagefit.io/en/help/admin-communication/admin-what-emails-does-vfit-send/">System email guide<span>Every automated email, documented</span></a>
+                </div>
+                <a class="mega-feature" href="https://www.vantagefit.io/request-demo/">
+                  <span>
+                    <small>Featured</small>
+                    <b>See the inbox side</b>
+                    <p>Thirty minutes on templates, push, branding and the inactive-user shortcut.</p>
+                  </span>
+                  <span class="go">Book a walkthrough
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+        <a class="nav-cta" href="https://www.vantagefit.io/request-demo/">Book a demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+
+    <!-- ============================================================
+         S1 HERO
+         ============================================================ -->
+    <header class="hero cn-hero" id="top">
+      <div class="shell hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow">Features · For HR teams</div>
+          <h1>Quiet employees do not need <em>another all-hands email.</em></h1>
+          <p class="lead">Employee wellness engagement notifications run on 29 branded templates, 34+ push types and one shortcut that finds who stopped logging.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+            <a class="btn btn-outline" href="#control">See what you can send today</a>
+          </div>
+          <div class="hero-note">
+            <span>Branded per company</span>
+            <span>13+ languages</span>
+            <span>Quiet-employee framing, not a Vantage Fit measurement</span>
+          </div>
+        </div>
+
+        <div class="hero-visual cn-visual">
+          <figure class="cn-photo">
+            <img src="../styled-homepage/card-invite.jpg" alt="Colleagues talking at a table during a workplace wellness program kickoff" width="1200" height="960">
+          </figure>
+          <div class="mail" role="img" aria-label="Branded Vantage Fit challenge email with the company logo, company accent colour and a join button">
+            <div class="mail-band">
+              <i>Co</i>
+              <b>Your company wellness</b>
+              <span>EN</span>
+            </div>
+            <div class="mail-body">
+              <small>Challenge reminder</small>
+              <h3>Step Into Spring starts Monday</h3>
+              <p>Your team is enrolled. Open the app before the first day so your steps count from hour one.</p>
+              <span class="mail-cta">View the challenge</span>
+              <div class="mail-foot">
+                <span>Sent in the recipient's language</span>
+                <span>Company branding applied</span>
+              </div>
+            </div>
+          </div>
+          <span class="mock-tag">Illustrative email</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============================================================
+         S2 CHANNELS
+         ============================================================ -->
+    <section class="feat-section" id="channels" aria-labelledby="ch-heading">
+      <div class="shell">
+        <div class="feat-head reveal">
+          <h2 id="ch-heading">Three channels, one company voice.</h2>
+          <p class="lead">Every send carries your logo, your accent colour and your program name, and arrives in the language on the employee's profile.</p>
+        </div>
+
+        <div class="counts reveal">
+          <article class="count hero-count">
+            <strong>29</strong>
+            <b>Email templates</b>
+            <p>Covering the whole arc, from the account being created to the certificate at the end.</p>
+          </article>
+          <article class="count">
+            <strong>34+</strong>
+            <b>Push notification types</b>
+            <p>iOS and Android, each deep-linked to the screen it is about rather than the home tab.</p>
+          </article>
+          <article class="count">
+            <strong>13+</strong>
+            <b>Languages</b>
+            <p>Chosen per employee. Custom terms and conditions need translations you supply.</p>
+          </article>
+        </div>
+
+        <div class="channel-note reveal">
+          <div>
+            <b>On the web app, employees get email</b>
+            <p>Push notifications are mobile. Plan the web audience around the inbox.</p>
+          </div>
+          <div>
+            <b>Preferences are set per company</b>
+            <p>Employees do not pick their own notification types. Reach is decided once, for everyone.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         S3 THE 13 MOMENTS
+         ============================================================ -->
+    <section class="feat-section alt" id="moments" aria-labelledby="mom-heading">
+      <div class="shell">
+        <div class="feat-head reveal">
+          <h2 id="mom-heading">Thirteen moments on one employee's arc.</h2>
+          <p class="lead">These are the triggers, not the template count. Each one fires off something the employee did, or something you published.</p>
+        </div>
+
+        <div class="rail-grid">
+          <div class="rail reveal" aria-label="Thirteen named lifecycle email moments in order">
+            <div class="moment"><b>Welcome</b><span>Account created</span></div>
+            <div class="moment"><b>App introduction</b><span>Just after signup</span></div>
+            <div class="moment"><b>Device connection</b><span>First login, nothing connected</span></div>
+            <div class="moment"><b>Challenge enrollment</b><span>Added to a challenge</span></div>
+            <div class="moment"><b>Challenge invitation</b><span>Invited by an admin</span></div>
+            <div class="moment"><b>Challenge reminder <i>Off by default</i></b><span>24, 48 or 72 hours before start</span></div>
+            <div class="moment"><b>Challenge started</b><span>Day one</span></div>
+            <div class="moment"><b>Team invite</b><span>Placed on a team</span></div>
+            <div class="moment"><b>Weekly progress</b><span>Score and rank, mid-challenge</span></div>
+            <div class="moment"><b>Weekly summary</b><span>Steps, calories, active minutes</span></div>
+            <div class="moment"><b>Event confirmation</b><span>After an RSVP</span></div>
+            <div class="moment"><b>Challenge completion</b><span>Final standing and certificate</span></div>
+            <div class="moment"><b>Custom email</b><span>Whenever you send one</span></div>
+          </div>
+
+          <div class="rail-side reveal">
+            <div class="side-card">
+              <b>Reminders are off until you ask</b>
+              <p>Challenge Reminder ships disabled, because a nudge every week of a long program reads as noise. Turn it on for the challenge where participation is slipping, not for all of them.</p>
+            </div>
+            <figure class="side-photo">
+              <img src="../styled-homepage/card-participate.jpg" alt="Employee walking outdoors during the workday after a challenge reminder" width="820" height="615" loading="lazy">
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         S4 SELF-SERVE VS ACCOUNT MANAGER
+         ============================================================ -->
+    <section class="feat-section" id="control" aria-labelledby="ctrl-heading">
+      <div class="shell">
+        <div class="feat-head reveal">
+          <h2 id="ctrl-heading">What you send today, and what your account manager sets.</h2>
+          <p class="lead">Sending is self-serve. Configuring what the system sends on its own is not, for any customer.</p>
+        </div>
+
+        <div class="split reveal">
+          <article class="col now">
+            <small>In the dashboard now</small>
+            <h3>You send it</h3>
+            <p>Four things, all live, all without a ticket.</p>
+            <ul>
+              <li><div><b>Preview emails</b><span>Configuration, Preview Emails. See each template with your branding on it.</span></div></li>
+              <li><div><b>Send a custom email</b><span>Community, Send Custom Email. Subject, body, attachments, template selection.</span></div></li>
+              <li><div><b>Notify or invite a challenge</b><span>Manage Challenge, Notify or Invite. Goes to that challenge's participants.</span></div></li>
+              <li><div><b>Publish a push notification</b><span>Community, Publish Notifications. Write, choose the audience, preview, send.</span></div></li>
+            </ul>
+          </article>
+          <article class="col">
+            <small>Account manager</small>
+            <h3>They configure it</h3>
+            <p>A process gate for every customer, not a contract tier you can buy out of.</p>
+            <ul>
+              <li><div><b>Per-type email toggles</b><span>Turning Weekly Summary off, or Challenge Reminder on.</span></div></li>
+              <li><div><b>The master email switch</b><span>Silences all Vantage Fit email when you run comms yourself.</span></div></li>
+              <li><div><b>Banner, logo, colours, program name</b><span>Applied per company. Deeper copy changes are mediated too.</span></div></li>
+              <li><div><b>Reminder timing</b><span>24, 48 or 72 hours before a challenge starts.</span></div></li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         S5 NUDGE
+         ============================================================ -->
+    <section class="feat-section alt tight" id="nudge" aria-labelledby="nudge-heading">
+      <div class="shell">
+        <div class="feat-head reveal">
+          <h2 id="nudge-heading">The inactive-user shortcut is a rule, not a robot.</h2>
+          <p class="lead">The dashboard surfaces up to five Recommended Actions, ordered by priority. Two of them are about the people who stopped logging.</p>
+        </div>
+
+        <div class="nudge-grid">
+          <div class="reveal">
+            <div class="rec">
+              <article>
+                <i>1</i>
+                <div>
+                  <b>View Inactive Employees</b>
+                  <p>Opens the Employee Report filtered to people with no activity in the last 30 days.</p>
+                </div>
+              </article>
+              <article class="lead-rec">
+                <i>2</i>
+                <div>
+                  <b>Nudge Inactive Users</b>
+                  <p>A rule-based shortcut into the admin screen for reaching that group. It is not a confirmed one-click send.</p>
+                  <span class="verify">Send path: verify</span>
+                </div>
+              </article>
+              <article>
+                <i>3</i>
+                <div>
+                  <b>Check Health Insights</b>
+                  <p>Only appears when that surface is enabled on your account.</p>
+                </div>
+              </article>
+            </div>
+
+            <div class="notai">
+              <b>Rule-based, and templated</b>
+              <p>Recommended Actions are triggered by thresholds in your own data. Email and push copy comes from templates. Neither is AI-written, and neither picks a segment out of a report for you.</p>
+            </div>
+          </div>
+
+          <div class="reveal">
+            <div class="shot">
+              <img
+                src="https://cdn.vantagecircle.com/image/upload/f_auto,q_auto,w_820/v1771579791/product-images-hub/v-fit/vfit-challenge-dashboard-desktop.png"
+                alt="Vantage Fit admin challenge dashboard showing challenge engagement, score and steps panels for an ongoing campaign"
+                width="820" height="667" loading="lazy">
+            </div>
+            <p class="shot-cap">Recommended Actions sit on this dashboard, next to the participation number they are reacting to. Figures inside the screenshot are sample data.</p>
+          </div>
+        </div>
+
+        <div class="sibrow reveal" aria-label="Related feature pages">
+          <a href="vantage-fit-program-builder-v1.html"><small>Build it</small><b>Program builder &amp; templates</b></a>
+          <a href="vantage-fit-audience-targeting-v1.html"><small>Aim it</small><b>Audience targeting</b></a>
+          <a href="vantage-fit-admin-dashboard-analytics-v1.html"><small>Measure</small><b>Admin dashboard &amp; analytics</b></a>
+          <a href="https://www.vantagefit.io/features/"><small>All of it</small><b>Features overview</b></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         S6 CLOSER
+         ============================================================ -->
+    <section class="final" id="demo" aria-labelledby="demo-heading">
+      <div class="shell">
+        <h2 id="demo-heading">See what lands in an employee's inbox.</h2>
+        <p>We will preview the templates with your branding, publish a push, and walk the inactive-user shortcut.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://www.vantagefit.io/request-demo/">Book a walkthrough</a>
+          <a class="btn btn-outline" href="vantage-fit-audience-targeting-v1.html">See who receives it</a>
+        </div>
+        <div class="final-checks">
+          <span>29 email templates</span>
+          <span>34+ push types</span>
+          <span>13+ languages</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="https://www.vantagefit.io/">
+            <img src="../styled-homepage/logo-white.png" alt="Vantage Fit" width="173" height="37" style="height:28px;width:auto;display:block">
+          </a>
+          <p class="footer-about">Inclusive wellness that turns participation into measurable progress.</p>
+        </div>
+        <div>
+          <div class="footer-title">For HR teams</div>
+          <div class="footer-links">
+            <a href="vantage-fit-admin-dashboard-analytics-v1.html">Admin dashboard &amp; analytics</a>
+            <a href="vantage-fit-program-builder-v1.html">Program builder &amp; templates</a>
+            <a href="vantage-fit-audience-targeting-v1.html">Audience targeting</a>
+            <a href="#top">Communications &amp; nudges</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Enterprise</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/features/integrations-sso/">Integrations &amp; SSO</a>
+            <a href="https://www.vantagefit.io/features/security-compliance/">Security &amp; privacy</a>
+            <a href="https://www.vantagefit.io/features/health-data-upload/">Health data upload</a>
+            <a href="https://www.vantagefit.io/pricing/">Pricing</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Company</div>
+          <div class="footer-links">
+            <a href="https://www.vantagefit.io/about-us/">About</a>
+            <a href="https://www.vantagefit.io/casestudy/">Case studies</a>
+            <a href="https://www.vantagefit.io/en/help/">Help Center</a>
+            <a href="https://www.vantagefit.io/request-demo/">Contact sales</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Vantage Circle. All rights reserved.</span>
+        <span>Aggregate reporting for HR admins</span>
+        <span>Wellness built for participation.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav
+    const menuButton = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      menuButton.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation');
+      navLinks.classList.toggle('open', !open);
+    });
+
+    // Mega menus: hover on desktop, tap on mobile, Escape closes.
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const desktopNav = window.matchMedia('(min-width: 861px)');
+    let closeTimer;
+
+    const closeAll = (except = null) => {
+      navItems.forEach((item) => { if (item !== except) item.classList.remove('desktop-open'); });
+    };
+
+    navItems.forEach((item) => {
+      item.addEventListener('pointerenter', () => {
+        if (!desktopNav.matches) return;
+        window.clearTimeout(closeTimer);
+        closeAll(item);
+        item.classList.remove('esc-closed');
+        item.classList.add('desktop-open');
+      });
+      item.addEventListener('pointerleave', () => {
+        if (!desktopNav.matches) return;
+        closeTimer = window.setTimeout(() => {
+          if (!item.matches(':hover') && !item.contains(document.activeElement)) item.classList.remove('desktop-open');
+        }, 120);
+      });
+      item.querySelector('.nav-trigger')?.addEventListener('click', (e) => {
+        if (desktopNav.matches) return;
+        e.preventDefault();
+        const isOpen = item.classList.contains('open');
+        navItems.forEach((n) => {
+          n.classList.remove('open');
+          n.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          item.classList.add('open');
+          item.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      navItems.forEach((item) => {
+        item.classList.remove('desktop-open', 'open');
+        if (item.contains(document.activeElement)) item.classList.add('esc-closed');
+      });
+    });
+
+    // Section reveal
+    const reveals = [...document.querySelectorAll('.reveal')];
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      reveals.forEach((el) => el.classList.add('on'));
+    } else {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('on');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -12% 0px' });
+      reveals.forEach((el) => io.observe(el));
+    }
+  </script>
+</body>
+</html>
